@@ -5,11 +5,11 @@
     xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
-  <loc>http://jrnold.github.io/pols_503_sp15/about.html</loc>
+  <loc>http://jrnold.github.io/pols_503_sp15/archive.html</loc>
   <lastmod>2015-03-25</lastmod>
  </url>
  <url>
-  <loc>http://jrnold.github.io/pols_503_sp15/archive.html</loc>
+  <loc>http://jrnold.github.io/pols_503_sp15/blog/index.html</loc>
   <lastmod>2015-03-25</lastmod>
  </url>
  <url>
