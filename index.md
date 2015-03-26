@@ -123,25 +123,25 @@ Given that this is my first time teaching this course, I expect many adjustments
 	- Fox, Ch 12, 13, 17.1--17.2
     - Gelman and Hill, Ch 4, 7 (optional)
 
-## Week 6: Outliers and Robust Regression
+## Week 6: Outliers, Robust Regression, Bootstrapping
 
 - Tuesday, May 5
 
     - Fox, Ch 11, 19
 
-## Week 7: Causality
+## Week 7: Causal Inference
 
 - Tuesday, May 12
 
-## Week 8: TBD
+## Week 8: Prediction
 
 - Tuesday, May 19
 
-## Week 9: TBD
+## Week 9: Limited Dependent Variables, Robust standard errors
 
 - Tuesday, May 26
 
-## Week 10:  TBD
+## Week 10: 
 
 - Tuesday, June 2
 
