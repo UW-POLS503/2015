@@ -1,0 +1,10 @@
+[Core]
+Name = pandoc2
+Module = pandoc2
+
+[Documentation]
+Author = Roberto Alsina
+Version = 1.0
+Website = http://getnikola.com
+Description = Compile markups into HTML using pandoc
+

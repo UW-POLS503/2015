@@ -21,10 +21,10 @@ BLOG_AUTHOR = "Jeffrey B. Arnold"  # (translatable)
 BLOG_TITLE = "POLS 503: Advanced Quantitative Political Methodology"  # (translatable)
 # This is the main URL for your site. It will be used
 # in a prominent link
-SITE_URL = "http://jrnold.github.io/pols_503_sp15"
+SITE_URL = "http://jrnold.github.io/pols_503_sp15/"
 # This is the URL where Nikola's output will be deployed.
 # If not set, defaults to SITE_URL
-# BASE_URL = "http://jrnold.github.io/pols_503_sp15"
+BASE_URL = "http://jrnold.github.io/pols_503_sp15/"
 BLOG_EMAIL = "jeffrey.arnold@gmail.com"
 BLOG_DESCRIPTION = "Site for POLS 503: Advanced Quantitative Political Methodology offered at the University of Washington in Spring 2015"  # (translatable)
 
@@ -121,14 +121,13 @@ TRANSLATIONS_PATTERN = "{path}.{lang}.{ext}"
 
 NAVIGATION_LINKS = {
     DEFAULT_LANG: (
-        ("/archive.html", "Archive"),
-        ("/categories/index.html", "Tags"),
-        ("/rss.xml", "RSS feed"),
+        ("/syllabus.html", "Syllabus"),
     ),
 }
 
 # Name of the theme to use.
-THEME = "bootstrap3"
+THEME = "ipython"
+# THEME = "default"
 
 # Below this point, everything is optional
 
@@ -200,12 +199,10 @@ TIMEZONE = "America/Los_Angeles"
 #
 
 POSTS = (
-    ("posts/*.rst", "posts", "post.tmpl"),
-    ("posts/*.txt", "posts", "post.tmpl"),
+    ("posts/*.md", "posts", "post.tmpl"),
 )
 PAGES = (
-    ("stories/*.rst", "stories", "story.tmpl"),
-    ("stories/*.txt", "stories", "story.tmpl"),
+    ("pages/*.md", "", "story.tmpl"),
 )
 
 # One or more folders containing files to be copied as-is into the output.
@@ -229,7 +226,7 @@ PAGES = (
 # 'html' assumes the file is HTML and just copies it
 COMPILERS = {
     "rest": ('.rst', '.txt'),
-    "markdown": ('.md', '.mdown', '.markdown'),
+    #"markdown": ('.md', '.mdown', '.markdown'),
     "textile": ('.textile',),
     "txt2tags": ('.t2t',),
     "bbcode": ('.bb',),
@@ -243,7 +240,7 @@ COMPILERS = {
     # Pandoc detects the input from the source filename
     # but is disabled by default as it would conflict
     # with many of the others.
-    # "pandoc": ('.rst', '.md', '.txt'),
+    "pandoc2": ('.md'),
 }
 
 # Create by default posts in one file format?
@@ -322,7 +319,7 @@ WRITE_TAG_CLOUD = True
 
 # Final location for the main blog page and sibling paginated pages is
 # output / TRANSLATION[lang] / INDEX_PATH / index-*.html
-# INDEX_PATH = ""
+INDEX_PATH = "blog"
 
 # Create per-month archives instead of per-year
 # CREATE_MONTHLY_ARCHIVE = False
@@ -354,7 +351,7 @@ WRITE_TAG_CLOUD = True
 
 # Final location for the blog main RSS feed is:
 # output / TRANSLATION[lang] / RSS_PATH / rss.xml
-# RSS_PATH = ""
+RSS_PATH = ""
 
 # Number of posts in RSS feeds
 # FEED_LENGTH = 10
@@ -370,7 +367,7 @@ WRITE_TAG_CLOUD = True
 # relative URL.
 #
 # If you don't need any of these, just set to []
-REDIRECTIONS = []
+# REDIRECTIONS = [("about.html", "index.html")]
 
 # Presets of commands to execute to deploy. Can be anything, for
 # example, you may use rsync:
@@ -590,11 +587,11 @@ RSS_LINKS_APPEND_QUERY = False
 LICENSE = ""
 # I recommend using the Creative Commons' wizard:
 # http://creativecommons.org/choose/
-# LICENSE = """
-# <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/ar/">
-# <img alt="Creative Commons License BY-NC-SA"
-# style="border-width:0; margin-bottom:12px;"
-# src="http://i.creativecommons.org/l/by-nc-sa/2.5/ar/88x31.png"></a>"""
+LICENSE = """
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/ar/">
+<img alt="Creative Commons License BY-NC-SA"
+style="border-width:0; margin-bottom:12px;"
+src="http://i.creativecommons.org/l/by-nc-sa/2.5/ar/88x31.png"></a>"""
 
 # A small copyright notice for the page footer (in HTML).
 # (translatable)
@@ -738,12 +735,14 @@ COMMENT_SYSTEM_ID = ""
 # Extra options to pass to the pandoc comand.
 # by default, it's empty, is a list of strings, for example
 # ['-F', 'pandoc-citeproc', '--bibliography=/Users/foo/references.bib']
-# PANDOC_OPTIONS = []
+PANDOC_OPTIONS = []
 
 # Social buttons. This is sample code for AddThis (which was the default for a
 # long time). Insert anything you want here, or even make it empty.
 # (translatable)
-# SOCIAL_BUTTONS_CODE = """
+SOCIAL_BUTTONS_CODE = """
+"""
+# SOCIAL_BTTONS_CODE = """
 # <!-- Social buttons -->
 # <div id="addthisbox" class="addthis_toolbox addthis_peekaboo_style addthis_default_style addthis_label_style addthis_32x32_style">
 # <a class="addthis_button_more">Share</a>
@@ -888,7 +887,8 @@ UNSLUGIFY_TITLES = True
 # }
 
 # If webassets is installed, bundle JS and CSS to make site loading faster
-# USE_BUNDLES = True
+USE_BUNDLES = False
+# TODO: set to True once I get webassets installed
 
 # Plugins you don't want to use. Be careful :-)
 # DISABLED_PLUGINS = ["render_galleries"]
