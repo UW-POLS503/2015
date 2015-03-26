@@ -19,7 +19,7 @@ and serve it locally
 ```
 
 Another way to install the dependencies to build
-Install `venv`. For Ubuntu 14.10 and python 3
+Install `venv`. In Ubuntu this can be installed with
 ```console
 > apt-get install python3-venv
 ```
@@ -30,15 +30,15 @@ Then create and activate a local environment
 ```
 One the virtual environment is activiated, install the dependencies with
 ```
-pip requirements.txt
+pip install -r requirements.txt
 ```
 
-Additionally this site requires
+Additionally this site requires the following (in addition to some libraries required by the python packages):
 
 - [pandoc](http://johnmacfarlane.net/pandoc/)
 - [pandoc-citeproc](https://github.com/jgm/pandoc-citeproc)
 
-In Ubuntu these can be installed with
+In Ubuntu, these can be installed with
 ```console
 > apt-get install pandoc pandoc-citeproc
 ```
