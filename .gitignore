@@ -1,4 +1,6 @@
-.doit.db.*
+.doit.db*
 /cache/
 /output/
-/auto/
+auto/
+__pycache__
+/venv/
