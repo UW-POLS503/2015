@@ -1,29 +1,49 @@
 <!--
-.. title: Info
+.. title: Syllabus
 .. slug: index
 .. date: 2015-03-25 21:36:15 UTC-07:00
-.. tags: 
-.. category: 
-.. link: 
-.. description: 
-.. type: text
+.. description: Syllabus for Jeffrey Arnold, POLS/CS&SS 503: Advanced Quantitative Political Methodology, Spring 2015, University of Washington.
 -->
 
 
 # Teaching Team
 
-|Professor   | [Jeffrey Arnold](http://jrnold.me)                       | [jrnold@uw.edu](mailto:jrnold@uw.ed
-u)     |
-|:-----------|:---------------------------------------------------------|:------------------------------------------|
-|TAs         | [Sergio García-Rios](http://www.sergiogarciarios.com/)   | [sigarcia@uw.edu](mailto:sigarcia@uw.edu) |
-|            | [Carolina Johnson](http://staff.washington.edu/csjohns/) | [csjohns@uw.edu](mailto:csjohns@uw.edu)   |
+<table class = ".table-stripped">
+<tr>
+<td>Professor </td>
+<td> <a href="http://jrnold.me">Jeffrey Arnold</a> </td>
+<td> <a href="mailto:jrnold@uw.ed">jrnold@uw.edu</a> </td>
+</tr>
+<tr>
+<td>TAs</td>
+<td><a href="http://www.sergiogarciarios.com/">Sergio García-Rios</a> </td>
+<td><a href="mailto:sigarcia@uw.edu">sigarcia@uw.edu</a> </td>
+</tr>
+<tr>
+<td></td>
+<td><a href="http://staff.washington.edu/csjohns/">Carolina Johnson</a> </td>
+<td><a href="mailto:csjohns@uw.edu">csjohns@uw.edu</a> </td>
+</tr>
+</table>
 
 # Class Meetings
 
-|  | Time | Room
-|:--|:--|:----|
-| Class | T 4:30-7:20 pm | SAV 158 |
-| Lab | Th 1:30-3:30 pm | **SAV 117** |
+<table class = ".table">
+<tr>
+<th></th>
+<th>Time</th>
+<th>Room</th>
+<tr>
+<td>Class </td>
+<td>T 4:30-7:20 pm </td>
+<td> SAV 158 </td>
+</tr>
+<tr>
+<td>Lab </td>
+<td>Th 1:30-3:30 pm </td>
+<td> SAV 117 </td>
+</tr>
+</table>
 
 # Overview and Class Goals
 
@@ -40,25 +60,18 @@ Our agenda includes gaining familiarity with statistical programming via the pop
 <!-- Begin from Chris Adolph syllabus -->
 
 It is desirable for students to have taken the introductory course in the
-sequence (Political Science 501), but any prior course on basic social statistics and linear
-regression should suffice.
+sequence (Political Science 501), but any prior course on basic social statistics and linear regression should suffice.
 
 <!-- End from Chris Adolph syllabus -->
 
-# Course Requirements
+# Assessment and Evaluation
 
-<!-- Begin from Chris Adolph syllabus -->
+Course evaluation is based on:
 
-Course evaluation is based on
-
-1. Problem sets assigned weekly or monthly
--
-
-You may discuss the problem sets with other students (and should note any such collaborators on your write-up), but the computer code, results, and write-up must be your own. The final paper should be a 15--20 page report on an original quantitative analysis or replication-and-extension
-of a published article.
-Students may work in pairs on the final paper with instructor permission.
-
-<!-- End from Chris Adolph syllabus -->
+1. Problem sets assigned weekly or bi-weekly. These problem sets will include programming problems with an emphasis on writing understandable, reproducible code.
+2. Final paper. A 15--20 page original report on an original quantitative analysis or replication-and-extension of a published article.
+    The quantitative analysis should be conducted in R and reproducible.
+	Students may work in pairs on the final paper with instructor permission.
 
 # Required Texts
 
@@ -72,22 +85,22 @@ Students may work in pairs on the final paper with instructor permission.
 **Warning:** The uncertainty on this schedule is high.
 Given that this is my first time teaching this course, I expect many adjustments to be made.
 
-## Week 1: Introduction to 503 and R and Matrix Algebra Review
+## Week 1: Introduction to 503 and R, Math Review
 
 - Tuesday, Mar 31: 
 
-    - Gelman and Hill Ch 2
-	- Moore and Siegel
-	- Basic regression review: Fox, Ch 2, 3
+    - Gelman and Hill, Ch 2
+ 	- @moore_mathematics_2013, Ch 12 (on canvas)
+	- Fox, Ch 2, 3
 
-## Week 2: Assumptions & Properties of the Lienar Regression Model, Part I
+## Week 2: Assumptions & Properties of the Linear Regression Model, Part I
 
 - Tuesday, April 7: 
 
-    - Zuur, Ch 1, 2, 3.
+    - Zuur, Ch 1, 2, 3
 	- Fox, Ch 5, 6, 9 (skim)
 
-## Week 3: Assumptions & Properties of the Lienar Regression Model, Part II
+## Week 3: Assumptions & Properties of the Linear Regression Model, Part II
 
 
 - Tuesday, April 14:
@@ -100,15 +113,15 @@ Given that this is my first time teaching this course, I expect many adjustments
 - Tuesday, Apr 21:
 
     - Zuur, Ch 4, 6
-	- Gelman and Hill, Ch 3
-	- Brambor, Clark and Golder
+	- Gelman and Hill, Ch 3]
+	- @brambor_understanding_2006
 
 ## Week 5: Model Fitting and Data Transformation
 
 - Tuesday, Apr 28
 
-    - Gelman and Hill, Ch 4, 7 (optional)
 	- Fox, Ch 12, 13, 17.1--17.2
+    - Gelman and Hill, Ch 4, 7 (optional)
 
 ## Week 6: Outliers and Robust Regression
 
@@ -116,7 +129,7 @@ Given that this is my first time teaching this course, I expect many adjustments
 
     - Fox, Ch 11, 19
 
-## Week 7: TBD
+## Week 7: Causality
 
 - Tuesday, May 12
 
@@ -134,4 +147,9 @@ Given that this is my first time teaching this course, I expect many adjustments
 
 * * * 
 
-Syllabus derived from Chris Adolph, "POLS/CSSS 503: Advanced Quantitative Political Methodology Syllabus", http://faculty.washington.edu/cadolph/503/503.pdf, [CC-BY-SA](https://creativecommons.org/licenses/by-sa/2.0/).
+Syllabus derived from Christopher Adolph. (Spring 2014). *POLS/CSSS 503: Advanced Quantitative Political Methodology* [Syllabus]. University of Washington. http://faculty.washington.edu/cadolph/503/503.pdf [CC-BY-SA](https://creativecommons.org/licenses/by-sa/2.0/).
+
+<!--  LocalWords:  UTC td href TAs García SAV gelman angrist UW eBook
+ -->
+<!--  LocalWords:  zuur Brambor TBD CSSS
+ -->
