@@ -123,8 +123,7 @@ TRANSLATIONS_PATTERN = "{path}.{lang}.{ext}"
 
 NAVIGATION_LINKS = {
     DEFAULT_LANG: (
-        ("/index.html", "Info"),
-        ("/schedule.html", "Schedule"),
+        ("/index.html", "Syllabus"),
         ("/links.html", "Links"),
         ("/faq.html", "FAQ"),
         ("https://canvas.uw.edu/courses/964019", "Canvas"),
