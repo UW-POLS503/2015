@@ -126,8 +126,7 @@ NAVIGATION_LINKS = {
 }
 
 # Name of the theme to use.
-THEME = "ipython"
-# THEME = "default"
+THEME = "ipython-flatly"
 
 # Below this point, everything is optional
 
@@ -208,7 +207,7 @@ PAGES = (
 # One or more folders containing files to be copied as-is into the output.
 # The format is a dictionary of {source: relative destination}.
 # Default is:
-# FILES_FOLDERS = {'files': ''}
+FILES_FOLDERS = {'files': ''}
 # Which means copy 'files' into 'output'
 
 # One or more folders containing listings to be processed and stored into
@@ -484,7 +483,7 @@ RSS_PATH = ""
 # be visible on the site. The format is a dictionary of {source:
 # relative destination}.
 #
-# IMAGE_FOLDERS = {'images': ''}
+IMAGE_FOLDERS = {'images': ''}
 
 # #############################################################################
 # HTML fragments and diverse things that are used by the templates
@@ -551,10 +550,23 @@ RSS_PATH = ""
 # FAVICONS contains (name, file, size) tuples.
 # Used for create favicon link like this:
 # <link rel="name" href="file" sizes="size"/>
-# FAVICONS = {
-#     ("icon", "/favicon.ico", "16x16"),
-#     ("icon", "/icon_128x128.png", "128x128"),
-# }
+# Generated these with http://www.favicomatic.com/done
+FAVICONS = {
+    ("apple-touch-icon-precomposed", "/apple-touch-icon-57x57.png", "57x57"),
+    ("apple-touch-icon-precomposed", "/apple-touch-icon-114x114.png", "114x114"),
+    ("apple-touch-icon-precomposed", "/apple-touch-icon-72x72.png", "72x72"),
+    ("apple-touch-icon-precomposed", "/apple-touch-icon-144x144.png", "144x144"),
+    ("apple-touch-icon-precomposed", "/apple-touch-icon-60x60.png", "60x60"),
+    ("apple-touch-icon-precomposed", "/apple-touch-icon-120x120.png", "120x120"),
+    ("apple-touch-icon-precomposed", "/apple-touch-icon-76x76.png", "76x76"),
+    ("apple-touch-icon-precomposed", "/apple-touch-icon-152x152.png", "152x152"),
+    ("icon", "/favicon-196x196.png", "196x196"),
+    ("icon", "/favicon-96x96.png", "96x96"),
+    ("icon", "/favicon-32x32.png", "32x32"),
+    ("icon", "/favicon-16x16.png", "16x16"),
+    ("icon", "/favicon-128.png", "128x128"),
+    # ("icon", "/icon_128x128.png", "128x128"),
+}
 
 # Show only teasers in the index pages? Defaults to False.
 # INDEX_TEASERS = False
@@ -588,10 +600,8 @@ LICENSE = ""
 # I recommend using the Creative Commons' wizard:
 # http://creativecommons.org/choose/
 LICENSE = """
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/ar/">
-<img alt="Creative Commons License BY-NC-SA"
-style="border-width:0; margin-bottom:12px;"
-src="http://i.creativecommons.org/l/by-nc-sa/2.5/ar/88x31.png"></a>"""
+<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/80x15.png" /></a>.
+"""
 
 # A small copyright notice for the page footer (in HTML).
 # (translatable)
@@ -769,7 +779,7 @@ SOCIAL_BUTTONS_CODE = """
 
 # By default, Nikola generates RSS files for the website and for tags, and
 # links to it.  Set this to False to disable everything RSS-related.
-# GENERATE_RSS = True
+GENERATE_RSS = False
 
 # RSS_LINK is a HTML fragment to link the RSS or Atom feeds. If set to None,
 # the base.tmpl will use the feed Nikola generates. However, you may want to
@@ -808,14 +818,14 @@ SOCIAL_BUTTONS_CODE = """
 # """ % SITE_URL
 #
 # If you prefer a Google search form, here's an example that should just work:
-# SEARCH_FORM = """
-# <!-- Custom search with Google-->
-# <form id="search" action="//www.google.com/search" method="get" class="navbar-form pull-left">
-# <input type="hidden" name="q" value="site:%s" />
-# <input type="text" name="q" maxlength="255" results="0" placeholder="Search"/>
-# </form>
-# <!-- End of custom search -->
-#""" % SITE_URL
+SEARCH_FORM = """
+<!-- Custom search with Google-->
+<form id="search" action="//www.google.com/search" method="get" class="navbar-form pull-left">
+<input type="hidden" name="q" value="site:%s" />
+<input type="text" name="q" maxlength="255" results="0" placeholder="Search"/>
+</form>
+<!-- End of custom search -->
+""" % SITE_URL
 
 # Use content distribution networks for jQuery, twitter-bootstrap css and js,
 # and html5shiv (for older versions of Internet Explorer)
