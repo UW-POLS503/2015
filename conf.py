@@ -126,7 +126,7 @@ NAVIGATION_LINKS = {
 }
 
 # Name of the theme to use.
-THEME = "ipython-flatly"
+THEME = "ipython"
 
 # Below this point, everything is optional
 
