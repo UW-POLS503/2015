@@ -18,7 +18,7 @@ import time
 
 # Data about this site
 BLOG_AUTHOR = "Jeffrey B. Arnold"  # (translatable)
-BLOG_TITLE = "POLS 503: Advanced Quantitative Political Methodology"  # (translatable)
+BLOG_TITLE = "POLS/CS&SS 503 : Advanced Quantitative Political Methodology"  # (translatable)
 # This is the main URL for your site. It will be used
 # in a prominent link
 SITE_URL = "http://jrnold.github.io/pols_503_sp15/"
@@ -26,7 +26,7 @@ SITE_URL = "http://jrnold.github.io/pols_503_sp15/"
 # If not set, defaults to SITE_URL
 BASE_URL = "http://jrnold.github.io/pols_503_sp15/"
 BLOG_EMAIL = "jeffrey.arnold@gmail.com"
-BLOG_DESCRIPTION = "Site for POLS 503: Advanced Quantitative Political Methodology offered at the University of Washington in Spring 2015"  # (translatable)
+BLOG_DESCRIPTION = "Site for POLS/CS&SS 503: Advanced Quantitative Political Methodology (University of Washington; Spring 2015)"  # (translatable)
 
 # Nikola is multilingual!
 #
@@ -600,7 +600,7 @@ LICENSE = ""
 # I recommend using the Creative Commons' wizard:
 # http://creativecommons.org/choose/
 LICENSE = """
-<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/80x15.png" /></a>.
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a>.
 """
 
 # A small copyright notice for the page footer (in HTML).
