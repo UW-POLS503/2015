@@ -1,0 +1,3 @@
+# Syllabus
+
+Hello, world!
