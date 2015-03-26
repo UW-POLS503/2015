@@ -6,22 +6,30 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
   <loc>http://jrnold.github.io/pols_503_sp15/archive.html</loc>
-  <lastmod>2015-03-25</lastmod>
+  <lastmod>2015-03-26</lastmod>
  </url>
  <url>
   <loc>http://jrnold.github.io/pols_503_sp15/blog/index.html</loc>
-  <lastmod>2015-03-25</lastmod>
+  <lastmod>2015-03-26</lastmod>
  </url>
  <url>
   <loc>http://jrnold.github.io/pols_503_sp15/categories/index.html</loc>
-  <lastmod>2015-03-25</lastmod>
+  <lastmod>2015-03-26</lastmod>
  </url>
  <url>
   <loc>http://jrnold.github.io/pols_503_sp15/index.html</loc>
-  <lastmod>2015-03-25</lastmod>
+  <lastmod>2015-03-26</lastmod>
+ </url>
+ <url>
+  <loc>http://jrnold.github.io/pols_503_sp15/links.html</loc>
+  <lastmod>2015-03-26</lastmod>
+ </url>
+ <url>
+  <loc>http://jrnold.github.io/pols_503_sp15/schedule.html</loc>
+  <lastmod>2015-03-26</lastmod>
  </url>
  <url>
   <loc>http://jrnold.github.io/pols_503_sp15/syllabus.html</loc>
-  <lastmod>2015-03-25</lastmod>
+  <lastmod>2015-03-26</lastmod>
  </url>
 </urlset>
