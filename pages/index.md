@@ -49,8 +49,12 @@ regression should suffice.
 
 <!-- Begin from Chris Adolph syllabus -->
 
-Course evaluation will be based on problem sets (given weekly or
-biweekly) and a final paper (due TBD). You may discuss the problem sets with other students (and should note any such collaborators on your write-up), but the computer code, results, and write-up must be your own. The final paper should be a 15--20 page report on an original quantitative analysis or replication-and-extension
+Course evaluation is based on
+
+1. Problem sets assigned weekly or monthly
+-
+
+You may discuss the problem sets with other students (and should note any such collaborators on your write-up), but the computer code, results, and write-up must be your own. The final paper should be a 15--20 page report on an original quantitative analysis or replication-and-extension
 of a published article.
 Students may work in pairs on the final paper with instructor permission.
 
@@ -60,7 +64,74 @@ Students may work in pairs on the final paper with instructor permission.
 
 - @fox_applied_2008
 - @gelman_data_2006
-- @angrist_mostly_2009
-- @zuur_beginners_2009 *available at the library*
+- @angrist_mostly_2009 (UW library eBook available)
+- @zuur_beginners_2009 (UW library eBook available)
 
-Some Text from Chris Adolph, "POLS/CSSS 503: Advanced Quantitative Political Methodology Syllabus", http://faculty.washington.edu/cadolph/503/503.pdf, [CC-BY-SA](https://creativecommons.org/licenses/by-sa/2.0/).
+# Schedule and Topics
+
+**Warning:** The uncertainty on this schedule is high.
+Given that this is my first time teaching this course, I expect many adjustments to be made.
+
+## Week 1: Introduction to 503 and R and Matrix Algebra Review
+
+- Tuesday, Mar 31: 
+
+    - Gelman and Hill Ch 2
+	- Moore and Siegel
+	- Basic regression review: Fox, Ch 2, 3
+
+## Week 2: Assumptions & Properties of the Lienar Regression Model, Part I
+
+- Tuesday, April 7: 
+
+    - Zuur, Ch 1, 2, 3.
+	- Fox, Ch 5, 6, 9 (skim)
+
+## Week 3: Assumptions & Properties of the Lienar Regression Model, Part II
+
+
+- Tuesday, April 14:
+
+    - Fox, Ch 9
+	- Zuur, Ch 5
+
+## Week 4: Statistical Inference / Interpretation of the Linear Model
+
+- Tuesday, Apr 21:
+
+    - Zuur, Ch 4, 6
+	- Gelman and Hill, Ch 3
+	- Brambor, Clark and Golder
+
+## Week 5: Model Fitting and Data Transformation
+
+- Tuesday, Apr 28
+
+    - Gelman and Hill, Ch 4, 7 (optional)
+	- Fox, Ch 12, 13, 17.1--17.2
+
+## Week 6: Outliers and Robust Regression
+
+- Tuesday, May 5
+
+    - Fox, Ch 11, 19
+
+## Week 7: TBD
+
+- Tuesday, May 12
+
+## Week 8: TBD
+
+- Tuesday, May 19
+
+## Week 9: TBD
+
+- Tuesday, May 26
+
+## Week 10:  TBD
+
+- Tuesday, June 2
+
+* * * 
+
+Syllabus derived from Chris Adolph, "POLS/CSSS 503: Advanced Quantitative Political Methodology Syllabus", http://faculty.washington.edu/cadolph/503/503.pdf, [CC-BY-SA](https://creativecommons.org/licenses/by-sa/2.0/).

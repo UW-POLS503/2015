@@ -28,6 +28,8 @@ BASE_URL = "http://jrnold.github.io/pols_503_sp15/"
 BLOG_EMAIL = "jeffrey.arnold@gmail.com"
 BLOG_DESCRIPTION = "Site for POLS/CS&SS 503: Advanced Quantitative Political Methodology (University of Washington; Spring 2015)"  # (translatable)
 
+SOURCE_URL = "http://github.com/jrnold/pols_503_sp15/"
+
 # Nikola is multilingual!
 #
 # Currently supported languages are:
@@ -609,7 +611,7 @@ LICENSE = """
 
 # A small copyright notice for the page footer (in HTML).
 # (translatable)
-CONTENT_FOOTER = 'Contents &copy; {date}         <a href="mailto:{email}">{author}</a> - Powered by         <a href="http://getnikola.com" rel="nofollow">Nikola</a>         {license}'
+CONTENT_FOOTER = 'Contents &copy; {date}  <a href="mailto:{email}">{author}</a> - Powered by <a href="http://getnikola.com" rel="nofollow">Nikola</a> {license} </br>Source on <a href="{source_url}">github</a>'
 
 # Things that will be passed to CONTENT_FOOTER.format().  This is done
 # for translatability, as dicts are not formattable.  Nikola will
@@ -629,7 +631,8 @@ CONTENT_FOOTER_FORMATS = {
             "email": BLOG_EMAIL,
             "author": BLOG_AUTHOR,
             "date": time.gmtime().tm_year,
-            "license": LICENSE
+            "license": LICENSE,
+            "source_url": SOURCE_URL
         }
     )
 }
