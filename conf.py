@@ -121,7 +121,11 @@ TRANSLATIONS_PATTERN = "{path}.{lang}.{ext}"
 
 NAVIGATION_LINKS = {
     DEFAULT_LANG: (
+        ("/schedule.html", "Schedule"),
+        ("/index.html", "Info"),
         ("/syllabus.html", "Syllabus"),
+        ("/links.html", "Links"),
+        ("/canvas.html", "Canvas"),
     ),
 }
 
