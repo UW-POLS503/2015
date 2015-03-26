@@ -8,30 +8,24 @@ article: http://ogp.me/ns/article#
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Info | POLS/CS&amp;SS 503 : Advanced Quantitative Political Methodology</title>
 
-                <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-        <link href="assets/css/rst.css" rel="stylesheet" type="text/css">
-        <link href="assets/css/code.css" rel="stylesheet" type="text/css">
-        <link href="assets/css/colorbox.css" rel="stylesheet" type="text/css">
-        <link href="assets/css/theme.css" rel="stylesheet" type="text/css">
-        <link href="assets/css/ipython.min.css" rel="stylesheet" type="text/css">
-        <link href="assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+                <link href="assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
 
     
       <link rel="canonical" href="http://jrnold.github.io/pols_503_sp15/index.html">
 
-            <link rel="icon" href="favicon-96x96.png" sizes="96x96">
-            <link rel="icon" href="favicon-196x196.png" sizes="196x196">
             <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-72x72.png" sizes="72x72">
-            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-76x76.png" sizes="76x76">
-            <link rel="icon" href="favicon-32x32.png" sizes="32x32">
-            <link rel="icon" href="favicon-16x16.png" sizes="16x16">
-            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-152x152.png" sizes="152x152">
-            <link rel="icon" href="favicon-128.png" sizes="128x128">
-            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-120x120.png" sizes="120x120">
-            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-60x60.png" sizes="60x60">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-144x144.png" sizes="144x144">
             <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-114x114.png" sizes="114x114">
             <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-57x57.png" sizes="57x57">
-            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-144x144.png" sizes="144x144">
+            <link rel="icon" href="favicon-16x16.png" sizes="16x16">
+            <link rel="icon" href="favicon-196x196.png" sizes="196x196">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-76x76.png" sizes="76x76">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-120x120.png" sizes="120x120">
+            <link rel="icon" href="favicon-32x32.png" sizes="32x32">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-60x60.png" sizes="60x60">
+            <link rel="icon" href="favicon-128.png" sizes="128x128">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-152x152.png" sizes="152x152">
+            <link rel="icon" href="favicon-96x96.png" sizes="96x96">
 
 
 
@@ -228,19 +222,101 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+e+'<\/'+'a'+'>');
 <h1 id="course-requirements">Course Requirements</h1>
 <!-- Begin from Chris Adolph syllabus -->
 
-<p>Course evaluation will be based on problem sets (given weekly or biweekly) and a final paper (due TBD). You may discuss the problem sets with other students (and should note any such collaborators on your write-up), but the computer code, results, and write-up must be your own. The final paper should be a 15--20 page report on an original quantitative analysis or replication-and-extension of a published article. Students may work in pairs on the final paper with instructor permission.</p>
+<p>Course evaluation is based on</p>
+<h2 id="problem-sets-assigned-weekly-or-monthly">1. Problem sets assigned weekly or monthly</h2>
+<p>You may discuss the problem sets with other students (and should note any such collaborators on your write-up), but the computer code, results, and write-up must be your own. The final paper should be a 15--20 page report on an original quantitative analysis or replication-and-extension of a published article. Students may work in pairs on the final paper with instructor permission.</p>
 <!-- End from Chris Adolph syllabus -->
 
 <h1 id="required-texts">Required Texts</h1>
 <ul>
 <li><span class="citation">John Fox <em>Applied Regression Analysis and Generalized Linear Models</em>, 2nd edition. (Los Angeles: SAGE Publications, Inc, 2008).</span></li>
 <li><span class="citation">Andrew Gelman and Jennifer Hill <em>Data Analysis Using Regression and Multilevel/Hierarchical Models</em>, 1 edition. (Cambridge ; New York: Cambridge University Press, 2006).</span></li>
-<li><span class="citation">Joshua D. Angrist and Jörn-Steffen Pischke <em>Mostly Harmless Econometrics: An Empiricist’s Companion</em>, 1 edition. (Princeton: Princeton University Press, 2009).</span></li>
 <li>
-<span class="citation">Alain Zuur, Elena N. Ieno, and Erik Meesters <em>A Beginner’s Guide to R</em>, 2009 edition. (Dordrecht ; New York: Springer, 2009).</span> <em>available at the library</em>
+<span class="citation">Joshua D. Angrist and Jörn-Steffen Pischke <em>Mostly Harmless Econometrics: An Empiricist’s Companion</em>, 1 edition. (Princeton: Princeton University Press, 2009).</span> (UW library eBook available)</li>
+<li>
+<span class="citation">Alain Zuur, Elena N. Ieno, and Erik Meesters <em>A Beginner’s Guide to R</em>, 2009 edition. (Dordrecht ; New York: Springer, 2009).</span> (UW library eBook available)</li>
+</ul>
+<h1 id="schedule-and-topics">Schedule and Topics</h1>
+<p><strong>Warning:</strong> The uncertainty on this schedule is high. Given that this is my first time teaching this course, I expect many adjustments to be made.</p>
+<h2 id="week-1-introduction-to-503-and-r-and-matrix-algebra-review">Week 1: Introduction to 503 and R and Matrix Algebra Review</h2>
+<ul>
+<li>
+<p>Tuesday, Mar 31:</p>
+<ul>
+<li>Gelman and Hill Ch 2</li>
+<li>Moore and Siegel</li>
+<li>Basic regression review: Fox, Ch 2, 3</li>
+</ul>
 </li>
 </ul>
-<p>Some Text from Chris Adolph, "POLS/CSSS 503: Advanced Quantitative Political Methodology Syllabus", http://faculty.washington.edu/cadolph/503/503.pdf, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>.</p>
+<h2 id="week-2-assumptions-properties-of-the-lienar-regression-model-part-i">Week 2: Assumptions &amp; Properties of the Lienar Regression Model, Part I</h2>
+<ul>
+<li>
+<p>Tuesday, April 7:</p>
+<ul>
+<li>Zuur, Ch 1, 2, 3.</li>
+<li>Fox, Ch 5, 6, 9 (skim)</li>
+</ul>
+</li>
+</ul>
+<h2 id="week-3-assumptions-properties-of-the-lienar-regression-model-part-ii">Week 3: Assumptions &amp; Properties of the Lienar Regression Model, Part II</h2>
+<ul>
+<li>
+<p>Tuesday, April 14:</p>
+<ul>
+<li>Fox, Ch 9</li>
+<li>Zuur, Ch 5</li>
+</ul>
+</li>
+</ul>
+<h2 id="week-4-statistical-inference-interpretation-of-the-linear-model">Week 4: Statistical Inference / Interpretation of the Linear Model</h2>
+<ul>
+<li>
+<p>Tuesday, Apr 21:</p>
+<ul>
+<li>Zuur, Ch 4, 6</li>
+<li>Gelman and Hill, Ch 3</li>
+<li>Brambor, Clark and Golder</li>
+</ul>
+</li>
+</ul>
+<h2 id="week-5-model-fitting-and-data-transformation">Week 5: Model Fitting and Data Transformation</h2>
+<ul>
+<li>
+<p>Tuesday, Apr 28</p>
+<ul>
+<li>Gelman and Hill, Ch 4, 7 (optional)</li>
+<li>Fox, Ch 12, 13, 17.1--17.2</li>
+</ul>
+</li>
+</ul>
+<h2 id="week-6-outliers-and-robust-regression">Week 6: Outliers and Robust Regression</h2>
+<ul>
+<li>
+<p>Tuesday, May 5</p>
+<ul>
+<li>Fox, Ch 11, 19</li>
+</ul>
+</li>
+</ul>
+<h2 id="week-7-tbd">Week 7: TBD</h2>
+<ul>
+<li>Tuesday, May 12</li>
+</ul>
+<h2 id="week-8-tbd">Week 8: TBD</h2>
+<ul>
+<li>Tuesday, May 19</li>
+</ul>
+<h2 id="week-9-tbd">Week 9: TBD</h2>
+<ul>
+<li>Tuesday, May 26</li>
+</ul>
+<h2 id="week-10-tbd">Week 10: TBD</h2>
+<ul>
+<li>Tuesday, June 2</li>
+</ul>
+<hr>
+<p>Syllabus derived from Chris Adolph, "POLS/CSSS 503: Advanced Quantitative Political Methodology Syllabus", http://faculty.washington.edu/cadolph/503/503.pdf, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>.</p>
 <div class="references">
 
 </div>
@@ -252,20 +328,15 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+e+'<\/'+'a'+'>');
         <!--End of body content-->
 
         <footer>
-            Contents © 2015         <a href="mailto:jeffrey.arnold@gmail.com">Jeffrey B. Arnold</a> - Powered by         <a href="http://getnikola.com" rel="nofollow">Nikola</a>         
+            Contents © 2015  <a href="mailto:jeffrey.arnold@gmail.com">Jeffrey B. Arnold</a> - Powered by <a href="http://getnikola.com" rel="nofollow">Nikola</a> 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png"></a>.
-
+ Source on <a href="http://github.com/jrnold/pols_503_sp15/">github</a>
             
         </footer>
     </div>
 </div>
 
-            <script src="assets/js/jquery.min.js"></script>
-            <script src="assets/js/bootstrap.min.js"></script>
-            <script src="assets/js/moment-with-locales.min.js"></script>
-            <script src="assets/js/fancydates.js"></script>
-        <script src="assets/js/mathjax.js"></script>
-        <script src="assets/js/jquery.colorbox-min.js"></script>
+            <script src="assets/js/all-nocdn.js"></script>
     
 
 
