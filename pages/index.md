@@ -1,5 +1,5 @@
 <!--
-.. title: Index
+.. title: Info
 .. slug: index
 .. date: 2015-03-25 21:36:15 UTC-07:00
 .. tags: 
@@ -9,20 +9,30 @@
 .. type: text
 -->
 
-This is the page for POLS/CS&SS 503: Advanced Quantitative Political Methdology
 
+# Teaching Team
+
+|Professor   | [Jeffrey Arnold](http://jrnold.me)                       | [jrnold@uw.edu](mailto:jrnold@uw.ed
+u)     |
+|:-----------|:---------------------------------------------------------|:------------------------------------------|
+|TAs         | [Sergio García-Rios](http://www.sergiogarciarios.com/)   | [sigarcia@uw.edu](mailto:sigarcia@uw.edu) |
+|            | [Carolina Johnson](http://staff.washington.edu/csjohns/) | [csjohns@uw.edu](mailto:csjohns@uw.edu)   |
+
+# Class Meetings
+
+|  | Time | Room
+|:--|:--|:----|
+| Class | T 4:30-7:20 pm | SAV 158 |
+| Lab | Th 1:30-3:30 pm | **SAV 117** |
 
 # Overview and Class Goals
 
 <!-- Begin from Chris Adolph syllabus -->
 
-This course continues the graduate sequence in quantitative
-political methodology, focused particularly on fitting, interpreting, and refining the
-linear regression model.
+This course continues the graduate sequence in quantitative political methodology, focused particularly on fitting, interpreting, and refining the linear regression model.
 
 Our agenda includes gaining familiarity with statistical programming via the popular R environment, developing clear and informative graphical representations of regression results, and understanding regression models in matrix form.
 
-More advanced topics, likely including time series, panel data, and causal inference, will be covered as time and student interests permit.
 <!-- End from Chris Adolph syllabus -->
 
 # Prerequisites
@@ -46,5 +56,11 @@ Students may work in pairs on the final paper with instructor permission.
 
 <!-- End from Chris Adolph syllabus -->
 
+# Required Texts
+
+- @fox_applied_2008
+- @gelman_data_2006
+- @angrist_mostly_2009
+- @zuur_beginners_2009 *available at the library*
 
 Some Text from Chris Adolph, "POLS/CSSS 503: Advanced Quantitative Political Methodology Syllabus", http://faculty.washington.edu/cadolph/503/503.pdf, [CC-BY-SA](https://creativecommons.org/licenses/by-sa/2.0/).
