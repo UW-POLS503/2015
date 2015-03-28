@@ -754,8 +754,8 @@ COMMENT_SYSTEM_ID = ""
 PANDOC_OPTIONS = ['-s',
                   '-f', 'markdown+yaml_metadata_block+pipe_tables',
                   '-F', 'pandoc-citeproc', 
-                  '--bibliography=pols_503_sp15.bib',
-                  '--csl=csl/chicago-syllabus.csl']
+                  '--bibliography=../pols_503_sp15.bib',
+                  '--csl=../csl/chicago-syllabus.csl']
 
 # Social buttons. This is sample code for AddThis (which was the default for a
 # long time). Insert anything you want here, or even make it empty.

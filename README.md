@@ -4,13 +4,16 @@ Course materials for POLS/CS&SS 503 -- Spring 2015 quarter at the University of 
 
 Course website is at https://jrnold.github.io/pols_503_sp15/
 
-## Install
+## Create Website
 
-This site is built using the static site generator [Nikola](http://getnikola.com/) with Python 3.
+The files for the site are in the directory `web`.
+
+This site is built using the static site generator [Nikola](http://getnikola.com/) with Python 3. 
 
 [Install](http://getnikola.com/handbook.html#installing-nikola) the latest version of Nikola and then build the site
 
 ```console
+> cd web
 > nikola build
 ```
 and serve it locally
