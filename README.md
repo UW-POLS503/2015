@@ -21,7 +21,7 @@ and serve it locally
 > nikola serve
 ```
 
-Another way to install the dependencies to build
+Another way to install the dependencies to build the website is using the Python 3 [venv](https://docs.python.org/3/library/venv.html) module, which replaced the virtual environments in Python 2.
 Install `venv`. In Ubuntu this can be installed with
 ```console
 > apt-get install python3-venv
