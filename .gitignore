@@ -1,0 +1,6 @@
+.doit.db*
+/cache/
+/output/
+auto/
+__pycache__
+/venv/
