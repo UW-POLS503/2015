@@ -131,7 +131,7 @@ NAVIGATION_LINKS = {
 }
 
 # Name of the theme to use.
-THEME = "ipython"
+THEME = "bootstrap3"
 
 # Below this point, everything is optional
 

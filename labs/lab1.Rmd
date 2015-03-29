@@ -1,0 +1,23 @@
+---
+title: "Lab 1: Introduction to R and Rstudio, and knitr"
+---
+
+# Downloading and Installing R
+
+
+# Using RStudio
+
+
+# R scripts and R
+
+
+
+
+# Creating your first R Markdown Document
+
+
+
+# Introduction to ggplot2
+
+- 
+- Translate existing plotting code from 2014 labs to ggplot2
