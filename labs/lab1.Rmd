@@ -30,5 +30,8 @@ title: "Lab 1: Introduction to R and Rstudio, and knitr"
 # Introduction to ggplot2
 
 - Either the vignette for ggplot2 or Kathrik Ram's tutorial (http://inundata.org/2013/04/10/a-quick-introduction-to-ggplot2/; referenced in Software Carpentry) look as good a place to start as any.
+- jennybc: https://github.com/jennybc/ggplot2-tutorial
+- STAT 545: https://stat545-ubc.github.io/cm005_still-data-ggplot2-rmarkdown.html
 - Translate existing plotting code from 2014 labs to ggplot2
+- The UW R session with jennybc https://github.com/jennybc/UW-R
 

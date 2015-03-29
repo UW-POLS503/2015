@@ -1,0 +1,18 @@
+---
+title: Lab 2: Tidy data with tidyr and dplyr; Running our first regression
+---
+
+## References
+
+- [Data Carpentry](http://datacarpentry.org/) https://github.com/datacarpentry/datacarpentry/tree/master/lessons/tidy-data Races and sexes of characters and number of words spoken
+- STAT 545
+
+    - https://stat545-ubc.github.io/cm007_dplyr-intro.html
+	- https://stat545-ubc.github.io/cm102_data-manipulation-finale.html
+
+- The vignette for dplyr and tidyr are good: http://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html
+
+
+
+
+
