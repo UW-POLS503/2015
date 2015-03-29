@@ -13,9 +13,9 @@ Some notes on the labs from Spring 2014. http://faculty.washington.edu/cadolph/i
 4. simulating the monty hall problem
 5. the birthday problem
 
-Notes
+Notes:
 
-- replace recoding with `plyr::revalue`
+- replace recoding with `plyr::revalue`, or manually do it with a named vector
 - replace loops and simulation with `dplyr::do`. Should probably do it with a for loop and then without it
 
 ### Lab 4: Useful things, largely loops and simulation
