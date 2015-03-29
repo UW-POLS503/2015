@@ -7,17 +7,28 @@ title: "Lab 1: Introduction to R and Rstudio, and knitr"
 
 # Using RStudio
 
+- Install and open
 
 # R scripts and R
 
+- What is an R script?
+- What is the difference between an R script and the file? 
+- What is the difference between the workspace and the code? Note that the code should be considered real, and the results computed in the workspace temporary.
+- Tips on getting help and TAB-completion, up and down history
 
+# Installing packages
 
+- Install ggplot2 using `install_packages`
+- Is there a way to install a package from `github` ? Probably `hadley/haven` to read Stata files.
 
 # Creating your first R Markdown Document
 
-
+- Create a markdown document
+- This should have a pretty graph
+- Save it to html and doc. Saving to pdf would require instal
 
 # Introduction to ggplot2
 
-- 
+- Either the vignette for ggplot2 or Kathrik Ram's tutorial (http://inundata.org/2013/04/10/a-quick-introduction-to-ggplot2/; referenced in Software Carpentry) look as good a place to start as any.
 - Translate existing plotting code from 2014 labs to ggplot2
+
