@@ -8,7 +8,7 @@
 
 # Teaching Team
 
-<table class = ".table-stripped">
+<table class = "table table-striped table-hover">
 <tr>
 <td>Professor </td>
 <td> <a href="http://jrnold.me">Jeffrey Arnold</a> </td>
@@ -28,7 +28,7 @@
 
 # Class Meetings
 
-<table class = ".table">
+<table class = "table table-striped table-hover">
 <tr>
 <th></th>
 <th>Time</th>
@@ -87,34 +87,46 @@ Given that this is my first time teaching this course, I expect many adjustments
 
 ## Week 1: Introduction to 503 and R, Math Review
 
-- Tuesday, Mar 31: 
+- Tuesday, March 31
 
     - Gelman and Hill, Ch 2
- 	- @moore_mathematics_2013, Ch 12 (on canvas)
 	- Fox, Ch 2, 3
+
+- Friday, April 3
+
+    - @wickham_layered_2010
 
 ## Week 2: Assumptions & Properties of the Linear Regression Model, Part I
 
-- Tuesday, April 7: 
+- Tuesday, April 7
 
-    - Zuur, Ch 1, 2, 3
 	- Fox, Ch 5, 6, 9 (skim)
+
+- Friday, April 10
+
+    - @wickham_tidy_2014
+    - Zuur, Ch 1, 2, 3 (optional)
 
 ## Week 3: Assumptions & Properties of the Linear Regression Model, Part II
 
-
-- Tuesday, April 14:
+- Tuesday, April 14
 
     - Fox, Ch 9
+	
+- Friday, April 17
+
 	- Zuur, Ch 5
 
 ## Week 4: Statistical Inference / Interpretation of the Linear Model
 
-- Tuesday, Apr 21:
+- Tuesday, April 21
 
-    - Zuur, Ch 4, 6
 	- Gelman and Hill, Ch 3]
 	- @brambor_understanding_2006
+
+- Friday, April 17
+
+    - Zuur, Ch 4, 6
 
 ## Week 5: Model Fitting and Data Transformation
 
@@ -122,6 +134,8 @@ Given that this is my first time teaching this course, I expect many adjustments
 
 	- Fox, Ch 12, 13, 17.1--17.2
     - Gelman and Hill, Ch 4, 7 (optional)
+	
+- Friday, May 1
 
 ## Week 6: Outliers, Robust Regression, Bootstrapping
 
@@ -129,17 +143,22 @@ Given that this is my first time teaching this course, I expect many adjustments
 
     - Fox, Ch 11, 19
 
+- Friday, May 8
+
 ## Week 7: Causal Inference
 
 - Tuesday, May 12
+- Friday, May 15
 
 ## Week 8: Prediction
 
 - Tuesday, May 19
+- Friday, May 22
 
 ## Week 9: Limited Dependent Variables, Robust standard errors
 
 - Tuesday, May 26
+- Friday, May 29
 
 ## Week 10: 
 

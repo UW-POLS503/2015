@@ -5,14 +5,13 @@ article: http://ogp.me/ns/article#
 " lang="en">
     <head>
     <meta charset="utf-8">
-    <meta name="description" content="Site for POLS/CS&amp;SS 503: Advanced Quantitative Political Methodology (University of Washington; Spring 2015)">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Archive | POLS/CS&amp;SS 503 : Advanced Quantitative Political Methodology</title>
+    <title>Installing R and RStudio | POLS/CS&amp;SS 503 : Advanced Quantitative Political Methodology</title>
 
                 <link href="assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
 
     
-      <link rel="canonical" href="http://jrnold.github.io/pols_503_sp15/archive.html">
+      <link rel="canonical" href="http://jrnold.github.io/pols_503_sp15/install_r.html">
 
             <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-72x72.png" sizes="72x72">
             <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-152x152.png" sizes="152x152">
@@ -35,6 +34,21 @@ article: http://ogp.me/ns/article#
 
     
 
+    
+    <meta name="author" content="Jeffrey B. Arnold">
+        <meta property="og:site_name" content="POLS/CS&amp;SS 503 : Advanced Quantitative Political Methodology">
+    <meta property="og:title" content="Installing R and RStudio">
+    <meta property="og:url" content="http://jrnold.github.io/pols_503_sp15/install_r.html">
+    <meta property="og:description" content="This course will require the following software:
+
+R. The programming language and interpreter that actually runs the code
+RStudio. An IDE, i.e. a nice interface that makes working with R much easier.
+">
+    <meta property="og:type" content="article">
+    <meta property="article:published_time" content="2015-03-29T23:09:26.422091-07:00">
+
+    
+    
 
 </head>
 <body>
@@ -100,11 +114,54 @@ article: http://ogp.me/ns/article#
         <!--Body content-->
         <div class="row">
             
-<article class="listpage">
+<article class="storypage" itemscope="itemscope" itemtype="http://schema.org/Article">
     <header>
-        <h1>Archive</h1>
+            <h1 class="p-name entry-title" itemprop="headline name"><a href="#" class="u-url">Installing R and RStudio</a></h1>
+
+        
     </header>
-    <p>Nothing found.</p>
+    <div class="e-content entry-content" itemprop="articleBody text">
+    <!--
+.. title: Installing R and RStudio
+-->
+
+<p>This course will require the following software:</p>
+<ol style="list-style-type: decimal">
+<li>R. The programming language and interpreter that actually runs the code</li>
+<li>RStudio. An <a href="http://en.wikipedia.org/wiki/Integrated_development_environment">IDE</a>, i.e. a nice interface that makes working with R much easier.</li>
+<li>Some tools to build R packages from source since we may be installing some bleeding edge packages.</li>
+<li>LaTeX (optional). Needed to compile PDFs from R Markdown</li>
+</ol>
+<h1 id="installing-r">Installing R</h1>
+<p>The R website is ... special. Since you probably don't know or care what a mirror is, here are links to the</p>
+<ul>
+<li>Ubuntu: <code>sudo apt-get install r-base-dev</code> (in order to be able to install other packages from source).</li>
+</ul>
+<h1 id="installing-rstudio">Installing RStudio</h1>
+<p>You want to download the RStudio Desktop version. Download it from <a href="http://www.rstudio.com/products/rstudio/download/">http://www.rstudio.com/products/rstudio/download/</a></p>
+<h1 id="installing-tools-to-build-r-packages-from-scratch">Installing Tools to Build R Packages from Scratch</h1>
+<p>Mature R packages are distributed over CRAN and installable in R using <code>install.packages</code> without any other assistance. However, we may use some bleeding-edge R packages that require the packages to be built from source and installed using the <a href="http://www.rstudio.com/products/rpackages/devtools/">devtools</a> package. This requires some extra tools (unless you are using Linux, which is why you should be using Linux).</p>
+<ul>
+<li>Windows: Install the newest version of <code>Rtools*.exe</code> from http://cran.r-project.org/bin/windows/Rtools/</li>
+<li>Mac: Install Xcode from the Mac App Store.</li>
+<li>Ubuntu: The tools to build packages from source should have been installed with <code>r-base-dev</code>.</li>
+</ul>
+<p>Or follow the instructions <a href="http://www.rstudio.com/products/rpackages/devtools/">here</a>.</p>
+<h1 id="installing-latex">Installing LaTeX</h1>
+<p>LaTeX is needed to create PDFs from R Markdown files. Follow the instructions below:</p>
+<ul>
+<li>Windows: <a href="http://miktex.org/download">http://miktex.org/download</a>
+</li>
+<li>OSX: <a href="https://tug.org/mactex/">https://tug.org/mactex/</a>
+</li>
+<li>Ubuntu: <code>apt-get install texlive</code> . This should have been installed with <code>r-base-dev</code>.</li>
+</ul>
+<div class="references">
+
+</div>
+
+    </div>
+    
 </article>
         </div>
         <!--End of body content-->
