@@ -31,7 +31,7 @@ Then create and activate a local environment
 > pyvenv-3.4 venv
 > source venv/bin/activate
 ```
-One the virtual environment is activiated, install the dependencies with
+One the virtual environment is activated, install the dependencies with
 ```
 pip install -r requirements.txt
 ```
@@ -46,3 +46,6 @@ In Ubuntu, these can be installed with
 > apt-get install pandoc pandoc-citeproc
 ```
 
+
+<!--  LocalWords:  nikola cd venv python3 pyvenv txt pandoc citeproc
+ -->
