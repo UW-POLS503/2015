@@ -1,10 +1,13 @@
 <!--
-.. title: Syllabus
+.. title: POLS/CS&SS 503: Advanced Quantitative Political Methodology
 .. slug: index
 .. date: 2015-03-25 21:36:15 UTC-07:00
 .. description: Syllabus for Jeffrey Arnold, POLS/CS&SS 503: Advanced Quantitative Political Methodology, Spring 2015, University of Washington.
 -->
 
+<p class="lead">
+University of Washington, Spring 2015
+</p>
 
 # Teaching Team
 
@@ -29,18 +32,15 @@
 # Class Meetings
 
 <table class = "table table-striped table-hover">
-<tr>
-<th></th>
-<th>Time</th>
-<th>Room</th>
-<tr>
 <td>Class </td>
-<td>T 4:30-7:20 pm </td>
+<td>Tues </td>
+<td> 4:30-7:20 pm </td>
 <td> SAV 158 </td>
 </tr>
 <tr>
 <td>Lab </td>
-<td>Th 1:30-3:30 pm </td>
+<td>Fri </td>
+<td>1:30-3:30 pm </td>
 <td> SAV 117 </td>
 </tr>
 </table>
