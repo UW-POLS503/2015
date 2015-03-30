@@ -1,3 +1,4 @@
+*~
 .doit.db*
 /cache/
 /output/
@@ -6,3 +7,4 @@ __pycache__
 venv/
 /web/output/
 /web/cache/
+/lectures/CSSScolors.sty~
