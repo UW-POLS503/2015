@@ -8,7 +8,7 @@
 
 # Teaching Team
 
-<table class = ".table-stripped">
+<table class = "table table-striped table-hover">
 <tr>
 <td>Professor </td>
 <td> <a href="http://jrnold.me">Jeffrey Arnold</a> </td>
@@ -28,7 +28,7 @@
 
 # Class Meetings
 
-<table class = ".table">
+<table class = "table table-striped table-hover">
 <tr>
 <th></th>
 <th>Time</th>
