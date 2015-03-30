@@ -33,7 +33,7 @@ Then create and activate a local environment
 ```
 One the virtual environment is activated, install the dependencies with
 ```
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 Additionally this site requires the following (in addition to some libraries required by the python packages):
