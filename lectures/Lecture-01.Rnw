@@ -1,0 +1,16 @@
+\documentclass[12pt,handout]{beamer}
+\input{includes.tex}
+\usepackage{tikz}
+
+\newcommand{\thetitle}{Review}
+\date{March 11, 2015}
+\subtitle{\thetitle{}}
+\hypersetup{pdftitle={\thetitle{}}}
+
+\begin{document}
+
+\begin{frame}
+  \maketitle{}
+\end{frame}
+
+\end{document}

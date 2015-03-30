@@ -74,11 +74,14 @@ sequence (Political Science 501), but any prior course on basic social statistic
 Course evaluation is based on:
 
 1. Problem sets assigned weekly or bi-weekly. These problem sets will include programming problems with an emphasis on writing understandable, reproducible code.
+    The assignments and due dates will be distributed during the quarter.
+	<!-- These assignments may involve peer review / grading. -->
 2. Final paper. A 15--20 page original report on an original quantitative analysis or replication-and-extension of a published article.
     The quantitative analysis should be conducted in R and reproducible.
 	Students may work in pairs on the final paper with instructor permission.
+	The final paper is due on **June 9, 2015 15:00 PDT**.
 
-# Required Texts
+# Texts
 
 - @fox_applied_2008
 - @gelman_data_2006
@@ -110,7 +113,7 @@ Given that this is my first time teaching this course, I expect many adjustments
 - Friday, April 10
 
     - @wickham_tidy_2014
-    - Zuur, Ch 1, 2, 3 (optional)
+    - Zuur, Ch 1, 2, 3
 
 ## Week 3: Assumptions & Properties of the Linear Regression Model, Part II
 
