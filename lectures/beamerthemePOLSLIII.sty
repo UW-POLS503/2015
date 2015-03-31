@@ -1,5 +1,8 @@
 \ProvidesPackage{bearmerthemePOLSLIII}[2014/01/16 v1.0]
 
+\newcommand{\CourseNumber}{POLS/CS\&SS 503}
+\newcommand{\CourseTitle}{Advanced Quantitative Political Methodology}
+
 \RequirePackage{fontspec}
 \RequirePackage{CSSScolors}
 
@@ -25,16 +28,16 @@
 \setbeamertemplate{enumerate items}[default]
 
 \setbeamercolor{normal text}{fg=black}
-\setbeamercolor*{title}{fg=black}
-\setbeamerfont{title}{size=\large}
-\setbeamercolor*{subtitle}{fg=CSSSTeal}
-\setbeamerfont{subtitle}{size=\LARGE}
+\setbeamercolor{title}{fg=CSSSTeal}
+\setbeamerfont{title}{series=\fontspec{Lato},size=\LARGE}
+\setbeamercolor{subtitle}{fg=black}
+\setbeamerfont{subtitle}{series=\fontspec{Lato Thin},size=\large}
 
 \setbeamercolor{itemize items}{fg=CSSSTeal}
 \setbeamertemplate{itemize items}[circle]
 \setbeamercolor{frametitle}{fg=CSSSTeal}
-\setbeamerfont{frametitle}{size=\LARGE}
-\setbeamerfont{framesubtitle}{size=\large}
+\setbeamerfont{frametitle}{size=\LARGE,series=\fontspec{Lato}}
+\setbeamerfont{framesubtitle}{size=\large,series=\fontspec{Lato}}
 \setbeamerfont{author}{size=\large}
 \setbeamerfont{institute}{size=\large}
 \setbeamercolor{structure}{fg=CSSSTeal}
@@ -66,24 +69,35 @@
   \vfill
   \begin{centering}
     \begin{beamercolorbox}[sep=8pt,center]{title}
-      \usebeamerfont{title}\inserttitle\par%
-      {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}
+      {\usebeamerfont{subtitle}\CourseNumber: \newline \CourseTitle\par}
+      {\usebeamerfont{title}\usebeamercolor[fg]{title}\MakeUppercase\inserttitle\par}
     \end{beamercolorbox}%
-    \vskip1em\par
-    \begin{beamercolorbox}[sep=8pt,center]{author}
+    \begin{beamercolorbox}[center]{date}
+      \usebeamerfont{date}\insertdate
+    \end{beamercolorbox}
+    \vspace{3em}
+    \begin{beamercolorbox}[center]{author}
       \usebeamerfont{author}\insertauthor
     \end{beamercolorbox}
-    \begin{beamercolorbox}[sep=8pt,center]{institute}
-      \usebeamerfont{institute}\insertinstitute
+    \vspace{-0.5em}
+    \begin{beamercolorbox}[center]{institute}
+      \begin{minipage}[t]{0.5\linewidth}
+        \begin{columns}
+          \begin{column}{0.5\textwidth}
+            \centering
+            \includegraphics[height=0.5in]{images/uw-deptPoliSci_273@2x.png}
+          \end{column}
+          \begin{column}{0.5\textwidth}
+            \centering
+            \includegraphics[height=0.5in]{images/CSSStranMD@2x.png}          
+          \end{column}
+        \end{columns}
+      \end{minipage}
+      %\usebeamerfont{institute}\insertinstitute
     \end{beamercolorbox}
-    \begin{beamercolorbox}[sep=8pt,center]{date}
-      \usebeamerfont{date}\insertdate
-    \end{beamercolorbox}\vskip0.5em
-    {\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}
   \end{centering}
   \vfill
 }
-
 
 \setbeamercovered{transparent=33}
 
