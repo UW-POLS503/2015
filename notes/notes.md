@@ -42,3 +42,14 @@ We always need more interesting data sets
 # R Stuff
 
 - Minimal repdroducible example http://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example
+
+# Homework Assignments via Git
+
+Want to do oneday, but that day is not today
+
+- https://stat545-ubc.github.io/hw00_homework-guidelines.html
+
+# Communication
+
+- Stat 545 uses GitHub issues and twitter for all discussion. https://stat545-ubc.github.io/help-STAT545.html
+  Are all students in github organization? 

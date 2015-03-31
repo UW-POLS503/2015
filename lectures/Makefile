@@ -26,6 +26,9 @@ Lecture_%_presentation.pdf : Lecture_%.tex $(INPUTS)
 clean :
 	-rm -rf *.aux *.bcf *.log *.snm *.out *.nav *.toc *.vrb *-options.tex *~ *.fls
 
+clean-all: clean
+	-rm $(LECTURE_TEX) $(LECTURE_PRESENTATIONS) $(LECTURE_HANDOUTS)
+
 .PHONY: clean all
 
 .PRECIOUS: $(LECTURE_TEX)

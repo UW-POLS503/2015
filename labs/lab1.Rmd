@@ -327,6 +327,10 @@ Although you can put comments on the same line after code, it is good practice t
 - This should have a pretty graph
 - Save it to html and doc. Saving to pdf would require instal
 
+# RSTudio Projects
+
+I like how STAT545 introduces it https://stat545-ubc.github.io/block002_hello-r-workspace-wd-project.html
+
 # Introduction to ggplot2
 
 - Either the vignette for ggplot2 or Kathrik Ram's tutorial (http://inundata.org/2013/04/10/a-quick-introduction-to-ggplot2/; referenced in Software Carpentry) look as good a place to start as any.
