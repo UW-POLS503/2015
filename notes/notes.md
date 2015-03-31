@@ -52,4 +52,17 @@ Want to do oneday, but that day is not today
 # Communication
 
 - Stat 545 uses GitHub issues and twitter for all discussion. https://stat545-ubc.github.io/help-STAT545.html
-  Are all students in github organization? 
+  Are all students in github organization?
+
+# Interactive Apps
+
+- ShinyEd https://stat.duke.edu/~mc301/shinyed/ CLT, distribution calculator, diagnostics for a simple linear regression
+
+# Stupid Stuff
+
+- "Use attach one more time" http://i.imgur.com/Mt3RItQ.jpg
+- "Statistical significance? You keep using that phrase. I do not hink it means what you think it means" 
+- "P-values. You keep using them. I do not think they mean what you think they mean" http://i.imgur.com/UuVWihM.jpg
+- "I don't always use R. But when I do, I use ggplot2 and dplyr" http://i.imgur.com/5RSGY0Z.jpg
+- "Keep Calm and Debug" http://www.keepcalm-o-matic.co.uk/p/keep-calm-and-debug-13/
+
