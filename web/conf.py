@@ -125,6 +125,14 @@ NAVIGATION_LINKS = {
     DEFAULT_LANG: (
         ("/index.html", "Syllabus"),
         ("/links.html", "Links"),
+        (
+            (
+                ("getting_help_with_R.md", "Getting Help with R"),
+                ("install_r_md", "Installing R"),
+                ("loading_data_in_r", "Loading Data in R"),
+            ),
+            "Topics"
+        ),
         ("/faq.html", "FAQ"),
         ("https://canvas.uw.edu/courses/964019", "Canvas"),
     ),
