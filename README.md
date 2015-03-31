@@ -1,12 +1,30 @@
 # POLS/CS&SS 503: Advanced Quantitative Political Methodology
 
-Course materials for POLS/CS&SS 503 -- Spring 2015 quarter at the University of Washington.
+Course materials for POLS/CS&SS 503, University of Washington, Spring 2015.
 
 Course website is at https://pols503.github.io/pols_503_sp15/
 
-## Notes
+## Contents
 
+```
+.
+├── csl
+├── labs
+├── lectures
+├── LICENSE.md
+├── notes
+├── pols_503_sp15.bib
+├── README.md
+└── web
+```
 
+- `READMDE.md` : you're reading it
+- `csl` : CSL style sheets used to format
+- `labs` : sources for the labs
+- `lectures` : sources for the lectures
+- `notes` : Some notes about course development. Things that may or may not make it into more public facing parts of the course.
+- `pols_503_sp15.bib`: bibliography
+- `web` : materials for the webs
 
 ## How to Create the Website
 
