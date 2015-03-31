@@ -9,27 +9,26 @@
 .. type: text
 -->
 
-# R Getting Help
+# R
 
-*TODO: whittle this down*
+## ggplot2
 
-- Learn to use the help commands: `?`, `help`, `apropos`
-- Someone's probably asked your question on Stackoverflow: http://stackoverflow.com/questions/tagged/r. So search and find the answer. But you are unlikely to have questions (yet) that haven't been asked and answered here, so avoid asking questions until you're more proficient.
-- Google has gotten better with R searches, but `R` (like other one-letter language names) is a particularly unfriendly search term
-- [rseek.org](http://rseek.org) is a specialized search restricted to sites already known to be related to R the statistical programming language
-- Other people asking how to learn R
-    - http://www.quora.com/How-do-I-learn-R
-	- UCLA ATS list http://www.ats.ucla.edu/stat/r/
+- The ggplot2 book. A new version just came out. You can find it on canvas.
+- The ggplot2 documentation http://docs.ggplot2.org/current/. If you don't know the function you want click on something with a picture that looks like what you are looking for.
+- Cookbook for R [graphs](http://www.cookbook-r.com/Graphs/). The author now works for Rstudio, infer from that what you will. It is organized by specific task so it may be easier to find what you are looking for than the documentation, which is arranged by 
+
+## tidyr / dplyr
+
+- [Data Wrangling Cheatsheet](http://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pd)f
+
+## Markdown and R Markdown
+
+- [R Markdown Cheat Sheet](http://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)
+- [R Markdown Reference Guide](http://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf](http://www.rstudio.com/wp)
+
+## Books
 
 - [Quick-R](http://www.statmethods.net/)
-- Cookbook for R [graphs](http://www.cookbook-r.com/Graphs/) The author now works for Rstudio, infer from that what you will.
-- [R Studio Cheatsheets](http://www.rstudio.com/resources/cheatsheets/) has several cheat sheet
-
-    - [Data Wrangling](http://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
-	- [R Markdown Cheat Sheet](http://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)
-	- [R Markdown Reference Guide](http://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf](http://www.rstudio.com/wp)
-
-- The ggplot2 documentation is itself almost a cheatsheet: http://docs.ggplot2.org/current/.
 - Jared Lander, [R for Everyone](http://www.amazon.com/Everyone-Advanced-Analytics-Graphics-Addison-Wesley/dp/0321888030) Teaches R assuming neither a programming or statistics background. One that I have considered and may consider in the future.
 - Note that all books in the Springer UseR! Series are available as eBooks (the non-DRM downloadable pdf kind!) from the UW Library.
 
@@ -37,10 +36,6 @@
 	- Robert Muenchen, *R for Stata Users*
 	- Hadley Wickham, *ggplot2: Elegant Graphics for Data Analysis*. It's a litte out of date at this point, so trust the `ggplot2` documentation. But, a new version is coming out any day now.
 	- Venables and Ripley, *Modern Applied Statistics with S*. A good reference book for both a variety of statistical models and how to implement them in R. 
-- Some people explaining why it is hard to learn R (although I think it has gotten much better!)
-
-    - http://r4stats.com/articles/why-r-is-hard-to-learn/
-	- http://www.statmethods.net/about/learningcurve.html
 
 - Need to level up your R skills?
 
@@ -55,8 +50,8 @@
 - Don't Bother
 
     - [R in a Nutshell](http://shop.oreilly.com/product/9780596801717.do) Not for learning R. Okay as reference.
-    - John Verzani, *Using R for Introductory Statistics*. This (formerly) appeared on many an stats syllabi (It's what I used in my equivalent of 503), and is decent, but the R code is poor and now woefully out of date.
-	- Michael Crawley, *The R Book*. No, it's not. Don't bother.
+    - John Verzani, *Using R for Introductory Statistics*. This (formerly) appeared on many an stats syllabi (it's what I used in my equivalent of 503) and is decent, but the R code is poor and now woefully out of date.
+	- Michael Crawley, *The R Book*. No, no, it's not.
 
 # LaTeX
 

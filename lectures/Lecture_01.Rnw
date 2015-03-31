@@ -1,0 +1,20 @@
+\documentclass[12pt,handout]{beamer}
+\input{includes.tex}
+\usepackage{tikz}
+
+\newcommand{\thetitle}{Introduction}
+\date{March 31, 2015}
+\title{\thetitle{}}
+\hypersetup{pdftitle={\CourseNumber: \CourseTitle: \thetitle{}}}
+
+\begin{document}
+
+\begin{frame}
+  \maketitle{}
+\end{frame}
+
+\begin{frame}
+  kl 
+\end{frame}
+
+\end{document}
