@@ -15,7 +15,7 @@
 
 \usefonttheme[onlymath]{serif}
 \usepackage[bold-style=ISO]{unicode-math}
-\setmathfont{XITS}
+\setmathfont{xits-math.otf}
 
 \mode<presentation>
 
@@ -31,7 +31,7 @@
 \setbeamercolor{title}{fg=CSSSTeal}
 \setbeamerfont{title}{series=\fontspec{Lato},size=\LARGE}
 \setbeamercolor{subtitle}{fg=black}
-\setbeamerfont{subtitle}{series=\fontspec{Lato Thin},size=\large}
+\setbeamerfont{subtitle}{series=\fontspec{Lato},size=\large}
 
 \setbeamercolor{itemize items}{fg=CSSSTeal}
 \setbeamertemplate{itemize items}[circle]
@@ -45,12 +45,12 @@
 \setbeamerfont{alerted text}{series=\bf}
 \setbeamercolor{description item}{fg=CSSSTeal}
 
-\setbeamertemplate{enumerate item}{\alph{enumi}.}
+%\setbeamertemplate{enumerate item}{\alph{enumi}.}
 
 \AtBeginSection[] % Do nothing for \section*
 {
   \begin{frame}
-    \frametitle{Outline}
+    \frametitle{}
     \tableofcontents[currentsection]
   \end{frame}
 }
@@ -58,7 +58,7 @@
 \AtBeginSubsection[] % Do nothing for \section*
 {
   \begin{frame}
-    \frametitle{Outline}
+    \frametitle{}
     \tableofcontents[currentsection,currentsubsection]
   \end{frame}
 }

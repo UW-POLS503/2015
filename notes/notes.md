@@ -65,4 +65,4 @@ Want to do oneday, but that day is not today
 - "P-values. You keep using them. I do not think they mean what you think they mean" http://i.imgur.com/UuVWihM.jpg
 - "I don't always use R. But when I do, I use ggplot2 and dplyr" http://i.imgur.com/5RSGY0Z.jpg
 - "Keep Calm and Debug" http://www.keepcalm-o-matic.co.uk/p/keep-calm-and-debug-13/
-
+- "One Does Not Simply Calculate a P-Value and Report Its Signficance" http://i.imgur.com/feHFU1v.jpg

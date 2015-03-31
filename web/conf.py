@@ -619,7 +619,7 @@ LICENSE = """
 
 # A small copyright notice for the page footer (in HTML).
 # (translatable)
-CONTENT_FOOTER = 'Contents &copy; {date}  <a href="mailto:{email}">{author}</a> - Powered by <a href="http://getnikola.com" rel="nofollow">Nikola</a> {license} </br>Source on <a href="{source_url}">github</a>'
+CONTENT_FOOTER = '<hr>Contents &copy; {date}  <a href="mailto:{email}">{author}</a> - Powered by <a href="http://getnikola.com" rel="nofollow">Nikola</a> {license} </br>Source on <a href="{source_url}">github</a>'
 
 # Things that will be passed to CONTENT_FOOTER.format().  This is done
 # for translatability, as dicts are not formattable.  Nikola will
@@ -761,7 +761,7 @@ COMMENT_SYSTEM_ID = ""
 # by default, it's empty, is a list of strings, for example
 # ['-F', 'pandoc-citeproc', '--bibliography=/Users/foo/references.bib']
 PANDOC_OPTIONS = ['-s',
-                  '-f', 'markdown+yaml_metadata_block+pipe_tables',
+                  '-f', 'markdown+yaml_metadata_block+pipe_tables+header_attributes',
                   '-F', 'pandoc-citeproc', 
                   '--bibliography=../pols_503_sp15.bib',
                   '--csl=../csl/chicago-syllabus.csl']
