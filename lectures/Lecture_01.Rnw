@@ -180,6 +180,26 @@
 
 \end{frame}
 
+\section{Challenger Example}
+
+\begin{frame}
+  \frametitle{Space Shuttle Challenger Exploded in 1986}
+  
+  \begin{center}
+    \includegraphics{images/Challenger_explosion.jpg}
+  \end{center}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{What Pattern Do You See? }
+
+  \begin{center}
+    \includegraphics{images/challenger2.png}
+  \end{center}
+
+\end{frame}
+
 \section{Outline of this Course}
 
 \begin{frame}
@@ -205,5 +225,9 @@
   \item \url{http://commons.wikimedia.org/wiki/File:Under_Construction.jpeg CC-BY-SA}
   \end{itemize}
 \end{frame}
+
+
+
+
 
 \end{document}
