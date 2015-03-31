@@ -2,7 +2,7 @@
 
 Course materials for POLS/CS&SS 503 -- Spring 2015 quarter at the University of Washington.
 
-Course website is at https://jrnold.github.io/pols_503_sp15/
+Course website is at https://pols503.github.io/pols_503_sp15/
 
 ## Notes
 
@@ -37,7 +37,7 @@ Then create and activate a local environment
 ```
 One the virtual environment is activated, install the dependencies with
 ```
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 Additionally this site requires the following (in addition to some libraries required by the python packages):

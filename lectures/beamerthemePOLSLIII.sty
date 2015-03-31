@@ -1,0 +1,92 @@
+\ProvidesPackage{bearmerthemePOLSLIII}[2014/01/16 v1.0]
+
+\RequirePackage{fontspec}
+\RequirePackage{CSSScolors}
+
+\usepackage{fontspec}
+\usepackage{xunicode}
+\defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+\setmainfont{OpenSans}
+\setsansfont{OpenSans}
+\setmonofont{InputMono}
+
+\usefonttheme[onlymath]{serif}
+\usepackage[bold-style=ISO]{unicode-math}
+\setmathfont{Asana Math}
+
+\mode<presentation>
+
+% Outer
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+% Inner
+\setbeamertemplate{blocks}[rounded]
+\setbeamertemplate{items}[circle]
+\setbeamertemplate{enumerate items}[default]
+
+\setbeamercolor{normal text}{fg=black}
+\setbeamercolor*{title}{fg=black}
+\setbeamerfont{title}{size=\large}
+\setbeamercolor*{subtitle}{fg=CSSSTeal}
+\setbeamerfont{subtitle}{size=\LARGE}
+
+\setbeamercolor{itemize items}{fg=CSSSTeal}
+\setbeamertemplate{itemize items}[circle]
+\setbeamercolor{frametitle}{fg=CSSSTeal}
+\setbeamerfont{frametitle}{size=\LARGE}
+\setbeamerfont{framesubtitle}{size=\large}
+\setbeamerfont{author}{size=\large}
+\setbeamerfont{institute}{size=\large}
+\setbeamercolor{structure}{fg=CSSSTeal}
+\setbeamercolor{alerted text}{fg=CSSSTeal}
+\setbeamerfont{alerted text}{series=\bf}
+\setbeamercolor{description item}{fg=CSSSTeal}
+
+\setbeamertemplate{enumerate item}{\alph{enumi}.}
+
+\AtBeginSection[] % Do nothing for \section*
+{
+  \begin{frame}
+    \frametitle{Outline}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\AtBeginSubsection[] % Do nothing for \section*
+{
+  \begin{frame}
+    \frametitle{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+
+\setbeamertemplate{title page}
+{
+  \vbox{}
+  \vfill
+  \begin{centering}
+    \begin{beamercolorbox}[sep=8pt,center]{title}
+      \usebeamerfont{title}\inserttitle\par%
+      {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}
+    \end{beamercolorbox}%
+    \vskip1em\par
+    \begin{beamercolorbox}[sep=8pt,center]{author}
+      \usebeamerfont{author}\insertauthor
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[sep=8pt,center]{institute}
+      \usebeamerfont{institute}\insertinstitute
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[sep=8pt,center]{date}
+      \usebeamerfont{date}\insertdate
+    \end{beamercolorbox}\vskip0.5em
+    {\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}
+  \end{centering}
+  \vfill
+}
+
+
+\setbeamercovered{transparent=33}
+
+\mode
+<all>
+

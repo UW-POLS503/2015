@@ -21,14 +21,14 @@ BLOG_AUTHOR = "Jeffrey B. Arnold"  # (translatable)
 BLOG_TITLE = "POLS/CS&SS 503 : Advanced Quantitative Political Methodology"  # (translatable)
 # This is the main URL for your site. It will be used
 # in a prominent link
-SITE_URL = "http://jrnold.github.io/pols_503_sp15/"
+SITE_URL = "http://pols503.github.io/pols_503_sp15/"
 # This is the URL where Nikola's output will be deployed.
 # If not set, defaults to SITE_URL
-BASE_URL = "http://jrnold.github.io/pols_503_sp15/"
+BASE_URL = "http://pols503.github.io/pols_503_sp15/"
 BLOG_EMAIL = "jeffrey.arnold@gmail.com"
 BLOG_DESCRIPTION = "Site for POLS/CS&SS 503: Advanced Quantitative Political Methodology (University of Washington; Spring 2015)"  # (translatable)
 
-SOURCE_URL = "http://github.com/jrnold/pols_503_sp15/"
+SOURCE_URL = "http://github.com/pols503/pols_503_sp15/"
 
 # Nikola is multilingual!
 #

@@ -1,3 +1,12 @@
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*~
 .doit.db*
 /cache/
 /output/
@@ -6,3 +15,5 @@ __pycache__
 venv/
 /web/output/
 /web/cache/
+lectures/*.pdf
+lectures/*.tex

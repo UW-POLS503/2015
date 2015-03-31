@@ -38,3 +38,7 @@ We always need more interesting data sets
 - Ebola Data https://github.com/cmrivers/ebola
 - Bechdel Test data: http://nbviewer.ipython.org/github/brianckeegan/Bechdel/blob/master/Bechdel_test.ipynb. https://github.com/fivethirtyeight/data/
 - Five-thirty eight https://github.com/fivethirtyeight/data/
+
+# R Stuff
+
+- Minimal repdroducible example http://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example
