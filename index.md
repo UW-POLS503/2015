@@ -9,9 +9,13 @@
 University of Washington, Spring 2015
 </p>
 
-<!--
-<a href="http://www.polisci.washington.edu/"><img src="uw-deptPoliSci_273@2x.png"></a>
-<a href="http://csss.washington.edu"><img src="CSSStranMD.svg" height="74"></a>
+<table>
+<tr>
+<td><a href="http://www.polisci.washington.edu/"><img src="uw-deptPoliSci_273@2x.png"></a></td>
+</tr>
+</table>
+
+
 -->
 
 # Teaching Team
