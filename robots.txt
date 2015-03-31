@@ -1,2 +1,2 @@
-Sitemap: http://jrnold.github.io/pols_503_sp15/sitemapindex.xml
+Sitemap: http://pols503.github.io/pols_503_sp15/sitemapindex.xml
 
