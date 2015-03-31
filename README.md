@@ -4,7 +4,11 @@ Course materials for POLS/CS&SS 503 -- Spring 2015 quarter at the University of 
 
 Course website is at https://jrnold.github.io/pols_503_sp15/
 
-## Create Website
+## Notes
+
+
+
+## How to Create the Website
 
 The files for the site are in the directory `web`.
 
