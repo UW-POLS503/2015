@@ -13,4 +13,24 @@
   \maketitle{}
 \end{frame}
 
+\begin{frame}
+  \begin{itemize}
+  \item Overview of the course
+  \item Paper
+  \item Assignments
+  \item Statistical
+  \item Practical
+  \item 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \begin{quotation}
+    Essentially, all models are wrong, but some are useful.
+    
+    - Box, G. E. P. and Draper, N. P. (1987) \textit{Empirical Model Building and Response Surface}
+  \end{quotation}
+  
+\end{frame}
+
 \end{document}
