@@ -35,7 +35,7 @@
   \item estimate and interpret linear models
   \item identify and explain the assumptions of the linear model
   \item diagnose problems linear models and use appropriate solutions
-  \item represent statistical models in matrix algebra and compute basic matric operations
+  \item represent statistical models in matrix algebra and compute basic matrix operations
   \item use R to implement the statistical methods introduced here
   \item take POLS/CSSS 510: MLE and other advanced CSSS courses
   \end{enumerate}
@@ -83,7 +83,7 @@
   
   \begin{itemize}
   \item \href{http://www.nature.com/nature/focus/reproducibility/}{Reproducibility} and Open Science
-  \item \href{http://www.nature.com/news/scientific-method-statistical-errors-1.14700}{NHST doubts}
+  \item \href{http://www.nature.com/news/scientific-method-statistical-errors-1.14700}{NHST (Null Hypothesis Significance Test) doubts}
   \item \href{http://www.nber.org/papers/w15794}{Causal inference}
   \item \href{http://jpr.sagepub.com/content/47/4/363}{Prediction}
   \item \href{http://www.computerhistory.org/revolution/calculators/1/65/272}{Computation}
@@ -231,3 +231,5 @@
 
 
 \end{document}
+%  LocalWords:  CSSS MLE NHST r4stats KDnuggets Kagglers' TIOBE useR
+%  LocalWords:  RedMonk Wickham
