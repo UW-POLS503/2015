@@ -1,0 +1,120 @@
+---
+title: "Challenger Analysis"
+author: "Jeffrey B. Arnold"
+date: "03/31/2015"
+output: html_document
+---
+
+**Objective**: The space shuttle Challenger exploded on January 28, 1986. It was a tragedy, and one that serves as a lesson in proper data analysis. 
+The space shuttle exploded due to an O-ring failure in the rocket caused by low temperatures. 
+There had been a history of O-ring damages to space shuttles prior to the launch.
+The temperature at the time of the launch was forecast to be 31 degrees Fahrenheit.
+You want to analyze the relationship between temperature and O-ring damage using the data available on damages to O-rings prior to the launch. 
+
+The first chunk should load any packages we will use. If these are not installed, we may need to install them using `install.packages()`.
+
+```{r load-packages}
+suppressPackageStartupMessages({
+  library("ggplot2")
+  library("dplyr")
+  library("alr4")
+})
+```
+
+The package `ggplot2` will be used to produce plots. The package `dplyr` is used for data manipulation and cleaning. The package `alr4` contains a dataset `Challeng` with data on t
+
+The second chunk should load any data we will use in the analysis. This is also by convention to make it easier for the reader to understand what you will be using in the analysis.
+
+We will 
+```{r}
+data("Challeng")
+```
+
+What's in the data? 
+```{r}
+summary(Challeng)
+```
+
+The two variables we are most interested in are `temp` and a measure of damage. There are several variables that measure damage to the rockets so we will choose `damage`, a damage index. The damage index runs from 0 to 12.
+
+The first step in the data analysis is to plot the variables. 
+Save the plot result to a variable to reuse it in a later chunk.
+```{r}
+challenger_plot_1 <- ggplot(Challeng, aes(x = temp, y = damage)) + 
+  geom_point()
+```
+But print it so it displays
+```{r}
+challenger_plot_1
+```
+
+There appears to be a negative relationship between temperature and damage (lower temperature, more damage).
+
+Let's run a regression of `damage` on `temp`. 
+This is not the best model for this, but it is a good first cut.
+
+```{r}
+challenger_model1 <- lm(damage ~ temp, data = Challeng)
+summary(challenger_model1)
+```
+However, the statistical significance of this relationship is not particularly useful in this case. 
+What we want to know is what is the predicted damage for a temperature of 31 degrees.
+```{r}
+predict(challenger_model1, newdata = data.frame(temp = 31))
+```
+
+At 31 degrees we would observe as much damage as had ever been observed before.
+
+Let's plot the fit of the linear regression.
+```{r}
+challenger_plot_1 + geom_smooth(method = "lm")
+```
+This plot displays reasons why the linear model is a poor one; the predictions extend below 0 and the data don't appear linear (exponential?).
+
+Instead, let's create a new variable called `anydamage` that is 1 if there is any damage and 0 if there was no damage.
+
+```{r}
+Challeng <- mutate(Challeng, anydamage = as.integer(damage > 0))
+```
+Now there is an additional column (`anydamage`).
+```{r}
+summary(Challeng)
+```
+
+As before, the first thing we do is plot the data.
+```{r}
+ggplot(Challeng, aes(x = temp, y = anydamage)) +
+  geom_point() 
+```
+
+Instead of running a linear model, let's run a logit model, which is a type of generalized linear model for binary data. 
+This is run using the function `glm`.
+
+```{r}
+challenger_model_2 <- glm(anydamage ~ temp, family = "binomial", 
+                          data = Challeng)
+summary(challenger_model_2)
+```
+The coefficients are even less useful than the linear case.
+
+But we can calculate the probability of any damage at a temperature of 31 degrees.
+
+```{r}
+predict(challenger_model_2, newdata = data.frame(temp = 31), type = "response")
+```
+
+The probability is over 99%!
+
+We may be interested about how much uncertainty there was about this estimate.
+So we plot the fit of the model.
+```{r}
+ggplot(Challeng, aes(x = temp, y = anydamage)) +
+  geom_point() +
+  geom_smooth(method = "glm", family = "binomial")
+```
+
+We analyzed the data in several ways. None of them suggest that launching at 31 degrees was a reasonable idea.
+
+
+
+**DO NOT LAUNCH!**
