@@ -122,6 +122,15 @@ Before posting, check that the question has not been asked and answered already.
 
 It is often more efficient to answer questions in person, so try to ask them attend office hours.
 
+## Resources
+
+There are a couple places on campus that you can go to get additional statistical conulting
+
+- CSSCR has a drop-in statistical consulting center in Savery 119. They provide consulting on statistical software, e.g. R. http://csscr.washington.edu/consulting.html
+- CSSS Statistical Consulting provides general statistical consulting (questions about your research project).
+  You can find their hours and locations on thier [site](https://www.csss.washington.edu/Consulting/).
+
+
 # Texts
 
 ### Required

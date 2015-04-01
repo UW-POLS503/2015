@@ -1,6 +1,0 @@
-<!--
-.. title: Lectures
-.. description: Lectures
--->
-
-
