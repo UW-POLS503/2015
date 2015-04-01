@@ -144,6 +144,7 @@ Given that this is my first time teaching this course, I expect many adjustments
 - Tuesday, March 31
 
     - [Deck 1](lectures/Lecture_01_handout.pdf)
+	- In-class R Markdown example analysis: [Rmd source](docs/Challenger_Analysis.Rmd), [html output](docs/Challenger_Analysis.html)
     - Gelman and Hill, Ch 2
 	- Fox, Ch 2, 3
 
