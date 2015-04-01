@@ -11,12 +11,10 @@ University of Washington, Spring 2015
 
 <table>
 <tr>
-<td><a href="http://www.polisci.washington.edu/"><img src="uw-deptPoliSci_273@2x.png"></a></td>
+<td><a href="http://www.polisci.washington.edu/"><img src="uw-deptPoliSci_273@2x.png" height="74px"></a></td>
+<td><a href="https://www.csss.washington.edu/"><img src="CSSStranMD@2x.png" height="95opx"></a></td>
 </tr>
 </table>
-
-
--->
 
 # Teaching Team
 
@@ -65,12 +63,12 @@ University of Washington, Spring 2015
 <tr>
 <td>Carolina Johnson</td>
 <td>Tu 3:30--4:30 pm </td>
-<td> </td>
+<td> SAV 119 </td>
 </tr>
 <tr>
 <td>Sergio García-Rios </td>
-<td>F 3:30--4:30 pm </td>
-<td> </td>
+<td>F 12:30--1:30 pm </td>
+<td> SAV 119 </td>
 </tr>
 </table>
 
@@ -116,7 +114,7 @@ For advice see the [FAQ](faq.html#paper).
 
 ## Email & Canvas: 
 
-The teaching team will send announcements regullarly by email.
+The teaching team will send announcements regularly by email.
 
 Any non-personal questions related to the material in the course should be posted as a [Canvas](https://canvas.uw.edu/courses/964019) discussion.
 Reserve email for personal or administrative matters.
@@ -228,5 +226,7 @@ Syllabus derived from Christopher Adolph. (Spring 2014). *POLS/CSSS 503: Advance
 
 <!--  LocalWords:  UTC td href TAs García SAV gelman angrist UW eBook
  -->
-<!--  LocalWords:  zuur Brambor TBD CSSS
+<!--  LocalWords:  zuur Brambor TBD CSSS img src 221B Tu faq html
+ -->
+<!--  LocalWords:  wickham brambor
  -->
