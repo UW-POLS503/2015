@@ -2,10 +2,33 @@
 .. title: Best practices for using R
 -->
 
-## Style Guide
+## Style Guide {#style}
 
+It is important to follow a consistent and clear style when writing R.
 
-## Best Practices
+Follow the Hadley Wickham's *Advanced R* [Style guide](http://adv-r.had.co.nz/Style.html).
+
+Writing code in a  consistent (and good) style will make is easier for others and you to read your code.
+It will also result fewer bugs.
+
+For, example, if you do not put spaces around the assignment operator (`<-`),
+```r
+x<-1
+```
+do you mean
+```r
+x <- 1
+```
+or
+```r
+x < -1
+```
+Off the top of your head, do you know which one R is going to do?
+Yes, I've seen bugs due to this in real life.
+
+## Best Practices {#best-practices}
+
+These are some best practices for writing R code
 
 1. Start your code with a description of what it is:
 
