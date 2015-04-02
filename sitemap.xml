@@ -18,7 +18,7 @@
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/docs/Challenger_Analysis.html</loc>
-  <lastmod>2015-03-31</lastmod>
+  <lastmod>2015-04-01</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/faq.html</loc>
@@ -42,6 +42,10 @@
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/loading_data_in_r.html</loc>
+  <lastmod>2015-04-01</lastmod>
+ </url>
+ <url>
+  <loc>http://pols503.github.io/pols_503_sp15/r_best_practices.html</loc>
   <lastmod>2015-04-01</lastmod>
  </url>
 </urlset>

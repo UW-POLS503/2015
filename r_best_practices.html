@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html prefix="
+og: http://ogp.me/ns#
+article: http://ogp.me/ns/article#
+" lang="en">
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Best practices for using R | POLS/CS&amp;SS 503 : Advanced Quantitative Political Methodology</title>
+
+                <link href="assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+
+    
+      <link rel="canonical" href="http://pols503.github.io/pols_503_sp15/r_best_practices.html">
+
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-120x120.png" sizes="120x120">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-60x60.png" sizes="60x60">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-57x57.png" sizes="57x57">
+            <link rel="icon" href="favicon-16x16.png" sizes="16x16">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-72x72.png" sizes="72x72">
+            <link rel="icon" href="favicon-96x96.png" sizes="96x96">
+            <link rel="icon" href="favicon-32x32.png" sizes="32x32">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-152x152.png" sizes="152x152">
+            <link rel="icon" href="favicon-128.png" sizes="128x128">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-76x76.png" sizes="76x76">
+            <link rel="icon" href="favicon-196x196.png" sizes="196x196">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-144x144.png" sizes="144x144">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-114x114.png" sizes="114x114">
+
+
+
+    
+        <!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]-->
+
+    
+
+    
+    <meta name="author" content="Jeffrey B. Arnold">
+        <meta property="og:site_name" content="POLS/CS&amp;SS 503 : Advanced Quantitative Political Methodology">
+    <meta property="og:title" content="Best practices for using R">
+    <meta property="og:url" content="http://pols503.github.io/pols_503_sp15/r_best_practices.html">
+    <meta property="og:description" content="Style Guide
+It is important to follow a consistent and clear style when writing R.
+Follow the Hadley Wickham's Advanced R Style guide.
+Writing code in a consistent (and good) style will make is easier">
+    <meta property="og:type" content="article">
+    <meta property="article:published_time" content="2015-04-01T23:07:05.854671-07:00">
+
+    
+    
+
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>p
+            <a class="navbar-brand" href="http://pols503.github.io/pols_503_sp15/">
+
+                <span id="blog-title">POLS/CS&amp;SS 503 : Advanced Quantitative Political Methodology</span>
+            </a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                                <li>
+<a href="index.html">Syllabus</a>
+                </li>
+<li>
+<a href="links.html">Links</a>
+            </li>
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">Topics<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                    <li>
+<a href="install_r_md">Installing R</a>
+                    </li>
+<li>
+<a href="getting_help_with_R.md">Getting Help with R</a>
+                    </li>
+<li>
+<a href="loading_data_in_r">Loading Data in R</a>
+                    </li>
+<li>
+<a href="R_best_practices">Best Practices with R</a>
+            </li>
+</ul>
+                </li>
+<li>
+<a href="faq.html">FAQ</a>
+                </li>
+<li>
+<a href="https://canvas.uw.edu/courses/964019">Canvas</a>
+
+                
+            </li>
+</ul>
+                
+<!-- Custom search with Google-->
+<form id="search" action="//www.google.com/search" method="get" class="navbar-form pull-left">
+<input type="hidden" name="q" value="site:http://pols503.github.io/pols_503_sp15/">
+<input type="text" name="q" maxlength="255" results="0" placeholder="Search">
+</form>
+<!-- End of custom search -->
+
+
+            <ul class="nav navbar-nav navbar-right">
+                
+            </ul>
+        </div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav>
+
+<!-- End of Menubar -->
+
+<div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        <div class="row">
+            
+<article class="storypage" itemscope="itemscope" itemtype="http://schema.org/Article">
+    <header>
+            <h1 class="p-name entry-title" itemprop="headline name"><a href="#" class="u-url">Best practices for using R</a></h1>
+
+        
+    </header>
+    <div class="e-content entry-content" itemprop="articleBody text">
+    <!-- 
+.. title: Best practices for using R
+-->
+
+<h2 id="style">Style Guide</h2>
+<p>It is important to follow a consistent and clear style when writing R.</p>
+<p>Follow the Hadley Wickham's <em>Advanced R</em> <a href="http://adv-r.had.co.nz/Style.html">Style guide</a>.</p>
+<p>Writing code in a consistent (and good) style will make is easier for others and you to read your code. It will also result fewer bugs.</p>
+<p>For, example, if you do not put spaces around the assignment operator (<code>&lt;-</code>),</p>
+<pre class="sourceCode r"><code class="sourceCode r">x&lt;-<span class="dv">1</span></code></pre>
+<p>do you mean</p>
+<pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="dv">1</span></code></pre>
+<p>or</p>
+<pre class="sourceCode r"><code class="sourceCode r">x &lt;<span class="st"> </span>-<span class="dv">1</span></code></pre>
+<p>Off the top of your head, do you know which one R is going to do? Yes, I've seen bugs due to this in real life.</p>
+<h2 id="best-practices">Best Practices</h2>
+<p>These are some best practices for writing R code suggested by <a href="https://github.com/swcarpentry/r-novice-inflammation">Software Carpentry</a></p>
+<ol style="list-style-type: decimal">
+<li>Start your code with a description of what it is:</li>
+</ol>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#This is code to replicate the analyses and figures from my 2014 Science paper.</span>
+<span class="co">#Code developed by Sarah Supp, Tracy Teal, and Jon Borelli</span></code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>The first code should all of your import statments (<code>library</code>)</li>
+</ol>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">"ggplot2"</span>)
+<span class="kw">library</span>(<span class="st">"reshape"</span>)
+<span class="kw">library</span>(<span class="st">"vegan"</span>)</code></pre>
+<p>Followed by any sourced documents</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">"foo.R"</span>)</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>Set your working directory before running a script, or start <code>R</code> inside your project folder:</li>
+</ol>
+<p>You should exercise caution when using <code>setwd()</code>. Changing directories inside your script can limit reproducibility:</p>
+<ul>
+<li>
+<code>setwd()</code> will throw an error if the directory you're trying to change to doesn't exit, or the user doesn't have the correct permissions to access it. This becomes a problem when sharing scripts between users who have organized their directories differently.</li>
+<li>If/when your script terminates with an error, you might leave the user in a different directory to where they started, and if they call the script again this will cause further problems. If you must use <code>setwd()</code>, it is best to put it at the top of the script to avoid this problem.</li>
+</ul>
+<p>The following error message indicates that R has failed to set the working directory you specified:</p>
+<pre><code>Error in setwd("~/path/to/working/directory") : cannot change working directory</code></pre>
+<p>Consider using the convention that the user running the script should begin in the relevant directory on their machine and then use relative file paths. That means you should avoid using <code>setwd()</code> <em>within</em> a script; instead you should use <code>setwd()</code> in the console to move into the correct directory before running a script.</p>
+<ol start="4" style="list-style-type: decimal">
+<li><p>Use <code>#</code> or <code>#-</code> to set off sections of your code so you can easily scroll through it and find things.</p></li>
+<li><p>Do <strong>not</strong> use <code>attach()</code>. Ever.</p></li>
+<li><p>If you have only one or a few functions, put them at the top of your code, so they are among the first things run. If you written many functions, put them all in their own .R file, and <code>source</code> them. Source will run all of these functions so that you can use them as you need them.</p></li>
+</ol>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">"my_genius_fxns.R"</span>)</code></pre>
+<ol start="6" style="list-style-type: decimal">
+<li><p>Use the style guide</p></li>
+<li><p>Keep your code modular. If a single function or loop gets too long, consider breaking it into smaller pieces.</p></li>
+<li><p>Don't repeat yourself. Automate! If you are repeating the same piece of code on multiple objects or files, use a loop or a function to do the same thing. The more you repeat yourself, the more likely you are to make a mistake.</p></li>
+<li><p>Manage all of your source files for a project in the same directory. Then use relative paths as necessary. For example, use</p></li>
+</ol>
+<pre class="sourceCode r"><code class="sourceCode r">dat &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">file =</span> <span class="st">"/files/dataset-2013-01.csv"</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)</code></pre>
+<p>rather than:</p>
+<pre class="sourceCode r"><code class="sourceCode r">dat &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">file =</span> <span class="st">"/Users/Karthik/Documents/sannic-project/files/dataset-2013-01.csv"</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)</code></pre>
+<ol start="10" style="list-style-type: decimal">
+<li><p>Don't save a session history (the default option in R, when it asks if you want an <code>RData</code> file). Instead, start in a clean environment so that older objects don't contaminate your current environment. This can lead to unexpected results, especially if the code were to be run on someone else's machine.</p></li>
+<li><p>Collaborate. Grab a buddy and practice "code review". We do it for methods and papers, why not code? Our code is a major scientific product and the result of a lot of hard work!</p></li>
+</ol>
+<hr>
+<p>Copywrite © <a href="http://software-carpentry.org/">Software Carpentry</a>, [link to the license][cc-by-human]. Page derived from "[Best practices for using R and designing programs](https://raw.githubusercontent.com/swcarpentry/r-novice-inflammation/gh-pages/06-best-practices-R.Rmd"), with only minor edits.</p>
+<div class="references">
+
+</div>
+
+    </div>
+    
+</article>
+        </div>
+        <!--End of body content-->
+
+        <footer>
+            <hr>Contents © 2015  <a href="mailto:jeffrey.arnold@gmail.com">Jeffrey B. Arnold</a> - Powered by <a href="http://getnikola.com" rel="nofollow">Nikola</a> 
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png"></a>.
+ Source on <a href="http://github.com/pols503/pols_503_sp15/">github</a>
+            
+        </footer>
+    </div>
+</div>
+
+            <script src="assets/js/all-nocdn.js"></script>
+    
+
+
+    <script>$('a.image-reference:not(.islink)').colorbox({rel:"gal",maxWidth:"100%",maxHeight:"100%",scalePhotos:true});</script>
+    <!-- fancy dates -->
+    <script>
+    moment.locale("");
+    fancydates(0, "YYYY-MM-DD HH:mm");
+    </script>
+    <!-- end fancy dates -->
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61453123-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</body>
+</html>
