@@ -127,7 +127,7 @@ NAVIGATION_LINKS = {
         ("/links.html", "Links"),
         (
             (
-                ("getting_help_with_R", "Getting Help with R"),
+                ("getting_help_with_r", "Getting Help with R"),
                 ("install_r", "Installing R"),
                 ("loading_data_in_r", "Loading Data in R"),
             ),

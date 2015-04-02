@@ -38,6 +38,28 @@ We always need more interesting data sets
 - Ebola Data https://github.com/cmrivers/ebola
 - Bechdel Test data: http://nbviewer.ipython.org/github/brianckeegan/Bechdel/blob/master/Bechdel_test.ipynb. https://github.com/fivethirtyeight/data/
 - Five-thirty eight https://github.com/fivethirtyeight/data/
+- Handbook of Small Datasets http://www.stat.ncsu.edu/research/sas/sicl/data/
+- UCI Machine Learning http://archive.ics.uci.edu/ml/
+- HistData http://cran.r-project.org/web/packages/HistData/index.html
+- UsingR https://github.com/cran/UsingR Datasets from Using R
+- Datasets from MASS, CAR, arm  ?
+- KDnuggets machine learning data http://www.kdnuggets.com/datasets/index.html
+- Stat 101 https://stat.duke.edu/~mc301/data/
+
+## Datasets used in intros
+
+- [Software Carpentry](http://swcarpentry.github.io/r-novice-inflammation/reference.html):
+
+    - inflammation data of patients
+	
+- [Data Carpentry](http://datacarpentry.org/) datasets are [here](https://github.com/datacarpentry/datacarpentry/tree/master/data)
+
+    - Biologoical datasets
+	- Text data: PLOS
+    - Lord of the Rings data
+
+- UBC-545 gapminder data
+
 
 # R Stuff
 
