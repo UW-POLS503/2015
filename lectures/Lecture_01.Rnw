@@ -1,12 +1,19 @@
-\documentclass[12pt,handout]{beamer}
+\input{\jobname-options}
+\ifdefined\ishandout
+  \documentclass[12pt,handout]{beamer}
+\else
+  \documentclass[12pt]{beamer}
+\fi
+% HEADER HERE
 \input{includes.tex}
-\usepackage{tikz}
 
 \newcommand{\thetitle}{Introduction}
 \date{March 31, 2015}
 \title{\thetitle{}}
-\hypersetup{pdftitle={\CourseNumber: \CourseTitle: \thetitle{}}}
-
+\hypersetup{
+  pdftitle={\thetitle{}},
+  pdfkeywords={statistics}
+}
 \begin{document}
 
 \begin{frame}
@@ -14,7 +21,215 @@
 \end{frame}
 
 \begin{frame}
-  kl 
+  \frametitle{Introductions}
 \end{frame}
 
+\section{What are we doing here?}
+
+\begin{frame}
+  \frametitle{What are the course objectives?}
+  
+  At the end of this course, you will be able to ... 
+  
+  \begin{enumerate}
+  \item estimate and interpret linear models
+  \item identify and explain the assumptions of the linear model
+  \item diagnose problems linear models and use appropriate solutions
+  \item represent statistical models in matrix algebra and compute basic matrix operations
+  \item use R to implement the statistical methods introduced here
+  \item take POLS/CSSS 510: MLE and other advanced CSSS courses
+  \end{enumerate}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{What are we covering in this course?}
+  
+  \begin{center}
+    \includegraphics{images/Data_Science_VD.png}    
+  \end{center}
+
+\end{frame}
+
+\section{Why Linear Models?}
+
+\begin{frame}
+  \frametitle{The Linear Model}
+  
+  {
+    \Huge
+    \begin{equation*}
+      y = X \beta + \epsilon
+    \end{equation*}
+  }
+  
+\end{frame}
+
+\begin{frame}
+  \begin{quotation}
+    {\large
+    Essentially, all models are wrong, but some are useful.
+    }
+    
+    - Box, G. E. P. and Draper, N. P. (1987) \textit{Empirical Model Building and Response Surface}
+  \end{quotation}
+  
+\end{frame}
+
+\section{Deep Thoughts}
+
+\begin{frame}
+  \frametitle{Recent Trends in (Quantitative Social) Science}
+  
+  \begin{itemize}
+  \item \href{http://www.nature.com/nature/focus/reproducibility/}{Reproducibility} and Open Science
+  \item \href{http://www.nature.com/news/scientific-method-statistical-errors-1.14700}{NHST (Null Hypothesis Significance Test) doubts}
+  \item \href{http://www.nber.org/papers/w15794}{Causal inference}
+  \item \href{http://jpr.sagepub.com/content/47/4/363}{Prediction}
+  \item \href{http://www.computerhistory.org/revolution/calculators/1/65/272}{Computation}
+  \item Data munging
+  \end{itemize}
+  
+\end{frame}
+
+% \begin{frame}
+%   \frametitle{Reproducibility}
+% \end{frame}
+
+% \begin{frame}
+%   \frametitle{NHST}
+% \end{frame}
+
+% \begin{frame}
+%   \frametitle{Causal Inference}
+%   \includegraphics{images/correlation.png}
+% \end{frame}
+
+% \begin{frame}
+%   \frametitle{Prediction}
+% \end{frame}
+
+% \begin{frame}
+%   \frametitle{Computation}
+% \end{frame}
+
+% \begin{frame}
+%   \frametitle{Data Munging}
+  
+%   \begin{quote}
+%     It is often said that 80\% of data analysis is spent on the process of cleaning and preparing data
+    
+%     -- Hadley Wickham, ``Tidy Data'', JSS 2014.
+%   \end{quote}
+  
+% \end{frame}
+
+\section{Why the Tools we are Using?}
+
+\begin{frame}
+  \begin{center}
+    \includegraphics{images/Rlogo.pdf}    
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Why R?}
+  
+  \begin{itemize}[<+->]
+  \item R is free (as in beer)
+  \item R is free (as in freedom)
+  \item R is a language
+  \item Graphics and data viz capabilities
+  \item Widely used
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{R is popular and becoming more so}
+  
+  \begin{itemize}[<+->]
+  \item r4stats.com, \href{http://r4stats.com/articles/popularity/}{The Popularity of Data Analysis Software}
+  \item \href{http://www.kdnuggets.com/polls/2014/languages-analytics-data-mining-data-science.html}{KDnuggets Languages for Analytics/Data Mining/Data Science}
+    
+  \item \href{http://blog.kaggle.com/2011/11/27/kagglers-favorite-tools/}{Kagglers' Favorite Tools}
+  \item \href{http://www.tiobe.com/index.php/content/paperinfo/tpci/index.html}{TIOBE Index for March 2015}. R is \#20 \textit{all programming languages}
+  \item \href{http://redmonk.com/sogrady/2015/01/14/language-rankings-1-15/}{The RedMonk Programming Language Rankings: January 2015}. R is \#13 of \textit{all programming languages}
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{R Markdown}
+  
+  \begin{itemize}[<+->]
+  \item R + markup language
+  \item Easier to combine code with results
+  \item Increases reproducibility
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{How to Learn R}
+  \framesubtitle{And How to Succeed in this Course!}
+
+  \begin{center}
+    \href{Hadley Wickham Interview by Data Science LA at useR 2014}{https://youtu.be/JxwxefRAu70?t=30m1s}
+  \end{center}
+
+\end{frame}
+
+\section{Challenger Example}
+
+\begin{frame}
+  \frametitle{Space Shuttle Challenger Exploded in 1986}
+  
+  \begin{center}
+    \includegraphics{images/Challenger_explosion.jpg}
+  \end{center}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{What Pattern Do You See? }
+
+  \begin{center}
+    \includegraphics{images/challenger2.png}
+  \end{center}
+
+\end{frame}
+
+\section{Outline of this Course}
+
+\begin{frame}
+  \begin{center}
+    \includegraphics{images/Under_Construction.jpeg}    
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Review Syllabus on Course Website}
+  
+  \begin{center}
+    Go to \url{http://pols503.github.io/pols_503_sp15}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{References}
+  
+  \begin{itemize}
+  \item Drew Conway, ``The Data Science Venn Diagram'', http://drewconway.com/zia/2013/3/26/the-data-science-venn-diagram, CC-BY-NC
+  \item R Logo. Tobias Wolf. http://developer.r-project.org/Logo/Rlogo.pdf CC-SA
+  \item \url{http://commons.wikimedia.org/wiki/File:Under_Construction.jpeg CC-BY-SA}
+  \end{itemize}
+\end{frame}
+
+
+
+
+
 \end{document}
+%  LocalWords:  CSSS MLE NHST r4stats KDnuggets Kagglers' TIOBE useR
+%  LocalWords:  RedMonk Wickham

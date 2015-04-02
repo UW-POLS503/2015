@@ -9,9 +9,11 @@ LECTURE_HANDOUTS = $(LECTURE_TEX:%.tex=%_handout.pdf)
 
 INPUTS = # includes.tex CSSScolors.sty beamerthemePOLSLIII.sty
 
-all : $(LECTURE_PRESENTATIONS) $(LECTURE_HANDOUTS)
-	@echo $(LECTURE_TEX)
-	@echo $(LECTURE_PRESENTATIONS) $(LECTURE_HANDOUTS)
+all : handouts presentations
+
+presentations: $(LECTURE_PRESENTATIONS) 
+
+handouts: $(LECTURE_HANDOUTS)
 
 Lecture_%.tex : Lecture_%.Rnw
 	$(R) -e 'LECTURE_NUM <- "$(patsubst Lecture_%.tex,%,$@)"; knitr::knit("$<",output="$@")'
@@ -21,7 +23,11 @@ Lecture_%_handout.pdf : Lecture_%.tex $(INPUTS)
 	$(LATEXMK) $(LATEXMK_OPTS) -jobname=$(basename $@) $<
 
 Lecture_%_presentation.pdf : Lecture_%.tex $(INPUTS)
+	@echo "" > $(patsubst %.pdf,%-options.tex,$@)
 	$(LATEXMK) $(LATEXMK_OPTS) -jobname=$(basename $@) $<
+
+%-code.R: %.Rnw
+	$(R) -e 'library(knitr);purl("$<",output="$@")'
 
 clean :
 	-rm -rf *.aux *.bcf *.log *.snm *.out *.nav *.toc *.vrb *-options.tex *~ *.fls

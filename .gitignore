@@ -7,6 +7,8 @@
 *.snm
 *.toc
 *~
+\#*#
+.#*
 .doit.db*
 /cache/
 /output/

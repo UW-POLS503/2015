@@ -620,7 +620,7 @@ LICENSE = """
 
 # A small copyright notice for the page footer (in HTML).
 # (translatable)
-CONTENT_FOOTER = 'Contents &copy; {date}  <a href="mailto:{email}">{author}</a> - Powered by <a href="http://getnikola.com" rel="nofollow">Nikola</a> {license} </br>Source on <a href="{source_url}">github</a>'
+CONTENT_FOOTER = '<hr>Contents &copy; {date}  <a href="mailto:{email}">{author}</a> - Powered by <a href="http://getnikola.com" rel="nofollow">Nikola</a> {license} </br>Source on <a href="{source_url}">github</a>'
 
 # Things that will be passed to CONTENT_FOOTER.format().  This is done
 # for translatability, as dicts are not formattable.  Nikola will
@@ -762,7 +762,7 @@ COMMENT_SYSTEM_ID = ""
 # by default, it's empty, is a list of strings, for example
 # ['-F', 'pandoc-citeproc', '--bibliography=/Users/foo/references.bib']
 PANDOC_OPTIONS = ['-s',
-                  '-f', 'markdown+yaml_metadata_block+pipe_tables',
+                  '-f', 'markdown+yaml_metadata_block+pipe_tables+header_attributes',
                   '-F', 'pandoc-citeproc', 
                   '--bibliography=../pols_503_sp15.bib',
                   '--csl=../csl/chicago-syllabus.csl']
@@ -868,7 +868,18 @@ SEARCH_FORM = """
 # Google Analytics or whatever else you use. Added to the bottom of <body>
 # in the default template (base.tmpl).
 # (translatable)
-# BODY_END = ""
+BODY_END = """
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61453123-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+"""
 
 # The possibility to extract metadata from the filename by using a
 # regular expression.

@@ -9,10 +9,12 @@
 University of Washington, Spring 2015
 </p>
 
-<!--
-<a href="http://www.polisci.washington.edu/"><img src="uw-deptPoliSci_273@2x.png"></a>
-<a href="http://csss.washington.edu"><img src="CSSStranMD.svg" height="74"></a>
--->
+<table>
+<tr>
+<td><a href="http://www.polisci.washington.edu/"><img src="uw-deptPoliSci_273@2x.png" height="74px"></a></td>
+<td><a href="https://www.csss.washington.edu/"><img src="CSSStranMD@2x.png" height="95opx"></a></td>
+</tr>
+</table>
 
 # Teaching Team
 
@@ -50,6 +52,26 @@ University of Washington, Spring 2015
 </tr>
 </table>
 
+## Office Hours
+
+<table class = "table table-striped table-hover">
+<tr>
+<td>Jeffrey Arnold</td>
+<td>W 10:15--12:15</td>
+<td>Smith 221B </td>
+</tr>
+<tr>
+<td>Carolina Johnson</td>
+<td>Tu 3:30--4:30 pm </td>
+<td> SAV 119 </td>
+</tr>
+<tr>
+<td>Sergio García-Rios </td>
+<td>F 12:30--1:30 pm </td>
+<td> SAV 119 </td>
+</tr>
+</table>
+
 # Overview and Class Goals
 
 <!-- Begin from Chris Adolph syllabus -->
@@ -71,21 +93,54 @@ sequence (Political Science 501), but any prior course on basic social statistic
 
 # Assessment and Evaluation
 
-Course evaluation is based on:
+## Problem Sets
 
-1. Problem sets assigned weekly or bi-weekly. These problem sets will include programming problems with an emphasis on writing understandable, reproducible code.
-    The assignments and due dates will be distributed during the quarter.
-	<!-- These assignments may involve peer review / grading. -->
-2. Final paper. A 15--20 page original report on an original quantitative analysis or replication-and-extension of a published article.
-    The quantitative analysis should be conducted in R and reproducible.
-	Students may work in pairs on the final paper with instructor permission.
-	The final paper is due on **June 9, 2015 15:00 PDT**.
+Problem sets assigned weekly or bi-weekly. These problem sets will include programming problems with an emphasis on writing understandable, reproducible code.
+
+The assignments and due dates will be distributed during the quarter.
+<!-- These assignments may involve peer review / grading. -->
+
+Assignments will be *both* submitted digitally through [canvas](https://canvas.uw.edu/courses/964019) at the due date and a paper copy to the TA at the next lab section.
+
+## Final Paper
+
+A 15--20 page original report on an original quantitative analysis or replication-and-extension of a published article.
+The quantitative analysis should be conducted in R and reproducible.
+Students may work in pairs on the final paper with instructor permission.
+
+The final paper is due on **June 9, 2015 15:00 PDT**.
+
+For advice see the [FAQ](faq.html#paper).
+
+## Email & Canvas: 
+
+The teaching team will send announcements regularly by email.
+
+Any non-personal questions related to the material in the course should be posted as a [Canvas](https://canvas.uw.edu/courses/964019) discussion.
+Reserve email for personal or administrative matters.
+Before posting, check that the question has not been asked and answered already.
+
+It is often more efficient to answer questions in person, so try to ask them attend office hours.
+
+## Resources
+
+There are a couple places on campus that you can go to get additional statistical conulting
+
+- CSSCR has a drop-in statistical consulting center in Savery 119. They provide consulting on statistical software, e.g. R. http://csscr.washington.edu/consulting.html
+- CSSS Statistical Consulting provides general statistical consulting (questions about your research project).
+  You can find their hours and locations on thier [site](https://www.csss.washington.edu/Consulting/).
+
 
 # Texts
+
+### Required
 
 - @fox_applied_2008
 - @gelman_data_2006
 - @angrist_mostly_2009 (UW library eBook available)
+
+### Optional
+
 - @zuur_beginners_2009 (UW library eBook available)
 
 # Schedule and Topics
@@ -97,11 +152,14 @@ Given that this is my first time teaching this course, I expect many adjustments
 
 - Tuesday, March 31
 
+    - [Deck 1](lectures/Lecture_01_handout.pdf)
+	- In-class R Markdown example analysis: [Rmd source](docs/Challenger_Analysis.Rmd), [html output](docs/Challenger_Analysis.html)
     - Gelman and Hill, Ch 2
 	- Fox, Ch 2, 3
 
 - Friday, April 3
 
+    - Complete Data Camp "Introduction to R", https://www.datacamp.com/courses/free-introduction-to-r
     - @wickham_layered_2010
 
 ## Week 2: Assumptions & Properties of the Linear Regression Model, Part I
@@ -113,7 +171,7 @@ Given that this is my first time teaching this course, I expect many adjustments
 - Friday, April 10
 
     - @wickham_tidy_2014
-    - Zuur, Ch 1, 2, 3
+    - Zuur, Ch 1, 2, 3 (optional)
 
 ## Week 3: Assumptions & Properties of the Linear Regression Model, Part II
 
@@ -123,7 +181,7 @@ Given that this is my first time teaching this course, I expect many adjustments
 	
 - Friday, April 17
 
-	- Zuur, Ch 5
+	- Zuur, Ch 5 (optional)
 
 ## Week 4: Statistical Inference / Interpretation of the Linear Model
 
@@ -178,5 +236,7 @@ Syllabus derived from Christopher Adolph. (Spring 2014). *POLS/CSSS 503: Advance
 
 <!--  LocalWords:  UTC td href TAs García SAV gelman angrist UW eBook
  -->
-<!--  LocalWords:  zuur Brambor TBD CSSS
+<!--  LocalWords:  zuur Brambor TBD CSSS img src 221B Tu faq html
+ -->
+<!--  LocalWords:  wickham brambor
  -->
