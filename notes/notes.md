@@ -8,7 +8,8 @@ Lab document
 - Follow advice from software carpentry templates
 
     - Software Carpentry Lesson Templates: http://software-carpentry.org/blog/2014/10/new-lesson-template-v2.html (the concepts, but not the details of implementation).
-	- Largely follow the Data Camp (https://teach.datacamp.com/style-guide) and [Advanced](http://adv-r.had.co.nz/Style.html) R style where appropriate.
+
+
 
 Conduct of the lab
 
@@ -65,4 +66,10 @@ Want to do oneday, but that day is not today
 - "P-values. You keep using them. I do not think they mean what you think they mean" http://i.imgur.com/UuVWihM.jpg
 - "I don't always use R. But when I do, I use ggplot2 and dplyr" http://i.imgur.com/5RSGY0Z.jpg
 - "Keep Calm and Debug" http://www.keepcalm-o-matic.co.uk/p/keep-calm-and-debug-13/
+
+## R Style Guides
+
+- Largely follow the Data Camp https://teach.datacamp.com/style-guide style guide
+- [Advanced](http://adv-r.had.co.nz/Style.html)
+- http://jefworks.github.io/R-style-guide/#naming-conventions
 
