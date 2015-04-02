@@ -28,7 +28,7 @@ Yes, I've seen bugs due to this in real life.
 
 ## Best Practices {#best-practices}
 
-These are some best practices for writing R code
+These are some best practices for writing R code suggested by [Software Carpentry](https://github.com/swcarpentry/r-novice-inflammation)
 
 1. Start your code with a description of what it is:
 
