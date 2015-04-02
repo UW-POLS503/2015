@@ -1,7 +1,14 @@
 \ProvidesPackage{bearmerthemePOLSLIII}[2014/01/16 v1.0]
 
+%% Edit
 \newcommand{\CourseNumber}{POLS/CS\&SS 503}
 \newcommand{\CourseTitle}{Advanced Quantitative Political Methodology}
+%% 
+\newcommand{\license}{\beamer@license}
+\long\def\beamer@license#1{%
+  \def\insertlicense{#1}%
+}
+\license{}
 
 \RequirePackage{fontspec}
 \RequirePackage{CSSScolors}
@@ -45,23 +52,26 @@
 \setbeamerfont{alerted text}{series=\bf}
 \setbeamercolor{description item}{fg=CSSSTeal}
 
+\setbeamercolor{section in toc}{fg=CSSSTeal}
+\setbeamercolor{subsection in toc}{fg=CSSSTeal}
+
 %\setbeamertemplate{enumerate item}{\alph{enumi}.}
 
-\AtBeginSection[] % Do nothing for \section*
-{
-  \begin{frame}
-    \frametitle{}
-    \tableofcontents[currentsection]
-  \end{frame}
-}
+% \AtBeginSection[] % Do nothing for \section*
+% {
+%   \begin{frame}
+%     \frametitle{}
+%     \tableofcontents[currentsection]
+%   \end{frame}
+% }
 
-\AtBeginSubsection[] % Do nothing for \section*
-{
-  \begin{frame}
-    \frametitle{}
-    \tableofcontents[currentsection,currentsubsection]
-  \end{frame}
-}
+% \AtBeginSubsection[] % Do nothing for \section*
+% {
+%   \begin{frame}
+%     \frametitle{}
+%     \tableofcontents[currentsection,currentsubsection]
+%   \end{frame}
+% }
 
 \setbeamertemplate{title page}
 {
@@ -95,6 +105,8 @@
       \end{minipage}
       %\usebeamerfont{institute}\insertinstitute
     \end{beamercolorbox}
+    \vspace{5em}
+    \insertlicense
   \end{centering}
   \vfill
 }

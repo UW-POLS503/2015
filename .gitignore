@@ -19,3 +19,4 @@ venv/
 /web/cache/
 lectures/*.pdf
 lectures/*.tex
+.Rproj.user

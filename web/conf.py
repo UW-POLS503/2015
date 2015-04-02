@@ -130,6 +130,7 @@ NAVIGATION_LINKS = {
                 ("getting_help_with_r", "Getting Help with R"),
                 ("install_r", "Installing R"),
                 ("loading_data_in_r", "Loading Data in R"),
+                ("R_best_practices", "Best Practices with R")
             ),
             "Topics"
         ),
@@ -619,7 +620,10 @@ LICENSE = """
 
 # A small copyright notice for the page footer (in HTML).
 # (translatable)
-CONTENT_FOOTER = '<hr>Contents &copy; {date}  <a href="mailto:{email}">{author}</a> - Powered by <a href="http://getnikola.com" rel="nofollow">Nikola</a> {license} </br>Source on <a href="{source_url}">github</a>'
+CONTENT_FOOTER = """<hr>Contents &copy; {date}  <a href="mailto:{email}">{author}</a>  {license} <br>
+Powered by <a href="http://getnikola.com" rel="nofollow">Nikola</a> | Theme is <a href="http://bootswatch.com/flatly/" rel="nofollow">Flatly</a> <br>
+Source on <a href="{source_url}">github</a>
+"""
 
 # Things that will be passed to CONTENT_FOOTER.format().  This is done
 # for translatability, as dicts are not formattable.  Nikola will

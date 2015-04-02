@@ -2,22 +2,12 @@
 title: "Lab 1: Introduction to R and Rstudio, and knitr"
 ---
 
-# Downloading and Installing R
-
-
-# Using RStudio
-
-This lab introduces you to R and RStudio, which you will be using throughout this course to apply and learn the statistical concepts discussed in class.
-But before we begin, let's clarify some terminology.
-R is the name of the programming language, and RStudio is a convenient and widely used interface to that language.
-
-The purpose of this lab is to build some basic fluency in R, and R commands to implement cover some of the concepts in Chapters 2 and 3 of *The Basic Practice of Statistics*.
 
 # RStudio
 
 R is the name of the programming language, and RStudio is a convenient and widely used interface to that language.
-R is a programming language, and RStudio is a n
-You should familiarize yourself with the RStudio GUI.
+
+Since you will be using it for the remainder of the course, you should familiarize yourself with the RStudio GUI.
 
 ![RStudio GUI](./images/RStudio.png)
 
@@ -45,7 +35,6 @@ Of those, the most likely to be useful to you are:
 - [Editing and Executing Code](http://www.rstudio.com/ide/docs/using/source)
 - [Viewing Command History](http://www.rstudio.com/ide/docs/using/history)
 
-
 # Installing and Loading Packages
 
 One of the best features of R is that, at the time of writing, there are over 6,000 packages which add functions and data to R.
@@ -62,45 +51,19 @@ Installing the package downloads the code onto your computer so that R can make 
 Loading a package makes the functionality contained in the package available to your current R session.
 You only need to to install the package once, although if new versions of the package become available, you may need to update or reinstall the package.
 
-This course will make use of several packages. 
-The following code will download and install these packages.
+Let's install some packages that we will be using in this course.
 
-If you are working on a CSSCR lab computer these should have already been installed.
-```{r,eval=FALSE}
-install.packages(c("devtools", "ggplot2"))
-devtools::install_github("jrnold/bps5data")
-```
-The previous code installs these packages:
-
-- **bps5data** add datasets included in *BPS* 5th edition.
-- **ggplot2** is a popular and widely used graphics package that you will use to create plots.
-- **devtools** is just needed to install the other packages.
-
-Before you use any of the code in these packages, you need to load them using the function `library`:
 ```{r}
-library("ggplot2")
-library("bps5data")
+install.packages(c("ggplot2", "dplyr", "tidyr"))
 ```
 
-You can see which packages are installed and loaded using the **Packages** tab in the lower right panel. 
-All packages that are installed are listed. 
-Packages that are loaded are checked.
-By checking (un-checking) the box next to a package you can load (unload) that package.
-
-<!-- ![Packages panel in RStudio showing installed and loaded packages.](./images/Packages.png) -->
-\begin{figure}
-\centering
-\includegraphics[height=2in]{images/Packages.png}
-\caption{Packages panel in RStudio showing installed and loaded packages. All the packages that appear are installed. \textbf{bps5data} and \textbf{bps6data} are loaded. }
-\end{figure}
-\clearpage
-
-<img style="text-align: center" src="images/Packages.png" width="50%"/>
-
+The code above installed three packages, **dplyr**, **ggplot2**, and **tidyr**.
+The `c()` is used to "combine" the package names into a single character vector.
 
 # Using R as a calculator
 
-Although it is so much more, you can use R as a calculator. For example, to add, subtract, multiply or divide:
+Although it is so much more, you can use R as a calculator.
+For example, to add, subtract, multiply or divide:
 ```{r }
 2 + 3
 2 - 3
@@ -147,7 +110,8 @@ foo / 2 * 8 + foo
 
 # Using R as a calculator
 
-Although it is so much more, you can use R as a calculator. For example, to add, subtract, multiply or divide:
+Although it is so much more, you can use R as a calculator.
+For example, to add, subtract, multiply or divide:
 ```{r }
 2 + 3
 2 - 3
@@ -192,89 +156,13 @@ foo + 3
 foo / 2 * 8 + foo
 ```
 
+**Note:** You can also use 
 
 # Data and Data Frames
 
 *Data frames* in R correspond to what you usually think of as a dataset or a spreadsheet, rows are observations and columns are variables.
 
-R can import data in a variety of sources, such as csv files.
-And, in most real applications, you will be loading data from an external source.
-However, to keep things simple for this lab we will use datasets from some of the packages installed at the start of this lab.
-
-Today we will use the a dataset derived from the Behavioral Risk Factor Surveillance System (BRFSS), an annual telephone survey of 350,000 people in the United States conducted by the Center for Disease Control (CDC).
-As its name implies, the BRFSS is designed to identify risk factors in the adult population and report emerging health trends.
-For example, respondents are asked about their diet and weekly physical activity, their HIV/AIDS status, possible tobacco use, and even their level of healthcare coverage.
-The BRFSS Web site (http://www.cdc.gov/brfss) contains a complete description of the survey, including the research questions that motivate the study and many interesting results derived from the data.
-
-We will focus on a random sample of 20,000 people from the BRFSS survey conducted in 2000. While there are over 200 variables in this data set, we will work with a small subset.
-We will download this data and load it as a data frame named `cdc`:
-```{r}
-source("http://www.openintro.org/stat/data/cdc.R")
-```
-You should see an object ``cdc`` in the **Environment** panel (upper right).
-
-You can view the data and get basic information like the number of rows, number of columns, and names of the variables in a couple ways.
- 
-Use the ``View`` function to open a spreadsheet view of the data in the upper left panel,
-```{r,eval = FALSE}
-View(cdc)
-```
-
-![RStudio data frame viewer (upper left panel)](./images/data_view.png)
-
-Use the ``dim`` function to get the number of columns (variables) and rows (individuals) 
-```{r}
-dim(cdc)
-```
-The first number is the number of rows, and the second number is the number of columns.
-
-Use the ``names`` function to get the names of the variables:
-```{r}
-names(cdc)
-```
-
-To extract a single column from the data frame use ``$``.
-For example, to extract the *height* column of the *cdc*, use ```cdc$height``.
-```
-```{r, eval = FALSE}
-cdc$height
-```
-This will print a long list of numbers.
-
-# Descriptive Statistics
-
-R has many functions. In this section you will learn a few which cover the descriptive statistics introduced in Chapter 2 of *BPS*.
-
-To get a general summary of the dataset, use the ``summary`` function
-```{r}
-summary(cdc)
-```
-Notice that ``summary`` returns the 5-number summary and the mean.
-
-To calculate the mean of a column (``weight``),
-```{r}
-mean(cdc$weight)
-```
-the median,
-```{r}
-median(cdc$weight)
-```
-standard deviation,
-```{r}
-sd(cdc$weight)
-```
-variance,
-```{r}
-var(cdc$weight)
-```
-1st and 3rd quartiles
-```{r}
-quantile(cdc$weight, c(0.25, 0.75))
-```
-and inter-quartile range
-```{r}
-IQR(cdc$weight)
-```
+Use the `gapminder` data.
 
 # R Scripts
 
@@ -293,7 +181,6 @@ mean(c(1, 2, 3))
 You can run the current line or highlighted section with *Ctl-Enter* or the *Run* button. 
 You can run the *entire* script with *Ctl-Shift-S* or the *Source* button.
 
-
 # Comments
 
 Any R code following a hash (``#``) is not executed.
@@ -307,19 +194,6 @@ And in this, nothing after the ``#`` is executed,
 2 + 2 # hello, world!
 ```
 Although you can put comments on the same line after code, it is good practice to put comments on separate lines
-
-
-# R scripts and R
-
-- What is an R script?
-- What is the difference between an R script and the file? 
-- What is the difference between the workspace and the code? Note that the code should be considered real, and the results computed in the workspace temporary.
-- Tips on getting help and TAB-completion, up and down history
-
-# Installing packages
-
-- Install ggplot2 using `install_packages`
-- Is there a way to install a package from `github` ? Probably `hadley/haven` to read Stata files.
 
 # Creating your first R Markdown Document
 
