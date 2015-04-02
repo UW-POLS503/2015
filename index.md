@@ -166,6 +166,10 @@ Given that this is my first time teaching this course, I expect many adjustments
 
 - Tuesday, April 7
 
+    - Matrix algebra readings. Either
+        - Moore @moore_mathematics_2013, Chapter  (on Canvas)
+		- Kevin Quinn's matrix algebra [handout](doc/matrix.pdf)
+		- [CSSS Math Camp Lectures](http://www.csss.washington.edu/MathCamp/Lectures/) Section 4
 	- Fox, Ch 5, 6, 9 (skim)
 
 - Friday, April 10
