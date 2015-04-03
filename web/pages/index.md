@@ -167,7 +167,7 @@ Given that this is my first time teaching this course, I expect many adjustments
 - Tuesday, April 7
 
     - Matrix algebra readings. Either
-        - Moore @moore_mathematics_2013, Chapter  (on Canvas)
+        - Moore @moore_mathematics_2013, Chapter 12 (on [Canvas](https://canvas.uw.edu/files/31074693/download?download_frd=1)).
 		- Kevin Quinn's matrix algebra [handout](doc/matrix.pdf)
 		- [CSSS Math Camp Lectures](http://www.csss.washington.edu/MathCamp/Lectures/) Section 4
 	- Fox, Ch 5, 6, 9 (skim)
