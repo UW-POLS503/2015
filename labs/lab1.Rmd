@@ -114,11 +114,6 @@ foo / 2 * 8 + foo
 
 **Note:** You can also use 
 
-# Data and Data Frames
-
-*Data frames* in R correspond to what you usually think of as a dataset or a spreadsheet, rows are observations and columns are variables.
-
-Use the `gapminder` data.
 
 # R Scripts
 
