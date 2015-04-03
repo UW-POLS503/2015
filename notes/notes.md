@@ -95,3 +95,18 @@ Want to do oneday, but that day is not today
 - Largely follow the Data Camp https://teach.datacamp.com/style-guide style guide
 - [Advanced](http://adv-r.had.co.nz/Style.html)
 - http://jefworks.github.io/R-style-guide/#naming-conventions
+
+## Assessments
+
+- Software carpentry in-lesson assessment http://software-carpentry.org/blog/2015/03/teaching-tips.html
+    - Real time feedback using sticky notes. Learners post a red sticky when they need help. They take down
+	  all notes at the start of exercises. They post a green sticky note when they have finished.
+	- Students make little name tents out of red and green paper. Prop it up on red side or green side depending on whether the lesson is too fast or slow.
+	- Minute notes. At lunch and at the end of the day learners write one good point (something they learned) and one bad point (something that didnt' work, that they didn't understand, or that they already knew).
+    - Etherpad for notes and sharing
+	
+- Data Analysis and Statistics Data Camp Lab.
+    - This lab covered material that is covered in the class (Strongly Agre, Agree, Neutral, Disagree, Strongly Disagree)
+	- The lab improved my understanding of these topics.
+    - The data were relevant and interesting to me.
+    - The length of time took to complete lab. (Less than 30 min, 30 min to 1 hour, 1 hour and 2 hours, more than 2 hours)

@@ -1,13 +1,29 @@
 ---
-title: "Lab 1: Introduction to R and Rstudio, and knitr"
+title: "Lab 1: Introduction to R and RStudio, and knitr"
 ---
 
 ```{r echo=FALSE,results='hide'}
-knitr::opts_chunk$set(results = 'hide', warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(results = 'hide', warning = FALSE, message = FALSE,
+                      fig.show = 'hide')
 ```
 
 
-# RStudio
+
+# Learning Objectives
+
+1. Install R and RStudio
+2. Load data from a csv into R
+
+
+
+# Installing R
+
+Install R, RStudio and **devtools**.
+Follow the instructions [here](http://pols503.github.io/pols_503_sp15/getting_help_with_r.html).
+
+
+
+# Orientation with RStudio
 
 R is the name of the programming language, and RStudio is a convenient and widely used interface to that language.
 
@@ -39,30 +55,11 @@ Of those, the most likely to be useful to you are:
 - [Editing and Executing Code](http://www.rstudio.com/ide/docs/using/source)
 - [Viewing Command History](http://www.rstudio.com/ide/docs/using/history)
 
-# Installing and Loading Packages
+**Challenge:**
 
-One of the best features of R is that, at the time of writing, there are over 6,000 packages which add functions and data to R.
-The current list of packages is can be found on [CRAN](http://cran.r-project.org/web/packages/), the R project's homepage.
+1. Go to *Tools > Global Options*. Change the font and color of the editor and console. Which one do you like the best?
+2. What happens when you type `Alt+Shift+K`?
 
-You will use several packages in this course, so you will need to know how to install them.
-Using a package requires two steps.
-
-1. installing
-2. loading
-
-These two steps are analogous to downloading/installing a program and opening/executing a program, respectively.
-Installing the package downloads the code onto your computer so that R can make use of it.
-Loading a package makes the functionality contained in the package available to your current R session.
-You only need to to install the package once, although if new versions of the package become available, you may need to update or reinstall the package.
-
-Let's install some packages that we will be using in this course.
-
-```{r eval=FALSE}
-install.packages(c("ggplot2", "dplyr", "tidyr"))
-```
-
-The code above installed three packages, **dplyr**, **ggplot2**, and **tidyr**.
-The `c()` is used to "combine" the package names into a single character vector.
 
 # Using R as a calculator
 
@@ -94,11 +91,13 @@ And you can combine many of them together
 sqrt(2 * 2)
 ```
 
+
+
 # Variables and Assignment
 
 In R, you can save the results of calculations into objects that you can use later.
 This is done using the special symbol, ``<-``.
-For example, this saves the results of 2 + 2 to an object named ``foo``.
+For example, this saves the results of 2 + 2 to an object named ``foo`` [^1]
 ```{r}
 foo <- 2 + 2
 ```
@@ -112,62 +111,82 @@ foo + 3
 foo / 2 * 8 + foo
 ```
 
-**Note:** You can also use 
+[^1]: If you are curious as to why the variable was named `foo`, read [this](http://en.wikipedia.org/wiki/Foobar).
+
+<<<<<<< HEAD
+=======
+You can use `=` instead of `<-` for assignment.
+You may see this in some other code.
+There are some technical reasons to use `<-` instead of `=`, but the primary reason we will use `<-` instead of `=` is that this is the convention used in modern `R` programs.
+
+**Challenge**
+1. Create a variable named whatever strikes your fancy and set it equal to the square root of 2.
+Then multiply it by 4.
+2. Create a variable with a really long name and assign it a value. Start typing its name
+3. Enter the following in the console `sdgagasdgjasda`.
+
+>>>>>>> 55a7007df8d5f78483f3b9da9065cf9a1fdf9817
 
 
-# R Scripts
+# Working Directory and R Projects
 
-You can save R commands in a file called an R script. 
-To create a new R Script use *File -> New File -> R Script*.
-This will create a new tab in the upper left panel which will have a name like "Untitled1".
-Save this to a file with the extension ".R" (RStudio will warn you if you do not)
+## Working Directory
 
-To see how this works, write a few commands in the editor.
-For example,
-```{r}
-2 + 2
-3 + 8
-mean(c(1, 2, 3))
+
+## R Projects
+
+Keeping all the files associated with a project organized together – input data, R scripts, analytical results, figures – is such a wise and common practice that RStudio has built-in support for this via its projects.  Read [this](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects) for more information about RStudio projects.
+
+You will use RStudio projects for your labs and homeworks, and **final paper**.
+Create a RStudio project that you will use for all your labs.
+
+1. *File -> New Project*
+2. Select "New Directory"
+3. Select "Empty Project"
+4. Select a name for your project as Directory Name.
+   "POLS_503_Labs" is as good as any, and better than most.
+   Then choose where to put this directory with "Create project as sub-directory of".
+   Don't worry about the other options.
+
+
+
+# Creating your first R Markdown Document
+
+For this course, you will be we using R Markdown documents for homeworks.
+Create your firs
+
+1. *File -> New File -> R Markdown*
+2. Choose a title and author for your file.  HTML output is fine.
+3. Hit OK. This will open a template for your Markdown file.
+4. Save this file with `Ctrl-S`.
+5. Click on the "Knit HTML" button. This will create a HTML document from this
+   document.
+
+
+Cheatsheets and additional resources about R Markdown are available at <http://rmarkdown.rstudio.com/>.
+
+
+# Loading Data into R
+
+For the remainder of this lab you will be using a dataset of GDP per capita and fertility
+from Gapminder.[^2]
+
+[^2]: Dataset from the [gapminder](https://github.com/jennybc/gapminder) R packager.
+      The dataset in that package is an excerpt from the [Gapminder](http://www.gapminder.org/data/) data. Gapminder data is released under the Creative Commons Attribution 3.0 Unported license. See their [terms of use](https://docs.google.com/document/pub?id=1POd-pBMc5vDXAmxrpGjPLaCSDSWuxX6FLQgq5DhlUhM).
+
+
+Download the csv ("[comma-separated values](http://en.wikipedia.org/wiki/Comma-separated_values)")" <https://github.com/POLS503/pols_503_sp15/blob/master/labs/gapminder.csv>.
+
+Then load the file
+```{r results='hide'}
+gapminder <- read.csv("gapminder.csv", stringsAsFactors = FALSE)
 ```
-You can run the current line or highlighted section with *Ctl-Enter* or the *Run* button. 
-You can run the *entire* script with *Ctl-Shift-S* or the *Source* button.
 
-# Comments
+This creates a *data frame*.
+A *data frame* is a type of R object that corresponds to what you usually think of as a dataset or a spreadsheet --- rows are observations and columns are variables.
 
-Any R code following a hash (``#``) is not executed.
-These are called comments, and can be used to annotate and explain your code.
-For example, this doesn't do anything.
-```{r }
-# hello, world!
-```
-And in this, nothing after the ``#`` is executed,
-```{r }
-2 + 2 # hello, world!
-```
-Although you can put comments on the same line after code, it is good practice to put comments on separate lines.
-
-# Getting Started
-
-1. Create a new project.
-    1. File -> New Project
-    2. Select "New Directory"
-    3. Select "Empty Project"
-    4. Select a name for your project as Directory Name. "POLS_503_Labs" is as good as any. Then choose where to put this directory with "Create project as subdirectory of". Don't worry about the other options.
-
-2. Creating your first R Markdown Document
-    1. File -> New File -> R Markdown
-    2. Choose a title and author for your file.  HTML output is fine. 
-    3. Hit OK. This will open a template for your Markdown file. **Save this file now.**
-    4. Cheatsheet and additional resources available at http://rmarkdown.rstudio.com/
-
-# Read In Data
-
-```{r}
-gapminder <- read.csv(file = "gapminder.csv", stringsAsFactors=FALSE)
-```
-
-
-# Look at the Data
+**Challenge:**
+What happens when you do the following?
 ```{r}
 gapminder
 ```
@@ -175,20 +194,25 @@ gapminder
 This is a lot of information. How can we get a more useful picture of the dataset as a whole?
 
 ```{r}
-dim(gapminder) #This will show the dimensions of the dataframe. Row first, column second. 
+dim(gapminder) #This will show the dimensions of the dataframe. Row first, column second.
 names(gapminder)
 head(gapminder)
 summary(gapminder)
-
 ```
+
+**Challenge:** Given the information previously:
 
 1. What are the variables in the dataset?
 2. How many observations are there?
+3. What is the unit of observation?
 3. What types of data are the different variables?
+4. What is the range of years in the data?
+5. What are the mean and median life expectancy?
 
-## More on dataframes and variables
+# Working with variables in Data Frames
+
 You can extract single variables (or columns) and perform different operations on them.
-To extract a variable, we use the $:
+To extract a variable, we use the dollar sign (`$`) extraction operator.
 ```{r }
 gapminder$lifeExp
 ```
@@ -201,69 +225,128 @@ median(gapminder$lifeExp)
 sd(gapminder$lifeExp)
 min(gapminder$lifeExp)
 max(gapminder$lifeExp)
+quantile(gapminder$lifeExp)
 ```
 
-Let's look at the distribution of the variable `lifeExp`. 
+**Challenge**
+1. What are the mean and median of GDP per capita?
+2. Find the 30th percentile of GDP per capita?
+3. The function `length()` calculates the length of a vector.
+   The function `unique()` returns the number of unique values in a vector.
+   How many countries in the data are there? How many years?
 
-You will use the **ggplot2** package for graphics.
+# Distributions
+
+Summary statistics reduce the information of a distribution to single values.
+A distribution providess a richer understanding of the data.
+Look at the distribution of the variable `lifeExp`.
+
+You will use the **ggplot2** package for graphics for most of this course.
 In order to use it, you will need to load it using `library()`
 ```{r}
 library("ggplot2")
 ```
 
-
+Create a histogram:
 ```{r}
 ggplot(gapminder, aes(x = lifeExp)) +
   geom_histogram()
 ```
-We could also save the plot to a variable 
+
+You could also save the plot to a variable
 ```{r}
 lifexp_plot <- ggplot(gapminder, aes(x = lifeExp)) +
                       geom_histogram()
 ```
-If you just write the variable it will print the object, which in this case creates the plot
+
+If you just enter the variable name in the console it will "print"" the object, which in this case, simply creates the plot:
 ```{r}
 lifexp_plot
 ```
 
-## Now explore another variable of your choosing
+**Challenge** Explore another variable of your choosing
+
 1. Look at some summary statistics for that variable.
 2. Visualize the distribution of that variable with a histogram.
-3. Describe this distribution in plain ordinary English to your partner.  
+3. Describe this distribution in plain ordinary English to your partner.
 4. Write it as discussion in your R Markdown file.
+
+
 
 # Exploring relationships between variables
 
-Facet the data by continent:
+Use **ggplot** to create hisograms for each year
 ```{r}
 lifexp_plot + facet_wrap( ~ continent)
 ```
 
-1. Describe how the distribution varies across the continents (Write it in your Markdown!)
+**Challege:**
+Describe how the distribution varies across years (Write it in your Markdown!)
 
-## Scatter GDP/LifeExp
-## Add best fit & CIs
-
-1. Write about the relationship.  
-
+You can also use **ggplot2** to create a scatterplot
 ```{r}
-ggplot(gapminder, aes(y = lifeExp, x = log(gdpPercap))) + geom_point() + geom_smooth() + facet_wrap( ~ year)
-
-library("dplyr")
-gapminder1977 <- filter(gapminder, year == 1977)
-
-ggplot(gapminder1977, )
-
+ggplot(gapminder, aes(y = lifeExp, x = log(gdpPercap))) +
+  geom_point() +
+  geom_smooth()
 
 ```
 
+**Challenge:**
+
+1. Why is GDP per capita logged?
+2. Create a plot with a scatter plot of life expectancy vs. GDP per capita for each year.
 
 
+# Comments
 
+Any R code following a hash (``#``) is not executed.
+These are called comments, and can and **should** be used to annotate and explain your code.
+For example, this doesn't do anything.
+```{r}
+#thisisacomment
+```
+And in this, nothing after the ``#`` is executed,
+```{r}
+#this is still a comment
+2 + 2 # this is also a comment
+```
 
+**Challenge:**
+What is this equal to?
+```{r}
+5 * 4 # + 3 # - 8
+```
 
+# R Scripts
 
+You can save R commands in a file called an R script.
+To create a new R Script use *File -> New File -> R Script*.
+This will create a new tab in the upper left panel which will have a name like "Untitled1".
+Save this to a file with the extension ".R" (RStudio will warn you if you do not)
 
+To see how this works, write a few commands in the editor.
+For example,
+```{r}
+2 + 2
+3 + 8
+mean(c(1, 2, 3))
+```
+You can run the current line or highlighted section with *Ctl-Enter* or the *Run* button.
 
+# Getting Help with R
 
+Refer to [Getting Help with R](http://pols503.github.io/pols_503_sp15/getting_help_with_r.html)
+
+1. Refer to http://docs.ggplot2.org/current/ to find out how to create a density plot. Create a density plot of `gdpPercap`. Is is right skewed, left skewed, or symmetric?
+2. Go to stackoverlow and search for questions with tag `[r]`.
+
+    * What are featured questions today?
+    * What is the most voted on question?
+	  * What is in the info tab?
+
+3. Find and download the **cowsay** package. You cannot use `install.packages`. What does the `cowsay` function do? Run it with something fun (it'll make make sense once you know what it does).
+
+* * *
+
+Some text and the data set used in this are taken from Jenny Bryant, [R basics, workspace and working directory, RStudio projects](https://stat545-ubc.github.io/block002_hello-r-workspace-wd-project.html), licensed under [CC BY-NC 3.0](http://creativecommons.org/licenses/by-nc/3.0/)
 
