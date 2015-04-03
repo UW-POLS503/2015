@@ -225,6 +225,8 @@
   \item Drew Conway, ``The Data Science Venn Diagram'', http://drewconway.com/zia/2013/3/26/the-data-science-venn-diagram, CC-BY-NC
   \item R Logo. Tobias Wolf. http://developer.r-project.org/Logo/Rlogo.pdf CC-SA
   \item \url{http://commons.wikimedia.org/wiki/File:Under_Construction.jpeg CC-BY-SA}
+  \item Challenger example inspired by Edward Tufte, *The Visual Display of Quantitative Information*
+  \item Idea for using the Challenger example in this course from Christopher Adolph, ``Introduction to the Course and R'', *POLS/CSSS 221: Advanced Quantitative Political Methodology*, Spring 2014. <http://faculty.washington.edu/cadolph/503/topic1.pw.pdf>
   \end{itemize}
 \end{frame}
 
