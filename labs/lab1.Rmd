@@ -2,6 +2,10 @@
 title: "Lab 1: Introduction to R and Rstudio, and knitr"
 ---
 
+```{r echo=FALSE,results='hide'}
+knitr::opts_chunk$set(results = 'hide', warning = FALSE, message = FALSE)
+```
+
 
 # RStudio
 
@@ -53,60 +57,12 @@ You only need to to install the package once, although if new versions of the pa
 
 Let's install some packages that we will be using in this course.
 
-```{r}
+```{r eval=FALSE}
 install.packages(c("ggplot2", "dplyr", "tidyr"))
 ```
 
 The code above installed three packages, **dplyr**, **ggplot2**, and **tidyr**.
 The `c()` is used to "combine" the package names into a single character vector.
-
-# Using R as a calculator
-
-Although it is so much more, you can use R as a calculator.
-For example, to add, subtract, multiply or divide:
-```{r }
-2 + 3
-2 - 3
-2 * 3
-2 / 3
-```
-
-The power of a number is calculated with ``^``, e.g. $4^2$ is,
-
-```{r }
-4 ^ 2
-```
-
-R includes many functions for standard math functions.
-For example, the square root function is ``sqrt``, e.g. $\sqrt{2}$,
-
-```{r }
-sqrt(2)
-```
-
-And you can combine many of them together
-```{r}
-(2 * 4 + 3 ) / 10
-sqrt(2 * 2)
-```
-
-# Variables and Assignment
-
-In R, you can save the results of calculations into objects that you can use later.
-This is done using the special symbol, ``<-``.
-For example, this saves the results of 2 + 2 to an object named ``foo``.
-```{r}
-foo <- 2 + 2
-```
-You can see that ``foo`` is equal to ``4``
-```{r}
-foo
-```
-And you can reuse foo in other calculations,
-```{r}
-foo + 3
-foo / 2 * 8 + foo
-```
 
 # Using R as a calculator
 
@@ -193,23 +149,126 @@ And in this, nothing after the ``#`` is executed,
 ```{r }
 2 + 2 # hello, world!
 ```
-Although you can put comments on the same line after code, it is good practice to put comments on separate lines
+Although you can put comments on the same line after code, it is good practice to put comments on separate lines.
 
-# Creating your first R Markdown Document
+# Getting Started
 
-- Create a markdown document
-- This should have a pretty graph
-- Save it to html and doc. Saving to pdf would require instal
+1. Create a new project.
+    1. File -> New Project
+    2. Select "New Directory"
+    3. Select "Empty Project"
+    4. Select a name for your project as Directory Name. "POLS_503_Labs" is as good as any. Then choose where to put this directory with "Create project as subdirectory of". Don't worry about the other options.
 
-# RSTudio Projects
+2. Creating your first R Markdown Document
+    1. File -> New File -> R Markdown
+    2. Choose a title and author for your file.  HTML output is fine. 
+    3. Hit OK. This will open a template for your Markdown file. **Save this file now.**
+    4. Cheatsheet and additional resources available at http://rmarkdown.rstudio.com/
 
-I like how STAT545 introduces it https://stat545-ubc.github.io/block002_hello-r-workspace-wd-project.html
+# Read In Data
 
-# Introduction to ggplot2
+```{r}
+gapminder <- read.csv(file = "gapminder.csv", stringsAsFactors=FALSE)
+```
 
-- Either the vignette for ggplot2 or Kathrik Ram's tutorial (http://inundata.org/2013/04/10/a-quick-introduction-to-ggplot2/; referenced in Software Carpentry) look as good a place to start as any.
-- jennybc: https://github.com/jennybc/ggplot2-tutorial
-- STAT 545: https://stat545-ubc.github.io/cm005_still-data-ggplot2-rmarkdown.html
-- Translate existing plotting code from 2014 labs to ggplot2
-- The UW R session with jennybc https://github.com/jennybc/UW-R
+
+# Look at the Data
+```{r}
+gapminder
+```
+
+This is a lot of information. How can we get a more useful picture of the dataset as a whole?
+
+```{r}
+dim(gapminder) #This will show the dimensions of the dataframe. Row first, column second. 
+names(gapminder)
+head(gapminder)
+summary(gapminder)
+
+```
+
+1. What are the variables in the dataset?
+2. How many observations are there?
+3. What types of data are the different variables?
+
+## More on dataframes and variables
+You can extract single variables (or columns) and perform different operations on them.
+To extract a variable, we use the $:
+```{r }
+gapminder$lifeExp
+```
+
+Again, perhaps a summary may be more interesting. We can do more specific operations on this variable alone:
+
+```{r}
+mean(gapminder$lifeExp)
+median(gapminder$lifeExp)
+sd(gapminder$lifeExp)
+min(gapminder$lifeExp)
+max(gapminder$lifeExp)
+```
+
+Let's look at the distribution of the variable `lifeExp`. 
+
+You will use the **ggplot2** package for graphics.
+In order to use it, you will need to load it using `library()`
+```{r}
+library("ggplot2")
+```
+
+
+```{r}
+ggplot(gapminder, aes(x = lifeExp)) +
+  geom_histogram()
+```
+We could also save the plot to a variable 
+```{r}
+lifexp_plot <- ggplot(gapminder, aes(x = lifeExp)) +
+                      geom_histogram()
+```
+If you just write the variable it will print the object, which in this case creates the plot
+```{r}
+lifexp_plot
+```
+
+## Now explore another variable of your choosing
+1. Look at some summary statistics for that variable.
+2. Visualize the distribution of that variable with a histogram.
+3. Describe this distribution in plain ordinary English to your partner.  
+4. Write it as discussion in your R Markdown file.
+
+# Exploring relationships between variables
+
+Facet the data by continent:
+```{r}
+lifexp_plot + facet_wrap( ~ continent)
+```
+
+1. Describe how the distribution varies across the continents (Write it in your Markdown!)
+
+## Scatter GDP/LifeExp
+## Add best fit & CIs
+
+1. Write about the relationship.  
+
+```{r}
+ggplot(gapminder, aes(y = lifeExp, x = log(gdpPercap))) + geom_point() + geom_smooth() + facet_wrap( ~ year)
+
+library("dplyr")
+gapminder1977 <- filter(gapminder, year == 1977)
+
+ggplot(gapminder1977, )
+
+
+```
+
+
+
+
+
+
+
+
+
+
 
