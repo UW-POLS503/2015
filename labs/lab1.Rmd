@@ -1,5 +1,7 @@
 ---
 title: "Lab 1: Introduction to R and RStudio, and knitr"
+author: Jeffrey B. Arnold and Carolina Johnson
+date: April 3, 2015
 ---
 
 ```{r echo=FALSE,results='hide'}

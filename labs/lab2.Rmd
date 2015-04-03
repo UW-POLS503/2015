@@ -1,5 +1,7 @@
 ---
-title: Lab 2: Tidy data with tidyr and dplyr; Running our first regression
+title: "Lab 2: Graphing and Data Manipulation"
+author: Jeffrey B. Arnold and Sergio Garcia
+date: April 10, 2015
 ---
 
 Objectives

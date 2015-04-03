@@ -8,6 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
+<meta name="author" content="Jeffrey B. Arnold and Carolina Johnson" />
 
 
 <title>Lab 1: Introduction to R and RStudio, and knitr</title>
@@ -61,6 +62,8 @@ img {
 
 <div id="header">
 <h1 class="title">Lab 1: Introduction to R and RStudio, and knitr</h1>
+<h4 class="author"><em>Jeffrey B. Arnold and Carolina Johnson</em></h4>
+<h4 class="date"><em>April 3, 2015</em></h4>
 </div>
 
 
@@ -102,7 +105,7 @@ img {
 <li><strong>help</strong> displays R help.</li>
 </ul></li>
 </ol>
-<p>RStudio documentation can be found at <a href="http://www.rstudio.com/ide/docs/" class="uri">http://www.rstudio.com/ide/docs/</a>. Of those, the most likely to be useful to you are:</p>
+<p>RStudio documentation can be found at <a href="http://www.rstudio.com/ide/docs/">http://www.rstudio.com/ide/docs/</a>. Of those, the most likely to be useful to you are:</p>
 <ul>
 <li><a href="http://www.rstudio.com/ide/docs/using/console">Working in the Console</a></li>
 <li><a href="http://www.rstudio.com/ide/docs/using/source">Editing and Executing Code</a></li>
@@ -138,8 +141,26 @@ sqrt(2 * 2)</code></pre>
 <p>And you can reuse foo in other calculations,</p>
 <pre class="r"><code>foo + 3
 foo / 2 * 8 + foo</code></pre>
+</div>
+<div id="head" class="section level1">
+<h1>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</h1>
 <p>You can use <code>=</code> instead of <code>&lt;-</code> for assignment. You may see this in some other code. There are some technical reasons to use <code>&lt;-</code> instead of <code>=</code>, but the primary reason we will use <code>&lt;-</code> instead of <code>=</code> is that this is the convention used in modern <code>R</code> programs.</p>
 <p><strong>Challenge</strong> 1. Create a variable named whatever strikes your fancy and set it equal to the square root of 2. Then multiply it by 4. 2. Create a variable with a really long name and assign it a value. Start typing its name 3. Enter the following in the console <code>sdgagasdgjasda</code>.</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>55a7007df8d5f78483f3b9da9065cf9a1fdf9817</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
 </div>
 <div id="working-directory-and-r-projects" class="section level1">
 <h1>Working Directory and R Projects</h1>
@@ -168,12 +189,12 @@ foo / 2 * 8 + foo</code></pre>
 <li>Save this file with <code>Ctrl-S</code>.</li>
 <li>Click on the “Knit HTML” button. This will create a HTML document from this document.</li>
 </ol>
-<p>Cheatsheets and additional resources about R Markdown are available at <a href="http://rmarkdown.rstudio.com/" class="uri">http://rmarkdown.rstudio.com/</a>.</p>
+<p>Cheatsheets and additional resources about R Markdown are available at <a href="http://rmarkdown.rstudio.com/">http://rmarkdown.rstudio.com/</a>.</p>
 </div>
 <div id="loading-data-into-r" class="section level1">
 <h1>Loading Data into R</h1>
 <p>For the remainder of this lab you will be using a dataset of GDP per capita and fertility from Gapminder.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
-<p>Download the csv (“<a href="http://en.wikipedia.org/wiki/Comma-separated_values">comma-separated values</a>”)&quot; <a href="https://github.com/POLS503/pols_503_sp15/blob/master/labs/gapminder.csv" class="uri">https://github.com/POLS503/pols_503_sp15/blob/master/labs/gapminder.csv</a>.</p>
+<p>Download the csv (“<a href="http://en.wikipedia.org/wiki/Comma-separated_values">comma-separated values</a>”)&quot; <a href="https://github.com/POLS503/pols_503_sp15/blob/master/labs/gapminder.csv">https://github.com/POLS503/pols_503_sp15/blob/master/labs/gapminder.csv</a>.</p>
 <p>Then load the file</p>
 <pre class="r"><code>gapminder &lt;- read.csv(&quot;gapminder.csv&quot;, stringsAsFactors = FALSE)</code></pre>
 <p>This creates a <em>data frame</em>. A <em>data frame</em> is a type of R object that corresponds to what you usually think of as a dataset or a spreadsheet — rows are observations and columns are variables.</p>
@@ -266,7 +287,7 @@ mean(c(1, 2, 3))</code></pre>
 <h1>Getting Help with R</h1>
 <p>Refer to <a href="http://pols503.github.io/pols_503_sp15/getting_help_with_r.html">Getting Help with R</a></p>
 <ol style="list-style-type: decimal">
-<li>Refer to <a href="http://docs.ggplot2.org/current/" class="uri">http://docs.ggplot2.org/current/</a> to find out how to create a density plot. Create a density plot of <code>gdpPercap</code>. Is is right skewed, left skewed, or symmetric?</li>
+<li>Refer to <a href="http://docs.ggplot2.org/current/">http://docs.ggplot2.org/current/</a> to find out how to create a density plot. Create a density plot of <code>gdpPercap</code>. Is is right skewed, left skewed, or symmetric?</li>
 <li><p>Go to stackoverlow and search for questions with tag <code>[r]</code>.</p>
 <ul>
 <li>What are featured questions today?</li>
