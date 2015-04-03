@@ -6,14 +6,21 @@ title: "Lab 1: Introduction to R and Rstudio, and knitr"
 knitr::opts_chunk$set(results = 'hide', warning = FALSE, message = FALSE)
 ```
 
+
+
 # Learning Objectives
 
 1. Install R and Rstudio
 2. Load data from a csv into R
 
+
+
 # Installing R
 
-Install R, Rstudio and **devtools**. Follow the instructions [here](http://pols503.github.io/pols_503_sp15/getting_help_with_r.html).
+Install R, Rstudio and **devtools**. 
+Follow the instructions [here](http://pols503.github.io/pols_503_sp15/getting_help_with_r.html).
+
+
 
 # Orientation with RStudio
 
@@ -50,6 +57,8 @@ Of those, the most likely to be useful to you are:
 **Challenge**
 Go to *Tools > Global Options*. Change the font and color of the editor and console. Which one do you like the best? 
 
+
+
 # Using R as a calculator
 
 Although it is so much more, you can use R as a calculator.
@@ -80,6 +89,8 @@ And you can combine many of them together
 sqrt(2 * 2)
 ```
 
+
+
 # Variables and Assignment
 
 In R, you can save the results of calculations into objects that you can use later.
@@ -105,39 +116,49 @@ You may see this in some other code.
 There are some technical reasons to use `<-` instead of `=`, but the primary reason we will use `<-` instead of `=` is that this is the convention used in modern `R` programs.
 
 **Challenge** 
-Create a variable named whatever strikes your fancy and set it equal to the square root of 2.
+1. Create a variable named whatever strikes your fancy and set it equal to the square root of 2.
 Then multiply it by 4.
+2. Create a variable with a really long name and assign it a value. Start typing its name 
+3. Enter the following in the console `sdgagasdgjasda`. 
 
-# Getting Started
+
+
+# R Projects
 
 Before you go any further we need to make sure
 
-1. Create a new project.
+1. *File -> New Project*
+2. Select "New Directory"
+3. Select "Empty Project"
+4. Select a name for your project as Directory Name.
+   "POLS_503_Labs" is as good as any, and better than most.
+   Then choose where to put this directory with "Create project as subdirectory of".
+   Don't worry about the other options.
 
-    1. *File -> New Project*
-    2. Select "New Directory"
-    3. Select "Empty Project"
-    4. Select a name for your project as Directory Name.
-	   "POLS_503_Labs" is as good as any, and better than most.
-       Then choose where to put this directory with "Create project as subdirectory of".
-       Don't worry about the other options.
 
-2. Creating your first R Markdown Document
 
-    1. *File -> New File -> R Markdown*
-    2. Choose a title and author for your file.  HTML output is fine. 
-    3. Hit OK. This will open a template for your Markdown file. **Save this file now.**
-    4. Cheatsheet and additional resources available at http://rmarkdown.rstudio.com/
+# Creating your firsr R Markdown Document
 
-# Data and Data Frames
+Creating your first R Markdown Document
+
+1. *File -> New File -> R Markdown*
+2. Choose a title and author for your file.  HTML output is fine. 
+3. Hit OK. This will open a template for your Markdown file. **Save this file now.**
+4. Cheatsheet and additional resources available at http://rmarkdown.rstudio.com/
+
+
+
+# Loading Data into R
 
 *Data frames* in R correspond to what you usually think of as a dataset or a spreadsheet, rows are observations and columns are variables.
 
-For the remainder of this da
-
-```{r}
-gapminder <- read.csv("gapminder.csv", stringsAsFactors=FALSE)
+Download the csv ("[comma-separated values](http://en.wikipedia.org/wiki/Comma-separated_values)")" <https://github.com/POLS503/pols_503_sp15/blob/master/labs/gapminder.csv>.
+Then load the file 
+```{r results='hide'}
+gapminder <- read.csv("gapminder.csv", stringsAsFactors = FALSE)
 ```
+
+
 
 # R Scripts
 
@@ -156,27 +177,10 @@ mean(c(1, 2, 3))
 You can run the current line or highlighted section with *Ctl-Enter* or the *Run* button. 
 You can run the *entire* script with *Ctl-Shift-S* or the *Source* button.
 
-# Comments
-
-Any R code following a hash (``#``) is not executed.
-These are called comments, and can and **should** be used to annotate and explain your code.
-For example, this doesn't do anything.
-```{r}
-#thisisacomment
-```
-And in this, nothing after the ``#`` is executed,
-```{r}
-#this is still a comment
-2 + 2 # this is also a comment
-```
-
-
 What is this equal to?
 ```{r}
 5 * 4 # + 3 # - 8
 ```
-
-# Look at the Data
 
 ```{r}
 gapminder
@@ -189,7 +193,6 @@ dim(gapminder) #This will show the dimensions of the dataframe. Row first, colum
 names(gapminder)
 head(gapminder)
 summary(gapminder)
-
 ```
 
 1. What are the variables in the dataset?
@@ -197,7 +200,8 @@ summary(gapminder)
 3. What types of data are the different variables?
 
 
-## More on dataframes and variables
+
+# More on dataframes and variables
 
 You can extract single variables (or columns) and perform different operations on them.
 To extract a variable, we use the $:
@@ -223,7 +227,6 @@ In order to use it, you will need to load it using `library()`
 library("ggplot2")
 ```
 
-
 ```{r}
 ggplot(gapminder, aes(x = lifeExp)) +
   geom_histogram()
@@ -244,6 +247,7 @@ lifexp_plot
 2. Visualize the distribution of that variable with a histogram.
 3. Describe this distribution in plain ordinary English to your partner.
 4. Write it as discussion in your R Markdown file.
+
 
 
 # Exploring relationships between variables
@@ -269,7 +273,25 @@ gapminder1977 <- filter(gapminder, year == 1977)
 ggplot(gapminder1977, )
 ```
 
-## Getting Help with R
+
+
+# Comments
+
+Any R code following a hash (``#``) is not executed.
+These are called comments, and can and **should** be used to annotate and explain your code.
+For example, this doesn't do anything.
+```{r}
+#thisisacomment
+```
+And in this, nothing after the ``#`` is executed,
+```{r}
+#this is still a comment
+2 + 2 # this is also a comment
+```
+
+
+
+# Getting Help with R
 
 Refer to [Getting Help with R](http://pols503.github.io/pols_503_sp15/getting_help_with_r.html)
 
