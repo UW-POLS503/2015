@@ -18,7 +18,7 @@ venv/
 /web/output/
 /web/cache/
 lectures/*.pdf
-lectures/*.tex
+lectures/Lecture_*.tex
 .Rproj.user
 *.Rhistory
-/labs/*.html
+

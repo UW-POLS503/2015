@@ -1,0 +1,65 @@
+% Common MACROS
+\newcommand{\LongName}{Jeffrey B. Arnold}
+\newcommand{\ShortName}{Arnold}
+\newcommand{\Institute}{University of Washington}
+
+\usepackage{amsmath,amsfonts}
+
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight0.8\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+
+\DeclareMathOperator{\mean}{mean}
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\cov}{Cov}
+\DeclareMathOperator{\cor}{Cor}
+\DeclareMathOperator{\var}{Var}
+\DeclareMathOperator{\se}{se}
+\DeclareMathOperator{\sd}{sd}
+\newcommand{\pvalue}{$p$-value}
+\newcommand{\pvalues}{$p$-values}
+\newcommand{\zscore}{$z$-score}
+\newcommand{\zscores}{$z$-scores}
+
+% Tables
+\usepackage{longtable,booktabs,multirow}
+\usepackage{caption}
+% These lines are needed to make table captions work with longtable:
+\makeatletter
+\def\fnum@table{\tablename~\thetable}
+\makeatother
+
+% PDF Stuff
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={\LongName},
+            colorlinks=true,
+            citecolor=CSSSTeal,
+            urlcolor=CSSSTeal,
+            filecolor=CSSSTeal,
+            pdfborder={0 0 0}}
+
+% Beamer Stuff
+\usetheme{POLSLIII}
+
+% license
+\usepackage{ccicons}
+\license{\href{http://creativecommons.org/licenses/by-nc-sa/4.0/}{\ccbyncsa}}
+
+% Title Stuff
+\institute{\Institute}
+\author[\ShortName]{\LongName}
+\title[\CourseNumber]{\CourseNumber: \\ \CourseTitle}
+
+% \beamerdefaultoverlayspecification{<+->}
+
+% Make overbrace and underbrace overlay specification aware
+\renewcommand<>{\overbrace}[2]{\alt#3{\overbrace{#1}{#2}}{#1}}
+\renewcommand<>{\underbrace}[2]{\alt#3{\underbrace{#1}{#2}}{#1}}
+
