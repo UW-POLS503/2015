@@ -9,8 +9,7 @@ knitr::opts_chunk$set(results = 'hide', warning = FALSE, message = FALSE)
 # Learning Objectives
 
 1. Install R and Rstudio
-2. 
-3. Find help
+2. Load data from a csv into R
 
 # Installing R
 
@@ -48,7 +47,7 @@ Of those, the most likely to be useful to you are:
 - [Editing and Executing Code](http://www.rstudio.com/ide/docs/using/source)
 - [Viewing Command History](http://www.rstudio.com/ide/docs/using/history)
 
-
+**Challenge**
 Go to *Tools > Global Options*. Change the font and color of the editor and console. Which one do you like the best? 
 
 # Using R as a calculator
@@ -105,16 +104,40 @@ You can use `=` instead of `<-` for assignment.
 You may see this in some other code.
 There are some technical reasons to use `<-` instead of `=`, but the primary reason we will use `<-` instead of `=` is that this is the convention used in modern `R` programs.
 
+**Challenge** 
 Create a variable named whatever strikes your fancy and set it equal to the square root of 2.
 Then multiply it by 4.
 
+# Getting Started
+
+Before you go any further we need to make sure
+
+1. Create a new project.
+
+    1. *File -> New Project*
+    2. Select "New Directory"
+    3. Select "Empty Project"
+    4. Select a name for your project as Directory Name.
+	   "POLS_503_Labs" is as good as any, and better than most.
+       Then choose where to put this directory with "Create project as subdirectory of".
+       Don't worry about the other options.
+
+2. Creating your first R Markdown Document
+
+    1. *File -> New File -> R Markdown*
+    2. Choose a title and author for your file.  HTML output is fine. 
+    3. Hit OK. This will open a template for your Markdown file. **Save this file now.**
+    4. Cheatsheet and additional resources available at http://rmarkdown.rstudio.com/
 
 # Data and Data Frames
 
 *Data frames* in R correspond to what you usually think of as a dataset or a spreadsheet, rows are observations and columns are variables.
 
-Use the `gapminder` data.
+For the remainder of this da
 
+```{r}
+gapminder <- read.csv("gapminder.csv", stringsAsFactors=FALSE)
+```
 
 # R Scripts
 
@@ -132,7 +155,6 @@ mean(c(1, 2, 3))
 ```
 You can run the current line or highlighted section with *Ctl-Enter* or the *Run* button. 
 You can run the *entire* script with *Ctl-Shift-S* or the *Source* button.
-
 
 # Comments
 
@@ -154,37 +176,8 @@ What is this equal to?
 5 * 4 # + 3 # - 8
 ```
 
-
-# Getting Started
-
-1. Create a new project.
-
-    1. *File -> New Project*
-    2. Select "New Directory"
-    3. Select "Empty Project"
-    4. Select a name for your project as Directory Name.
-	   "POLS_503_Labs" is as good as any, and better than most.
-       Then choose where to put this directory with "Create project as subdirectory of".
-       Don't worry about the other options.
-
-2. Creating your first R Markdown Document
-
-    1. *File -> New File -> R Markdown*
-    2. Choose a title and author for your file.  HTML output is fine. 
-    3. Hit OK. This will open a template for your Markdown file. **Save this file now.**
-    4. Cheatsheet and additional resources available at http://rmarkdown.rstudio.com/
-
-# Read In Data
-
-In this example we will use data on gapminder
-
-Download the 
-
-```{r}
-gapminder <- read.csv("gapminder.csv", stringsAsFactors=FALSE)
-```
-
 # Look at the Data
+
 ```{r}
 gapminder
 ```
@@ -203,7 +196,9 @@ summary(gapminder)
 2. How many observations are there?
 3. What types of data are the different variables?
 
+
 ## More on dataframes and variables
+
 You can extract single variables (or columns) and perform different operations on them.
 To extract a variable, we use the $:
 ```{r }
@@ -243,12 +238,13 @@ If you just write the variable it will print the object, which in this case crea
 lifexp_plot
 ```
 
-## Now explore another variable of your choosing
+**Challenge** Explore another variable of your choosing
 
 1. Look at some summary statistics for that variable.
 2. Visualize the distribution of that variable with a histogram.
 3. Describe this distribution in plain ordinary English to your partner.
 4. Write it as discussion in your R Markdown file.
+
 
 # Exploring relationships between variables
 
@@ -275,12 +271,14 @@ ggplot(gapminder1977, )
 
 ## Getting Help with R
 
-Refer to [Getting Help with R](getting
+Refer to [Getting Help with R](http://pols503.github.io/pols_503_sp15/getting_help_with_r.html)
 
 1. Refer to http://docs.ggplot2.org/current/ to find out how to create a density plot. Create a density plot of `gdpPercap`. Is is right skewed, left skewed, or symmetric? 
-2. Go to stackoverlow and search for questions with tag `[r]`. 
+2. Go to stackoverlow and search for questions with tag `[r]`.
+
     * What are featured questions today? 
     * What is the most voted question?
 	* What is in the info tab?
-3. Find and download the cowsay package. You cannot use `install.packages`. What does the `cowsay` function do? Run it with something fun (it'll make make sense once you know what it does).
+	
+3. Find and download the **cowsay** package. You cannot use `install.packages`. What does the `cowsay` function do? Run it with something fun (it'll make make sense once you know what it does).
 
