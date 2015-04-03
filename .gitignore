@@ -20,3 +20,4 @@ venv/
 lectures/*.pdf
 lectures/*.tex
 .Rproj.user
+*.Rhistory
