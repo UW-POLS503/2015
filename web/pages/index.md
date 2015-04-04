@@ -212,6 +212,8 @@ Given that this is my first time teaching this course, I expect many adjustments
 	
 ### Friday, May 1
 
+TBD
+
 ## Week 6: Outliers, Robust Regression, Bootstrapping
 
 ### Tuesday, May 5
@@ -220,25 +222,47 @@ Given that this is my first time teaching this course, I expect many adjustments
 
 ### Friday, May 8
 
+TBD
+
 ## Week 7: Causal Inference
 
 ### Tuesday, May 12
+
+TBD
+
 ### Friday, May 15
+
+TBD
 
 ## Week 8: Prediction
 
 ### Tuesday, May 19
+
+TBD
+
 ### Friday, May 22
+
+TBD
 
 ## Week 9: Limited Dependent Variables, Robust standard errors
 
 ### Tuesday, May 26
+
+TBD
+
 ### Friday, May 29
+
+TBD
 
 ## Week 10: 
 
 ### Tuesday, June 2
+
+TBD
+
 ### Friday, June 5
+
+TBD
 
 * * * 
 
