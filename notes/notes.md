@@ -120,3 +120,11 @@ Want to do oneday, but that day is not today
 	- The lab improved my understanding of these topics.
     - The data were relevant and interesting to me.
     - The length of time took to complete lab. (Less than 30 min, 30 min to 1 hour, 1 hour and 2 hours, more than 2 hours)
+
+## Pre- and Post-Survey
+
+### Pre-Survey
+
+- remove question on "linear algebra". Based on the responses I think some confused it with algebra.
+- Add question about multiplying two matrices, transpose of a matrix, and matrix x vector.
+
