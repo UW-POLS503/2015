@@ -150,89 +150,95 @@ Given that this is my first time teaching this course, I expect many adjustments
 
 ## Week 1: Introduction to 503 and R, Math Review
 
-- Tuesday, March 31
+### Tuesday, March 31
 
-    - [Deck 1](lectures/Lecture_01_handout.pdf)
-	- In-class R Markdown example analysis: [Rmd source](docs/Challenger_Analysis.Rmd), [html output](docs/Challenger_Analysis.html)
+
+- [Deck 1](lectures/Lecture_01_handout.pdf)
+- Readings
+    - In-class R Markdown example analysis: [Rmd source](docs/Challenger_Analysis.Rmd), [html output](docs/Challenger_Analysis.html)
     - Gelman and Hill, Ch 2
-	- Fox, Ch 2, 3
+    - Fox, Ch 2, 3 (review)
 
-- Friday, April 3
+### Friday, April 3
 
+- Lab document: [.Rmd](labs/lab1.Rmd), [html](labs/lab1.html)
+- Data: [gapminder.csv](labs/gapminder.csv)
+- Readings:
     - Complete Data Camp "Introduction to R", https://www.datacamp.com/courses/free-introduction-to-r
     - @wickham_layered_2010
 
 ## Week 2: Assumptions & Properties of the Linear Regression Model, Part I
 
-- Tuesday, April 7
+### Tuesday, April 7
 
-    - Matrix algebra readings. Either
-        - Moore @moore_mathematics_2013, Chapter 12 (on [Canvas](https://canvas.uw.edu/files/31074693/download?download_frd=1)).
-		- Kevin Quinn's matrix algebra [handout](doc/matrix.pdf)
-		- [CSSS Math Camp Lectures](http://www.csss.washington.edu/MathCamp/Lectures/) Section 4
-	- Fox, Ch 5, 6, 9 (skim)
+- Matrix algebra readings. Read **any** of the following
+    - Moore @moore_mathematics_2013, Chapter 12 (on [Canvas](https://canvas.uw.edu/files/31074693/download?download_frd=1)).
+    - Kevin Quinn's matrix algebra [handout](doc/matrix.pdf)
+    - [CSSS Math Camp Lectures](http://www.csss.washington.edu/MathCamp/Lectures/) Section 4
+- Fox, Ch 5, 6, 9 (skim)
 
-- Friday, April 10
+### Friday, April 10
 
-    - @wickham_tidy_2014
-    - Zuur, Ch 1, 2, 3 (optional)
+- @wickham_tidy_2014
+- Zuur, Ch 1, 2, 3 (optional)
 
 ## Week 3: Assumptions & Properties of the Linear Regression Model, Part II
 
-- Tuesday, April 14
+### Tuesday, April 14
 
-    - Fox, Ch 9
+- Fox, Ch 9
 	
-- Friday, April 17
+### Friday, April 17
 
-	- Zuur, Ch 5 (optional)
+- Zuur, Ch 5 (optional)
 
 ## Week 4: Statistical Inference / Interpretation of the Linear Model
 
-- Tuesday, April 21
+### Tuesday, April 21
 
-	- Gelman and Hill, Ch 3]
-	- @brambor_understanding_2006
+- Gelman and Hill, Ch 3]
+- @brambor_understanding_2006
 
-- Friday, April 17
+### Friday, April 17
 
-    - Zuur, Ch 4, 6
+- Zuur, Ch 4, 6
 
 ## Week 5: Model Fitting and Data Transformation
 
-- Tuesday, Apr 28
+### Tuesday, Apr 28
 
-	- Fox, Ch 12, 13, 17.1--17.2
-    - Gelman and Hill, Ch 4, 7 (optional)
+- Fox, Ch 12, 13, 17.1--17.2
+- Gelman and Hill, Ch 4, 7 (optional)
 	
-- Friday, May 1
+### Friday, May 1
 
 ## Week 6: Outliers, Robust Regression, Bootstrapping
 
-- Tuesday, May 5
+### Tuesday, May 5
 
-    - Fox, Ch 11, 19
+- Fox, Ch 11, 19
 
-- Friday, May 8
+### Friday, May 8
 
 ## Week 7: Causal Inference
 
-- Tuesday, May 12
-- Friday, May 15
+### Tuesday, May 12
+### Friday, May 15
 
 ## Week 8: Prediction
 
-- Tuesday, May 19
-- Friday, May 22
+### Tuesday, May 19
+### Friday, May 22
 
 ## Week 9: Limited Dependent Variables, Robust standard errors
 
-- Tuesday, May 26
-- Friday, May 29
+### Tuesday, May 26
+### Friday, May 29
 
 ## Week 10: 
 
-- Tuesday, June 2
+### Tuesday, June 2
+### Friday, June 5
 
 * * * 
 
