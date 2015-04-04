@@ -4,7 +4,9 @@ LABS_HTML = $(LABS_RMD:%.Rmd=%.html)
 
 all: build
 
-build: $(LABS_HTML) data
+build: data
+
+labs: $(LABS_HTML) data
 
 data: gapminder.csv
 
