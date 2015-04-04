@@ -9,8 +9,6 @@ Lab document
 
     - Software Carpentry Lesson Templates: http://software-carpentry.org/blog/2014/10/new-lesson-template-v2.html (the concepts, but not the details of implementation).
 
-
-
 Conduct of the lab
 
 - Follow the tips for teaching in Software Carpentry [here](http://swcarpentry.github.io/slideshows/teaching-tips/index.html) and [here](http://software-carpentry.org/blog/2015/03/teaching-tips.html)
@@ -46,6 +44,18 @@ We always need more interesting data sets
 - Datasets from MASS, CAR, arm  ?
 - KDnuggets machine learning data http://www.kdnuggets.com/datasets/index.html
 - Stat 101 https://stat.duke.edu/~mc301/data/
+- Datasets used in Blackwell PSC 504: http://www.mattblackwell.org/teaching/psc504/
+
+    - Ben Olken "Monitoring Corruption"
+    - Christopher Blattman and J Annan. 2010. "consequences of child soldiering." Review of Economics and Statistics
+    - National Supported Work Demonstration Experimental and Observational Data
+    - Ebonya L. Washington. 2008. "Female Socialization: How Daughters Affect
+eir Legislator Fathers' Voting on Woman’s Issues." American Economic
+Review.
+    - David Card and Alan B Krueger (Sept. 1994). “Minimum Wages and Employment: A Case Study of the Fast-Food Industry in New Jersey and Pennsylvania”. American Economic Review
+    - Daron Acemoglu, Simon Johnson, and James A Robinson (Dec. 2001).
+"Colonial Origins of Comparative Development: An Empirical Investigation". American Economic Review
+
 
 ## Datasets used in intros
 
