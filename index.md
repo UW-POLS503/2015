@@ -57,7 +57,7 @@ University of Washington, Spring 2015
 <table class = "table table-striped table-hover">
 <tr>
 <td>Jeffrey Arnold</td>
-<td>W 10:15--12:15</td>
+<td>Th 3:00--5:00 pm</td>
 <td>Smith 221B </td>
 </tr>
 <tr>
