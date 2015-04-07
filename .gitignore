@@ -22,3 +22,6 @@ lectures/Lecture_*.tex
 .Rproj.user
 *.Rhistory
 
+/lectures/figure/
+/lectures/lecture-02_cache/
+/lectures/lecture-02_files/
