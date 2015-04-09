@@ -173,9 +173,9 @@ Given that this is my first time teaching this course, I expect many adjustments
 
 - Matrix algebra readings. Read **any** of the following
     - Moore @moore_mathematics_2013, Chapter 12 (on [Canvas](https://canvas.uw.edu/files/31074693/download?download_frd=1)).
-    - Kevin Quinn's matrix algebra [handout](doc/matrix.pdf)
+    - Kevin Quinn's matrix algebra [handout](docs/matrix.pdf)
     - [CSSS Math Camp Lectures](http://www.csss.washington.edu/MathCamp/Lectures/) Section 4
-- Fox, Ch 5, 6, 9 (skim)
+- Fox, Ch. 5, 9.1--9.2
 
 ### Friday, April 10
 
@@ -186,7 +186,7 @@ Given that this is my first time teaching this course, I expect many adjustments
 
 ### Tuesday, April 14
 
-- Fox, Ch 9
+- Fox, Ch. 6, 9.3
 	
 ### Friday, April 17
 
@@ -196,12 +196,12 @@ Given that this is my first time teaching this course, I expect many adjustments
 
 ### Tuesday, April 21
 
-- Gelman and Hill, Ch 3]
+- Gelman and Hill, Ch 3
 - @brambor_understanding_2006
 
 ### Friday, April 17
 
-- Zuur, Ch 4, 6
+- Zuur, Ch 4, 6 (optional)
 
 ## Week 5: Model Fitting and Data Transformation
 
