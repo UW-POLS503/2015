@@ -16,7 +16,7 @@ source("init.R")
 \input{includes.tex}
 
 
-\newcommand{\thetitle}{Matrix Algebra, Linear Regressions}
+\newcommand{\thetitle}{Matrix Algebra, Linear Regression}
 \date{April 7, 2015}
 \title{\thetitle{}}
 \hypersetup{
@@ -35,7 +35,7 @@ source("init.R")
   \begin{itemize}
   \item Linear regression as finding a ``best'' line
   \item Linear regression as the conditional expectation function
-  \item How Linear regression relates to the normal distribution
+  \item How linear regression relates to the normal distribution
   \end{itemize}
   
 \end{frame}
@@ -46,8 +46,11 @@ source("init.R")
   \begin{block}{Regression}
     distribution of a \textbf{response} (outcome) variable $Y$ --- or summary of that distribution --- 
     as a function of \textbf{explanatory} variables $X_{1}, \dots, X_{k}$.
-    
-    \only<2>{We will focus on \textbf{ordinary least squares (OLS) linear regression}}
+  \end{block}
+  
+  \begin{block}{Ordinary Least Squares}
+    Finds a $\hat{Y} = \mat{X} \vc{B}$ that minimizes $\sum (Y_{i} - \hat{Y}_{i})^{2})$.
+    This estimates a linear conditional expectation function $E(Y | X_{1}, \dots, X_{k})$.
   \end{block}
   
 \end{frame}
@@ -56,12 +59,17 @@ source("init.R")
   \frametitle{OLS Objective Function}
   \framesubtitle{One $X$}
   
+  Find the line 
+  \begin{equation*}
+    \hat{Y} = A + B X
+  \end{equation*}
+  such that
   \begin{equation*}
     A, B = \argmin_{A, B} S(A, B)
   \end{equation*}
   where 
   \begin{equation*}
-    S(A, B) = \sum_{i} E_{i}^{2} = \sum_{i} (Y_{i} - \hat{Y}_{i}) = \sum_{i} (Y_{i} - A - B X_{i})^{2}
+    S(A, B) = \sum_{i} E_{i}^{2} = \sum_{i} (Y_{i} - \hat{Y}_{i})^{2} = \sum_{i} (Y_{i} - A - B X_{i})^{2}
   \end{equation*}
   
   How do we minimize this? 
@@ -69,7 +77,7 @@ source("init.R")
 \end{frame}
 
 \begin{frame}
-\frametitle{What does the objective function look like?}
+\frametitle{What does the OLS objective function look like?}
 
 <<fakeregdata>>=
 n <- 100
@@ -119,7 +127,7 @@ dat2 <- expand.grid(A = seq(-3, 5, by = 0.05),
 \end{frame}
 
 \begin{frame}
-  \frametitle{Finding the best $A, B$ in Linear Regression}
+  \frametitle{Finding the best $A, B$ in Least Squares}
   \framesubtitle{One $X$}
   
   To minimize, set partial derivatives equal to 0 and solve:
@@ -136,7 +144,7 @@ dat2 <- expand.grid(A = seq(-3, 5, by = 0.05),
 \end{frame}
 
 \begin{frame}
-  \frametitle{Implications of Linear Regression Solution}
+  \frametitle{Implications of the OLS Solution}
   \small
   
   Least squares $A$ and $B$
@@ -149,6 +157,7 @@ dat2 <- expand.grid(A = seq(-3, 5, by = 0.05),
   \item $\bar{X}, \bar{Y}$ is in the regression line
   \item $\sum X_{i} E_{i} = 0$
     \begin{align*}
+      \footnotesize
       \sum X_{i} E_{i} &= \sum X_{i} (Y_{i} - A - B X_{i})  \\
       &= \sum X_{i} Y_{i} - A \sum X_{i} - B \sum X_{i} = 0
     \end{align*}
@@ -163,17 +172,21 @@ dat2 <- expand.grid(A = seq(-3, 5, by = 0.05),
 
 
 \begin{frame}
-  \frametitle{Linear Regression Objective Function}
+  \frametitle{OLS Objective Function}
   \framesubtitle{Multiple $X$}
   
-  When there are $k$ explanatory variables:
+  Find plane
   \begin{equation*}
-    A, B = \argmin_{A, B} S(A, B_{1}, \dots, B_{k})
+    Y = A + B_{1} X_{1} + B_{2} X_{2} + \dots + B_{k} X_{k}
+  \end{equation*}
+  such that 
+  \begin{equation*}
+    A, B_{1}, \dots, B_{k} = \argmin_{A, B_{1}, \dots, B_{k}} S(A, B_{1}, \dots, B_{k})
   \end{equation*}
   where
   \begin{align*}
-    S(A, B) &= \sum_{i} E_{i}^{2} = \sum_{i} (Y_{i} - \hat{Y}_{i})  \\
-            &= \sum_{i} (Y_{i} - A - B_{1} X_{i,1} - B_{2} X_{i,2} + \dots + B_{k} X_{i,k})^{2}
+    S(A, B_{1}, \dots, B_{k}) &= \sum_{i} E_{i}^{2} = \sum_{i} (Y_{i} - \hat{Y}_{i})^{2}  \\
+            &= \sum_{i} (Y_{i} - A - \sum_{j=1}^{k} B_{j} X_{i,j})
   \end{align*}
   
   How do we minimize this?
@@ -181,11 +194,11 @@ dat2 <- expand.grid(A = seq(-3, 5, by = 0.05),
 
 
 \begin{frame}
-  \frametitle{Finding the best $A, B$ in Linear Regression}
+  \frametitle{Finding the best $A, B$ in Least Squares Regression}
   \framesubtitle{Multiple $X$}
   
   Set partial derivatives equal to 0 and solve system of equations for 
-  {\small
+  {\footnotesize
   \begin{align*}
     \frac{\partial S(A, B_{1}, B_{2}, \dots, B_{k})}{\partial A} &= \sum (-1) (2) (Y_{i} - A - B X_{i}) = 0 \\
     \frac{\partial S(A, B_{1}, B_{2}, \dots, B_{k})}{\partial B_{1}} &= \sum (-X_{i,1}) (2) (Y_{i} - A - B_{1} X_{i,1} - \dots - B_{2} X_{i,k}) = 0 \\
@@ -328,7 +341,7 @@ dat2 <- expand.grid(A = seq(-3, 5, by = 0.05),
   \item To minimize need to calculate derivative of $\vc{e}' \vc{e}$ with respect to $\vc{b}$.
   \item Need two know two things
     \begin{itemize}
-    \item derivative of scalar with respect to vector
+    \item derivative of scalar with respect to vector ($2 \vc{b}' X' y$)
     \item derivative of quadratic form ($\vc{b}' \mat{X}' \mat{X} \vc{b}$)
     \end{itemize}
   \end{itemize}
@@ -338,9 +351,9 @@ dat2 <- expand.grid(A = seq(-3, 5, by = 0.05),
 \begin{frame}
   \frametitle{What is the derivative of scalar with respect to vector}
   
-  Need to take derivative of $\vc{e}' \vc{e}$ with respect to $\vc{b}$ to find $\vc{b}$ that min the sum of squared.
-  
-  A derivative of a scalar with respect to a vector
+  \begin{itemize}
+  \item Need to take derivative of $\vc{e}' \vc{e}$ with respect to $\vc{b}$ to find $\vc{b}$ that min the sum of squared.
+  \item A derivative of a scalar with respect to a vector
   \begin{align*}
     y = \vc{a}' \vc{x} &= a_{1} x_{1} + a_{2} x_{2} + \dots + a_{n} x_{n}\\
     \frac{\partial y}{\partial \vc{x}} &=
@@ -349,6 +362,8 @@ dat2 <- expand.grid(A = seq(-3, 5, by = 0.05),
                                          \end{bmatrix}' \\
     \frac{\partial y}{\partial \vc{x}} &= \vc{a}
   \end{align*}
+  \end{itemize}
+  
   
 \end{frame}
 
@@ -367,14 +382,14 @@ dat2 <- expand.grid(A = seq(-3, 5, by = 0.05),
 \end{frame}
 
 \begin{frame}
-  \frametitle{Linear Regression in Matrix Form}
+  \frametitle{OLS in Matrix Form}
   \framesubtitle{Minimizing the objective function}
   
   \begin{enumerate}
   \item Take partial derivative of $S(\vc{b})$:
     \begin{align*}
       \frac{\partial S(\vc{b})}{\vc{b}}  &= \frac{\partial}{\vc{b}} (\vc{y}' \vc{y} - 2 \vc{b}' \mat{X}' \vc{y} + \vc{b}' \mat{X}' \mat{X} \vc{b}) \\
-      &= 0 - (2 \vc{y}' \mat{X} ) + 2 \vc{b}' (\mat{X}' \mat{X}) \vc{b}
+      &= 0 - (2 \vc{y}' \mat{X} ) + 2 (\mat{X}' \mat{X}) \vc{b}
     \end{align*}
   \item Set to 0, and solve for $\vc{b}$:
     \begin{align*}
@@ -421,8 +436,9 @@ dat2 <- expand.grid(A = seq(-3, 5, by = 0.05),
   \item Conditional Expectation Function is $\E(Y_{i} | X_{i} =x)$ for all $x$
   \item The CEF is the Min Mean Squared Error (MMSE) predictor of $Y_{i}$ given $X_{i}$
   \item If the population CEF is linear, then the least squares population regression is the CEF
-  \item If the population CEF is not linear, then the least squares line is the MMSE linear estimate
-    of the CEF.
+  \item If the population CEF is not linear, then the least squares line is the MMSE linear estimate of the CEF.
+    
+  \item See Angrist and Pischke, Ch 3.1
   \end{itemize}
   
 \end{frame}
@@ -439,7 +455,8 @@ dat2 <- expand.grid(A = seq(-3, 5, by = 0.05),
       y_{i} &= X_{i} \beta + \epsilon_{i} && \epsilon_{i} \sim N(0, \sigma^{2})
     \end{align*}
   \item Why? We haven't had to assume normal distributions before now.
-  \item Helps with statistical inference results
+  \item Helps with statistical inference results. 
+  \item However, the CLT handles asymptotic sampling distribution of parameters
   \end{itemize}
 \end{frame}
 
