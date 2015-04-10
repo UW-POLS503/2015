@@ -4,7 +4,7 @@ author: Jeffrey B. Arnold, Christopher Adolph
 date: April 10, 2015
 ---
 
-**Due in lab**: 15 April, 2015 at 1:30 pm
+**Due in lab**: Friday, April 17, 2015 at 3:30 pm
 
 ## Instructions
 

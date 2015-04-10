@@ -24,7 +24,7 @@ hw:
 build: lectures hw labs
 	cd $(WEBDIR); source venv/bin/activate; nikola build
 
-deploy: lectures
+deploy: lectures hw labs
 	cd $(WEBDIR); source venv/bin/activate; nikola github_deploy
 
 .PHONY: lectures build build-deploy labs hw
