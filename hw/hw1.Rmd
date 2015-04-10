@@ -10,9 +10,11 @@ Due in lab: 15 April
 
 1. Create a new R project for this homework named `hw1` and load that project.
 2. Download the data file `democracy.csv` into the directory of that project.
+3. Do your analyses in an R markdown document.
+4. 
+5. R Markdown file follow the [R code guidelines](http://pols503.github.io/pols_503_sp15/r_best_practices.html) for this course.
 
 - Turn in a zipped  directory 
-- For the R Markdown file follow the [R code guidelines](http://pols503.github.io/pols_503_sp15/r_best_practices.html) for this course.
 - All problems should be answerable in *at most* a few lines of R code.
   Questions which require looking up values should be answered using R code and not manually checking the values through the GUI.
 

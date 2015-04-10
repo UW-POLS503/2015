@@ -352,3 +352,8 @@ Refer to [Getting Help with R](http://pols503.github.io/pols_503_sp15/getting_he
 
 Some text and the data set used in this are taken from Jenny Bryant, [R basics, workspace and working directory, RStudio projects](https://stat545-ubc.github.io/block002_hello-r-workspace-wd-project.html), licensed under [CC BY-NC 3.0](http://creativecommons.org/licenses/by-nc/3.0/)
 
+
+* * *
+
+
+
