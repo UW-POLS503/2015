@@ -11,7 +11,7 @@ lectures:
 	cp $(wildcard $(LECTURE_DIR)/*_handout.pdf) $(WEBDIR)/files/lectures/
 
 labs:
-	make -C labs;
+	make -C labs
 	-mkdir $(WEBDIR)/files/labs
 	cp $(LAB_DIR)/*.Rmd $(LAB_DIR)/*.html $(LAB_DIR)/*.csv $(WEBDIR)/files/labs
 
