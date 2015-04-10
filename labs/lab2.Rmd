@@ -5,6 +5,13 @@ date: "April 10, 2015"
 output: html_document
 ---
 
+The objectives of this lab are
+
+1. Understand how R treats missing values and use functions to identify and remove those missing values
+2. Manipulate data using the verbs in the **dplyr**
+3. Use the pipe operator `%>%` to simplify complicated code by chaining expressions together
+4. Create plots using the ggplot2 package.
+
 We will be using the following libraries in this `dplyr` and `ggplot2` so make sure to install and load those libraries:
 
 ```{r, libraries, warning = FALSE, message = FALSE}
@@ -24,12 +31,13 @@ foo <- c(1, 2, NA, 3, 4)
 
 **Challenge**
 
-- What is the result of `mean(foo)`
-- Look at the documentation of `mean` to change how that function handles missing values.
-- How does `median(foo)` work? 
-- `foo > 2`. Are all the entries `TRUE` and `FALSE`?
-- What does `is.na(foo)` do? What about `! is.na(foo)` ?
-- What does `foo[is.na(foo)]` do?
+1.  What is the result of `2 + NA`
+1.  What is the result of `mean(foo)`
+1.  Look at the documentation of `mean` to change how that function handles missing values.
+1.  How does `median(foo)` work? 
+1.  `foo > 2`. Are all the entries `TRUE` and `FALSE`?
+1.  What does `is.na(foo)` do? What about `! is.na(foo)` ?
+1.  What does `foo[! is.na(foo)]` do?
 
 The function `na.omit` is particularly useful.
 It removes any row in a dataset with a missing value in *any* column.
@@ -85,7 +93,10 @@ Most data manipulations can be done by combining these verbs together --- someth
 ```{r}
 glimpse(gapminder)
 ```
-or `tbl_df` - which will offer a more [^2]
+or `tbl_df` - which will print out the data frame more similarly to `head`
+```{r}
+tbl_df(gapminder)
+```
 
 ## Exploring our Data
 
@@ -95,10 +106,27 @@ We want to explore the relationship between life expectancy and GDP.
 Let's use some `dplyr` verbs to explore our data.
 For you Stata users missing "if statements" let's begin with `filter()`
 
-```{r}
+```{r results='hide'}
 filter(gapminder, lifeExp < 29)
 filter(gapminder, country == "Rwanda")
 filter(gapminder, country %in% c("Rwanda", "Afghanistan"))
+```
+
+You can combine filter statements.
+Including multiple logical statements is equivalent to combining them with "and".
+This will give all observations in "Africa", before 1966, and which have
+a life expectancy less than 40.
+```{r results='hide'}
+filter(gapminder, continent == "Africa", year < 1966, lifeExp < 40)
+```
+That is equivalent to 
+```{r results='hide'}
+filter(gapminder, continent == "Africa" & year < 1966 & lifeExp < 40)
+```
+To combine logical statements with "or" you need to explicitly use `|`.
+To find observations from Afghanistan or Albania,
+```{r results='hide'}
+filter(gapminder, country == "Afghanistan" | country == "Albania")
 ```
 
 ## %>%
@@ -136,68 +164,69 @@ Imagine we wanted to recover each country’s GDP. We do have data for populatio
 gapminder <- gapminder %>%
 mutate(gdp = pop * gdpPercap)
 
-gapminder %>% glimpse #let's take a look
+gapminder %>% glimpse
 ```
 
 So... GDP is almost useless because it doesn't give a base line and that is why we often use per capita, but a baseline is often more useful, how about comparing it to another country sat, USA? Yes USA, USA, USA!
 
 Let's  create first an object containing only US data, we use `filter` here
 ```{r}
-just_usa <- gapminder %>% filter(country == "United States")
-
+just_usa <- gapminder %>%
+  filter(country == "United States") %>%
+  select(year, gdpPercap) %>%
+  rename(usa_gdpPercap = gdpPercap)
 ```
 
-Remember our friend `match` from that 501 R homework, Yeah I don't remember either... Well, here it is again!
+We can join (or merge) the dataset to the gapminder data using the `left_join` function.
+There are are several ways to merge datasets with **dplyr** (left join, right join, inner join, and outer join which differ in which oberservations it matches and keep).
 ```{r}
-gapminder <- gapminder %>%
-  mutate(usa = just_usa$gdpPercap[match(year, just_usa$year)],
-         gdpPercapRel = gdpPercap / usa)
+gapminder <- left_join(gapminder, just_usa, by = c("year")) %>%
+  mutate(gdpPercapRel = gdpPercap / usa_gdpPercap)
+```
 
-gapminder
-
+Now, summarize the relative GDP 
+```{r}
 gapminder %>%
   select(gdpPercapRel) %>%
   summary
+  
 ```
 
 Nice, now we can do something like this:
 
 Look at the GDP per capita  of Mexico and Canada relative to US by year
 ```{r}
-gapminder %>%filter(country==c("United States", "Canada", "Mexico")) %>%
-  select(country, year, gdpPercap, usa, gdpPercapRel)
+gapminder %>%
+  filter(country %in% c("United States", "Canada", "Mexico")) %>%
+  select(country, year, gdpPercap, usa_gdpPercap, gdpPercapRel) %>%
+  glimpse()
 ```
 
-Great! Mexico is way poorer in relation to US.
 
-
-### `arrange`
+## `arrange`
 
 Because the world is not always ordered the way we want it
 ```{r}
 gapminder %>%
-  arrange(year, country)
+  arrange(year, country) %>%
+  glimpse()
 
 
 gapminder %>%
   filter(year == 2007) %>%
-  arrange(lifeExp)
+  arrange(- lifeExp) %>%
+  glimpse()
 
 ```
-
 
 ** Challenge
 
 What about life expectancy? Create a relative to life expectancy variable, compare the three NAFTA countries US, Canada and Mexico
 
-WOW! Mexicans are relatively poor but not dying, Great!
 
 # Plotting with ggplot2
 
 We will be using the graphics package **ggplot2**, which is one of the most popular, but it is only one of several graphics packages in R.[^1]
-
-
-## Grammar of graphics
 
 Unlike many other graphics systems, functions in **ggplot2** do not correspond to separate types of graphs.
 There are not scatterplot, histogram, or line chart functions per se.
@@ -232,7 +261,6 @@ No we can add `geoms`
 p + geom_point()
 ```
 
-
 That look okay but it would probably look be better if we log transform
 ```{r}
 p_l <- ggplot(gapminder, aes(x = log10(gdpPercap), y = lifeExp))
@@ -241,9 +269,7 @@ p_l + geom_point()
 
 A better way to log transform
 ```{r}
-
 p + geom_point() + scale_x_log10()
-
 ```
 
 Let's make that stick
@@ -265,33 +291,30 @@ p + geom_point(aes(color = continent))
 In full detail, up to now:
 ```{r}
 ggplot(gapminder, aes(x = gdpPercap, y = lifeExp, color = continent)) +
-  geom_point() + scale_x_log10()
+  geom_point() +
+  scale_x_log10()
 ```
-
 Let's address over-plotting: SET alpha transparency and size to a value
 ```{r}
 p + geom_point(alpha = (1/3), size = 3)
-
 ```
-
 Add now a fitted curve or line
 ```{r}
 p + geom_point() + geom_smooth()
 p + geom_point() + geom_smooth(lwd = 2, se = FALSE)
 
 p +  geom_smooth(lwd = 1, se = FALSE, method = "lm") + geom_point()
-
 ```
-That's great but i actually think want revive our interest in continents!
+That's great but I actually want to revive our interest in continents!
 ```{r}
-
 p + aes(color = continent) + geom_point() + geom_smooth(lwd = 3, se = FALSE)
 ```
 Facetting: another way to exploit a factor
 ```{r}
 p + geom_point(alpha = (1/3), size = 3) + facet_wrap(~ continent)
-
-# Still want lines? Let's add them
+```
+Still want lines? Let's add them
+```{r}
 p + geom_point(alpha = (1/3), size = 3) + facet_wrap(~ continent) +
   geom_smooth(lwd = 2, se = FALSE)
 ```
@@ -302,15 +325,9 @@ p + geom_point(alpha = (1/3), size = 3) + facet_wrap(~ continent) +
 * make mini-plots, split out by continent
 * add a fitted smooth and/or linear regression, w/ or w/o faceting
 
-## Saving plots
-
-You can use the `ggsave` function to save plots.
 
 
 ```{r}
-## CHALLENGE HERE
-
-
 # plot lifeExp against year
 # y <- ggplot(gDat, aes(x = year, y = lifeExp)) + geom_point()
 
@@ -323,16 +340,11 @@ You can use the `ggsave` function to save plots.
 
 # y + geom_smooth(se = FALSE, lwd = 2) +
 #  facet_wrap(~ continent)
-
 ```
 
 What if I am only interrested in the US?
-
-sadly, ggplot() does not have a 'subset =' argument
-so do that 'on the fly' with subset(..., subset = ...)
-
 ```{r}
-ggplot(subset(gapminder, country == "United States"),
+ggplot(filter(gapminder, country == "United States"),
        aes(x = year, y = lifeExp)) + geom_line() + geom_point()
 
 ```
@@ -340,9 +352,11 @@ ggplot(subset(gapminder, country == "United States"),
 Let just look at five countries
 
 ```{r}
-jCountries <- c("United States", "Canada", "Rwanda", "Cambodia", "Mexico")
-ggplot(subset(gapminder, country %in% jCountries),
-       aes(x = year, y = lifeExp, color = country)) + geom_line() + geom_point()
+some_countries <- c("United States", "Canada", "Rwanda", "Cambodia", "Mexico")
+ggplot(filter(gapminder, country %in% some_countries),
+       aes(x = year, y = lifeExp, color = country)) +
+	   geom_line() +
+	   geom_point()
 ```
 
 
@@ -352,18 +366,25 @@ So what's up with Mexico?
 
 Not really...
 ```{r}
-Countries <- c("United States", "Canada", "Rwanda", "Cambodia", "Mexico")
-ggplot(subset(gapminder, country %in% jCountries),
+ggplot(subset(gapminder, country %in% some_countries),
        aes(x = year, y = lifeExp, color = country)) + geom_line() + geom_point(aes(size=gdpPercap))
 ```
 
+You can change the way the plot looks overall using `theme`
+
+```{r}
+ggplot(subset(gapminder, country %in% some_countries),
+       aes(x = year, y = lifeExp, color = country)) +
+  geom_line() +
+  geom_point(aes(size=gdpPercap)) + 
+  theme_minimal()
+```
+
+In addition to the themes included with ggplot, several other themes are available in the [ggthemes](http://cran.r-project.org/web/packages/ggthemes/index.html) package.
 
 ## References
 
 - Hadley Wickham's tutorials from useR 2014: Video [Part I](https://www.youtube.com/watch?v=8SGif63VW6E), [Part II](https://www.youtube.com/watch?v=Ue08LVuk790), [Slides and Tutorial](https://www.dropbox.com/sh/i8qnluwmuieicxc/AAAgt9tIKoIm7WZKIyK25lh6a).
-
-- [Data Carpentry](http://datacarpentry.org/) (tidy data)[https://github.com/datacarpentry/datacarpentry/tree/master/lessons/tidy-data] lesson.
-
 - The vignettes for [dplyr](http://cran.rstudio.com/web/packages/dplyr/) and [tidyr](http://cran.rstudio.com/web/packages/dplyr/)
 
 
@@ -377,9 +398,9 @@ ggplot(subset(gapminder, country %in% jCountries),
 [^2]:
 
 * * *
-
 - Derived from Jennifer Bryan, "hello ggplot2!", https://github.com/jennybc/ggplot2-tutorial/blob/master/ggplot2-tutorial-slides.pdf. License: CC-BY-NC
 - Derived from Karthik Ram, "A quick introduction to ggplot2", [Speakerdeck](http://inundata.org/2013/04/10/a-quick-introduction-to-ggplot2/), [github](https://github.com/karthik/ggplot-lecture). License: [CC-BY](http://creativecommons.org/licenses/by/2.0/)
+-->
 
 * * * 
 
