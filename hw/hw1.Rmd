@@ -115,6 +115,11 @@ q. What were the 25th and 75th percentiles of ethnolinguistic fractionalization 
 
 ## Problem 2
 
+a. What is the dependent variable for your final project?
+b. Will you be writing this yourself, or with collaborators? Do you plan on submitting this work for another course?
+c. How do you plan on obtaining the data you need for analysis? What are your sources?
+d. Take the opportunity to do some preliminary exploratory analysis if you already have the data.
+
 * * *
 
 Derived from of Christopher Adolph, "Problem Set 1", *POLS/CSSS 503*, University of Washington, Spring 2014. <http://faculty.washington.edu/cadolph/503/503hw1.pdf>. Used with permission.
