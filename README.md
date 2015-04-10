@@ -9,6 +9,7 @@ Course website is at https://pols503.github.io/pols_503_sp15/
 ```
 .
 ├── csl
+├── hw
 ├── labs
 ├── lectures
 ├── LICENSE.md
@@ -21,6 +22,7 @@ Course website is at https://pols503.github.io/pols_503_sp15/
 - `READMDE.md` : you're reading it
 - `csl` : CSL style sheets used to format
 - `labs` : sources for the labs
+- `hw` : homework assignments (not the solutions - which are kept separate)
 - `lectures` : sources for the lectures
 - `notes` : Some notes about course development. Things that may or may not make it into more public facing parts of the course.
 - `pols_503_sp15.bib`: bibliography
