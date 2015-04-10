@@ -1,6 +1,6 @@
 ---
 title: "Lab 2: Graphing and Data Manipulation"
-author: Jeffrey B. Arnold and Sergio Garcia
+author: Jeffrey B. Arnold and Sergio Garcia!
 date: April 10, 2015
 ---
 
