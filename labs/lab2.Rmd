@@ -5,54 +5,40 @@ date: "April 10, 2015"
 output: html_document
 ---
 
-## Objectives
+We will be using the following libraries in this `dplyr` and `ggplot2` so make sure to install and load those libraries:
 
-1. Use `dplyr` to manipulate data
-2. Understand what a tidy dataset is and how to get data into
+```{r, libraries, warning = FALSE, message = FALSE}
+library("dplyr")
+library("ggplot2")
+library("gapminder")
+```
 
-#  Meet the mighty `dplyr`
-Dplyr aims to provide a function for each basic verb of data manipulating:
 
--  `filter()` (and `slice()`)
+# Meet the mighty `dplyr`
+
+**dplyr** aims to provide a function for each basic verb of data manipulating:
+
+-  `filter()` and `slice()`
 -  `arrange()`
--  `select()` (and `rename()`)
+-  `select()` and `rename()`
 -  `distinct()`
--  `mutate()` (and `transmute()`)
+-  `mutate()` and `transmute()`
 -  `summarise()`
 -  `sample_n()` and `sample_frac()`
 
-
-
-***
-***
-## Load Relevant Libraries
-
-The main  objective is to get you familirized with `dplyer` and `ggplot2` so make sure to install and load those libraries
-
-```{r, Libraries, warning=FALSE,message=FALSE}
-library(dplyr)
-library(ggplot2)
-```
-
-
 ## Load the Data
 
-We are going to be using the gapminder data again.
+We will be using the gapminder data again.
+The 
 
-
-```{r}
-gd_url <- "http://tiny.cc/gapminder"
-gdf <- read.delim(file = gd_url)
-```
-
-Let's take a look at the structure of this dataset using ``str{}`` which gives us usefull information about the internal structure of any ``R`` object. 
+Let's take a look at the structure of this dataset using `str()` which gives us useful information about the internal structure of any `R` object.
 ```{r}
 str(gdf)
 ```
 
 We have previously used ``head()`` which is useful to get a quick view of your data but this time we are trying something different.
 
-We are going to use `tbl_df()` which is a wrapper around a data frame that won’t accidentally print a lot of data to the screen 
+We are going to use `tbl_df()` which is a wrapper around a data frame that won’t accidentally print a lot of data to the screen
 
 ```{r}
 gtbl <- tbl_df(gdf)
@@ -61,9 +47,7 @@ gtbl
 
 A `tbl_df` is basically an improved data.frame, for which dplyr provides nice methods for high-level inspection.
 
-***
-
-We can also use `glimse`
+We can also use `glimpse`
 ```{r}
 glimpse(gtbl)
 ```
@@ -72,7 +56,9 @@ glimpse(gtbl)
 
 We are ready to begin exploring our data set in more depth.
 
-We want to explore the relarionship between life expecrtancy and gdp. Let's use some `dplyr` verbs to explore our data. For you STATA users missing "if statements" let's begin with `filter()` 
+We want to explore the relationship between life expectancy and GDP.
+Let's use some `dplyr` verbs to explore our data.
+For you Stata users missing "if statements" let's begin with `filter()`
 
 ```{r}
 filter(gtbl, lifeExp < 29)
@@ -81,18 +67,16 @@ filter(gtbl, country %in% c("Rwanda", "Afghanistan"))
 ```
 
 
+## %>%
 
-## Meet the new pipe operator
-
-Before we go any further, we should exploit the new pipe operator that `dplyr` imports from the magrittr package. This is going to change your data analytical life.
+Before we go any further, we should exploit the new pipe operator that `dplyr` imports from the **magrittr** package. This is going to change your data analytical life.
 
 Here’s what it looks like: `%>%`
 ```{r}
 gdf %>% head()
-
 ```
 
-This is equivalent to head(gdf). This pipe operator takes the thing on the left-hand-side and pipes it into the function call on the right-hand-side – literall, drops it in as the first argument.
+This is equivalent to `head(gdf)`. This pipe operator takes the thing on the left-hand-side and pipes it into the function call on the right-hand-side - literally, drops it in as the first argument.
 
 Of course, you can still specify other arguments to this function! To see the first 3 rows of Gapminder, we could say:
 ```{r}
@@ -108,15 +92,16 @@ filter(gtbl, lifeExp>40) %>%
 ```
 
 
-
 ## Use `select()` to subset the data on variables or columns.
 
-Most of the times we don't need to see al the variables and are often interested in just a few of them. Here’s a conventional call:
+Most of the times we don't need to see all the variables and are often interested in just a few of them. Here’s a conventional call:
 ```{r}
-select(gtbl, year, lifeExp) ## tbl_df prevents TMI from printing
+select(gtbl, year, lifeExp)
 ```
 
-#Challenge
+# Missing Data
+
+# Challenge
 
 Using a combination of `filter`, `select` and and `head` show only year and life expectancy of Cambodia.for the first two observations
 
@@ -128,43 +113,35 @@ gtbl %>%
   head(2)
 ```
 
-
 # Use `mutate()` to add (generate?) new variables
-
-
 
 Imagine we wanted to recover each country’s GDP. We do have data for population and GDP per capita. what do we do?
 
--  Yes we multiply, let's create a new variable called gdp that brings back the gross amount
+-  Yes we multiply, let's create a new variable called GDP that brings back the gross amount
 
 ```{r}
-
 gtbl <- gtbl %>%
 mutate(gdp = pop * gdpPercap)
 
 
 gtbl %>% glimpse #let's take a look
-
 ```
 
-###############
+So... GDP is almost useless because it doesn't give a base line and that is why we often use per capita, but a baseline is often more useful, how about comparing it to another country sat, USA? Yes USA, USA, USA!
 
-So... GDP is almost uselless becuase it doesn't give a base line and that is why we often use per capita, but a baseline is often more useful, how about comparing it to anohter country sat, USA? Yes USA, USA, USA!
-
-Let's  create first an obkect containing only US data, we use `filter' here
+Let's  create first an object containing only US data, we use `filter` here
 ```{r}
 just_usa <- gtbl %>% filter(country == "United States")
 
 ```
 
-Remember our frine `match` from that 501 R homework, Yeah I don't remeber either... Well, here it is again!
+Remember our friend `match` from that 501 R homework, Yeah I don't remember either... Well, here it is again!
 ```{r}
 gtbl <- gtbl %>%
   mutate(usa = just_usa$gdpPercap[match(year, just_usa$year)],
          gdpPercapRel = gdpPercap / usa)
 
 gtbl
-
 
 gtbl %>%
   select(gdpPercapRel) %>%
@@ -173,17 +150,17 @@ gtbl %>%
 
 Nice, now we can do something like this:
 
-Look at the GDP per capita  of Mexico and Canda realtive to US by year
+Look at the GDP per capita  of Mexico and Canada relative to US by year
 ```{r}
 gtbl %>%filter(country==c("United States", "Canada", "Mexico")) %>%
   select(country, year, gdpPercap, usa, gdpPercapRel)
 ```
 
-Great! Mexico is way poorer in relation to US. 
+Great! Mexico is way poorer in relation to US.
 
 
 
-## `arrange` becuase the world is not always ordered the way we want it
+## `arrange` because the world is not always ordered the way we want it
 ```{r}
 gtbl %>%
   arrange(year, country)
@@ -199,58 +176,65 @@ gtbl %>%
 ## Challenge
 
 
-What about life expectancy? Create a relative to life expectancy variable, compare the three NAFTA countries US, Canada and Mexico 
+What about life expectancy? Create a relative to life expectancy variable, compare the three NAFTA countries US, Canada and Mexico
 
 
 ```{r}
 # Challenge here
 ```
 
-
 WOW! Mexicans are relatively poor but not dying, Great!
 
-***
-***
-***
+# Plotting with ggplot2
 
-# Now `ggplot2`
+We will be using the graphics package **ggplot2**, which is one of the most popular, but it is only one of several graphics packages in R.[^1]
 
- -->
-The most important ggplot2 components are:  `geoms`, `aesthetic`, `mappings` and `faceting`.
+[^1]: You may encounter these other packages in other classes, or code samples online.
 
-   * Aesthetic attributes, aes for short: like colour, size and shape,
-   * Geometric objects, geoms for short, represent what you actually see on the plot: points, lines, polygons, etc.
-   * Statistical transformations, stats for short, summarise data in many useful ways.
+	- base graphics: included with R. Functions like `plot`, `barplot`, `hist`. See http://www.statmethods.net/graphs/index.html
+	- lattice graphics: Functions including `barchart`, `densityplot`, `dotplot`, `xyplot`, `histogram`. See http://www.statmethods.net/advgraphs/trellis.html
+	- Other graphics packages designed for the web: [ggvis](http://ggvis.rstudio.com/), [rcharts](http://rcharts.io/), [plotly](https://plot.ly/)
+	- [tile](http://faculty.washington.edu/cadolph/?page=60) Chris Adolph's graphics package.
 
+## Grammar of graphics
+
+Unlike many other graphics systems, functions in **ggplot2** do not correspond to separate types of graphs.
+There are not scatterplot, histogram, or line chart functions per se.
+Instead plots are built up from component functions.
+
+1. Data
+2. Aesthetics: Maps variables in the data to visual properties: position, color, size, shape, line type ...
+3. Geometric objects: The specific shapes that are drawn: points, lines, 
+4. scales: How variables values map to "computer" values.
+5. stat: summarize or transform the data. e.g. bin data and count in histogram; run a regression to get a line.
+5. facet: create mini-plots of data subsets
 
 
 Let's continue using the gapminder data, take another look at it
-
 ```{r}
 glimpse(gtbl)
 ```
 
-Great, let the ggploting begin:
+Great, let the plotting begin:
 
 ```{r}
- # ggplot(gtbl, aes(x = gdpPercap, y = lifeExp)) 
+ # ggplot(gtbl, aes(x = gdpPercap, y = lifeExp))
 ```
-Nothing to plot yet! This just initializes the gg, it is better if you assing it to an object, `p` is good enough 
+Nothing to plot yet! This just initializes the gg, it is better if you assign it to an object, `p` is good enough
 ```{r}
 p <- ggplot(gtbl, aes(x = gdpPercap, y = lifeExp))
 ```
-  
-No we can add `geoms` 
+
+No we can add `geoms`
 ```{r}
 p + geom_point()
 ```
 
 
-That look Okay but it would probably look be better if we  log transform 
+That look okay but it would probably look be better if we log transform
 ```{r}
-p_l<-ggplot(gtbl, aes(x = log10(gdpPercap), y = lifeExp)) 
-
-p_l+geom_point()
+p_l <- ggplot(gtbl, aes(x = log10(gdpPercap), y = lifeExp))
+p_l + geom_point()
 ```
 
 A better way to log transform
@@ -265,24 +249,24 @@ Let's make that stick
 p <- p + scale_x_log10()
 
 ```
-Common workflow: gradually build up the plot you want,  re-define the object 'p' as you develop "keeper" commands. Note that in the rea-assigning we excluded the `geom`  
+
+Common workflow: gradually build up the plot you want,  re-define the object 'p' as you develop "keeper" commands.
+Note that in the reassigning we excluded the `geom`.
 
 
-Now, let's MAP continent variable to aesthetic color
-
+Now, let continent variable to aesthetic color
 ```{r}
-
-
 p + geom_point(aes(color = continent))
 
 ```
+
 In full detail, up to now:
 ```{r}
 ggplot(gtbl, aes(x = gdpPercap, y = lifeExp, color = continent)) +
-  geom_point() + scale_x_log10() 
+  geom_point() + scale_x_log10()
 ```
 
-Let's address overplotting: SET alpha transparency and size to a value
+Let's address over-plotting: SET alpha transparency and size to a value
 ```{r}
 p + geom_point(alpha = (1/3), size = 3)
 
@@ -295,8 +279,8 @@ p + geom_point() + geom_smooth(lwd = 2, se = FALSE)
 
 p +  geom_smooth(lwd = 1, se = FALSE, method = "lm") + geom_point()
 
-``` 
-That's great but i actuly think want revive our interest in continents!
+```
+That's great but i actually think want revive our interest in continents!
 ```{r}
 
 p + aes(color = continent) + geom_point() + geom_smooth(lwd = 3, se = FALSE)
@@ -310,11 +294,16 @@ p + geom_point(alpha = (1/3), size = 3) + facet_wrap(~ continent) +
   geom_smooth(lwd = 2, se = FALSE)
 ```
 
-## Challenge:  
+## Challenge:
 
-* plot lifeExp against year  
-* make mini-plots, split out by continent  
-* add a fitted smooth and/or linear regression, w/ or w/o facetting  
+* plot lifeExp against year
+* make mini-plots, split out by continent
+* add a fitted smooth and/or linear regression, w/ or w/o faceting
+
+
+## Saving data
+
+You can `ggsave`
 
 
 
@@ -339,7 +328,7 @@ p + geom_point(alpha = (1/3), size = 3) + facet_wrap(~ continent) +
 
 What if I am only interrested in the US?
 
-sadly, ggplot() does not have a 'subset =' argument  
+sadly, ggplot() does not have a 'subset =' argument
 so do that 'on the fly' with subset(..., subset = ...)
 
 ```{r}
@@ -354,7 +343,7 @@ Let just look at five countries
 jCountries <- c("United States", "Canada", "Rwanda", "Cambodia", "Mexico")
 ggplot(subset(gtbl, country %in% jCountries),
        aes(x = year, y = lifeExp, color = country)) + geom_line() + geom_point()
-``` 
+```
 
 
 So what's up with Mexico?
@@ -363,16 +352,33 @@ So what's up with Mexico?
 
 Not really...
 ```{r}
-jCountries <- c("United States", "Canada", "Rwanda", "Cambodia", "Mexico")
+Countries <- c("United States", "Canada", "Rwanda", "Cambodia", "Mexico")
 ggplot(subset(gtbl, country %in% jCountries),
        aes(x = year, y = lifeExp, color = country)) + geom_line() + geom_point(aes(size=gdpPercap))
-``` 
+```
 
 
 ## References
 
 - Hadley Wickham's tutorials from useR 2014: Video [Part I](https://www.youtube.com/watch?v=8SGif63VW6E), [Part II](https://www.youtube.com/watch?v=Ue08LVuk790), [Slides and Tutorial](https://www.dropbox.com/sh/i8qnluwmuieicxc/AAAgt9tIKoIm7WZKIyK25lh6a).
-- [Data Carpentry](http://datacarpentry.org/) [https://github.com/datacarpentry/datacarpentry/tree/master/lessons/tidy-data](tidy data) lesson
 
-- The vignette for dplyr and tidyr are good: http://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html
+- [Data Carpentry](http://datacarpentry.org/) (tidy data)[https://github.com/datacarpentry/datacarpentry/tree/master/lessons/tidy-data] lesson.
 
+- The vignettes for [dplyr](http://cran.rstudio.com/web/packages/dplyr/) and [tidyr](http://cran.rstudio.com/web/packages/dplyr/)
+
+* * *
+
+- Derived from Jennifer Bryan, "hello ggplot2!", https://github.com/jennybc/ggplot2-tutorial/blob/master/ggplot2-tutorial-slides.pdf. License: CC-BY-NC
+- Derived from Karthik Ram, "A quick introduction to ggplot2", [Speakerdeck](http://inundata.org/2013/04/10/a-quick-introduction-to-ggplot2/), [github](https://github.com/karthik/ggplot-lecture). License: [CC-BY](http://creativecommons.org/licenses/by/2.0/)
+
+
+<!--  LocalWords:  'Lab Manipulation' html dplyr summarise frac gd df
+ -->
+<!--  LocalWords:  ggplot2 gapminder url gdf delim str tbl gtbl Stata
+ -->
+<!--  LocalWords:  lifeExp magrittr gdp gdpPercap usa gdpPercapRel gg
+ -->
+<!--  LocalWords:  NAFTA geoms aes colour ggplot log10 workflow 'p'
+ -->
+<!--  LocalWords:  lwd se lm Facetting gDat
+ -->
