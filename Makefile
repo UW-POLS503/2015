@@ -2,6 +2,7 @@ SHELL = bash
 WEBDIR = web
 LECTURE_DIR = lectures
 LAB_DIR = labs
+HW_DIR = hw
 
 all :build
 
@@ -15,10 +16,15 @@ labs:
 	-mkdir $(WEBDIR)/files/labs
 	cp $(LAB_DIR)/*.Rmd $(LAB_DIR)/*.html $(LAB_DIR)/*.csv $(WEBDIR)/files/labs
 
-build: lectures
+hw:
+	make -C hw
+	-mkdir $(WEBDIR)/files/hw
+	cp $(HW_DIR)/hw*.html $(WEBDIR)/files/hw
+
+build: lectures hw labs
 	cd $(WEBDIR); source venv/bin/activate; nikola build
 
 deploy: lectures
 	cd $(WEBDIR); source venv/bin/activate; nikola github_deploy
 
-.PHONY: lectures build build-deploy labs
+.PHONY: lectures build build-deploy labs hw

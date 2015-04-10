@@ -111,7 +111,6 @@ p. Which democracy was (or democracies were) closest to the median years of educ
 
 q. What were the 25th and 75th percentiles of ethnolinguistic fractionalization for new and old countries?
 
-[^1]: Przeworski, Adam, Michael E. Alvarez, Jose Antonio Cheibub, and Fernando Limongi. 2000. *Democracy and Development: Political Institutions and Well-Being in the World, 1950-1990*. Cambridge University Press. For more on these data, see <www.nsd.uib.no/macrodataguide/set.html?id=1\&sub=1`>.
 
 ## Problem 2
 
@@ -120,9 +119,11 @@ b. Will you be writing this yourself, or with collaborators? Do you plan on subm
 c. How do you plan on obtaining the data you need for analysis? What are your sources?
 d. Take the opportunity to do some preliminary exploratory analysis if you already have the data.
 
+[^1]: Przeworski, Adam, Michael E. Alvarez, Jose Antonio Cheibub, and Fernando Limongi. 2000. *Democracy and Development: Political Institutions and Well-Being in the World, 1950-1990*. Cambridge University Press.
+
 * * *
 
-Derived from of Christopher Adolph, "Problem Set 1", *POLS/CSSS 503*, University of Washington, Spring 2014. <http://faculty.washington.edu/cadolph/503/503hw1.pdf>. Used with permission.
+Derived from of Christopher Adolph, "Problem Set 1", *POLS/CSSS 503*, University of Washington, Spring 2014. <http://faculty.washington.edu/cadolph/503/503hw1.pdf>; "Problem Set 2", *POLS/CSSS 503*, University of Washington, Spring 2014 <http://faculty.washington.edu/cadolph/503/503hw2.pdf>. Used with permission.
 
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
 
