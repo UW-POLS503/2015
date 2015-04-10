@@ -1,5 +1,5 @@
 ---
-title: "Lab 1: Introduction to R, RStudio, and knitr"
+title: "Lab 1: Introduction to R and RStudio, and knitr"
 author: Jeffrey B. Arnold and Carolina Johnson
 date: April 3, 2015
 ---
@@ -127,6 +127,13 @@ Then multiply it by 4.
 2. Create a variable with a really long name and assign it a value. Start typing its name
 3. Enter the following in the console `sdgagasdgjasda`.
 
+>>>>>>> 55a7007df8d5f78483f3b9da9065cf9a1fdf9817
+
+
+# Working Directory and R Projects
+
+## Working Directory
+
 
 ## R Projects
 
@@ -164,13 +171,10 @@ Cheatsheets and additional resources about R Markdown are available at <http://r
 # Loading Data into R
 
 For the remainder of this lab you will be using a dataset of GDP per capita and fertility
-from [Gapminder](http://gapminder.org).[^2]
-This data was famously used in a TED talk by Hans Rosling.[^3]
+from Gapminder.[^2]
 
 [^2]: Dataset from the [gapminder](https://github.com/jennybc/gapminder) R packager.
       The dataset in that package is an excerpt from the [Gapminder](http://www.gapminder.org/data/) data. Gapminder data is released under the Creative Commons Attribution 3.0 Unported license. See their [terms of use](https://docs.google.com/document/pub?id=1POd-pBMc5vDXAmxrpGjPLaCSDSWuxX6FLQgq5DhlUhM).
-
-[^3]: Hans Rosling. (2006, February). The Best Stats You've Ever Seen [Video file]. Retrieved from  <http://www.ted.com/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen>
 
 
 Download the csv ("[comma-separated values](http://en.wikipedia.org/wiki/Comma-separated_values)")" <https://github.com/POLS503/pols_503_sp15/blob/master/labs/gapminder.csv>.
@@ -347,4 +351,9 @@ Refer to [Getting Help with R](http://pols503.github.io/pols_503_sp15/getting_he
 * * *
 
 Some text and the data set used in this are taken from Jenny Bryant, [R basics, workspace and working directory, RStudio projects](https://stat545-ubc.github.io/block002_hello-r-workspace-wd-project.html), licensed under [CC BY-NC 3.0](http://creativecommons.org/licenses/by-nc/3.0/)
+
+
+* * *
+
+
 

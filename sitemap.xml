@@ -6,15 +6,15 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/archive.html</loc>
-  <lastmod>2015-04-09</lastmod>
+  <lastmod>2015-04-10</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/blog/index.html</loc>
-  <lastmod>2015-04-09</lastmod>
+  <lastmod>2015-04-10</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/categories/index.html</loc>
-  <lastmod>2015-04-09</lastmod>
+  <lastmod>2015-04-10</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/docs/Challenger_Analysis.html</loc>
@@ -22,19 +22,23 @@
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/faq.html</loc>
-  <lastmod>2015-04-09</lastmod>
+  <lastmod>2015-04-10</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/getting_help_with_r.html</loc>
-  <lastmod>2015-04-09</lastmod>
+  <lastmod>2015-04-10</lastmod>
+ </url>
+ <url>
+  <loc>http://pols503.github.io/pols_503_sp15/hw/hw1.html</loc>
+  <lastmod>2015-04-10</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/index.html</loc>
-  <lastmod>2015-04-09</lastmod>
+  <lastmod>2015-04-10</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/install_r.html</loc>
-  <lastmod>2015-04-09</lastmod>
+  <lastmod>2015-04-10</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/labs/lab1.html</loc>
@@ -42,18 +46,18 @@
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/labs/lab2.html</loc>
-  <lastmod>2015-04-03</lastmod>
+  <lastmod>2015-04-10</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/links.html</loc>
-  <lastmod>2015-04-09</lastmod>
+  <lastmod>2015-04-10</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/loading_data_in_r.html</loc>
-  <lastmod>2015-04-09</lastmod>
+  <lastmod>2015-04-10</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/r_best_practices.html</loc>
-  <lastmod>2015-04-09</lastmod>
+  <lastmod>2015-04-10</lastmod>
  </url>
 </urlset>

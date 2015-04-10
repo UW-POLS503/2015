@@ -181,8 +181,9 @@ Given that this is my first time teaching this course, I expect many adjustments
 
 ### Friday, April 10
 
-- @wickham_tidy_2014
-- Zuur, Ch 1, 2, 3 (optional)
+- Readings:
+
+    - Hadley Wickham, [Introduction to dplyr](http://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html)
 
 ## Week 3: Assumptions & Properties of the Linear Regression Model, Part II
 
@@ -192,7 +193,10 @@ Given that this is my first time teaching this course, I expect many adjustments
 	
 ### Friday, April 17
 
-- Zuur, Ch 5 (optional)
+- Readings
+
+    - @wickham_tidy_2014
+    - Hadley Wickham, [tidyr vignette](http://cran.rstudio.com/web/packages/tidyr/vignettes/tidy-data.html)
 
 ## Week 4: Statistical Inference / Interpretation of the Linear Model
 
@@ -203,7 +207,10 @@ Given that this is my first time teaching this course, I expect many adjustments
 
 ### Friday, April 17
 
-- Zuur, Ch 4, 6 (optional)
+- Readings
+
+    - **stargazer** [vignette](http://cran.r-project.org/web/packages/stargazer/vignettes/stargazer.pdf)
+	- **broom** [vignette](http://cran.r-project.org/web/packages/broom/vignettes/broom.html)
 
 ## Week 5: Model Fitting and Data Transformation
 

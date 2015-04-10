@@ -13,19 +13,19 @@ article: http://ogp.me/ns/article#
     
       <link rel="canonical" href="http://pols503.github.io/pols_503_sp15/r_best_practices.html">
 
-            <link rel="icon" href="favicon-32x32.png" sizes="32x32">
-            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-152x152.png" sizes="152x152">
-            <link rel="icon" href="favicon-16x16.png" sizes="16x16">
-            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-60x60.png" sizes="60x60">
-            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-72x72.png" sizes="72x72">
-            <link rel="icon" href="favicon-128.png" sizes="128x128">
-            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-120x120.png" sizes="120x120">
-            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-144x144.png" sizes="144x144">
             <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-114x114.png" sizes="114x114">
+            <link rel="icon" href="favicon-16x16.png" sizes="16x16">
+            <link rel="icon" href="favicon-128.png" sizes="128x128">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-76x76.png" sizes="76x76">
+            <link rel="icon" href="favicon-32x32.png" sizes="32x32">
             <link rel="icon" href="favicon-96x96.png" sizes="96x96">
             <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-57x57.png" sizes="57x57">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-72x72.png" sizes="72x72">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-152x152.png" sizes="152x152">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-60x60.png" sizes="60x60">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-120x120.png" sizes="120x120">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-144x144.png" sizes="144x144">
             <link rel="icon" href="favicon-196x196.png" sizes="196x196">
-            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-76x76.png" sizes="76x76">
 
 
 
@@ -44,7 +44,7 @@ It is important to follow a consistent and clear style when writing R.
 Follow the Hadley Wickham's Advanced R Style guide.
 Writing code in a consistent (and good) style will make is easier">
     <meta property="og:type" content="article">
-    <meta property="article:published_time" content="2015-04-02T12:37:47.453213-07:00">
+    <meta property="article:published_time" content="2015-04-10T12:28:04.205806-07:00">
 
     
     
@@ -80,6 +80,14 @@ Writing code in a consistent (and good) style will make is easier">
 <a href="links.html">Links</a>
             </li>
 <li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">Homeworks<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                    <li>
+<a href="hw/hw1.html">HW 1</a>
+            </li>
+</ul>
+            </li>
+<li class="dropdown">
 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Topics<b class="caret"></b></a>
             <ul class="dropdown-menu">
                     <li>
@@ -91,8 +99,8 @@ Writing code in a consistent (and good) style will make is easier">
 <li>
 <a href="loading_data_in_r.html">Loading Data in R</a>
                     </li>
-<li>
-<a href="R_best_practices.html">Best Practices with R</a>
+<li class="active">
+<a href="#">Best Practices with R</a>
             </li>
 </ul>
                 </li>
@@ -153,7 +161,7 @@ Writing code in a consistent (and good) style will make is easier">
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;<span class="st"> </span>-<span class="dv">1</span></code></pre>
 <p>Off the top of your head, do you know which one R is going to do? Yes, I've seen bugs due to this in real life.</p>
 <h2 id="best-practices">Best Practices</h2>
-<p>These are some best practices for writing R code suggested by <a href="https://github.com/swcarpentry/r-novice-inflammation">Software Carpentry</a></p>
+<p>These are some best practices for writing R code suggested by <a href="https://github.com/swcarpentry/r-novice-inflammation">Software Carpentry</a>. Many of these are applicable, although some are more specific to putting your analyses in R scripts rather than when writing your analyses in R Markdown documents.</p>
 <ol style="list-style-type: decimal">
 <li>Start your code with a description of what it is:</li>
 </ol>
@@ -171,30 +179,30 @@ Writing code in a consistent (and good) style will make is easier">
 <li>Set your working directory before running a script, or start <code>R</code> inside your project folder:</li>
 </ol>
 <p>You should exercise caution when using <code>setwd()</code>. Changing directories inside your script can limit reproducibility:</p>
-<ul>
-<li>
-<code>setwd()</code> will throw an error if the directory you're trying to change to doesn't exit, or the user doesn't have the correct permissions to access it. This becomes a problem when sharing scripts between users who have organized their directories differently.</li>
-<li>If/when your script terminates with an error, you might leave the user in a different directory to where they started, and if they call the script again this will cause further problems. If you must use <code>setwd()</code>, it is best to put it at the top of the script to avoid this problem.</li>
-</ul>
+<pre><code>* `setwd()` will throw an error if the directory you're trying to change to doesn't exit, or the user doesn't have the correct permissions to access it. This becomes a problem when sharing scripts between users who have organized their directories differently.
+* If/when your script terminates with an error, you might leave the user in a different directory to where they started, and if they call the script again this will cause further problems. If you must use `setwd()`, it is best to put it at the top of the script to avoid this problem.</code></pre>
 <p>The following error message indicates that R has failed to set the working directory you specified:</p>
-<pre><code>Error in setwd("~/path/to/working/directory") : cannot change working directory</code></pre>
-<p>Consider using the convention that the user running the script should begin in the relevant directory on their machine and then use relative file paths. That means you should avoid using <code>setwd()</code> <em>within</em> a script; instead you should use <code>setwd()</code> in the console to move into the correct directory before running a script.</p>
+<pre><code>```
+Error in setwd("~/path/to/working/directory") : cannot change working directory
+```
+
+Consider using the convention that the user running the script should begin in the relevant directory on their machine and then use relative file paths.
+That means you should avoid using `setwd()` *within* a script; instead you should use `setwd()` in the console to move into the correct directory before running a script.</code></pre>
 <ol start="4" style="list-style-type: decimal">
 <li><p>Use <code>#</code> or <code>#-</code> to set off sections of your code so you can easily scroll through it and find things.</p></li>
 <li><p>Do <strong>not</strong> use <code>attach()</code>. Ever.</p></li>
-<li><p>If you have only one or a few functions, put them at the top of your code, so they are among the first things run. If you written many functions, put them all in their own .R file, and <code>source</code> them. Source will run all of these functions so that you can use them as you need them.</p></li>
-</ol>
+<li>
+<p>If you have only one or a few functions, put them at the top of your code, so they are among the first things run. If you written many functions, put them all in their own .R file, and <code>source</code> them. Source will run all of these functions so that you can use them as you need them.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">"my_genius_fxns.R"</span>)</code></pre>
-<ol start="6" style="list-style-type: decimal">
-<li><p>Use the style guide</p></li>
+</li>
 <li><p>Keep your code modular. If a single function or loop gets too long, consider breaking it into smaller pieces.</p></li>
 <li><p>Don't repeat yourself. Automate! If you are repeating the same piece of code on multiple objects or files, use a loop or a function to do the same thing. The more you repeat yourself, the more likely you are to make a mistake.</p></li>
-<li><p>Manage all of your source files for a project in the same directory. Then use relative paths as necessary. For example, use</p></li>
-</ol>
+<li>
+<p>Manage all of your source files for a project in the same directory. Then use relative paths as necessary. For example, use</p>
 <pre class="sourceCode r"><code class="sourceCode r">dat &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">file =</span> <span class="st">"/files/dataset-2013-01.csv"</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)</code></pre>
 <p>rather than:</p>
 <pre class="sourceCode r"><code class="sourceCode r">dat &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">file =</span> <span class="st">"/Users/Karthik/Documents/sannic-project/files/dataset-2013-01.csv"</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)</code></pre>
-<ol start="10" style="list-style-type: decimal">
+</li>
 <li><p>Don't save a session history (the default option in R, when it asks if you want an <code>RData</code> file). Instead, start in a clean environment so that older objects don't contaminate your current environment. This can lead to unexpected results, especially if the code were to be run on someone else's machine.</p></li>
 <li><p>Collaborate. Grab a buddy and practice "code review". We do it for methods and papers, why not code? Our code is a major scientific product and the result of a lot of hard work!</p></li>
 </ol>
