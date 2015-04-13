@@ -1,0 +1,66 @@
+---
+title: Homework 2
+author: Christopher Adolph, Arnold
+date: April 20, 2015
+---
+
+
+## Problem 1
+
+This problem uses [sprinters.csv](https://raw.githubusercontent.com/POLS503/pols_503_sp15/master/data/sprinters.csv) which contains the winning times from the \lnt{100} meter sprint in Olympic competitions going back to 1900.[^1]
+
+
+The file `sprinters.csv`. 
+
+| Variable | Description |
+|:----|:----|
+| `finish` |  best time in seconds in the \lnt{100} meter sprint |
+| `year`   | the year of the competition |
+| `women` |  1 if the time is women's best; 0 if the time the men's best. |
+
+a. In R, Create a matrix $X$ comprised of three columns: a column of
+   ones, a columnmade of the variable year, and a column made up of
+   the variable women. Create a matrix $y$ comprised of a single
+   column, made up of the variable finish. Now compute the following
+   using R’s matrix commands (note that you will need to use the
+   matrix multiplication operator `%*%`):
+   $$
+   b = (X' X)^{-1} X' y
+   $$
+   Report result of this calculation.
+
+b. Using the function `lm`, run a regression of `finish` on `year` and `women`.
+   Compare the results the calculation you did in part *a*.
+
+c. Make a nice plot summarizing this regression.
+  On a single graph, plot the data and the regression line.
+   Make sure the graph is labeled nicely, so that anyone who does not know your variable names could still read it.
+
+d. Rerun the regression, adding an interaction between `women` and `year`.
+
+e. Redo the plot with a new fit, one for each level of `women`.
+
+f. Suppose that an Olympics had been held in 2001.
+   Use the `predict` function to calculate the expected finishing time for men and for women.
+   Calculate 95% confidence intervals for the predictions.
+
+g. The authors of the *Nature* article were interested in predicting the finishing times for the 2156 Olympics.
+   Use `predict` to do so, for both men and women, and report 95% confidence intervals for your results.
+
+h. Do you trust the model’s predictions? Is there reason to trust the  prediction more than the 2156 prediction?
+   Is any assumption of the model being abused or overworked to make this prediction?
+   Hint: Try predicting the finishing times in the year 3000 C.E. and in -3000 B.C.E?
+
+## Problem 2
+
+
+
+
+[^1]:  A. J. Tatem, C. A. Guerra, P. M. Atkinson and S. I.  Hay, *Nature* Vol. 431, p. 525 (2004).
+
+* * *
+
+Derived from of Christopher Adolph, "Problem Set 2", *POLS/CSSS 503*, University of Washington, Spring 2014. <http://faculty.washington.edu/cadolph/503/503hw2.pdf>. Used with permission.
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+
