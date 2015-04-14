@@ -193,6 +193,7 @@ Given that this is my first time teaching this course, I expect many adjustments
 	
 ### Friday, April 17
 
+- [Deck 3](lectures/Lecture_03_handout.pdf), [Sampling Distribution of linear regression example](https://raw.githubusercontent.com/POLS503/pols_503_sp15/master/lectures/Sampling_Distribution_Linear_Regression.Rmd), [Multiple regression coefficient anatomy](https://github.com/POLS503/pols_503_sp15/blob/master/lectures/multiple_regression_anatomy.R)
 - Readings
 
     - @wickham_tidy_2014
