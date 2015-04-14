@@ -4,6 +4,7 @@ suppressPackageStartupMessages({
     library("dplyr")
     library("stringr")
     library("knitr")
+    library("readr")
 })
 
 opts_chunk$set(fig.height = 3, fig.width = 5,
@@ -19,4 +20,6 @@ pat <- knit_patterns[["get"]]()
 pat[["header.begin"]] <- "% HEADER HERE"
 knit_patterns[["set"]](pat)
 
-set.seed(57976496)
+set.seed(5797646)
+
+theme_local <- theme_minimal
