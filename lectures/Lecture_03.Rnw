@@ -1,0 +1,572 @@
+% Copyright (C) 2015 Jeffrey B. Arnold
+% License CC BY-NC-SA 4.0 http://creativecommons.org/licenses/by-nc-sa/4.0/
+<<init,echo=FALSE,results='hide',warning=FALSE,message=FALSE>>=
+source("init.R")
+@
+<<header>>=
+suppressPackageStartupMessages({
+  library("mvtnorm")
+})
+@
+
+
+\input{\jobname-options}
+\ifdefined\ishandout%
+  \documentclass[handout]{beamer}
+\else
+  \documentclass[]{beamer}
+\fi
+
+% HEADER HERE
+
+\input{includes.tex}
+
+
+\newcommand{\thetitle}{Linear Regression Estimator}
+\date{April 14, 2015}
+\title{\thetitle{}}
+\hypersetup{
+  pdftitle={\thetitle{}},
+  pdfkeywords={statistics}
+}
+
+\begin{document}
+
+\begin{frame}
+  \maketitle{}
+\end{frame}
+
+\begin{frame}
+\frametitle{Overview}
+\tableofcontents
+\end{frame}
+
+\section{Regression Coefficient Anatomy}
+
+\begin{frame}
+  \frametitle{Coeficients of a simple regression}
+  
+  \begin{equation*}
+    Y_{i} = A + B X_{i} + E_{i} 
+  \end{equation*}
+  
+  The least squares coefficients are
+  \begin{align*}
+    A &= \bar{Y} + B \bar{X} \\
+    B &= \frac{\sum_{i} (X_{i} - \bar{X}) (Y_{i} - \bar{Y})}{\sum_{i} {(X_{i} - \bar{X})}^{2}}
+  \end{align*}
+  
+  \begin{itemize}
+  \item State $B$ in terms of $\cov$ and $\var$? 
+  \item State $B$ in terms of $\cor(X, Y)$ and $\sd$?
+  \item What values can $B$ take if $\sd(X) = \sd(Y) = 1$?
+  \item What is $\hat{Y}$ for $X = \bar{X}$?
+  \item What happens to $B$ as $\var{X}$ decreases? $\var{Y}$ decreases? If $\var{X} = 0$
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+\frametitle{Least squares when $\var{X} = 0$}
+
+<<constant_x_plot>>=
+ybar <- 2
+y <- as.numeric(scale(rnorm(10)) + ybar)
+x <- 1
+f <- function(slope) {
+  ybar - slope * x  
+}
+coefdata <- data_frame(B = seq(-5, 5, by = 1),
+                        A = f(B))
+
+ggplot(data_frame(y = y, x = x), aes(x = x, y = y)) +
+    geom_point() + 
+    geom_abline(data = coefdata, mapping = aes(intercept = A, slope = B)) +
+    theme_local()
+
+@ 
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Least squares coefficients are unidentified if $\var{x} = 0$}
+
+\begin{itemize}
+\item If $\var{x} = 0$ then least squares solution is unidentified
+\item There is no unique value of $A, B$ that $\argmin_{A, B} \sum_i E_i^2$
+\end{itemize}
+
+<<constant_x_analysis,echo=TRUE,size="tiny">>=
+y <- c(1, 2, 3, 4, 5)
+x <- 1
+ybar <- mean(y)
+ybar
+# A = 2, B = 1
+sum((y - 2 - 1 * x) ^ 2)
+# A = -7, B = 10
+sum((y + 7 - 10 * x) ^ 2)
+@
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Coefficients of a multiple regression}
+
+  \begin{equation*}
+    \vec{Y} = \mat{X} \vc{b} + \vc{e}
+  \end{equation*}
+  
+  \begin{itemize}
+  \item $\vc{b} = {(\mat{X}' \mat{X})}^{-1} \mat{X}' \vc{y}$. \only<2>{\textit{Not that intuitive!}}
+  \item<3> Coefficient $\vc{b}_j$ is
+    \begin{equation*}
+      \vc{b}_{k} = \frac{ \cov(\vc{y}, \tilde{\vc{x}}_{j})}{\var(\tilde{\vc{x}}_{k})}
+    \end{equation*}
+  \item<4> Where $\tilde{\vc{x}}_{j}$ are the residulals of $\vc{x}_{j}$ on all $X_{h}$ where $h \neq j$    
+    \begin{equation*}
+      \tilde{X}_{j,i} = X_{j,i} - \tilde{A} - \sum_{h \neq j} \tilde{B}_{h} X_{h}
+    \end{equation*}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Regression example}
+
+  See \texttt{multiple\_regression\_anatomy.R}
+  
+\end{frame}
+
+\begin{frame}
+\frametitle{Least Squares coefficients are unidentified if $X' X = 0$}  
+
+\begin{itemize}
+\item Examples:
+  \begin{itemize}
+  \item Number of observations less than $k + 1$
+  \item $X_{k}$ is constant
+  \item $X_{k}$ is a linear function of other variables: $X_{k} = \sum_{j \neq k} c_{j} X_{j}$. 
+    \begin{itemize}
+    \item dummy variables for all categories of a categorical variable
+    \item variable multiplied by the constant of another variable
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Which of these would be cases of collinearity and why?}
+  
+  \begin{itemize}
+  \item There is a variable that takes values ``white'', ``black'', ``hispanic'', ``asian'', ``other''.
+    You include a dummy variable for each category.
+  \item GDP, GDP per capita, and population
+  \item Log GDP, log GDP per capita, and log population
+  \item GDP in millions of dollars; GDP in trillions of dollars
+  \item GDP measured in nominal value; GDP measured in real terms
+  \item Regression with 3 variables and 4 observations
+  \end{itemize}
+  
+\end{frame}
+
+\section{Linear Regression Population Model}
+
+\begin{frame}
+  \frametitle{Population model in a simple regression}
+  \begin{equation*}
+    Y_{i} = \alpha + \beta X_{i} + \epsilon_{i}
+  \end{equation*}
+  
+  {\small
+  Assumptions for statistical inference
+  \begin{enumerate}
+  \item \textit{X is not invariant} $\var{X} > 0$
+  \item \textit{Linearity}. Average value of error given $x$ is 0. $E(\epsilon_{i}) = E(\epsilon_{i} | x_{i}) = 0$
+    \begin{equation*}
+      \mu_{i} = E(Y_{i}) = \E(Y | X_{i}) = \E(\alpha + \beta X_{i} + \epsilon_{i}) +  \alpha + \beta x_{i}
+    \end{equation*}
+  \item \textit{Constant variance} Variance of the errors is the same regardless of the value of $X$
+    \begin{equation*}
+      \var(Y | x_{i}) = E(\epsilon_{i}^{2}) = \sigma_{\epsilon}^{2}
+    \end{equation*}
+  \item \textit{Independence Observations are sampled independently}. $\cor(\epsilon_{i}, \epsilon_{j}) = 0$ for all $i \neq j$.
+  \item \textit{Fixed $X$ or $X$ measured without error and independent of the error}
+  \item \textit{Normality} Errors are normally distributed $\epsilon_{i} \sim N\left(0, \sigma_{\epsilon}^{2}\right)$
+  \end{enumerate}
+  }
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Population model in a multiple regression}
+  \begin{equation*}
+    Y_{i} = \alpha + \beta_{1} x_{i,1} + \beta_{2} x_{i,2} + \cdots + \beta_{k} x_{i,k} + \epsilon_{i}
+  \end{equation*}
+  
+  {\small
+  Assumptions for statistical inference
+  \begin{enumerate}
+  \item \textit{X is not invariant} and no $X$ is a perfect linear function of the others.
+  \item \textit{Linearity}. $\E(\epsilon_{i}) = 0$
+  \item \textit{Constant variance} $V(\epsilon_{i}) = \sigma^{2}_{\epsilon}$
+  \item \textit{Independence Observations are sampled independently}. $\cor(\epsilon_{i}, \epsilon_{j}) = 0$ for all $i \neq j$.
+  \item \textit{Fixed $X$ or $X$ measured without error and independent of the error}
+  \item \textit{Normality} Errors are normally distributed $\epsilon_{i} \sim N\left(0, \sigma_{\epsilon}^{2}\right)$
+  \end{enumerate}
+  }
+  
+\end{frame}
+
+
+\section{Sampling Distribution}
+
+\begin{frame}
+  \frametitle{Definitions}
+  
+  \begin{description}
+  \item[population] The observations of interest. May be theoretical
+  \item[sample] The data you have.
+  \item[parameter] A function of the population distribution
+  \item[statistic] A function of the sample
+  \item[sampling distribution] The distribution of a statistic calculated from the distribution of samples of a given size drawn from a population.
+  \end{description}
+  
+\end{frame}
+
+\begin{frame}
+  
+  See \texttt{Sampling\_Distributions.Rmd}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Sampling Distribution of Simple Regression Coefficients}
+  
+  The sampling distributions of $A$, $B$ given $Y_{i} = \alpha + \beta X_{i} + \epsilon_{i}$
+  \begin{itemize}
+  \item expected values (linearity)
+    \begin{align*}
+      \E(A) &= \alpha \\
+      \E(B) &= \beta \\
+    \end{align*}
+  \item variances (linearity, constant variance, independence)
+    \begin{align*}
+      \var(A) &= \frac{\sigma_{\epsilon}^{2}}{n} \cdot \frac{\sum x_{i}^{2}}{\sum {(x_{i} - \bar{x})}^{2}} \\
+      \var(B) &= \frac{\sigma_{\epsilon}^{2}}{\sum {(x_{i} - \bar{x})}^{2}} = \frac{\sigma_{\epsilon}^{2}}{n \var(x)}
+    \end{align*}
+  \item normal distribution (normal errors)
+    \begin{align*}
+      A &\sim N(\E(A), \var(A)) \\
+      B &\sim N(\E(B), \var(B))          
+    \end{align*}
+  \item However, sampling distribution to normal as $n \to \infty$ due to Central Limit Theorem
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Coefficient sampling distributions in multiple regression}
+
+  The sampling distributions of $B_{k}$ given $Y_{i} = \alpha + \beta X_{i} + \epsilon_{i}$
+  \begin{itemize}
+  \item Expected value: $\E(B_{K}) = \beta_{k}$
+  \item Variance:
+    \begin{align*}
+      \var(B_{j}) &= \frac{1}{(1 - R^{2}_{j})} \frac{\sigma^{2}_{\epsilon}}{\sum {(x_{i,j} - \bar{x}_{j})}^{2}} \\
+      &= \frac{\sigma_{\epsilon}^{2}}{\sum_{i} {\left(x_{i,j} - \hat{x}_{i,j}\right)}^{2}}
+    \end{align*}
+    Where $R^{2}_{j}$ is $R^{2}$ from regression of $X_{j}$ on other $X$, and $\hat{x}_{ij}$ are fitted values from that regression.
+  \item Normally distributed if errors are normally distributed or as $n \to \infty$.
+  \item $\vc{b}$ is multivariate normally distributed
+    \begin{equation*}
+      \vc{b} \sim N \left(\beta, \sigma^{2}_{\epsilon} {(X' X)}^{-1} \right)
+    \end{equation*}
+  \end{itemize}
+  
+\end{frame}
+
+
+\section{Estimators and mean squared error}
+
+\begin{frame}
+  \frametitle{Let's define some things}
+  
+  \begin{description}
+  \item[statistic] Function of a sample, e.g. Sample mean $\bar{x} = \frac{1}{n} \sum x_{i}$
+  \item[parameter] Function of the population distribution, e.g. Expected value $\mu$ of the normal distribution.
+  \item[estimator] Method to use a sample statistic (estimate) to infer a population parameter (estimand)
+  \end{description}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{How to determine if an estimator is good?}
+  
+  \begin{itemize}[<+->]
+  \item Is $\hat{\beta} = {\left(\mat{X}' \mat{X}\right)}^{-1} \mat{X}' \vc{y}$ a good estimator for $\beta$?
+  \item Would another estimator be better? 
+  \item First, need criteria to by which to judge estimators
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{What makes an estimator good?}
+  
+  \begin{itemize}
+  \item Bias
+  \item Variance
+  \item Efficiency (mean squared error)
+  \item Consistency
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Bias and Variance}
+
+  \begin{block}{Bias}
+    On average how far off is the estimator?
+    \begin{align*}
+      \text{bias}(\hat \beta) = \E(\hat \beta ) - \beta
+    \end{align*}
+  \end{block}
+  
+  \begin{block}{Variance}
+    Does the estimator give similar results in different samples? 
+    \begin{equation*}
+      \var(\hat{\beta}) = \E
+      \left(
+        {(\beta - \E(\hat{\beta}))}^{2}
+      \right)
+    \end{equation*}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Bias and Variance Visualized}
+
+<<bullseye, warning=FALSE,message = FALSE>>=
+param <- data.frame(variance =
+                    ordered(c("low", "low", "high", "high"), levels = c("high", "low")),
+                    bias = ordered(c("low", "high", "low", "high"), levels = c("low", "high")),
+                    sigma = I(list(diag(2) * 2, diag(2) * 2, diag(2) * 0.5, diag(2) * 0.5)),
+                    mu = I(list(c(-1, -1), c(0, 0), c(-1, -1), c(0, 0))))
+
+param <- mutate(param,
+                category = sprintf("%s/%s", variance, bias))
+
+measures <- plyr::mdply(param,
+                  function(mu, sigma, ...) {
+                    ret <- rmvnorm(200, mu[[1]], sigma[[1]])
+                    colnames(ret) <- c("x", "y")
+                    ret
+                  })
+
+circles <- plyr::ldply(c(0.5, 1, 1.5, 2), 
+                 function(radius) {
+                   angle <- seq(-base::pi, base::pi, length = 100)
+                   data.frame(radius = radius,
+                              angle = angle,
+                              x = radius * sin(angle),
+                              y = radius * cos(angle))
+                 })
+
+(ggplot(measures, aes(x = x, y = y))
+  + geom_path(data = circles, aes(x = x, y = y, group = radius),
+              colour = "gray", size = rel(0.5),
+              alpha = 0.6)
+  + geom_point(size = 1, colour = "black", alpha = 0.8)
+  + geom_point(data = data.frame(x = 0, y = 0),
+               mapping = aes(x = x, y = y), colour = "red",
+               size = rel(2))
+  + facet_grid(variance ~ bias)
+  + scale_y_continuous("Variance", limits = c(-4, 4))
+  + scale_x_continuous("Bias", limits = c(-4, 4))
+  + theme_local()
+  + theme(panel.grid = element_blank(),
+          axis.text = element_blank(),
+          axis.ticks = element_blank())
+ )
+
+@   
+\end{frame}
+
+\begin{frame}
+  \frametitle{What makes an estimator good?}
+  
+  \begin{itemize}
+  \item Unbiased methods may still miss the truth by a large amount, just direction not systematic
+  \item Unbiased estimates can be horrible: random draw from numbers 0--24 for time of day
+  \item Biased estimates are not necessarily terrible: a clock that's 2 minutes fast
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{You may prefer a biased, low variance estimator to an unbiased, high variance estimator}
+
+<<bias_variance_2, warning = FALSE>>=
+(ggplot(data_frame(x = seq(-4, 4, length.out = 256),
+                   theta1 = dnorm(x, mean = 0.2, sd = 0.2),
+                   theta2 = dnorm(x, mean = 0, sd = 1)))
+ + geom_ribbon(mapping = aes(x = x, ymin = 0, ymax = theta1), fill = "red", 
+               alpha = 0.2)
+ + geom_ribbon(mapping = aes(x = x, ymin = 0, ymax = theta2), fill = "blue",
+               alpha = 0.2)
+ + scale_x_continuous("", breaks = 0, labels = expression(beta))
+ + theme_local()
+ + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+         panel.grid = element_blank())
+ )
+
+@   
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Mean Squared Error (MSE)}
+  
+  \begin{itemize}
+  \item MSE is 
+  \begin{equation*}
+    MSE(\hat \beta) = \E
+    \left(
+      (\hat \beta - \beta)^{2}
+    \right) 
+  \end{equation*}
+  \item MSE trades off bias and variance
+  \begin{align*}
+    MSE(\hat \beta) 
+    &= 
+    \E( (\hat{\beta} - \E(\hat{\beta}))^{2} ) +
+    \E(\E(\hat{\beta}) - \beta))^{2} 
+    \\
+    &= 
+    \var(\hat \beta) + 
+    \left(
+      \text{bias}(\hat{\beta}, \beta)
+    \right)^{2}
+  \end{align*}
+\item root mean squared error (RMSE) $\sqrt{\text{MSE}}$: on average how far is an estimate from the truth
+\item An \textbf{efficient} estimator has the smallest MSE
+\item What is the MSE of an unbiased estimator? 
+  \only<2>{
+    \begin{equation*}
+      MSE(\hat{\beta}) = \var(\hat{\beta}) + \left( \text{bias}(\hat{\beta}, \beta) \right)^{2} = \var(\hat{\beta}) + 0 = \var(\hat{\beta})
+    \end{equation*}
+  }
+\end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{MSE Example}
+  
+  \begin{itemize}
+  \item Suppose population parameter $\beta = 1$
+  \item Consider two estimators $\hat \beta_{1}$ and $\hat \beta_{2}$. 
+    \begin{itemize}
+    \item $\hat \beta_{1} \sim N(1, 1^{2})$
+    \item $\hat \beta_{2} \sim N(0.5, 0.5^{2})$
+    \end{itemize}
+  \item What are the bias, variance, and MSE of each estimator? 
+    %% \begin{itemize}
+    %% \item<2> $\var{\hat{\beta}_{1}} = 1$, $bias(\hat{\beta}_{1}) = 0$, $MSE = 1 + 0^{2} = 1$.
+    %% \item<3> $\var{\hat{\beta}_{1}} = 0.25$, $bias(\hat{\beta}_{2}) = (0.5 - 1) = 0.5$, $MSE = 0.25 + 0.5^{2} = 0.5$
+    %% \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Consistency}
+  
+  \begin{itemize}
+  \item A consistent estimator converges to the parameter value as the number of observations grows
+    \begin{align*}
+      \E(\hat{\beta} - \beta) \to 0 && \text{ as $n \to \infty$}
+    \end{align*}
+  \item A concern of econometricians
+  \item May not be as much a concern in finite, small sample sizes
+  \item We will mainly be concerned with efficiency, secondarily with bias, rarely with consistency
+  \end{itemize}
+  
+\end{frame}
+
+\section{Gauss-Markov Theorem}
+
+\begin{frame}
+  \frametitle{LS assumptions and consequences of violations}
+
+  {\footnotesize
+  \begin{tabular}{llll}
+    & Assumption & & Consequence of violation \\
+    \hline
+    1 & No perfect collinearity& $\rank(\mat{X}) = k$, $k < n$ & Coefficients unidentified \\
+    2 & $\mat{X}$ is exogenous & $\E(\mat{X} \epsilon) = 0$ & Biased, even as $n \to \infty$ \\
+    3 & Disturbances have mean 0 & $\E(\epsilon) = 0$ & Biased, even as $n \to \infty$ \\                                                            
+    4 & No serial correlation & $\E(\epsilon_{i} \epsilon_{j}) = 0$, $i \neq j$ & Unbiased but ineff. Wrong se. \\
+    5 & Homoskedastic errors & $\E(\epsilon' \epsilon') = \sigma^{2} \mat{I}$ & Unbiased but ineff. Wrong se. \\
+    6 & Normal errors & $\epsilon \sim N(0, \sigma^{2})$ & se wrong unless $n \to \infty$ \\
+   \hline
+  \end{tabular}
+  }
+  
+  \only<2>{Assumptions stronger from top to bottom, 4 and 5 could be combined}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Unbiasedness of LS}
+  
+  \begin{itemize}
+  \item Only need assumptions 1-3 (no collinearity, $\mat{X}$ exogenous, $\E(\epsilon) = 0$
+  \item Start with 
+    \begin{align*}
+      \hat \beta &= (\mat{X}' \mat{X})^{-1} \mat{X}' (\mat{X} \beta + \epsilon) \\
+      &= \beta + (\mat{X}' \mat{X})^{-1} \mat{X}' \epsilon
+    \end{align*}
+  \item Take the expectation
+    \begin{align*}
+      \E(\hat \beta) &= \E(\beta) + \E(\mat{X}' \mat{X})^{-1} \mat{X}' \epsilon) \\
+                     &= \E(\beta) + \mat{X}' \mat{X})^{-1} \mat{X}' \E (\epsilon) \\
+      &= \E(\beta)
+    \end{align*}
+  \item Since $\E(\hat{\beta}) = \E(\beta)$, LS is unbiased.
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Gauss-Markov}
+  
+  \begin{itemize}
+  \item If make assumptions 1--5: LS is the best linear unbiased estimator (BLUE)
+  \item LS estimator is \textbf{linear} because $\hat{\beta} = \mat{M} \mat{y}$, where $\mat{M} = {(\mat{X}' \mat{X})}^{-1} \mat{X}'$
+  \item \textbf{best} is best mean squared error (MSE).
+  \item If LS is unbiased, then its mean squared error is the same as its \dots{}? 
+  \item Could exist other non-linear unbiased estimators with smaller MSE, e.g. Robust regression when population has fat tailed errors
+  \item If errors are Gaussian, LS is Minimum Variance Unbiased (MVU).
+  \item MVU = for \textit{all} estimators that are unbiased. $\hat{\beta}$ has smallest variance (and MSE).
+  \end{itemize}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{References}
+  
+  \begin{itemize}
+  \item Some slides derived from Christopher Adolph \textit{Linear Regression in Matrix Form / Propoerties \& Assumptions of Linear Regression}. Used with permission. <http://faculty.washington.edu/cadolph/503/topic3.pw.pdf>
+  \item Material included from
+    \begin{itemize}
+    \item Fox Ch 6, 9.3
+    \item Angrist and Pischke, Chapter 3
+    \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
+\end{document}
+
