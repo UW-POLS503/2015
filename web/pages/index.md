@@ -193,6 +193,7 @@ Given that this is my first time teaching this course, I expect many adjustments
 	
 ### Friday, April 17
 
+- [Deck 3](lectures/Lecture_03_handout.pdf), [Sampling Distribution of linear regression example](
 - Readings
 
     - @wickham_tidy_2014
