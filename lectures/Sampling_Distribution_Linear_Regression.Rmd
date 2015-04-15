@@ -6,6 +6,10 @@ output: html_document
 ---
 
 ```{r}
+library("dplyr")
+library("tidyr")
+library("broom")
+library("ggplot2")
 #' Simulate from a linear normal model
 #'
 #' Draws samples from a 

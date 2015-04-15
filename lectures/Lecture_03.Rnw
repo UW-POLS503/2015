@@ -57,11 +57,11 @@ suppressPackageStartupMessages({
   \end{align*}
   
   \begin{itemize}
-  \item State $B$ in terms of $\cov$ and $\var$? 
-  \item State $B$ in terms of $\cor(X, Y)$ and $\sd$?
+  \item State $B$ in terms of covariance of $X$ and $Y$ and variance?
+  \item State $B$ in terms of correlation of $X$ and $Y$ and standard deviations?
   \item What values can $B$ take if $\sd(X) = \sd(Y) = 1$?
   \item What is $\hat{Y}$ for $X = \bar{X}$?
-  \item What happens to $B$ as $\var{X}$ decreases? $\var{Y}$ decreases? If $\var{X} = 0$
+  \item What happens to $B$ as $\var(X)$ decreases? $\var(Y)$ decreases? If $\var(X) = 0$
   \end{itemize}
   
 \end{frame}
@@ -137,10 +137,10 @@ sum((y + 7 - 10 * x) ^ 2)
 \end{frame}
 
 \begin{frame}
-\frametitle{Least Squares coefficients are unidentified if $X' X = 0$}  
+\frametitle{Least Squares coefficients are unidentified if ${(X' X)}^{-1}$ does not exist
 
 \begin{itemize}
-\item Examples:
+\item Common cases in which ${(X' X)^{-1}}$ does not exist:
   \begin{itemize}
   \item Number of observations less than $k + 1$
   \item $X_{k}$ is constant
@@ -179,18 +179,20 @@ sum((y + 7 - 10 * x) ^ 2)
   {\small
   Assumptions for statistical inference
   \begin{enumerate}
-  \item \textit{X is not invariant} $\var{X} > 0$
+  \item \textit{X is not invariant:} $\var(X) > 0$
   \item \textit{Linearity}. Average value of error given $x$ is 0. $E(\epsilon_{i}) = E(\epsilon_{i} | x_{i}) = 0$
+    % FIXME: What is really the point of this equation? How do I explain it? 
     \begin{equation*}
-      \mu_{i} = E(Y_{i}) = \E(Y | X_{i}) = \E(\alpha + \beta X_{i} + \epsilon_{i}) +  \alpha + \beta x_{i}
+      \mu_{i} = E(Y_{i}) = \E(Y | X_{i}) = \E(\alpha + \beta X_{i} + \epsilon_{i}) =  \alpha + \beta x_{i}
     \end{equation*}
   \item \textit{Constant variance} Variance of the errors is the same regardless of the value of $X$
+    % If not going to go in detail to explain these assumptions should I just keep it informal?
     \begin{equation*}
       \var(Y | x_{i}) = E(\epsilon_{i}^{2}) = \sigma_{\epsilon}^{2}
     \end{equation*}
-  \item \textit{Independence Observations are sampled independently}. $\cor(\epsilon_{i}, \epsilon_{j}) = 0$ for all $i \neq j$.
-  \item \textit{Fixed $X$ or $X$ measured without error and independent of the error}
-  \item \textit{Normality} Errors are normally distributed $\epsilon_{i} \sim N\left(0, \sigma_{\epsilon}^{2}\right)$
+  \item \textit{Independence:} Observations are sampled independently. $\cor(\epsilon_{i}, \epsilon_{j}) = 0$ for all $i \neq j$.
+  \item Fixed $X$ or $X$ measured without error and independent of the error.
+  \item Errors are normally distributed $\epsilon_{i} \sim N\left(0, \sigma_{\epsilon}^{2}\right)$
   \end{enumerate}
   }
   
@@ -261,12 +263,17 @@ sum((y + 7 - 10 * x) ^ 2)
   \item However, sampling distribution to normal as $n \to \infty$ due to Central Limit Theorem
   \end{itemize}
   
+  % Asked:
+  % How does $n$ influence V(A), V(B)
+  % How does the variance of x influcnce V(A), V(B)
+  % For what values of X does 
+  
 \end{frame}
 
 \begin{frame}
   \frametitle{Coefficient sampling distributions in multiple regression}
 
-  The sampling distributions of $B_{k}$ given $Y_{i} = \alpha + \beta X_{i} + \epsilon_{i}$
+  The sampling distributions of $B_{k}$ given $Y_{i} = \alpha + \sum \beta_{j} X_{j,i} + \epsilon_{i}$
   \begin{itemize}
   \item Expected value: $\E(B_{K}) = \beta_{k}$
   \item Variance:
