@@ -429,7 +429,7 @@ yhyp <- data_frame(lnenp = iver$lnenp,
 
 We'll use these values of X and y to plot the regression line over a scatterplot of the observed data using **ggplot2**:
 ```{r}
-plot <- ggplot(iver, aes(x = lnenp, y = povred, label = cty)) +
+plot <- ggplot(iver, aes(x = lnenp, y = povred)) +
 	geom_line(aes(x = lnenp, y = yhyp[ , 1]))
 plot
 ```
@@ -441,7 +441,8 @@ plot
 ```
 Finally, add the original data with text labels,
 ```{r}
-plot + geom_text(size = 3) +	theme_minimal()
+plot + geom_text(mapping = aes(colour = elec_sys, label = cty), size = 3) + 
+	theme_minimal()
 ```
 
 
