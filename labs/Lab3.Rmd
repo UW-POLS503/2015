@@ -161,6 +161,11 @@ lm_multi_interact <- lm(povred ~ lnenp + maj + pr + lnenp:maj, data = iver)
 summary(lm_multi_interact)
 ```
 
+Take a look at the help page for `formula`
+```{r eval=FALSE}
+?formula
+```
+
 ### Second aside on formulas
 
 To better understand what the formula is doing, let's look at the model matrix one of the more complex formulas above generates:
