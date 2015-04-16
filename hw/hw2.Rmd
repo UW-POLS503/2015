@@ -1,7 +1,7 @@
 ---
 title: Homework 2
-author: Christopher Adolph, Arnold
-date: April 20, 2015
+author: Christopher Adolph, Jeffrey B. Arnold
+date: April 16, 2015
 ---
 
 
@@ -53,7 +53,37 @@ h. Do you trust the model’s predictions? Is there reason to trust the �
 
 ## Problem 2
 
+This question will use a dataset included with R.
+```{r}
+data("anscombe")
+```
+The dataset consists of 4 seperate datasets each with an $x$ and $y$ variable.
+The original dataset is not a tidy dataset.
+The following code creates a tidy dataset of the anscombe data that is easier to analyze than the 
+```{r}
+library("tidyr")
+anscombe2 %>%
+	mutate(obs = row_number()) %>%
+	gather(variable_dataset, value, - obs) %>%
+	separate(variable_dataset, c("variable", "dataset"), sep = 1L) %>%
+	spread(variable, value) %>%
+	arrange(dataset, obs)
 
+```
+
+
+a. For each dataset: calculate the mean and standard deviations of x and y, and correlation between x and y, and run a linear regression between x and y for each dataset. How similar do you think that these datasets will look?
+b. Create a scatter plot Hint: you can do this easily with `facet_wrap`.
+
+## Problem 3
+
+a. Create an R project for your analysis. Include all relevant data in that directory. Create an `.Rmd` file.
+b. Describe your data and the variables in your data.
+c. Summarize your data. Use both numerical and graphical summaries. 
+
+If you do not have data at this point, talk to me ASAP. 
+It's okay if you end up doing something different for your final paper, or are still unsure of you analysis.
+The point of this is to get you working with your data as soon as possible, so any problems arise early and can be dealt with now, when things can be done, and not later, when it is too late.
 
 
 [^1]:  A. J. Tatem, C. A. Guerra, P. M. Atkinson and S. I.  Hay, *Nature* Vol. 431, p. 525 (2004).
