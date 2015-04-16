@@ -5,7 +5,7 @@ date: "April 17, 2015"
 output: html_document
 ---
 ```{r echo = FALSE, results = 'hide'}
-knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(warning = TRUE, message = FALSE)
 ```
 
 ## Outline
@@ -24,7 +24,7 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 ```{r}
 library("dplyr")
 library("tidyr")
-library("gplot2")
+library("ggplot2")
 library("readr")
 ```
 
@@ -38,14 +38,14 @@ library("readr")
 
 This dataset is cross sectional data on industrial democracies. Containing:
 
---------- --------------------------------------- 
+--------- ---------------------------------------------------------------- 
 `povred`  Percent of citizens lifted out of poverty by taxes and transfers  
 `enp`     Natural log of effective number of parties  
 `lnenp`   Natural log of effective number of parties  
 `maj`     Majoritarian election system dummy  
 `pr`      Proportional representation dummy  
 `unam`    Unanimity government dummy (Switzerland)
---------- ----------------------------------------
+--------- ----------------------------------------------------------------
 
 Source of data and model Torben Iversen and David Soskice, 2002, ``Why do some democracies redistribute more than others?'' Harvard University.
 
