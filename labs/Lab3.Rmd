@@ -28,6 +28,7 @@ library(ggplot2)
 library("dplyr")
 library("tidyr")
 library("gplot2")
+library("readr")
 ```
 
 
@@ -53,6 +54,7 @@ Source of data and model Torben Iversen and David Soskice, 2002, ``Why do some d
 
 ```{r echo=FALSE, results='hide', fig.show='hide'}
 iver <- read.csv("iver.csv", as.is=TRUE)
+iver <- read_csv("iver.csv")
 dim(iver)
 iver
 head(iver)
