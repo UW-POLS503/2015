@@ -59,7 +59,8 @@ sd <- summarise_each(iver, funs(sd))
 min <- summarise_each(iver, funs(min))
 max <- summarise_each(iver, funs(max))
 median <- summarise_each(iver, funs(median))
-rbind(mean, sd, min, max, median) %>% data.frame(row.names=c("mean", "sd", "min", "max", "median"))
+rbind(mean, sd, min, max, median) %>%
+	data.frame(row.names=c("mean", "sd","min", "max", "median"))
 
 povred.plot <- ggplot(iver, aes(povred)) + geom_histogram()
 povred.plot
