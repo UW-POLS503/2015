@@ -9,7 +9,7 @@ date: April 10, 2015
 ## Instructions
 
 1. Create a new R project for this homework named `hw1` and load that project.
-2. Download the data file `democracy.csv` into the directory of that project.
+2. Download the data file  [democracy.csv](https://raw.githubusercontent.com/POLS503/pols_503_sp15/master/data/democracy.csv) into the directory of that project.
 3. Do your analyses in an R markdown document.
 4. Submit a zipped file of the directory with your R project through Canvas. This should contain all the materials for another person to run your R Markdown fil  This should contain:
 
@@ -30,7 +30,7 @@ Some other guidance
 
 ## Data
 
-The file `democracy.csv` contains data from Przeworski et. al, *Demoracy and Deveolpment: Political Institutions and Well-Being in the Worlds, 1950-1990* [^1].
+The file [democracy.csv](https://raw.githubusercontent.com/POLS503/pols_503_sp15/master/data/democracy.csv) contains data from Przeworski et. al, *Demoracy and Deveolpment: Political Institutions and Well-Being in the Worlds, 1950-1990* [^1].
 The data have been slightly recoded, to make higher values indicate higher levels of political liberty and democracy.
 
 | Variable | Description |

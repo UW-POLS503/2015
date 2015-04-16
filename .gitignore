@@ -6,6 +6,7 @@
 *.out
 *.snm
 *.toc
+*.vrb
 *~
 *.Rhistory
 *_cache

@@ -157,7 +157,6 @@ dat2 <- expand.grid(A = seq(-3, 5, by = 0.05),
   \item $\bar{X}, \bar{Y}$ is in the regression line
   \item $\sum X_{i} E_{i} = 0$
     \begin{align*}
-      \footnotesize
       \sum X_{i} E_{i} &= \sum X_{i} (Y_{i} - A - B X_{i})  \\
       &= \sum X_{i} Y_{i} - A \sum X_{i} - B \sum X_{i} = 0
     \end{align*}

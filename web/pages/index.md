@@ -181,6 +181,7 @@ Given that this is my first time teaching this course, I expect many adjustments
 
 ### Friday, April 10
 
+- Lab document: [.Rmd](labs/lab2.Rmd), [html](labs/lab2.html)
 - Readings:
 
     - Hadley Wickham, [Introduction to dplyr](http://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html)
@@ -189,9 +190,13 @@ Given that this is my first time teaching this course, I expect many adjustments
 
 ### Tuesday, April 14
 
-- Fox, Ch. 6, 9.3
+- [Deck 3](lectures/Lecture_03_handout.pdf), [Sampling Distribution of linear regression example](https://raw.githubusercontent.com/POLS503/pols_503_sp15/master/lectures/Sampling_Distribution_Linear_Regression.Rmd), [Multiple regression coefficient anatomy](https://github.com/POLS503/pols_503_sp15/blob/master/lectures/multiple_regression_anatomy.R)
+- Readings:
+
+    - Fox, Ch. 6, 9.3
 	
 ### Friday, April 17
+
 
 - Readings
 
