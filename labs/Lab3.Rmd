@@ -135,7 +135,7 @@ summary(lm_multi)
 ### Aside on the formula 
 Note: the first argument to the function is an R formula.  Formulas appear throughout many R functions, and have some special features of their syntax, some of which are illustrated below.  
 
-In `lm`, the formula is used to generate the exact X matrix that will be used to estimate the model.  To see the matrix being generated internally by `lm`, add the argument `x = TRUE` to the `lm()` call:
+In `lm`, the formula is used to generate the exact $X$ matrix that will be used to estimate the model.  To see the matrix being generated internally by `lm`, add the argument `x = TRUE` to the `lm()` call:
 ```{r}
 lm_multi <- lm_multi <- lm(povred ~ lnenp + maj + pr, data = iver, x = TRUE)
 lm_multi$x
@@ -170,7 +170,7 @@ Take a look at the help page for `formula`
 
 To better understand what the formula is doing, let's look at the model matrix one of the more complex formulas above generates:
 ```{r}
-lm_multi_interact <- lm(povred ~ lnenp*maj + pr, data = iver, x = TRUE)
+lm_multi_interact <- lm(povred ~ lnenp * maj + pr, data = iver, x = TRUE)
 lm_multi_interact$x
 ```
 
@@ -185,7 +185,7 @@ summary(lm_multi_log)
 You can also do other transformations such as taking the square of a variable (we'll talk more abou this substantively later in the course):
 To apply a mathematical function to a variable within the formula object, enclose it in `I()`.
 ```{r}
-lm_multi_sq <- lm(povred ~ enp + I(enp^2) + maj + pr, data = iver)
+lm_multi_sq <- lm(povred ~ enp + I(enp ^ 2) + maj + pr, data = iver)
 summary(lm_multi_sq)
 ```
 
