@@ -50,28 +50,27 @@ This dataset is cross sectional data on industrial democracies. Containing:
 Source of data and model Torben Iversen and David Soskice, 2002, ``Why do some democracies redistribute more than others?'' Harvard University.
 
 ```{r echo=FALSE, results='hide', fig.show='hide', message = FALSE}
-iver <- read_csv("iver.csv")
+iver <- read_csv("iver2.csv")
 dim(iver)
 iver
 head(iver)
 
 # Summarise iver variables
 iver %>% 
-	select(- cty) %>%
-	summarise_each(funs(mean, sd))
+	summarise_each(funs(mean, sd), - cty, - elec_sys)
 
-mean <- summarise_each(iver, funs(mean), - cty)
-sd <- summarise_each(iver, funs(sd), - cty)
-min <- summarise_each(iver, funs(min), - cty)
-max <- summarise_each(iver, funs(max), - cty)
-median <- summarise_each(iver, funs(median), - cty)
+mean <- summarise_each(iver, funs(mean), - cty, - elec_sys)
+sd <- summarise_each(iver, funs(sd), - cty, - elec_sys)
+min <- summarise_each(iver, funs(min), - cty, - elec_sys)
+max <- summarise_each(iver, funs(max), - cty, - elec_sys)
+median <- summarise_each(iver, funs(median), - cty, - elec_sys)
 rbind(mean, sd, min, max, median) %>%
   mutate(statistic = c("mean", "sd","min", "max", "median"))
 
 # using tidyr
 # Method 1: make long, then summarize over each variable
 iver_long <- iver %>%
-	gather(variable, value, - cty)
+	gather(variable, value, - cty, - elec_sys)
 
 iver_summary <- iver_long %>%
 	group_by(variable) %>%
@@ -84,7 +83,7 @@ iver_summary <- iver_long %>%
 # Method 2
 # See what each step is doing
 iver_summary2 <- iver %>%
-	summarise_each(funs(mean, sd, min, max, median), - cty) %>%
+	summarise_each(funs(mean, sd, min, max, median), - cty, - elec_sys) %>%
 	gather(variable_stat, value) %>%
 	separate(variable_stat, c("variable", "stat"), sep = "_") %>%
 	spread(stat, value)
@@ -128,16 +127,17 @@ summary(lm_bivar)
 
 **A multivariate model:**
 ```{r}
-lm_multi <- lm(povred ~ lnenp + maj + pr, data = iver)
+lm_multi <- lm(povred ~ lnenp + elec_sys, data = iver)
 summary(lm_multi)
 ```
 
 ### Aside on the formula 
+
 Note: the first argument to the function is an R formula.  Formulas appear throughout many R functions, and have some special features of their syntax, some of which are illustrated below.  
 
 In `lm`, the formula is used to generate the exact $X$ matrix that will be used to estimate the model.  To see the matrix being generated internally by `lm`, add the argument `x = TRUE` to the `lm()` call:
 ```{r}
-lm_multi <- lm_multi <- lm(povred ~ lnenp + maj + pr, data = iver, x = TRUE)
+lm_multi <- lm_multi <- lm(povred ~ lnenp + elec_sys, data = iver, x = TRUE)
 lm_multi$x
 ```
 
@@ -151,13 +151,13 @@ summary(lm_multi_noc)
 
 **A new model with multiple regressors and an interaction:**
 ```{r}
-lm_multi_interact <- lm(povred ~ lnenp * maj + pr, data = iver)
+lm_multi_interact <- lm(povred ~ lnenp * elec_sys, data = iver)
 summary(lm_multi_interact)
 ```
 
 If you want to add an interaction separately from the individual variables being interacted:
 ```{r}
-lm_multi_interact <- lm(povred ~ lnenp + maj + pr + lnenp:maj, data = iver)
+lm_multi_interact <- lm(povred ~ lnenp + elec_sys + lnenp:elec_sys, data = iver)
 summary(lm_multi_interact)
 ```
 
@@ -170,7 +170,7 @@ Take a look at the help page for `formula`
 
 To better understand what the formula is doing, let's look at the model matrix one of the more complex formulas above generates:
 ```{r}
-lm_multi_interact <- lm(povred ~ lnenp * maj + pr, data = iver, x = TRUE)
+lm_multi_interact <- lm(povred ~ lnenp * elec_sys, data = iver, x = TRUE)
 lm_multi_interact$x
 ```
 
@@ -178,14 +178,14 @@ lm_multi_interact$x
 
 (This transformation is just illustrating that you have the option of taking the log of a variable *inside* the formula, rather than creating a new variable prior to fitting).
 ```{r}
-lm_multi_log <- lm(povred ~ log(enp) + maj + pr, data = iver)
+lm_multi_log <- lm(povred ~ log(enp) + elec_sys, data = iver)
 summary(lm_multi_log)
 ```
 
 You can also do other transformations such as taking the square of a variable (we'll talk more abou this substantively later in the course):
 To apply a mathematical function to a variable within the formula object, enclose it in `I()`.
 ```{r}
-lm_multi_sq <- lm(povred ~ enp + I(enp ^ 2) + maj + pr, data = iver)
+lm_multi_sq <- lm(povred ~ enp + I(enp ^ 2) + elec_sys, data = iver)
 summary(lm_multi_sq)
 ```
 
@@ -245,6 +245,7 @@ iver$cty[3:5]
 
 
 ### Matrices
+
 Matrices are collections of equal-length vectors in row and column arrangement.  Matrices store information in a rectangular format, so look like dataframes, but are less flexible as all data must be the same type (you can't mix character and numeric data, for example).  At first when you start working in R, matrices will be in use behind the scenes more than something you work with much.  
 
 As an example, see what happens when we convert our dataframe into a matrix:
@@ -290,22 +291,32 @@ mydata <- data.frame(variable1 = a.vector,
 										 variable2 = another.vector,
 										 variable3 = yet another vector)
 ```
+An alternative function to create a data frame is `data_frame` from the **dplyr** package.
+It differs from `data.frame` in a few of its defaults: by default it does not convert character vectors to factors, and it does not not rename columns.
+```{r eval=FALSE}
+mydata <- data_frame(variable1 = a_vector,
+										 variable2 = another_vector,
+										 variable3 = yet_another_vector)
+```
 
 An example:
 ```{r}
-mydata <- data.frame(somenumbers = seq(1,50,7),
-										 somewords = c("pounce", "bounce", "IPA", "crescent"),
-										 is.silly = c(TRUE, FALSE, FALSE, TRUE, FALSE, FALSE,
-										 						  TRUE, TRUE))
+mydata <- data_frame(somenumbers = seq(2, 16, by = 2),
+										 somewords = rep(c("pounce", "bounce", "IPA", "crescent"), 2),
+										 a_number = 5,
+										 is_silly = rep(c(TRUE, FALSE), each = 4))
 mydata
 ```
 
 Note, vectors must be either the same length or even multiples of each other's length (shorter vectors will be repeated)
 
-mydata <- data.frame(somenumber = seq(1,50,3),
-)
+```{r eval = FALSE}
+mydata <- data_frame(somenumber = seq(1,50,3),)
+```
+
 
 ### Lists
+
 Finally, another object type is the list, which can store different types of R objects (kind like a vector, but instead of values of a variable, they're objects we might want to save and come back to).  Lists are everywhere. Many of the functions we use (such as `lm()`) return lists.  Dataframes are even a special kind of list!
 
 List elements have names. The easiest way to access an element of a list is to use the `$` and the name (just like looking at a variable in a dataframe).
@@ -382,19 +393,19 @@ Let's try this with our model.
 
 *hint (refer to dataframe info above for how to create a new dataframe for newdata argument)*
 ```{r}
-predict(lm_multi, newdata = data.frame(lnenp = log(2), maj = 1, pr = 0),
+predict(lm_multi, newdata = data_frame(lnenp = log(2), elec_sys = "maj"),
 				interval = "confidence")
-predict(lm_multi, newdata = data.frame(lnenp = log(seq(1:5)), maj = 1, pr = 0),
+predict(lm_multi, newdata = data_frame(lnenp = log(seq(1:5)), elec_sys = "maj"),
 				interval = "confidence")
 ```
 or
 ```{r}
-xnew <-  data.frame(lnenp = log(seq(1:5)), maj = 1, pr = 0)
+xnew <-  data_frame(lnenp = log(seq(1:5)), elec_sys = "maj")
 predict(lm_multi, newdata = xnew, interval="confidence")
 ```
 or
 ```{r}
-data.frame(lnenp = log(seq(1:5)), maj = 1, pr = 0) %>%
+data_frame(lnenp = log(seq(1:5)), elec_sys = "maj") %>%
 	predict(lm_multi, newdata=., interval="confidence")
 ```
 
@@ -411,30 +422,26 @@ lnenp_hyp <- seq(min(iver$lnenp), max(iver$lnenp), 0.1)
 
 Calculate expected values of `povred` for each observed level of `lnenp`, setting the covariates to an fixed level, often to the mean (illustrating the effect of a change in `lnenp`, all else equal).  Remember to keep variable names identical to those in the model!
 ```{r}
-yhyp <- data.frame(lnenp = iver$lnenp, 
-									 maj = mean(iver$maj), 
-									 pr = mean(iver$pr)) %>%
+yhyp <- data_frame(lnenp = iver$lnenp, 
+									 elec_sys = "maj") %>%
 	predict(lm_multi, newdata = . , interval = "confidence")
 ```
 
 We'll use these values of X and y to plot the regression line over a scatterplot of the observed data using **ggplot2**:
 ```{r}
-plot <- ggplot(iver, aes(x = lnenp, y = povred, label = cty))
+plot <- ggplot(iver, aes(x = lnenp, y = povred, label = cty)) +
+	geom_line(aes(x = lnenp, y = yhyp[ , 1]))
+plot
 ```
 Now add confidence intervals,
 ```{r}
 plot <- plot +
-	geom_ribbon(aes(ymin = yhyp[ , 2], ymax = yhyp[ , 3]),
-							alpha = (1 / 3)) + geom_line(aes(x = lnenp, y = yhyp[ , 1]))
+	geom_ribbon(aes(ymin = yhyp[ , 2], ymax = yhyp[ , 3]), alpha = (1 / 3))
 plot
 ```
-Finally, add the original data with text labels.
+Finally, add the original data with text labels,
 ```{r}
-plot + geom_text(data = filter(iver, maj == 1), color = "red", size = 3) +
-	geom_text(data = filter(iver, pr == 1), color = "blue", size = 3) +
-	geom_text(data = filter(iver, unam == 1), color = "green", size = 3) +
-	theme_minimal()
+plot + geom_text(size = 3) +	theme_minimal()
 ```
 
-**CHECK**
-!!!!! ???? There has to be a better way to easily color by party system and include a legend - appreciate that this is b/c it's a set of dummies rather than a single factor variable, but surely there's a better solution?
+
