@@ -1,10 +1,10 @@
 ---
-title: "POLS 503 Lab 3"
+title: "POLS 503: Lab 3"
 author: "Carolina Johnson"
-date: "Friday, April 17, 2015"
+date: "April 17, 2015"
 output: html_document
 ---
-```{r echo=FALSE,results='hide'}
+```{r echo = FALSE, results = 'hide'}
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 ```
 
@@ -46,7 +46,7 @@ This dataset is cross sectional data on industrial democracies. Containing:
 `unam`    Unanimity government dummy (Switzerland)
 --------- ----------------------------------------
 
-Source of data & (and model for plot): Torben Iversen and David Soskice, 2002, “Why do some democracies redistribute more than others?” Harvard University.
+Source of data and model Torben Iversen and David Soskice, 2002, ``Why do some democracies redistribute more than others?'' Harvard University.
 
 ```{r echo=FALSE, results='hide', fig.show='hide'}
 iver <- read.csv("iver.csv", as.is=TRUE)
@@ -70,6 +70,7 @@ lnenp.plot
 ```
 
 ## Regression!
+
 The basic command for linear regression in R is `lm()`. A call to this function takes the generic form illustrated below:
 ```{r eval=FALSE}
 res <- lm(y ~ x1 + x2 + x3, data = your.dataframe)
@@ -85,8 +86,8 @@ Let's run a regression using the Iverson and Soskice data.  We save the regressi
 
 **A simple bivariate model:**
 ```{r}
-lm.bivar <- lm(povred ~ lnenp, data = iver)
-summary(lm.bivar)
+lm_bivar <- lm(povred ~ lnenp, data = iver)
+summary(lm_bivar)
 ```
 
 *Challenge:*
@@ -96,8 +97,8 @@ summary(lm.bivar)
 
 **A multivariate model:**
 ```{r}
-lm.multi <- lm(povred ~ lnenp + maj + pr, data = iver)
-summary(lm.multi)
+lm_multi <- lm(povred ~ lnenp + maj + pr, data = iver)
+summary(lm_multi)
 ```
 
 ### Aside on the formula 
@@ -105,54 +106,56 @@ Note: the first argument to the function is an R formula.  Formulas appear throu
 
 In `lm`, the formula is used to generate the exact X matrix that will be used to estimate the model.  To see the matrix being generated internally by `lm`, add the argument `x = TRUE` to the `lm()` call:
 ```{r}
-lm.multi <- lm.multi <- lm(povred ~ lnenp + maj + pr, data = iver, x = TRUE)
-lm.multi$x
+lm_multi <- lm_multi <- lm(povred ~ lnenp + maj + pr, data = iver, x = TRUE)
+lm_multi$x
 ```
 
 We'll look at this again in one of the more complicated model specifications below.
 
 **A new model with multiple regressors and no constant:**
 ```{r}
-lm.multi.noC <- lm(povred ~ -1 + lnenp + maj + pr + unam, data = iver)
-summary(lm.multi.noC)
+lm_multi_noc <- lm(povred ~ -1 + lnenp + maj + pr + unam, data = iver)
+summary(lm_multi_noc)
 ```
 
 **A new model with multiple regressors and an interaction:**
 ```{r}
-lm.multi.interact <- lm(povred ~ lnenp*maj + pr, data = iver)
-summary(lm.multi.interact)
+lm_multi_interact <- lm(povred ~ lnenp * maj + pr, data = iver)
+summary(lm_multi_interact)
 ```
 
 If you want to add an interaction separately from the individual variables being interacted:
 ```{r}
-lm.multi.interact <- lm(povred ~ lnenp + maj + pr + lnenp:maj, data = iver)
-summary(lm.multi.interact)
+lm_multi_interact <- lm(povred ~ lnenp + maj + pr + lnenp:maj, data = iver)
+summary(lm_multi_interact)
 ```
 
 ### Second aside on formulas
+
 To better understand what the formula is doing, let's look at the model matrix one of the more complex formulas above generates:
 ```{r}
-lm.multi.interact <- lm(povred ~ lnenp*maj + pr, data = iver, x = TRUE)
-lm.multi.interact$x
+lm_multi_interact <- lm(povred ~ lnenp*maj + pr, data = iver, x = TRUE)
+lm_multi_interact$x
 ```
 
 **A new model with multiple regressors and a transformation:**
+
 (This transformation is just illustrating that you have the option of taking the log of a variable *inside* the formula, rather than creating a new variable prior to fitting).
 ```{r}
-lm.multi.log <- lm(povred ~ log(enp) + maj + pr, data = iver)
-summary(lm.multi.log)
+lm_multi_log <- lm(povred ~ log(enp) + maj + pr, data = iver)
+summary(lm_multi_log)
 ```
 
 You can also do other transformations such as taking the square of a variable (we'll talk more abou this substantively later in the course):
 To apply a mathematical function to a variable within the formula object, enclose it in `I()`.
 ```{r}
-lm.multi.sq <- lm(povred ~ enp + I(enp^2) + maj + pr, data = iver)
-summary(lm.multi.sq)
+lm_multi_sq <- lm(povred ~ enp + I(enp^2) + maj + pr, data = iver)
+summary(lm_multi_sq)
 ```
 
 But what is this `lm()` object? Is it a dataframe?
 ```{r}
-is.data.frame(lm.multi)
+is.data.frame(lm_multi)
 ```
 No!  
 
@@ -175,13 +178,13 @@ Vectors are collections of single values, with a length equal to the number of i
 
 For example, here is a vector of names:
 ```{r}
-names <- c("Sarah", "Melina", "Jefferson", "Brad", "Ashley")
-print(names)
+persons <- c("Sarah", "Melina", "Jefferson", "Brad", "Ashley")
+print(persons)
 ```
 
 And here is a vector of numbers:
 ```{r}
-numbers <- c(1,2,3,4,5,6,7,8,9,10)
+numbers <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 print(numbers)
 ```
 Another way to creat the same vector could have been:
@@ -192,7 +195,7 @@ number_sequence <- seq(from = 1, to = 10, by = 1)
 You can extract an item from a vector using square brackets:
 ```{r}
 numbers[5]
-names[2:3]
+persons[2:3]
 ```
 
 Single variables in our dataframe are *also* vectors. This is how we can do operations on them such as calculating the mean.
@@ -210,35 +213,39 @@ Matrices are collections of equal-length vectors in row and column arrangement. 
 
 As an example, see what happens when we convert our dataframe into a matrix:
 ```{r}
-iver.matrix <- as.matrix(iver)
-iver.matrix
+iver_matrix <- as.matrix(iver)
+iver_matrix
 ```
 Why is everything in quotation marks now?
 
 You can index a matrix using square brackets, indicating first the row you want, then the column. This is the same way that you could directly extract specific values from a dataframe
 
 ```{r}
-iver.matrix[2:4,] # a blank before or after the comma indicates all rows or columns, respectively
-iver.matrix[8,4]
+iver_matrix[2:4, ]
+```
+A blank before or after the comma indicates all rows or columns, respectively
+```{r}
+iver_matrix[8, 4]
 ```
 
 
 ### Dataframes
+
 You've  seen these a lot! Now there are all kinds of tools to exploit the features of dataframes, many of which you're familiar with.  
 
 For the sake of completeness, here's the equivalent "base R" way of pulling out (or indexing) a dataframe to select rows or colums that meet certain criteria (you will likely see this in other's code or in help files etc as you explore resources on your ow):
 
 First, let's select all countries with a majoritarian system of government:
 ```{r}
-iver[iver$maj==1, ] # this selects all columns
+iver[iver$maj == 1, ] # this selects all columns
 ```
 
 Next let's subset the data to all majoritarian countries but only keep the columns povred and lnenp (for example)
 ```{r}
-iver[iver$maj==1, c("povred", "lnenp")]
+iver[iver$maj == 1, c("povred", "lnenp")]
 
 #let's keep the country names too!
-iver[iver$maj==1, c("cty", "povred", "lnenp")]
+iver[iver$maj == 1, c("cty", "povred", "lnenp")]
 ```
 
 Here's how you create a new dataframe from scratch:
@@ -252,7 +259,8 @@ An example:
 ```{r}
 mydata <- data.frame(somenumbers = seq(1,50,7),
 										 somewords = c("pounce", "bounce", "IPA", "crescent"),
-										 is.silly = c(TRUE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE))
+										 is.silly = c(TRUE, FALSE, FALSE, TRUE, FALSE, FALSE,
+										 						  TRUE, TRUE))
 mydata
 ```
 
@@ -276,24 +284,26 @@ To find out what in a list us `str()` and/or `names()`
     b. The residuals (what are the residuals?)
     c. The fitted values (what are the fitted values?)
 
+To extract the coefficients,
 ```{r}
-# A:
-coefficients.multi <- lm.multi$coefficients
-coefficients.multi
+coefficients_multi <- lm_multi$coefficients
+coefficients_multi
 # or
-coef(lm.multi) #This is making use of the "attributes" of the lm object, a programming detail we're not going to talk about today
-
-# B
-residuals.multi <- lm.multi$residuals
-residuals.multi
+coef(lm_multi)
+```
+To extract the residuals,
+```{r}
+residuals_multi <- lm_multi$residuals
+residuals_multi
 #or
-resid(lm.multi)
+resid(lm_multi)
+```
 
-# C
-fitted.multi <- lm.multi$fitted.values
-fitted.multi
+```{r}
+fitted_multi <- lm_multi$fitted.values
+fitted_multi
 #or
-fitted(lm.multi)
+fitted(lm_multi)
 ```
 
 *Challenge:*
@@ -302,16 +312,18 @@ fitted(lm.multi)
 
 To extract standard errors of the estimates:
 ```{r}
-se.multi <- lm.multi %>% vcov() %>% diag %>% sqrt
+se_multi <- lm_multi %>% vcov() %>% diag %>% sqrt
 ```
 This calculates the standard errors by calculating the square root of the diagonal of the variance-covariance matrix of the parameters of the model object.  `vcov()` is an example of a function that has a specific "method" for different types of objects: it knows we have an  `lm` object and acts accordingly.
 
 ## Returning to regression
 
-### Fitted values and predictions for new or hypothetical data
+### Fitted values and predictions
+
+hypothetical data
 Another way to get the fitted values is with `predict()`:
 ```{r}
-predict(lm.multi)
+predict(lm_multi)
 ```
 
 The nice thing about predict is that it will actually let us calculate the expected values from our model for any set of real or hypothetical data with the same X variables:
@@ -332,41 +344,56 @@ Let's try this with our model.
 1. What would we expect the level of poverty reduction to be for a majoritarian country with 2 parties?
 2. What would we expect the level of poverty reduction to be for a PR country as it goes from 1 to 5 parties?
 
-*hint (refer to dataframe info above for how to create a new dataframe for newdata argument)
+*hint (refer to dataframe info above for how to create a new dataframe for newdata argument)*
 ```{r}
-#1:
-predict(lm.multi, newdata = data.frame(lnenp = log(2), maj = 1, pr = 0), interval = "confidence")
-predict(lm.multi, newdata = data.frame(lnenp = log(seq(1:5)), maj = 1, pr = 0), interval = "confidence")
-#or
+predict(lm_multi, newdata = data.frame(lnenp = log(2), maj = 1, pr = 0),
+				interval = "confidence")
+predict(lm_multi, newdata = data.frame(lnenp = log(seq(1:5)), maj = 1, pr = 0),
+				interval = "confidence")
+```
+or
+```{r}
 xnew <-  data.frame(lnenp = log(seq(1:5)), maj = 1, pr = 0)
-predict(lm.multi, newdata = xnew, interval="confidence")
-#or
-data.frame(lnenp = log(seq(1:5)), maj = 1, pr = 0) %>% predict(lm.multi, newdata=., interval="confidence")
+predict(lm_multi, newdata = xnew, interval="confidence")
+```
+or
+```{r}
+data.frame(lnenp = log(seq(1:5)), maj = 1, pr = 0) %>%
+	predict(lm_multi, newdata=., interval="confidence")
 ```
 
 ### Plotting regression results
+
 Plotting regression results can be even more informative. Informationally dense, and more intuitive than regression tables!
 
-To plot a regression line (not just using the `lm` smoother in ggplot), you can either fit a line to the observed values of X and the fitted values and CIs from `predict`, or fit a line to hypothetical data to illustrate the estimated relationship (the latter can help you to have smoother confidence intervals where you have fewer observations).
+To plot a regression line (not just using the `lm` smoother in ****ggplot2**2**), you can either fit a line to the observed values of X and the fitted values and CIs from `predict`, or fit a line to hypothetical data to illustrate the estimated relationship (the latter can help you to have smoother confidence intervals where you have fewer observations).
 
 Generate a range of hypothetical values for a key variable of interest:
 ```{r}
-lnenp.hyp <- seq(min(iver$lnenp), max(iver$lnenp), 0.1)
+lnenp_hyp <- seq(min(iver$lnenp), max(iver$lnenp), 0.1)
 ```
 
 Calculate expected values of `povred` for each observed level of `lnenp`, setting the covariates to an fixed level, often to the mean (illustrating the effect of a change in `lnenp`, all else equal).  Remember to keep variable names identical to those in the model!
 ```{r}
-yhyp <- data.frame(lnenp = iver$lnenp, maj = mean(iver$maj), pr = mean(iver$pr)) %>%
-	predict(lm.multi, newdata = . , interval = "confidence")
+yhyp <- data.frame(lnenp = iver$lnenp, 
+									 maj = mean(iver$maj), 
+									 pr = mean(iver$pr)) %>%
+	predict(lm_multi, newdata = . , interval = "confidence")
 ```
 
-We'll use these values of X and y to plot the regression line over a scatterplot of the observed data using ggplot2:
+We'll use these values of X and y to plot the regression line over a scatterplot of the observed data using **ggplot2**:
 ```{r}
 plot <- ggplot(iver, aes(x = lnenp, y = povred, label = cty))
-
-plot <- plot + geom_ribbon(aes(ymin = yhyp[,2], ymax = yhyp[,3]), alpha = (1/3)) + geom_line(aes(x = lnenp, y = yhyp[,1])) # adds line and CI
+```
+Now add confidence intervals,
+```{r}
+plot <- plot +
+	geom_ribbon(aes(ymin = yhyp[ , 2], ymax = yhyp[ , 3]),
+							alpha = (1 / 3)) + geom_line(aes(x = lnenp, y = yhyp[ , 1]))
 plot
-
+```
+Finally, add the original data with text labels.
+```{r}
 plot + geom_text(data = filter(iver, maj == 1), color = "red", size = 3) +
 	geom_text(data = filter(iver, pr == 1), color = "blue", size = 3) +
 	geom_text(data = filter(iver, unam == 1), color = "green", size = 3) +
