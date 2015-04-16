@@ -5,7 +5,7 @@ date: "April 17, 2015"
 output: html_document
 ---
 ```{r echo = FALSE, results = 'hide'}
-knitr::opts_chunk$set(warning = TRUE, message = FALSE)
+knitr::opts_chunk$set(warning = TRUE, message = TRUE)
 ```
 
 ## Outline
@@ -21,7 +21,7 @@ knitr::opts_chunk$set(warning = TRUE, message = FALSE)
     d. `predict()` 
     e. Plotting regression summary/expected values
 
-```{r}
+```{r, message = FALSE}
 library("dplyr")
 library("tidyr")
 library("ggplot2")
@@ -49,7 +49,7 @@ This dataset is cross sectional data on industrial democracies. Containing:
 
 Source of data and model Torben Iversen and David Soskice, 2002, ``Why do some democracies redistribute more than others?'' Harvard University.
 
-```{r eval = FALSE, echo=FALSE, results='hide', fig.show='hide'}
+```{r echo=FALSE, results='hide', fig.show='hide', message = FALSE}
 iver <- read_csv("iver.csv")
 dim(iver)
 iver
