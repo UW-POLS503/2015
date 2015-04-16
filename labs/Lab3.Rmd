@@ -37,12 +37,14 @@ library(ggplot2)
 
 This dataset is cross sectional data on industrial democracies. Containing:
 
-`povred`: Percent of citizens lifted out of poverty by taxes and transfers  
-`enp`: Natural log of effective number of parties  
-`lnenp`: Natural log of effective number of parties  
-`maj`:  Majoritarian election system dummy  
-`pr`: Proportional representation dummy  
-`unam`: Unanimity government dummy (Switzerland)
+--------- --------------------------------------- 
+`povred`  Percent of citizens lifted out of poverty by taxes and transfers  
+`enp`     Natural log of effective number of parties  
+`lnenp`   Natural log of effective number of parties  
+`maj`     Majoritarian election system dummy  
+`pr`      Proportional representation dummy  
+`unam`    Unanimity government dummy (Switzerland)
+--------- ----------------------------------------
 
 Source of data & (and model for plot): Torben Iversen and David Soskice, 2002, “Why do some democracies redistribute more than others?” Harvard University.
 
