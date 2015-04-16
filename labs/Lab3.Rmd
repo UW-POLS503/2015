@@ -49,25 +49,53 @@ This dataset is cross sectional data on industrial democracies. Containing:
 
 Source of data and model Torben Iversen and David Soskice, 2002, ``Why do some democracies redistribute more than others?'' Harvard University.
 
-```{r echo=FALSE, results='hide', fig.show='hide'}
-iver <- read.csv("iver.csv", as.is=TRUE)
+```{r eval = FALSE, echo=FALSE, results='hide', fig.show='hide'}
 iver <- read_csv("iver.csv")
 dim(iver)
 iver
 head(iver)
-summarise_each(iver, funs(mean, sd))
-mean <- summarise_each(iver, funs(mean))
-sd <- summarise_each(iver, funs(sd))
-min <- summarise_each(iver, funs(min))
-max <- summarise_each(iver, funs(max))
-median <- summarise_each(iver, funs(median))
+
+# Summarise iver variables
+iver %>% 
+	select(- cty) %>%
+	summarise_each(funs(mean, sd))
+
+mean <- summarise_each(iver, funs(mean), - cty)
+sd <- summarise_each(iver, funs(sd), - cty)
+min <- summarise_each(iver, funs(min), - cty)
+max <- summarise_each(iver, funs(max), - cty)
+median <- summarise_each(iver, funs(median), - cty)
 rbind(mean, sd, min, max, median) %>%
-	data.frame(row.names=c("mean", "sd","min", "max", "median"))
+  mutate(statistic = c("mean", "sd","min", "max", "median"))
+
+# using tidyr
+# Method 1: make long, then summarize over each variable
+iver_long <- iver %>%
+	gather(variable, value, - cty)
+
+iver_summary <- iver_long %>%
+	group_by(variable) %>%
+	summarise(mean = mean(value),
+						median = median(value),
+						min = min(value),
+						max = max(value),
+						sd = sd(value))
+
+# Method 2
+# See what each step is doing
+iver_summary2 <- iver %>%
+	summarise_each(funs(mean, sd, min, max, median), - cty) %>%
+	gather(variable_stat, value) %>%
+	separate(variable_stat, c("variable", "stat"), sep = "_") %>%
+	spread(stat, value)
+
 
 povred.plot <- ggplot(iver, aes(povred)) + geom_histogram()
 povred.plot
+
 enp.plot <- ggplot(iver, aes(enp)) + geom_histogram()
 enp.plot
+
 lnenp.plot <- ggplot(iver, aes(lnenp)) + geom_histogram()
 lnenp.plot
 ```
