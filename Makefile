@@ -1,10 +1,14 @@
 SHELL = bash
+R = Rscript
 WEBDIR = web
 LECTURE_DIR = lectures
 LAB_DIR = labs
 HW_DIR = hw
 
-all :build
+WEB_RMD_FILES = $(wildcard $(WEBDIR)/pages/*.Rmd)
+WEB_MD_FILES = $(WEB_RMD_FILES:%.Rmd=%.md)
+
+all : build
 
 lectures:
 	make -C lectures
@@ -21,10 +25,15 @@ hw:
 	-mkdir $(WEBDIR)/files/hw
 	cp $(HW_DIR)/hw*.html $(WEBDIR)/files/hw
 
-build: lectures hw labs
+web: $(WEB_MD_FILES)
+
+web/pages/%.md: web/pages/%.Rmd
+	cd web/pages && $(R) -e 'knitr::knit("$(notdir $^)", output="$(notdir $@)")'
+
+build: lectures hw labs web
 	cd $(WEBDIR); source venv/bin/activate; nikola build
 
-deploy: lectures hw labs
+deploy: build
 	cd $(WEBDIR); source venv/bin/activate; nikola github_deploy
 
-.PHONY: lectures build build-deploy labs hw
+.PHONY: lectures build build-deploy labs hw web

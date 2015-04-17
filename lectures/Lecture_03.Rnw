@@ -137,7 +137,7 @@ sum((y + 7 - 10 * x) ^ 2)
 \end{frame}
 
 \begin{frame}
-\frametitle{Least Squares coefficients are unidentified if ${(X' X)}^{-1}$ does not exist
+\frametitle{Least Squares coefficients are unidentified if ${(X' X)}^{-1}$ does not exist}
 
 \begin{itemize}
 \item Common cases in which ${(X' X)^{-1}}$ does not exist:
