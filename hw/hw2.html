@@ -95,12 +95,10 @@ img {
 </tbody>
 </table>
 <ol style="list-style-type: lower-alpha">
-<li>In R, Create a matrix <span class="math">\(X\)</span> comprised of three columns: a column of ones, a columnmade of the variable year, and a column made up of the variable women.Create a matrix <span class="math">\(y\)</span> comprised of a single column, made up of the variable finish. Now compute the following using R’s matrix commands (note that you will need to use the matrix multiplication operator <code>%*%</code>): <span class="math">\[
+<li><p>In R, Create a matrix <span class="math">\(X\)</span> comprised of three columns: a column of ones, a columnmade of the variable year, and a column made up of the variable women.Create a matrix <span class="math">\(y\)</span> comprised of a single column, made up of the variable finish. Now compute the following using R’s matrix commands (note that you will need to use the matrix multiplication operator <code>%*%</code>): <span class="math">\[
    b = (X' X)^{-1} X' y
-   \]</span> Report the result of this calculation.</li>
-</ol>
-<p>See <a href="http://pols503.github.io/pols_503_sp15/matrices_in_r.html">Matrices in R</a> for more information on how to use matrices in R.</p>
-<ol start="2" style="list-style-type: lower-alpha">
+   \]</span> Report the result of this calculation.</p>
+<p>See <a href="http://pols503.github.io/pols_503_sp15/matrices_in_r.html">Matrices in R</a> for more information on how to use matrices in R.</p></li>
 <li><p>Using the function <code>lm</code>, run a regression of <code>finish</code> on <code>year</code> and <code>women</code>. Compare the results the calculation you did in part <em>a</em>.</p></li>
 <li><p>Make a nice plot summarizing this regression. On a single graph, plot the data and the regression line. Make sure the graph is labeled nicely, so that anyone who does not know your variable names could still read it.</p></li>
 <li><p>Rerun the regression, adding an interaction between <code>women</code> and <code>year</code>.</p></li>
@@ -115,18 +113,8 @@ img {
 <p>This question will use a dataset included with R.</p>
 <pre class="r"><code>data(&quot;anscombe&quot;)</code></pre>
 <p>The dataset consists of 4 seperate datasets each with an <span class="math">\(x\)</span> and <span class="math">\(y\)</span> variable. The original dataset is not a tidy dataset. The following code creates a tidy dataset of the anscombe data that is easier to analyze than the</p>
-<pre class="r"><code>library(&quot;dplyr&quot;)</code></pre>
-<pre><code>## 
-## Attaching package: 'dplyr'
-## 
-## The following object is masked from 'package:stats':
-## 
-##     filter
-## 
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code>library(&quot;tidyr&quot;)
+<pre class="r"><code>library(&quot;dplyr&quot;)
+library(&quot;tidyr&quot;)
 anscombe2 &lt;- anscombe %&gt;%
     mutate(obs = row_number()) %&gt;%
     gather(variable_dataset, value, - obs) %&gt;%
