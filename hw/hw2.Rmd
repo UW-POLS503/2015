@@ -1,5 +1,5 @@
 ---
-title: Homework 2
+title: "POLS/CSSS 503: Homework 2"
 author: Christopher Adolph, Jeffrey B. Arnold
 date: April 16, 2015
 ---
@@ -10,7 +10,7 @@ date: April 16, 2015
 This problem uses [sprinters.csv](https://raw.githubusercontent.com/POLS503/pols_503_sp15/master/data/sprinters.csv) which contains the winning times from the \lnt{100} meter sprint in Olympic competitions going back to 1900.[^1]
 
 
-The file `sprinters.csv`. 
+The dataset `sprinters` contains the following variables:
 
 | Variable | Description |
 |:----|:----|
@@ -29,7 +29,7 @@ a. In R, Create a matrix $X$ comprised of three columns: a column of
    $$
    Report the result of this calculation.
    
-   See [Matrices in R](http://pols503.github.io/pols_503_sp15/matrices_in_r.html) for more information on how to use matrices in R.
+    See [Matrices in R](http://pols503.github.io/pols_503_sp15/matrices_in_r.html) for more information on how to use matrices in R.
 
 b. Using the function `lm`, run a regression of `finish` on `year` and `women`.
    Compare the results the calculation you did in part *a*.
@@ -62,7 +62,7 @@ data("anscombe")
 The dataset consists of 4 seperate datasets each with an $x$ and $y$ variable.
 The original dataset is not a tidy dataset.
 The following code creates a tidy dataset of the anscombe data that is easier to analyze than the 
-```{r}
+```{r message=FALSE,results='hide'}
 library("dplyr")
 library("tidyr")
 anscombe2 <- anscombe %>%
@@ -81,9 +81,10 @@ b. Create a scatter plot Hint: you can do this easily with `facet_wrap`.
 
 This problem relates to your own research and final paper.
 
-a. Load your data into R.
-a. Describe your data and the variables in your data.
-b. Summarize your data. Use both numerical and graphical summaries. 
+a. Describe your data. Do you have it in a form that you can load it into R? What variables does it include? What are their descriptions and types?
+b. Describe, in as precise terms as possible, the distribution of the outcome varaible you plan to use. If you have the data in hand, a histogram would be ideal; if you do not, give a verbal description of what you expect the distribution to look like. Be sure to indicate if the data are continuous or categorical.Describe in 
+c. What challenges would your data pose for analysis by least squares regression? Be sure to discuss any potential violations of the assumptions of the GaussMarkov theorem, as well as any other complications or difficulties you see in
+modeling your data.
 
 If you do not have data at this point, talk to me ASAP. 
 It's okay if you end up doing something different for your final paper, or are still unsure of you analysis.
