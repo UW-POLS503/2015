@@ -31,8 +31,7 @@ library("readr")
 
 ## Reading in data review:
 
-1. Download Iverson and Soskice data
-    a. (alternatively, see if you can figure out how to read in a file directly from a webpage)
+1. Download the data [iver.csv](http://pols503.github.io/pols_503_sp15/data/iver.csv)
 2. Generate summary statistics for all variables in the dataset (number of observations, min, max, median, mean, standard deviation)
 3. Plot the distributions of each numeric variable
 
@@ -49,8 +48,13 @@ This dataset is cross sectional data on industrial democracies. Containing:
 
 Source of data and model Torben Iversen and David Soskice, 2002, ``Why do some democracies redistribute more than others?'' Harvard University.
 
-```{r echo=FALSE, results='hide', fig.show='hide', message = FALSE}
-iver <- read_csv("iver2.csv")
+```{r results='hide',echo = FALSE}
+iver <- read_csv("../data/iver.csv")
+```
+```{r eval=FALSE}
+iver <- read_csv("iver.csv")
+```
+```{r}
 dim(iver)
 iver
 head(iver)
@@ -102,12 +106,12 @@ lnenp.plot
 ## Regression!
 
 The basic command for linear regression in R is `lm()`. A call to this function takes the generic form illustrated below:
-```{r eval=FALSE}
+```{r, eval=FALSE}
 res <- lm(y ~ x1 + x2 + x3, data = your.dataframe)
 ```
 
 To see a summary of the regression results use `summary()`:
-```{r eval=FALSE}
+```{r, eval=FALSE}
 summary(res)
 ```
 
