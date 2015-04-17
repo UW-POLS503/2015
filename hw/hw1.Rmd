@@ -19,7 +19,7 @@ date: April 10, 2015
 	- Any data or other files neede to run the analyses in your R Markdown doceument.
 
 5. Turn in a paper copy of the document compiled from the analyses at lab.
-5. You can work together on this but you should each turn in your own assignments and write up your work separately.
+6. You can work together on this but you should each turn in your own assignments and write up your work separately.
    Include the names of your collaborators on your assignment.
 
 Some other guidance

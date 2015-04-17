@@ -8,9 +8,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
-<meta name="author" content="Christopher Adolph, Arnold" />
+<meta name="author" content="Christopher Adolph, Jeffrey B. Arnold" />
 
-<meta name="date" content="2015-04-20" />
+<meta name="date" content="2015-04-16" />
 
 <title>Homework 2</title>
 
@@ -63,8 +63,8 @@ img {
 
 <div id="header">
 <h1 class="title">Homework 2</h1>
-<h4 class="author"><em>Christopher Adolph, Arnold</em></h4>
-<h4 class="date"><em>April 20, 2015</em></h4>
+<h4 class="author"><em>Christopher Adolph, Jeffrey B. Arnold</em></h4>
+<h4 class="date"><em>April 16, 2015</em></h4>
 </div>
 
 
@@ -95,9 +95,12 @@ img {
 </tbody>
 </table>
 <ol style="list-style-type: lower-alpha">
-<li><p>In R, Create a matrix <span class="math">\(X\)</span> comprised of three columns: a column of ones, a columnmade of the variable year, and a column made up of the variable women. Create a matrix <span class="math">\(y\)</span> comprised of a single column, made up of the variable finish. Now compute the following using R’s matrix commands (note that you will need to use the matrix multiplication operator <code>%*%</code>): <span class="math">\[
+<li>In R, Create a matrix <span class="math">\(X\)</span> comprised of three columns: a column of ones, a columnmade of the variable year, and a column made up of the variable women.Create a matrix <span class="math">\(y\)</span> comprised of a single column, made up of the variable finish. Now compute the following using R’s matrix commands (note that you will need to use the matrix multiplication operator <code>%*%</code>): <span class="math">\[
    b = (X' X)^{-1} X' y
-   \]</span> Report result of this calculation.</p></li>
+   \]</span> Report the result of this calculation.</li>
+</ol>
+<p>See <a href="http://pols503.github.io/pols_503_sp15/matrices_in_r.html">Matrices in R</a> for more information on how to use matrices in R.</p>
+<ol start="2" style="list-style-type: lower-alpha">
 <li><p>Using the function <code>lm</code>, run a regression of <code>finish</code> on <code>year</code> and <code>women</code>. Compare the results the calculation you did in part <em>a</em>.</p></li>
 <li><p>Make a nice plot summarizing this regression. On a single graph, plot the data and the regression line. Make sure the graph is labeled nicely, so that anyone who does not know your variable names could still read it.</p></li>
 <li><p>Rerun the regression, adding an interaction between <code>women</code> and <code>year</code>.</p></li>
@@ -109,6 +112,40 @@ img {
 </div>
 <div id="problem-2" class="section level2">
 <h2>Problem 2</h2>
+<p>This question will use a dataset included with R.</p>
+<pre class="r"><code>data(&quot;anscombe&quot;)</code></pre>
+<p>The dataset consists of 4 seperate datasets each with an <span class="math">\(x\)</span> and <span class="math">\(y\)</span> variable. The original dataset is not a tidy dataset. The following code creates a tidy dataset of the anscombe data that is easier to analyze than the</p>
+<pre class="r"><code>library(&quot;dplyr&quot;)</code></pre>
+<pre><code>## 
+## Attaching package: 'dplyr'
+## 
+## The following object is masked from 'package:stats':
+## 
+##     filter
+## 
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>library(&quot;tidyr&quot;)
+anscombe2 &lt;- anscombe %&gt;%
+    mutate(obs = row_number()) %&gt;%
+    gather(variable_dataset, value, - obs) %&gt;%
+    separate(variable_dataset, c(&quot;variable&quot;, &quot;dataset&quot;), sep = 1L) %&gt;%
+    spread(variable, value) %&gt;%
+    arrange(dataset, obs)</code></pre>
+<ol style="list-style-type: lower-alpha">
+<li>For each dataset: calculate the mean and standard deviations of x and y, and correlation between x and y, and run a linear regression between x and y for each dataset. How similar do you think that these datasets will look?</li>
+<li>Create a scatter plot Hint: you can do this easily with <code>facet_wrap</code>.</li>
+</ol>
+</div>
+<div id="problem-3" class="section level2">
+<h2>Problem 3</h2>
+<ol style="list-style-type: lower-alpha">
+<li>Create an R project for your analysis. Include all relevant data in that directory. Create an <code>.Rmd</code> file.</li>
+<li>Describe your data and the variables in your data.</li>
+<li>Summarize your data. Use both numerical and graphical summaries.</li>
+</ol>
+<p>If you do not have data at this point, talk to me ASAP. It’s okay if you end up doing something different for your final paper, or are still unsure of you analysis. The point of this is to get you working with your data as soon as possible, so any problems arise early and can be dealt with now, when things can be done, and not later, when it is too late.</p>
 <hr />
 <p>Derived from of Christopher Adolph, “Problem Set 2”, <em>POLS/CSSS 503</em>, University of Washington, Spring 2014. <a href="http://faculty.washington.edu/cadolph/503/503hw2.pdf">http://faculty.washington.edu/cadolph/503/503hw2.pdf</a>. Used with permission.</p>
 <p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,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" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>

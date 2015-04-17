@@ -18,7 +18,7 @@ import time
 
 # Data about this site
 BLOG_AUTHOR = "Jeffrey B. Arnold"  # (translatable)
-BLOG_TITLE = "POLS/CS&SS 503 : Advanced Quantitative Political Methodology"  # (translatable)
+BLOG_TITLE = "POLS/CS&SS 503"  # (translatable)
 # This is the main URL for your site. It will be used
 # in a prominent link
 SITE_URL = "http://pols503.github.io/pols_503_sp15/"
@@ -136,7 +136,8 @@ NAVIGATION_LINKS = {
                 ("getting_help_with_r.html", "Getting Help with R"),
                 ("install_r.html", "Installing R"),
                 ("loading_data_in_r.html", "Loading Data in R"),
-                ("r_best_practices.html", "Best Practices with R")
+                ("r_best_practices.html", "Best Practices with R"),
+                ("matrices_in_r.html", "Matrices in R")
             ),
             "Topics"
         ),
