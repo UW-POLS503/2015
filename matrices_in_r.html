@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html prefix="
+og: http://ogp.me/ns#
+article: http://ogp.me/ns/article#
+" lang="en">
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Brief Introduction to Matrices and Matrix Algebra R | POLS/CS&amp;SS 503</title>
+
+                <link href="assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+
+    
+      <link rel="canonical" href="http://pols503.github.io/pols_503_sp15/matrices_in_r.html">
+
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-144x144.png" sizes="144x144">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-152x152.png" sizes="152x152">
+            <link rel="icon" href="favicon-128.png" sizes="128x128">
+            <link rel="icon" href="favicon-96x96.png" sizes="96x96">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-60x60.png" sizes="60x60">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-57x57.png" sizes="57x57">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-76x76.png" sizes="76x76">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-114x114.png" sizes="114x114">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-72x72.png" sizes="72x72">
+            <link rel="icon" href="favicon-16x16.png" sizes="16x16">
+            <link rel="icon" href="favicon-196x196.png" sizes="196x196">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-120x120.png" sizes="120x120">
+            <link rel="icon" href="favicon-32x32.png" sizes="32x32">
+
+
+
+    
+        <!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]-->
+
+    
+
+    
+    <meta name="author" content="Jeffrey B. Arnold">
+        <meta property="og:site_name" content="POLS/CS&amp;SS 503">
+    <meta property="og:title" content="Brief Introduction to Matrices and Matrix Algebra R">
+    <meta property="og:url" content="http://pols503.github.io/pols_503_sp15/matrices_in_r.html">
+    <meta property="og:description" content="Creating Matrices
+You can create matrices with the matrix function. The first argument is a vector, and the nrow and ncol arguments specify the number of rows and columns, respectively. Note that, by ">
+    <meta property="og:type" content="article">
+    <meta property="article:published_time" content="2015-04-17T09:38:56.376917-07:00">
+
+    
+    
+
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>p
+            <a class="navbar-brand" href="http://pols503.github.io/pols_503_sp15/">
+
+                <span id="blog-title">POLS/CS&amp;SS 503</span>
+            </a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                                <li>
+<a href="index.html">Syllabus</a>
+                </li>
+<li>
+<a href="links.html">Links</a>
+            </li>
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">Homeworks<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                    <li>
+<a href="hw/hw1.html">HW 1</a>
+                    </li>
+<li>
+<a href="hw/hw2.html">HW 2</a>
+            </li>
+</ul>
+            </li>
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">Topics<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                    <li>
+<a href="getting_help_with_r.html">Getting Help with R</a>
+                    </li>
+<li>
+<a href="install_r.html">Installing R</a>
+                    </li>
+<li>
+<a href="loading_data_in_r.html">Loading Data in R</a>
+                    </li>
+<li>
+<a href="r_best_practices.html">Best Practices with R</a>
+                    </li>
+<li class="active">
+<a href="#">Matrices in R</a>
+            </li>
+</ul>
+                </li>
+<li>
+<a href="faq.html">FAQ</a>
+                </li>
+<li>
+<a href="https://canvas.uw.edu/courses/964019">Canvas</a>
+
+                
+            </li>
+</ul>
+                
+<!-- Custom search with Google-->
+<form id="search" action="//www.google.com/search" method="get" class="navbar-form pull-left">
+<input type="hidden" name="q" value="site:http://pols503.github.io/pols_503_sp15/">
+<input type="text" name="q" maxlength="255" results="0" placeholder="Search">
+</form>
+<!-- End of custom search -->
+
+
+            <ul class="nav navbar-nav navbar-right">
+                
+            </ul>
+        </div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav>
+
+<!-- End of Menubar -->
+
+<div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        <div class="row">
+            
+<article class="storypage" itemscope="itemscope" itemtype="http://schema.org/Article">
+    <header>
+            <h1 class="p-name entry-title" itemprop="headline name"><a href="#" class="u-url">Brief Introduction to Matrices and Matrix Algebra R</a></h1>
+
+        
+    </header>
+    <div class="e-content entry-content" itemprop="articleBody text">
+    <!--
+.. title: Brief Introduction to Matrices and Matrix Algebra R
+-->
+
+<h2 id="creating-matrices">Creating Matrices</h2>
+<p>You can create matrices with the <code>matrix</code> function. The first argument is a vector, and the <code>nrow</code> and <code>ncol</code> arguments specify the number of rows and columns, respectively. Note that, by default, the elements of the matrix are filled in by column.</p>
+<pre class="sourceCode r"><code class="sourceCode r">A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">0</span>), <span class="dt">nrow =</span> <span class="dv">2</span>, <span class="dt">ncol =</span> <span class="dv">2</span>)
+B &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">7</span>, <span class="dv">2</span>, <span class="dv">1</span>, -<span class="dv">3</span>, -<span class="dv">1</span>), <span class="dt">nrow =</span> <span class="dv">2</span>, <span class="dt">ncol =</span> <span class="dv">3</span>)
+C &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>:<span class="dv">4</span>, <span class="dt">nrow =</span> <span class="dv">2</span>, <span class="dt">ncol =</span> <span class="dv">2</span>)</code></pre>
+<p>The identity matrices can be created using the <code>diag</code> function. This creates the 2 x 2 diagonal matrix.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">diag</span>(<span class="dv">2</span>)</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    1    0
+## [2,]    0    1</code></pre>
+<p>However, the <code>diag</code> function is one of the more surpsing functions in R; read the "Details" section of its documentation. These all do different things:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">diag</span>(<span class="dv">3</span>)</code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    0    0
+## [2,]    0    1    0
+## [3,]    0    0    1</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">diag</span>(<span class="dt">nrow =</span> <span class="dv">3</span>)</code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    0    0
+## [2,]    0    1    0
+## [3,]    0    0    1</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">diag</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>))</code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    0    0
+## [2,]    0    2    0
+## [3,]    0    0    3</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">diag</span>(<span class="kw">matrix</span>(<span class="dv">1</span>:<span class="dv">9</span>, <span class="dt">nrow =</span> <span class="dv">3</span>, <span class="dt">ncol =</span> <span class="dv">3</span>))</code></pre>
+<pre><code>## [1] 1 5 9</code></pre>
+<p>You can also create matrices by using <code>cbind</code> to combine vectors by column,</p>
+<pre class="sourceCode r"><code class="sourceCode r">a &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)
+b &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>)
+<span class="kw">cbind</span>(a, b)</code></pre>
+<pre><code>##      a b
+## [1,] 1 4
+## [2,] 2 5
+## [3,] 3 6</code></pre>
+<p>and <code>rbind</code> to combine vectors by row,</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rbind</span>(a, b)</code></pre>
+<pre><code>##   [,1] [,2] [,3]
+## a    1    2    3
+## b    4    5    6</code></pre>
+<p>Note that <code>cbind</code> and <code>rbind</code> can take arbitrary number of arguments,</p>
+<pre class="sourceCode r"><code class="sourceCode r">c &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>)
+<span class="kw">rbind</span>(a, b, c)</code></pre>
+<pre><code>##   [,1] [,2] [,3]
+## a    1    2    3
+## b    4    5    6
+## c    7    8    9</code></pre>
+<h2 id="matrix-information">Matrix Information</h2>
+<p>To find the dimensions of a matrix use <code>dim</code>, <code>ncol</code>, or <code>nrow</code></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(B)</code></pre>
+<pre><code>## [1] 2 3</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">nrow</span>(B)</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ncol</span>(B)</code></pre>
+<pre><code>## [1] 3</code></pre>
+<p>To extract an element from a matrix use brackets. This extracts the 1st row, 2nd column from A,</p>
+<pre class="sourceCode r"><code class="sourceCode r">A[<span class="dv">1</span>, <span class="dv">2</span>]</code></pre>
+<pre><code>## [1] 3</code></pre>
+<p>This extracts the 2nd row, 1st column from A,</p>
+<pre class="sourceCode r"><code class="sourceCode r">A[<span class="dv">2</span>, <span class="dv">1</span>]</code></pre>
+<pre><code>## [1] 5</code></pre>
+<p>If you leave column blank, it extracts the entire row,</p>
+<pre class="sourceCode r"><code class="sourceCode r">A[<span class="dv">1</span>, ]</code></pre>
+<pre><code>## [1] 1 3</code></pre>
+<p>If you leave row blank, it extracts the entire column,</p>
+<pre class="sourceCode r"><code class="sourceCode r">A[ , <span class="dv">1</span>]</code></pre>
+<pre><code>## [1] 1 5</code></pre>
+<p>You can also extract multiple rows or columns,</p>
+<pre class="sourceCode r"><code class="sourceCode r">B[<span class="dv">1</span>, <span class="dv">2</span>:<span class="dv">3</span>]</code></pre>
+<pre><code>## [1]  2 -3</code></pre>
+<h2 id="matrix-operations">Matrix Operations</h2>
+<p>The common operators <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code> and <code>^</code> work elementwise. In particular, <code>*</code> is <strong>not</strong> matrix multiplication.</p>
+<pre class="sourceCode r"><code class="sourceCode r">A +<span class="st"> </span>C</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    2    6
+## [2,]    7    4</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">A +<span class="st"> </span><span class="dv">2</span></code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    3    5
+## [2,]    7    2</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">A -<span class="st"> </span>C</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    0    0
+## [2,]    3   -4</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">A -<span class="st"> </span><span class="dv">2</span></code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]   -1    1
+## [2,]    3   -2</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">A *<span class="st"> </span>C</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    1    9
+## [2,]   10    0</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">A *<span class="st"> </span><span class="dv">2</span></code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    2    6
+## [2,]   10    0</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">A /<span class="st"> </span>C</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]  1.0    1
+## [2,]  2.5    0</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">A /<span class="st"> </span><span class="dv">2</span></code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]  0.5  1.5
+## [2,]  2.5  0.0</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">A ^<span class="st"> </span>C</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    1   27
+## [2,]   25    0</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">A ^<span class="st"> </span><span class="dv">2</span></code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    1    9
+## [2,]   25    0</code></pre>
+<p>If you try to do operations with matrices that do not have comptible dimensions, you will get the following error.</p>
+<pre class="sourceCode r"><code class="sourceCode r">A +<span class="st"> </span>B</code></pre>
+<pre><code>## Error in A + B: non-conformable arrays</code></pre>
+<p>To transpose a matrix use the <code>t</code> function</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t</span>(A)</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    1    5
+## [2,]    3    0</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t</span>(B)</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    1    7
+## [2,]    2    1
+## [3,]   -3   -1</code></pre>
+<p>For matrix multiplication use the <code>%*%</code> operator</p>
+<pre class="sourceCode r"><code class="sourceCode r">A %*%<span class="st"> </span>C</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    7   15
+## [2,]    5   15</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t</span>(C) %*%<span class="st"> </span>A</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]   11    3
+## [2,]   23    9</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">A %*%<span class="st"> </span>B</code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]   22    5   -6
+## [2,]    5   10  -15</code></pre>
+<p>You can multiply a matrix by a vector, but it will treat the vector as a column vector.</p>
+<pre class="sourceCode r"><code class="sourceCode r">B %*%<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</code></pre>
+<pre><code>##      [,1]
+## [1,]   -4
+## [2,]    6</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>) %*%<span class="st"> </span>B</code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]   15    4   -5</code></pre>
+<p>but not,</p>
+<pre class="sourceCode r"><code class="sourceCode r">B %*%<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)</code></pre>
+<pre><code>## Error in B %*% c(1, 2): non-conformable arguments</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>) %*%<span class="st"> </span>B</code></pre>
+<pre><code>## Error in c(1, 2, 3) %*% B: non-conformable arguments</code></pre>
+<p>Aside: To find help for a special function, quote its name after <code>?</code>. For example,</p>
+<pre class="sourceCode r"><code class="sourceCode r">?<span class="st">"%*%"</span></code></pre>
+<p>To invert a matrix, use the <code>solve</code> function. This will calculate <span class="math"><em>A</em><sup> − 1</sup></span>,</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">solve</span>(A)</code></pre>
+<pre><code>##           [,1]        [,2]
+## [1,] 0.0000000  0.20000000
+## [2,] 0.3333333 -0.06666667</code></pre>
+<p>You cannot invert non-square matrices</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">solve</span>(B)</code></pre>
+<pre><code>## Error in solve.default(B): 'a' (2 x 3) must be square</code></pre>
+<p>Note that you should avoid using <em>solve</em> if at all possible. Inverting matrices is computationally expensive (about <span class="math"><em>O</em>(<em>n</em><sup>3</sup>)</span>), and there are more efficient methods to invert matrices using knowledge of features of the matrix.</p>
+<div class="references">
+
+</div>
+
+    </div>
+    
+</article>
+        </div>
+        <!--End of body content-->
+
+        <footer>
+            <hr>Contents © 2015  <a href="mailto:jeffrey.arnold@gmail.com">Jeffrey B. Arnold</a>  
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png"></a>.
+ <br>
+Powered by <a href="http://getnikola.com" rel="nofollow">Nikola</a> | Theme is <a href="http://bootswatch.com/flatly/" rel="nofollow">Flatly</a> <br>
+Source on <a href="http://github.com/pols503/pols_503_sp15/">github</a>
+
+            
+        </footer>
+    </div>
+</div>
+
+            <script src="assets/js/all-nocdn.js"></script>
+    
+
+
+    <script>$('a.image-reference:not(.islink)').colorbox({rel:"gal",maxWidth:"100%",maxHeight:"100%",scalePhotos:true});</script>
+    <!-- fancy dates -->
+    <script>
+    moment.locale("");
+    fancydates(0, "YYYY-MM-DD HH:mm");
+    </script>
+    <!-- end fancy dates -->
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61453123-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</body>
+</html>
