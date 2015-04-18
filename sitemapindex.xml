@@ -5,7 +5,19 @@
     xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <sitemap>
+  <loc>http://pols503.github.io/pols_503_sp15/categories/r-errors.xml</loc>
+  <lastmod>2015-04-18</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>http://pols503.github.io/pols_503_sp15/categories/writing.xml</loc>
+  <lastmod>2015-04-18</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>http://pols503.github.io/pols_503_sp15/rss.xml</loc>
+  <lastmod>2015-04-18</lastmod>
+ </sitemap>
+ <sitemap>
   <loc>http://pols503.github.io/pols_503_sp15/sitemap.xml</loc>
-  <lastmod>2015-04-17</lastmod>
+  <lastmod>2015-04-18</lastmod>
  </sitemap>
 </sitemapindex>

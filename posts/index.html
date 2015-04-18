@@ -5,15 +5,15 @@ article: http://ogp.me/ns/article#
 " lang="en">
     <head>
     <meta charset="utf-8">
-    <meta name="description" content="Tags">
+    <meta name="description" content="Site for POLS/CS&amp;SS 503: Advanced Quantitative Political Methodology (University of Washington; Spring 2015)">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Tags | POLS/CS&amp;SS 503</title>
+    <title>POLS/CS&amp;SS 503 | POLS/CS&amp;SS 503</title>
 
                 <link href="../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
 
                 <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.xml">
 
-      <link rel="canonical" href="http://pols503.github.io/pols_503_sp15/categories/index.html">
+      <link rel="canonical" href="http://pols503.github.io/pols_503_sp15/posts/index.html">
 
             <link rel="icon" href="../favicon-128.png" sizes="128x128">
             <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-76x76.png" sizes="76x76">
@@ -132,11 +132,78 @@ article: http://ogp.me/ns/article#
         <!--Body content-->
         <div class="row">
             
-<h1>Tags</h1>
-    <ul class="list-inline">
-        <li><a class="reference badge" href="r-errors.html">R errors</a></li>
-        <li><a class="reference badge" href="writing.html">writing</a></li>
-    </ul>
+<div class="postindex">
+    <article class="h-entry post-text">
+    <header>
+        <h1 class="p-name entry-title"><a href="r-warning-messages-involving-lc_type.html" class="u-url">R warning messages involving LC_TYPE</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">Jeffrey B. Arnold</span></p>
+            <p class="dateline"><a href="r-warning-messages-involving-lc_type.html" rel="bookmark"><time class="published dt-published" datetime="2015-04-18T13:50:40-07:00" title="2015-04-18 13:50">2015-04-18 13:50</time></a></p>
+        </div>
+    </header>
+    <div class="e-content entry-content">
+    <!--
+.. title: R warning messages involving LC_TYPE
+.. slug: r-warning-messages-involving-lc_type
+.. date: 2015-04-18 13:50:40 UTC-07:00
+.. tags: R errors
+.. category: 
+.. link: 
+.. description: 
+.. type: text
+-->
+
+<p>If you are running R on a Mac and get the following warning message,</p>
+<pre class="sourceCode r"><code class="sourceCode r">During startup -<span class="st"> </span>Warning messages:
+<span class="dv">1</span>:<span class="st"> </span>Setting LC_CTYPE failed, using <span class="st">"C"</span>
+<span class="dv">2</span>:<span class="st"> </span>Setting LC_COLLATE failed, using <span class="st">"C"</span>
+<span class="dv">3</span>:<span class="st"> </span>Setting LC_TIME failed, using <span class="st">"C"</span>
+<span class="dv">4</span>:<span class="st"> </span>Setting LC_MESSAGES failed, using <span class="st">"C"</span>
+<span class="dv">5</span>:<span class="st"> </span>Setting LC_PAPER failed, using <span class="st">"C"</span></code></pre>
+<p>run this command in R,</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system</span>(<span class="st">"defaults write org.R-project.R force.LANG en_US.UTF-8"</span>)</code></pre>
+<p>See this StackOverflow <a href="http://stackoverflow.com/questions/9689104/installing-r-on-mac-warning-messages-setting-lc-ctype-failed-using-c">question</a> for more information.</p>
+<div class="references">
+
+</div>
+
+    </div>
+    </article>
+    <article class="h-entry post-text">
+    <header>
+        <h1 class="p-name entry-title"><a href="writing-a-paper-for-this-course.html" class="u-url">Writing a paper for this course</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">Jeffrey B. Arnold</span></p>
+            <p class="dateline"><a href="writing-a-paper-for-this-course.html" rel="bookmark"><time class="published dt-published" datetime="2015-04-18T13:48:27-07:00" title="2015-04-18 13:48">2015-04-18 13:48</time></a></p>
+        </div>
+    </header>
+    <div class="e-content entry-content">
+    <!--
+.. title: Writing a paper for this course
+.. slug: writing-a-paper-for-this-course
+.. date: 2015-04-18 13:48:27 UTC-07:00
+.. tags: writing
+.. category: 
+.. link: 
+.. description: 
+.. type: text
+-->
+
+<p>This course requires writing a final paper. Here are a couple of articles that may help.</p>
+<ul>
+<li><p>"Writing Empirical Papers: 6 Rules &amp; 12 Recommendations", Christopher Adolph, <a href="http://faculty.washington.edu/cadolph/503/papers.pdf">http://faculty.washington.edu/cadolph/503/papers.pdf</a>. Written for previous versions of 503 course and still applicable both to this course and beyond.</p></li>
+<li><p>Gary King, "Publication, Publication", <a href="http://gking.harvard.edu/files/paperspub.pdf">http://gking.harvard.edu/files/paperspub.pdf</a>. Advice on how to turn a class project into a publication.</p></li>
+</ul>
+<div class="references">
+
+</div>
+
+    </div>
+    </article>
+</div>
+
+
+
         </div>
         <!--End of body content-->
 
