@@ -95,7 +95,7 @@ img {
 </tbody>
 </table>
 <ol style="list-style-type: lower-alpha">
-<li><p>In R, Create a matrix <span class="math">\(X\)</span> comprised of three columns: a column of ones, a columnmade of the variable year, and a column made up of the variable women.Create a matrix <span class="math">\(y\)</span> comprised of a single column, made up of the variable finish. Now compute the following using R’s matrix commands (note that you will need to use the matrix multiplication operator <code>%*%</code>): <span class="math">\[
+<li><p>In R, Create a matrix <span class="math">\(X\)</span> comprised of three columns: a column of ones, a column made of the variable year, and a column made up of the variable women. Create a matrix <span class="math">\(y\)</span> comprised of a single column, made up of the variable finish. Now compute the following using R’s matrix commands (note that you will need to use the matrix multiplication operator <code>%*%</code>): <span class="math">\[
    b = (X' X)^{-1} X' y
    \]</span> Report the result of this calculation.</p>
 <p>See <a href="http://pols503.github.io/pols_503_sp15/matrices_in_r.html">Matrices in R</a> for more information on how to use matrices in R.</p></li>
@@ -105,7 +105,7 @@ img {
 <li><p>Redo the plot with a new fit, one for each level of <code>women</code>.</p></li>
 <li><p>Suppose that an Olympics had been held in 2001. Use the <code>predict</code> function to calculate the expected finishing time for men and for women. Calculate 95% confidence intervals for the predictions.</p></li>
 <li><p>The authors of the <em>Nature</em> article were interested in predicting the finishing times for the 2156 Olympics. Use <code>predict</code> to do so, for both men and women, and report 95% confidence intervals for your results.</p></li>
-<li><p>Do you trust the model’s predictions? Is there reason to trust the 2001 prediction more than the 2156 prediction? Is any assumption of the model being abused or overworked to make this prediction? Hint: Try predicting the finishing times in the years 3000 C.E.</p></li>
+<li><p>Do you trust the model’s predictions? Is there reason to trust the 2001 prediction more than the 2156 prediction? Is any assumption of the model being abused or overworked to make this prediction? Hint: Try predicting the finishing times in the year 3000 C.E.</p></li>
 </ol>
 </div>
 <div id="problem-2" class="section level2">
@@ -123,7 +123,7 @@ anscombe2 &lt;- anscombe %&gt;%
     arrange(dataset, obs)</code></pre>
 <ol style="list-style-type: lower-alpha">
 <li>For each dataset: calculate the mean and standard deviations of x and y, and correlation between x and y, and run a linear regression between x and y for each dataset. How similar do you think that these datasets will look?</li>
-<li>Create a scatter plot Hint: you can do this easily with <code>facet_wrap</code>.</li>
+<li>Create a scatter plot of each dataset and its linear regression fit. Hint: you can do this easily with <code>facet_wrap</code>.</li>
 </ol>
 </div>
 <div id="problem-3" class="section level2">

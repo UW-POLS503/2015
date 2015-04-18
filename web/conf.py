@@ -124,7 +124,6 @@ TRANSLATIONS_PATTERN = "{path}.{lang}.{ext}"
 NAVIGATION_LINKS = {
     DEFAULT_LANG: (
         ("/index.html", "Syllabus"),
-        ("/links.html", "Links"),
         (
             (
                 ("hw/hw1.html", "HW 1"),
@@ -142,8 +141,9 @@ NAVIGATION_LINKS = {
             ),
             "Topics"
         ),
-        ("/faq.html", "FAQ"),
+        ("posts/index.html", "Posts"),
         ("https://canvas.uw.edu/courses/964019", "Canvas"),
+        ("/links.html", "Links"),
     ),
 }
 
@@ -262,7 +262,7 @@ COMPILERS = {
     # Pandoc detects the input from the source filename
     # but is disabled by default as it would conflict
     # with many of the others.
-    "pandoc2": ('.md'),
+    "pandoc2": ('.md', '.mdown', '.markdown'),
 }
 
 # Create by default posts in one file format?
@@ -341,7 +341,7 @@ WRITE_TAG_CLOUD = False
 
 # Final location for the main blog page and sibling paginated pages is
 # output / TRANSLATION[lang] / INDEX_PATH / index-*.html
-INDEX_PATH = "blog"
+INDEX_PATH = "posts"
 
 # Create per-month archives instead of per-year
 # CREATE_MONTHLY_ARCHIVE = False
@@ -810,7 +810,7 @@ SHOW_SOURCELINK = False
 
 # By default, Nikola generates RSS files for the website and for tags, and
 # links to it.  Set this to False to disable everything RSS-related.
-GENERATE_RSS = False
+GENERATE_RSS = True
 
 # RSS_LINK is a HTML fragment to link the RSS or Atom feeds. If set to None,
 # the base.tmpl will use the feed Nikola generates. However, you may want to
