@@ -197,7 +197,7 @@ Given that this is my first time teaching this course, I expect many adjustments
 	
 ### Friday, April 17
 
-- Lab Notes [.Rmd](labs/lab3.Rmd), [.html](labs/lab3.html)
+
 - Readings
 
     - @wickham_tidy_2014

@@ -181,10 +181,6 @@ Download the csv ("[comma-separated values](http://en.wikipedia.org/wiki/Comma-s
 
 Then load the file
 ```{r results='hide'}
-# do this for running the project
-gapminder <- read.csv("../data/gapminder.csv", stringsAsFactors = FALSE)
-```
-```{r eval=FALSE}
 gapminder <- read.csv("gapminder.csv", stringsAsFactors = FALSE)
 ```
 
