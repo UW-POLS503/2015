@@ -49,7 +49,7 @@ This dataset is cross sectional data on industrial democracies. Containing:
 
 Source of data and model Torben Iversen and David Soskice, 2002, ``Why do some democracies redistribute more than others?'' Harvard University.
 
-```{r echo=FALSE, results='hide', fig.show='hide', message = FALSE}
+```{r results='hide'}
 iver <- read_csv("iver2.csv")
 dim(iver)
 iver
@@ -127,9 +127,16 @@ summary(lm_bivar)
 
 **A multivariate model:**
 ```{r}
-lm_multi <- lm(povred ~ lnenp + elec_sys, data = iver)
+lm_multi <- lm(povred ~ lnenp + maj + pr, data = iver)
 summary(lm_multi)
 ```
+
+You could also specify the same model using R's default treatment of categorical variables in the formula:
+```{r}
+lm_cat <- lm(povred ~ lnenp + elec_sys, data = iver)
+summary(lm_cat)
+```
+
 
 ### Aside on the formula 
 
@@ -137,8 +144,8 @@ Note: the first argument to the function is an R formula.  Formulas appear throu
 
 In `lm`, the formula is used to generate the exact $X$ matrix that will be used to estimate the model.  To see the matrix being generated internally by `lm`, add the argument `x = TRUE` to the `lm()` call:
 ```{r}
-lm_multi <- lm_multi <- lm(povred ~ lnenp + elec_sys, data = iver, x = TRUE)
-lm_multi$x
+lm_cat <- lm(povred ~ lnenp + elec_sys, data = iver, x = TRUE)
+lm_cat$x
 ```
 
 We'll look at this again in one of the more complicated model specifications below.
@@ -308,7 +315,7 @@ mydata <- data_frame(somenumbers = seq(2, 16, by = 2),
 mydata
 ```
 
-Note, vectors must be either the same length or even multiples of each other's length (shorter vectors will be repeated)
+Note, vectors must be either the same length or multiples of each other's length (shorter vectors will be repeated)
 
 ```{r eval = FALSE}
 mydata <- data_frame(somenumber = seq(1,50,3),)
@@ -393,20 +400,20 @@ Let's try this with our model.
 
 *hint (refer to dataframe info above for how to create a new dataframe for newdata argument)*
 ```{r}
-predict(lm_multi, newdata = data_frame(lnenp = log(2), elec_sys = "maj"),
+predict(lm_cat, newdata = data_frame(lnenp = log(2), elec_sys = "maj"),
 				interval = "confidence")
-predict(lm_multi, newdata = data_frame(lnenp = log(seq(1:5)), elec_sys = "maj"),
+predict(lm_cat, newdata = data_frame(lnenp = log(seq(1:5)), elec_sys = "maj"),
 				interval = "confidence")
 ```
 or
 ```{r}
 xnew <-  data_frame(lnenp = log(seq(1:5)), elec_sys = "maj")
-predict(lm_multi, newdata = xnew, interval="confidence")
+predict(lm_cat, newdata = xnew, interval="confidence")
 ```
 or
 ```{r}
 data_frame(lnenp = log(seq(1:5)), elec_sys = "maj") %>%
-	predict(lm_multi, newdata=., interval="confidence")
+	predict(lm_cat, newdata=., interval="confidence")
 ```
 
 ### Plotting regression results
@@ -420,14 +427,16 @@ Generate a range of hypothetical values for a key variable of interest:
 lnenp_hyp <- seq(min(iver$lnenp), max(iver$lnenp), 0.1)
 ```
 
-Calculate expected values of `povred` for each observed level of `lnenp`, setting the covariates to an fixed level, often to the mean (illustrating the effect of a change in `lnenp`, all else equal).  Remember to keep variable names identical to those in the model!
+Calculate expected values of `povred` for each observed level of `lnenp`, setting the covariates to an fixed level, illustrating the effect of a change in `lnenp`, all else equal (for a "typical" respondent, use the mean of the covariates you are keeping fixed).  Remember to keep variable names identical to those in the model!
+
+In order to set variable levels to their mean (to create a line that summarizes model for all countries, not just majoritarian or PR), I've gone back to using the original lm_multi model object, with the dummy variables.
+
 ```{r}
-yhyp <- data_frame(lnenp = iver$lnenp, 
-									 elec_sys = "maj") %>%
+yhyp <- data.frame(lnenp = iver$lnenp, maj = mean(iver$maj), pr = mean(iver$pr)) %>%
 	predict(lm_multi, newdata = . , interval = "confidence")
 ```
 
-We'll use these values of X and y to plot the regression line over a scatterplot of the observed data using **ggplot2**:
+We'll use these values of y and observed values of x to plot the regression line over a scatterplot of the observed data using **ggplot2**:
 ```{r}
 plot <- ggplot(iver, aes(x = lnenp, y = povred)) +
 	geom_line(aes(x = lnenp, y = yhyp[ , 1]))
@@ -442,8 +451,27 @@ plot
 Finally, add the original data with text labels,
 ```{r}
 plot + geom_text(mapping = aes(colour = elec_sys, label = cty), size = 3) + 
-	theme_minimal()
+	theme_minimal() 
 ```
+
+
+For interest, here's a comparison with the lines you would get if you did (as we did in lab) just set elec_sys to majoritarian or PR:
+```{r}
+yhyp_maj <- data.frame(lnenp = iver$lnenp, elec_sys = "maj") %>%
+	predict(lm_cat, newdata = . , interval = "confidence")
+yhyp_pr <- data.frame(lnenp = iver$lnenp, elec_sys = "pr") %>%
+	predict(lm_cat, newdata = . , interval = "confidence")
+
+plot_line_compare <- plot + 	geom_line(aes(x = lnenp, y = yhyp_maj[ , 1]), colour = "red") + geom_line(aes(x = lnenp, y = yhyp_pr[ , 1]), colour = "green") 
+plot_line_compare
+```
+
+And compare how the different lines overlay the different countries:
+```{r}
+plot_line_compare + geom_text(mapping = aes(colour = elec_sys, label = cty), size = 3) + 
+	theme_minimal() 
+```
+
 
 * * * 
 
