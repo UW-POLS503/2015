@@ -4,14 +4,9 @@ LABS_HTML = $(LABS_RMD:%.Rmd=%.html)
 
 all: build
 
-build: data
+build: labs
 
-labs: $(LABS_HTML) data
-
-data: gapminder.csv
-
-gapminder.csv: gapminder.R
-	$(RSCRIPT) $^
+labs: $(LABS_HTML)
 
 %.html: %.Rmd
 	$(RSCRIPT) -e 'rmarkdown::render("$^", output_file="$@", runtime="static")'

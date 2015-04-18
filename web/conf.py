@@ -131,6 +131,8 @@ NAVIGATION_LINKS = {
             ),
             "Homeworks"
         ),
+        ("/posts", "Posts"),
+        ("/data.html", "Data"),
         (
             (
                 ("getting_help_with_r.html", "Getting Help with R"),
@@ -230,7 +232,8 @@ PAGES = (
 # One or more folders containing files to be copied as-is into the output.
 # The format is a dictionary of {source: relative destination}.
 # Default is:
-FILES_FOLDERS = {'files': ''}
+FILES_FOLDERS = {'files': '',
+                 '../data': 'data'}
 # Which means copy 'files' into 'output'
 
 # One or more folders containing listings to be processed and stored into

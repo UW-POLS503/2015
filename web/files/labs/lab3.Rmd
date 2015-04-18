@@ -49,8 +49,14 @@ This dataset is cross sectional data on industrial democracies. Containing:
 
 Source of data and model Torben Iversen and David Soskice, 2002, ``Why do some democracies redistribute more than others?'' Harvard University.
 
-```{r results='hide'}
-iver <- read_csv("iver2.csv")
+```{r echo = FALSE, results = 'hide'}
+iver <- read_csv("../data/iver.csv")
+```
+```{r eval=FALSE}
+iver <- read_csv("iver.csv")
+```
+
+```{r}
 dim(iver)
 iver
 head(iver)
