@@ -37,10 +37,10 @@ data/gapminder.csv: data/gapminder.R
 	cd data && $(R) $(notdir $^)
 
 web/pages/%.md: web/pages/%.Rmd
-	$(R) -e 'knitr::knit("$^")'
+	cd $(dir $^) && $(R) -e 'knitr::knit("$(notdir $^)")'
 
 web/posts/%.md: web/posts/%.Rmd
-	$(R) -e 'knitr::knit("$^")'
+	cd $(dir $^) && $(R) -e 'knitr::knit("$(notdir $^)")'
 
 
 build: lectures hw labs web data
