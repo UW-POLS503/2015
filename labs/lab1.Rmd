@@ -5,8 +5,8 @@ date: April 3, 2015
 ---
 
 ```{r echo=FALSE,results='hide'}
-knitr::opts_chunk$set(results = 'hide', warning = FALSE, message = FALSE,
-                      fig.show = 'hide')
+knitr::opts_chunk$set(results = "hide", warning = FALSE, message = FALSE,
+                      fig.show = "hide")
 ```
 
 
@@ -115,8 +115,6 @@ foo / 2 * 8 + foo
 
 [^1]: If you are curious as to why the variable was named `foo`, read [this](http://en.wikipedia.org/wiki/Foobar).
 
-<<<<<<< HEAD
-=======
 You can use `=` instead of `<-` for assignment.
 You may see this in some other code.
 There are some technical reasons to use `<-` instead of `=`, but the primary reason we will use `<-` instead of `=` is that this is the convention used in modern `R` programs.
@@ -126,8 +124,6 @@ There are some technical reasons to use `<-` instead of `=`, but the primary rea
 Then multiply it by 4.
 2. Create a variable with a really long name and assign it a value. Start typing its name
 3. Enter the following in the console `sdgagasdgjasda`.
-
->>>>>>> 55a7007df8d5f78483f3b9da9065cf9a1fdf9817
 
 
 # Working Directory and R Projects
@@ -180,7 +176,10 @@ from Gapminder.[^2]
 Download the csv ("[comma-separated values](http://en.wikipedia.org/wiki/Comma-separated_values)")" <https://github.com/POLS503/pols_503_sp15/blob/master/labs/gapminder.csv>.
 
 Then load the file
-```{r results='hide'}
+```{r results='hide',echo=FALSE}
+gapminder <- read.csv("../data/gapminder.csv", stringsAsFactors = FALSE)
+```
+```{r eval=FALSE}
 gapminder <- read.csv("gapminder.csv", stringsAsFactors = FALSE)
 ```
 
@@ -196,11 +195,16 @@ gapminder
 This is a lot of information. How can we get a more useful picture of the dataset as a whole?
 
 ```{r}
-dim(gapminder) #This will show the dimensions of the dataframe. Row first, column second.
+dim(gapminder)
 names(gapminder)
 head(gapminder)
 summary(gapminder)
 ```
+
+- `dim` shows the dimensions of the data frame as the number of rows, columns
+- `names` shows the column names of the data frame.
+- `head` shows the first few observations
+- `summary` calculates summary statistics for all variables in the data frame.
 
 **Challenge:** Given the information previously:
 

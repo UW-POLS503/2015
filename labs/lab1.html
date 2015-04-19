@@ -141,26 +141,8 @@ sqrt(2 * 2)</code></pre>
 <p>And you can reuse foo in other calculations,</p>
 <pre class="r"><code>foo + 3
 foo / 2 * 8 + foo</code></pre>
-</div>
-<div id="head" class="section level1">
-<h1>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</h1>
 <p>You can use <code>=</code> instead of <code>&lt;-</code> for assignment. You may see this in some other code. There are some technical reasons to use <code>&lt;-</code> instead of <code>=</code>, but the primary reason we will use <code>&lt;-</code> instead of <code>=</code> is that this is the convention used in modern <code>R</code> programs.</p>
 <p><strong>Challenge</strong> 1. Create a variable named whatever strikes your fancy and set it equal to the square root of 2. Then multiply it by 4. 2. Create a variable with a really long name and assign it a value. Start typing its name 3. Enter the following in the console <code>sdgagasdgjasda</code>.</p>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>55a7007df8d5f78483f3b9da9065cf9a1fdf9817</p>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
 </div>
 <div id="working-directory-and-r-projects" class="section level1">
 <h1>Working Directory and R Projects</h1>
@@ -201,10 +183,16 @@ foo / 2 * 8 + foo</code></pre>
 <p><strong>Challenge:</strong> What happens when you do the following?</p>
 <pre class="r"><code>gapminder</code></pre>
 <p>This is a lot of information. How can we get a more useful picture of the dataset as a whole?</p>
-<pre class="r"><code>dim(gapminder) #This will show the dimensions of the dataframe. Row first, column second.
+<pre class="r"><code>dim(gapminder)
 names(gapminder)
 head(gapminder)
 summary(gapminder)</code></pre>
+<ul>
+<li><code>dim</code> shows the dimensions of the data frame as the number of rows, columns</li>
+<li><code>names</code> shows the column names of the data frame.</li>
+<li><code>head</code> shows the first few observations</li>
+<li><code>summary</code> calculates summary statistics for all variables in the data frame.</li>
+</ul>
 <p><strong>Challenge:</strong> Given the information previously:</p>
 <ol style="list-style-type: decimal">
 <li>What are the variables in the dataset?</li>
@@ -298,6 +286,7 @@ mean(c(1, 2, 3))</code></pre>
 </ol>
 <hr />
 <p>Some text and the data set used in this are taken from Jenny Bryant, <a href="https://stat545-ubc.github.io/block002_hello-r-workspace-wd-project.html">R basics, workspace and working directory, RStudio projects</a>, licensed under <a href="http://creativecommons.org/licenses/by-nc/3.0/">CC BY-NC 3.0</a></p>
+<hr />
 </div>
 <div class="footnotes">
 <hr />
