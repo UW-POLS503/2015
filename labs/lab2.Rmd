@@ -56,7 +56,7 @@ In this lab, you will be using the same data, but as it is distributed in **gapm
 
 To load a dataset included with an R package, use the `data()` function.
 You can see which datasets are included in a package,
-```{r}
+```{r eval=FALSE}
 data(package = "gapminder")
 ```
 

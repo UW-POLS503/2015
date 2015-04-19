@@ -265,6 +265,7 @@ COMPILERS = {
     # but is disabled by default as it would conflict
     # with many of the others.
     "pandoc2": ('.md', '.mdown', '.markdown'),
+    "rmarkdown": ('.Rmd',),
 }
 
 # Create by default posts in one file format?
