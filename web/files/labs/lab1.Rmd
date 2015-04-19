@@ -5,8 +5,8 @@ date: April 3, 2015
 ---
 
 ```{r echo=FALSE,results='hide'}
-knitr::opts_chunk$set(results = 'hide', warning = FALSE, message = FALSE,
-                      fig.show = 'hide')
+knitr::opts_chunk$set(results = "hide", warning = FALSE, message = FALSE,
+                      fig.show = "hide")
 ```
 
 
@@ -195,11 +195,16 @@ gapminder
 This is a lot of information. How can we get a more useful picture of the dataset as a whole?
 
 ```{r}
-dim(gapminder) #This will show the dimensions of the dataframe. Row first, column second.
+dim(gapminder)
 names(gapminder)
 head(gapminder)
 summary(gapminder)
 ```
+
+- `dim` shows the dimensions of the data frame as the number of rows, columns
+- `names` shows the column names of the data frame.
+- `head` shows the first few observations
+- `summary` calculates summary statistics for all variables in the data frame.
 
 **Challenge:** Given the information previously:
 

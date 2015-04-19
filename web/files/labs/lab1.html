@@ -183,10 +183,16 @@ foo / 2 * 8 + foo</code></pre>
 <p><strong>Challenge:</strong> What happens when you do the following?</p>
 <pre class="r"><code>gapminder</code></pre>
 <p>This is a lot of information. How can we get a more useful picture of the dataset as a whole?</p>
-<pre class="r"><code>dim(gapminder) #This will show the dimensions of the dataframe. Row first, column second.
+<pre class="r"><code>dim(gapminder)
 names(gapminder)
 head(gapminder)
 summary(gapminder)</code></pre>
+<ul>
+<li><code>dim</code> shows the dimensions of the data frame as the number of rows, columns</li>
+<li><code>names</code> shows the column names of the data frame.</li>
+<li><code>head</code> shows the first few observations</li>
+<li><code>summary</code> calculates summary statistics for all variables in the data frame.</li>
+</ul>
 <p><strong>Challenge:</strong> Given the information previously:</p>
 <ol style="list-style-type: decimal">
 <li>What are the variables in the dataset?</li>

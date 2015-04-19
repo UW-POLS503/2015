@@ -34,7 +34,7 @@ foo <- c(1, 2, NA, 3, 4)
 1.  What is the result of `2 + NA`
 1.  What is the result of `mean(foo)`
 1.  Look at the documentation of `mean` to change how that function handles missing values.
-1.  How does `median(foo)` work? 
+1.  How does `median(foo)` work?
 1.  `foo > 2`. Are all the entries `TRUE` and `FALSE`?
 1.  What does `is.na(foo)` do? What about `! is.na(foo)` ?
 1.  What does `foo[! is.na(foo)]` do?
@@ -61,7 +61,7 @@ data(package = "gapminder")
 ```
 
 
-**challenge** 
+**challenge**
 
 - Which dataset in the **gapminder** package is country data?
 - Load that data using the `data` function
@@ -75,7 +75,7 @@ data("gapminder")
 # Introduction `dplyr`
 
 **dplyr** is a package for data manipulation.
-It provides a few core functions data manipulation. 
+It provides a few core functions data manipulation.
 Most data manipulations can be done by combining these verbs together --- something which becomes even easier with the `%>%` operator.
 
 -  `filter()`: subset observations by logical conditions
@@ -119,7 +119,7 @@ a life expectancy less than 40.
 ```{r results='hide'}
 filter(gapminder, continent == "Africa", year < 1966, lifeExp < 40)
 ```
-That is equivalent to 
+That is equivalent to
 ```{r results='hide'}
 filter(gapminder, continent == "Africa" & year < 1966 & lifeExp < 40)
 ```
@@ -131,7 +131,7 @@ filter(gapminder, country == "Afghanistan" | country == "Albania")
 
 ## %>%
 
-Before we go any further, we should exploit the new pipe operator that `dplyr` imports from the **magrittr** package. 
+Before we go any further, we should exploit the new pipe operator that `dplyr` imports from the **magrittr** package.
 This is going to change your data analytical life.
 
 
@@ -151,7 +151,7 @@ gapminder %>%
   filter(country == "Cambodia") %>%
   select(year, lifeExp) %>%
   slice(1:2)
-  
+
 ```
 
 **Challenge** Use `mutate()` to add  new variables
@@ -184,12 +184,12 @@ gapminder <- left_join(gapminder, just_usa, by = c("year")) %>%
   mutate(gdpPercapRel = gdpPercap / usa_gdpPercap)
 ```
 
-Now, summarize the relative GDP 
+Now, summarize the relative GDP
 ```{r}
 gapminder %>%
   select(gdpPercapRel) %>%
   summary
-  
+
 ```
 
 Nice, now we can do something like this:
@@ -234,7 +234,7 @@ Instead plots are built up from component functions.
 
 1. Data
 2. Aesthetics: Maps variables in the data to visual properties: position, color, size, shape, line type ...
-3. Geometric objects: The specific shapes that are drawn: points, lines, 
+3. Geometric objects: The specific shapes that are drawn: points, lines,
 4. scales: How variables values map to "computer" values.
 5. stat: summarize or transform the data. e.g. bin data and count in histogram; run a regression to get a line.
 5. facet: create mini-plots of data subsets
@@ -296,14 +296,13 @@ ggplot(gapminder, aes(x = gdpPercap, y = lifeExp, color = continent)) +
 ```
 Let's address over-plotting: SET alpha transparency and size to a value
 ```{r}
-p + geom_point(alpha = (1/3), size = 3)
+p + geom_point(alpha = (1 / 3), size = 3)
 ```
 Add now a fitted curve or line
 ```{r}
 p + geom_point() + geom_smooth()
 p + geom_point() + geom_smooth(lwd = 2, se = FALSE)
-
-p +  geom_smooth(lwd = 1, se = FALSE, method = "lm") + geom_point()
+p + geom_smooth(lwd = 1, se = FALSE, method = "lm") + geom_point()
 ```
 That's great but I actually want to revive our interest in continents!
 ```{r}
@@ -311,11 +310,11 @@ p + aes(color = continent) + geom_point() + geom_smooth(lwd = 3, se = FALSE)
 ```
 Facetting: another way to exploit a factor
 ```{r}
-p + geom_point(alpha = (1/3), size = 3) + facet_wrap(~ continent)
+p + geom_point(alpha = (1 / 3), size = 3) + facet_wrap(~ continent)
 ```
 Still want lines? Let's add them
 ```{r}
-p + geom_point(alpha = (1/3), size = 3) + facet_wrap(~ continent) +
+p + geom_point(alpha = (1 / 3), size = 3) + facet_wrap(~ continent) +
   geom_smooth(lwd = 2, se = FALSE)
 ```
 
@@ -345,7 +344,9 @@ p + geom_point(alpha = (1/3), size = 3) + facet_wrap(~ continent) +
 What if I am only interrested in the US?
 ```{r}
 ggplot(filter(gapminder, country == "United States"),
-       aes(x = year, y = lifeExp)) + geom_line() + geom_point()
+       aes(x = year, y = lifeExp)) +
+  geom_line() +
+  geom_point()
 
 ```
 
@@ -355,8 +356,8 @@ Let just look at five countries
 some_countries <- c("United States", "Canada", "Rwanda", "Cambodia", "Mexico")
 ggplot(filter(gapminder, country %in% some_countries),
        aes(x = year, y = lifeExp, color = country)) +
-	   geom_line() +
-	   geom_point()
+  geom_line() +
+  geom_point()
 ```
 
 
@@ -367,7 +368,9 @@ So what's up with Mexico?
 Not really...
 ```{r}
 ggplot(subset(gapminder, country %in% some_countries),
-       aes(x = year, y = lifeExp, color = country)) + geom_line() + geom_point(aes(size=gdpPercap))
+       aes(x = year, y = lifeExp, color = country)) +
+  geom_line() +
+  geom_point(aes(size=gdpPercap))
 ```
 
 You can change the way the plot looks overall using `theme`
@@ -376,7 +379,7 @@ You can change the way the plot looks overall using `theme`
 ggplot(subset(gapminder, country %in% some_countries),
        aes(x = year, y = lifeExp, color = country)) +
   geom_line() +
-  geom_point(aes(size=gdpPercap)) + 
+  geom_point(aes(size=gdpPercap)) +
   theme_minimal()
 ```
 
@@ -390,11 +393,11 @@ In addition to the themes included with ggplot, several other themes are availab
 
 [^1]: You may encounter these other packages in other classes, or code samples online.
 
-  - base graphics: included with R. Functions like `plot`, `barplot`, `hist`. See http://www.statmethods.net/graphs/index.html
-	- lattice graphics: Functions including `barchart`, `densityplot`, `dotplot`, `xyplot`, `histogram`. See http://www.statmethods.net/advgraphs/trellis.html
-	- Other graphics packages designed for the web: [ggvis](http://ggvis.rstudio.com/), [rcharts](http://rcharts.io/), [plotly](https://plot.ly/)
-	- [tile](http://faculty.washington.edu/cadolph/?page=60) Chris Adolph's graphics package.
-  
+    - base graphics: included with R. Functions like `plot`, `barplot`, `hist`. See http://www.statmethods.net/graphs/index.html
+    - lattice graphics: Functions including `barchart`, `densityplot`, `dotplot`, `xyplot`, `histogram`. See http://www.statmethods.net/advgraphs/trellis.html
+    - - Other graphics packages designed for the web: [ggvis](http://ggvis.rstudio.com/), [rcharts](http://rcharts.io/), [plotly](https://plot.ly/)
+    - - [tile](http://faculty.washington.edu/cadolph/?page=60) Chris Adolph's graphics package.
+
 [^2]:
 
 * * *
@@ -402,7 +405,7 @@ In addition to the themes included with ggplot, several other themes are availab
 - Derived from Karthik Ram, "A quick introduction to ggplot2", [Speakerdeck](http://inundata.org/2013/04/10/a-quick-introduction-to-ggplot2/), [github](https://github.com/karthik/ggplot-lecture). License: [CC-BY](http://creativecommons.org/licenses/by/2.0/)
 -->
 
-* * * 
+* * *
 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
 R code is licensed under a [BSD 2-clause](http://www.r-project.org/Licenses/BSD_2_clause) license.
