@@ -7,7 +7,7 @@ date: April 16, 2015
 
 ## Problem 1
 
-This problem uses [sprinters.csv](http://localhost:8000/data/sprinters.csv) which contains the winning times from the \lnt{100} meter sprint in Olympic competitions going back to 1900.[^1]
+This problem uses [sprinters.csv](http://pols503.github.io/pols_503_sp15/data/sprinters.csv) which contains the winning times from the \lnt{100} meter sprint in Olympic competitions going back to 1900.[^1]
 
 
 The dataset `sprinters` contains the following variables:

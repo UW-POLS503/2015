@@ -2,7 +2,9 @@
 title: "POLS 503: Lab 3"
 author: "Carolina Johnson"
 date: "April 17, 2015"
-output: html_document
+output:
+  html_document:
+    keep_md: true
 ---
 ```{r echo = FALSE, results = 'hide'}
 knitr::opts_chunk$set(warning = TRUE, message = TRUE)
@@ -522,8 +524,17 @@ ggplot() +
 Because different datasets are used by different geoms,
 each geom had to have a `data` and `mapping` (aesthetics) argument.
 
+```{r results='asis'}
+cat(texreg::htmlreg(list(lm_cat),
+                html.tag = FALSE,
+                head.tag = FALSE,
+                body.tag = FALSE,
+                doctype = FALSE))
+```
 
-
+```{r results='asis'}
+stargazer::stargazer(lm_cat, type = "html")
+```
 
 
 * * *

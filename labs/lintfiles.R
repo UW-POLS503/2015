@@ -1,15 +1,22 @@
 library("knitr")
 library("lintr")
-lint_rmd <- function(filename, linters = default_linters) {
+knit_lint <- function(filename, linters = default_linters,
+                      encoding = getOption("encoding"), cache = FALSE) {
 	tmpfn <- tempfile()
-	on.exit(file.remove(tmpfn))
+	on.exit(if (file.exists(tmpfn) file.remove(tmpfn))
 	knitr::purl(filename, output = tmpfn, documentation = 2L, quiet = TRUE)
-	lints <- lintr::lint(tmpfn, linters = linters, cache = FALSE)
+	lints <- lintr::lint(tmpfn, linters = linters, cache = cache)
 	for (i in seq_along(lints)) {
 		lints[[i]][["filename"]] <- filename
 	}
 	lints
 }
+
+# knit_tidy <- function(hair, report, encoding = getOption("encoding"), ...) {
+#   knitr::purl(filename, output = tmpfn, documentation = 2L, quiet = TRUE)
+#   tidy_source(tmpfn)
+#
+# }
 
 linters <- list(assignment_linter,
 								single_quotes_linter,
@@ -33,4 +40,30 @@ rmd_files <- dir(".", pattern = ".*\\.Rmd$")
 for (fn in rmd_files) {
 	print(fn)
 	print(lint_rmd(fn, linters = linters))
+}
+
+knit_lint <- function(ifile, encoding = encoding) {
+  x <- readLines(ifile, encoding = encoding, warn = FALSE)
+  n <- length(x)
+  if (n == 0)
+    return(x)
+  p <- detect_pattern(x, tolower(file_ext(ifile)))
+#   if (is.null(p))
+#     return(x)
+#   p <- all_patterns[[p]]
+#   p1 = p$chunk.begin
+#   p2 = p$chunk.end
+#   i1 = grepl(p1, x)
+#   i2 = filter_chunk_end(i1, grepl(p2, x))
+#   m = numeric(n)
+#   m[i1] = 1
+#   m[i2] = 2
+#   if (m[1] == 0)
+#     m[1] = 2
+#   for (i in seq_len(n - 1)) if (m[i + 1] == 0)
+#     m[i + 1] = m[i]
+#   x[m == 1 | i2] = ""
+#   x[m == 2] = gsub(p$inline.code, "", x[m == 2])
+#   x
+    x
 }

@@ -128,3 +128,12 @@ Want to do oneday, but that day is not today
 - remove question on "linear algebra". Based on the responses I think some confused it with algebra.
 - Add question about multiplying two matrices, transpose of a matrix, and matrix x vector.
 
+# Misc
+
+- coefficient plots: **arm**, **coefplot**, using **broom** to **ggplot2**
+- tables: 
+    * texreg: both html and latex. Issues getting the LaTeX to play nice with markdown
+    * stargazer: both html and latex
+	* comparison http://stackoverflow.com/questions/5465314/tools-for-making-latex-tables-in-r
+    * http://conjugateprior.org/2013/10/call-them-what-you-will/, http://conjugateprior.org/2013/03/r-to-latex-packages-coverage/
+	
