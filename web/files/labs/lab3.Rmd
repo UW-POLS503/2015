@@ -469,7 +469,7 @@ plot + geom_text(mapping = aes(colour = elec_sys, label = cty), size = 3) +
 ```
 
 
-For interest, here's a comparison with the lines you would get if you did (as we did in lab) just set elec_sys to majoritarian or PR:
+For interest, here's a comparison with the lines you would get if you did (as we did in lab) just set `elec_sys` to `"maj"` or `"pr"`:
 ```{r}
 yhyp_maj <- data.frame(lnenp = iver$lnenp, elec_sys = "maj") %>%
   predict(lm_cat, newdata = . , interval = "confidence")
@@ -489,7 +489,38 @@ plot_line_compare +
   theme_minimal()
 ```
 
-An alternative method
+Another way of doing this is as follows,
+Create a new data frame with different values of `lnenp` for each category of `elec_sys`.
+This is easily done using the function `expand.grid`.
+```{r}
+xhyp_cat <- expand.grid(lnenp = iver$lnenp, elec_sys = unique(iver$elec_sys))
+```
+Then predict `y` values for each combination of `x` using the `predict` function,
+and add those columns to the `x` values using `cbind`.
+```{r}
+yhyp_cat <- cbind(xhyp_cat,
+									predict(lm_cat, newdata = xhyp_cat, interval = "confidence"))
+```
+
+In this format, the lines can be easily plotted in ggplot using the `elec_sys`
+variable in `colour` and `fill` aesthetics to draw seperate shapes for each "maj",
+"pr", and "unem".
+```{r}
+ggplot() +
+	geom_line(data = yhyp_cat,
+						mapping = aes(x = lnenp, y = fit, ymin = lwr, ymax = upr,
+													colour = elec_sys)) +
+	geom_ribbon(data = yhyp_cat, 
+							aes(x = lnenp, y = fit, ymin = lwr, ymax = upr,
+								  fill = elec_sys),
+							alpha = 0.2) +
+	geom_text(data = iver, mapping = aes(x = lnenp, y = povred, label = cty,
+                                       colour = elec_sys)) +
+	scale_y_continuous("povred")
+
+```
+Because different datasets are used by different geoms,
+each geom had to have a `data` and `mapping` (aesthetics) argument.
 
 
 
