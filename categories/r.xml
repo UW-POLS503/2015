@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>POLS/CS&amp;SS 503</title><link>http://pols503.github.io/pols_503_sp15/</link><description>Site for POLS/CS&amp;SS 503: Advanced Quantitative Political Methodology (University of Washington; Spring 2015)</description><atom:link href="http://pols503.github.io/pols_503_sp15/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><lastBuildDate>Mon, 20 Apr 2015 20:19:04 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>R Packages Warnings and Messages when Loading</title><link>http://pols503.github.io/pols_503_sp15/posts/package_loading_warnings_and_errors.html</link><dc:creator>Jeffrey B. Arnold</dc:creator><description>&lt;!--
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>POLS/CS&amp;SS 503 (R)</title><link>http://pols503.github.io/pols_503_sp15/</link><description></description><atom:link href="http://pols503.github.io/pols_503_sp15/categories/r.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><lastBuildDate>Mon, 20 Apr 2015 20:19:04 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>R Packages Warnings and Messages when Loading</title><link>http://pols503.github.io/pols_503_sp15/posts/package_loading_warnings_and_errors.html</link><dc:creator>Jeffrey B. Arnold</dc:creator><description>&lt;!--
 .. title: R Packages Warnings and Messages when Loading
 .. slug: package_loading_warnings_and_errors
 .. tags: R, error messages
@@ -53,47 +53,4 @@
 &lt;div class="references"&gt;
 
 &lt;/div&gt;
-</description><category>error messages</category><category>R</category><guid>http://pols503.github.io/pols_503_sp15/posts/package_loading_warnings_and_errors.html</guid><pubDate>Mon, 20 Apr 2015 20:18:00 GMT</pubDate></item><item><title>R warning messages involving LC_TYPE</title><link>http://pols503.github.io/pols_503_sp15/posts/r-warning-messages-involving-lc_type.html</link><dc:creator>Jeffrey B. Arnold</dc:creator><description>&lt;!--
-.. title: R warning messages involving LC_TYPE
-.. slug: r-warning-messages-involving-lc_type
-.. date: 2015-04-18 13:50:40 UTC-07:00
-.. tags: R errors
-.. category: 
-.. link: 
-.. description: 
-.. type: text
---&gt;
-
-&lt;p&gt;If you are running R on a Mac and get the following warning message,&lt;/p&gt;
-&lt;pre class="sourceCode r"&gt;&lt;code class="sourceCode r"&gt;During startup -&lt;span class="st"&gt; &lt;/span&gt;Warning messages:
-&lt;span class="dv"&gt;1&lt;/span&gt;:&lt;span class="st"&gt; &lt;/span&gt;Setting LC_CTYPE failed, using &lt;span class="st"&gt;"C"&lt;/span&gt;
-&lt;span class="dv"&gt;2&lt;/span&gt;:&lt;span class="st"&gt; &lt;/span&gt;Setting LC_COLLATE failed, using &lt;span class="st"&gt;"C"&lt;/span&gt;
-&lt;span class="dv"&gt;3&lt;/span&gt;:&lt;span class="st"&gt; &lt;/span&gt;Setting LC_TIME failed, using &lt;span class="st"&gt;"C"&lt;/span&gt;
-&lt;span class="dv"&gt;4&lt;/span&gt;:&lt;span class="st"&gt; &lt;/span&gt;Setting LC_MESSAGES failed, using &lt;span class="st"&gt;"C"&lt;/span&gt;
-&lt;span class="dv"&gt;5&lt;/span&gt;:&lt;span class="st"&gt; &lt;/span&gt;Setting LC_PAPER failed, using &lt;span class="st"&gt;"C"&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;run this command in R,&lt;/p&gt;
-&lt;pre class="sourceCode r"&gt;&lt;code class="sourceCode r"&gt;&lt;span class="kw"&gt;system&lt;/span&gt;(&lt;span class="st"&gt;"defaults write org.R-project.R force.LANG en_US.UTF-8"&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;See this StackOverflow &lt;a href="http://stackoverflow.com/questions/9689104/installing-r-on-mac-warning-messages-setting-lc-ctype-failed-using-c"&gt;question&lt;/a&gt; for more information.&lt;/p&gt;
-&lt;div class="references"&gt;
-
-&lt;/div&gt;
-</description><category>R errors</category><guid>http://pols503.github.io/pols_503_sp15/posts/r-warning-messages-involving-lc_type.html</guid><pubDate>Sat, 18 Apr 2015 20:50:40 GMT</pubDate></item><item><title>Writing a paper for this course</title><link>http://pols503.github.io/pols_503_sp15/posts/writing-a-paper-for-this-course.html</link><dc:creator>Jeffrey B. Arnold</dc:creator><description>&lt;!--
-.. title: Writing a paper for this course
-.. slug: writing-a-paper-for-this-course
-.. date: 2015-04-18 13:48:27 UTC-07:00
-.. tags: writing
-.. category: 
-.. link: 
-.. description: 
-.. type: text
---&gt;
-
-&lt;p&gt;This course requires writing a final paper. Here are a couple of articles that may help.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;"Writing Empirical Papers: 6 Rules &amp;amp; 12 Recommendations", Christopher Adolph, &lt;a href="http://faculty.washington.edu/cadolph/503/papers.pdf"&gt;http://faculty.washington.edu/cadolph/503/papers.pdf&lt;/a&gt;. Written for previous versions of 503 course and still applicable both to this course and beyond.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Gary King, "Publication, Publication", &lt;a href="http://gking.harvard.edu/files/paperspub.pdf"&gt;http://gking.harvard.edu/files/paperspub.pdf&lt;/a&gt;. Advice on how to turn a class project into a publication.&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class="references"&gt;
-
-&lt;/div&gt;
-</description><category>writing</category><guid>http://pols503.github.io/pols_503_sp15/posts/writing-a-paper-for-this-course.html</guid><pubDate>Sat, 18 Apr 2015 20:48:27 GMT</pubDate></item></channel></rss>
+</description><category>error messages</category><category>R</category><guid>http://pols503.github.io/pols_503_sp15/posts/package_loading_warnings_and_errors.html</guid><pubDate>Mon, 20 Apr 2015 20:18:00 GMT</pubDate></item></channel></rss>
