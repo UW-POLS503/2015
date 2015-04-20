@@ -19,6 +19,10 @@
 \setmainfont{OpenSans}
 \setsansfont{OpenSans}
 \setmonofont{Source Code Pro}
+\usefonttheme[onlymath]{serif}
+\usepackage[bold-style=ISO]{unicode-math}
+\setmathfont{Asana Math}
+
 
 % \RequirePackage[bold-style=ISO]{unicode-math}
 % %\setmathfont{xits-math.otf}
@@ -58,21 +62,21 @@
 
 %\setbeamertemplate{enumerate item}{\alph{enumi}.}
 
-% \AtBeginSection[] % Do nothing for \section*
-% {
-%   \begin{frame}
-%     \frametitle{}
-%     \tableofcontents[currentsection]
-%   \end{frame}
-% }
+\AtBeginSection[] % Do nothing for \section*
+{
+  \begin{frame}
+    \frametitle{}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
 
-% \AtBeginSubsection[] % Do nothing for \section*
-% {
-%   \begin{frame}
-%     \frametitle{}
-%     \tableofcontents[currentsection,currentsubsection]
-%   \end{frame}
-% }
+\AtBeginSubsection[] % Do nothing for \section*
+{
+  \begin{frame}
+    \frametitle{}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
 
 \setbeamertemplate{title page}
 {
@@ -111,6 +115,7 @@
   \end{centering}
   \vfill
 }
+
 
 \setbeamercovered{transparent=33}
 
