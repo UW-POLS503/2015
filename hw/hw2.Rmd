@@ -7,7 +7,7 @@ date: April 16, 2015
 
 ## Problem 1
 
-This problem uses [sprinters.csv](https://raw.githubusercontent.com/POLS503/pols_503_sp15/master/data/sprinters.csv) which contains the winning times from the \lnt{100} meter sprint in Olympic competitions going back to 1900.[^1]
+This problem uses [sprinters.csv](http://pols503.github.io/pols_503_sp15/data/sprinters.csv) which contains the winning times from the \lnt{100} meter sprint in Olympic competitions going back to 1900.[^1]
 
 
 The dataset `sprinters` contains the following variables:
@@ -19,8 +19,8 @@ The dataset `sprinters` contains the following variables:
 | `women` |  1 if the time is women's best; 0 if the time the men's best. |
 
 a. In R, Create a matrix $X$ comprised of three columns: a column of
-   ones, a columnmade of the variable year, and a column made up of
-   the variable women.Create a matrix $y$ comprised of a single
+   ones, a column made of the variable year, and a column made up of
+   the variable women. Create a matrix $y$ comprised of a single
    column, made up of the variable finish. Now compute the following
    using R’s matrix commands (note that you will need to use the
    matrix multiplication operator `%*%`):
@@ -35,7 +35,7 @@ b. Using the function `lm`, run a regression of `finish` on `year` and `women`.
    Compare the results the calculation you did in part *a*.
 
 c. Make a nice plot summarizing this regression.
-  On a single graph, plot the data and the regression line.
+   On a single graph, plot the data and the regression line.
    Make sure the graph is labeled nicely, so that anyone who does not know your variable names could still read it.
 
 d. Rerun the regression, adding an interaction between `women` and `year`.
@@ -51,7 +51,7 @@ g. The authors of the *Nature* article were interested in predicting the finishi
 
 h. Do you trust the model’s predictions? Is there reason to trust the 2001 prediction more than the 2156 prediction?
    Is any assumption of the model being abused or overworked to make this prediction?
-   Hint: Try predicting the finishing times in the years 3000 C.E.
+   Hint: Try predicting the finishing times in the year 3000 C.E.
 
 ## Problem 2
 
@@ -75,7 +75,7 @@ anscombe2 <- anscombe %>%
 ```
 
 a. For each dataset: calculate the mean and standard deviations of x and y, and correlation between x and y, and run a linear regression between x and y for each dataset. How similar do you think that these datasets will look?
-b. Create a scatter plot Hint: you can do this easily with `facet_wrap`.
+b. Create a scatter plot of each dataset and its linear regression fit. Hint: you can do this easily with `facet_wrap`.
 
 ## Problem 3
 

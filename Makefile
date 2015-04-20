@@ -5,15 +5,19 @@ LECTURE_DIR = lectures
 LAB_DIR = labs
 HW_DIR = hw
 
-WEB_RMD_FILES = $(wildcard $(WEBDIR)/pages/*.Rmd)
-WEB_MD_FILES = $(WEB_RMD_FILES:%.Rmd=%.md)
+PAGES_DIR = $(WEBDIR)/pages
+PAGES_RMD_FILES = $(wildcard $(PAGES_DIR)/*.Rmd)
+PAGES_MD_FILES = $(PAGES_RMD_FILES:%.Rmd=%.md)
+POSTS_DIR = $(WEBDIR)/posts
+POSTS_RMD_FILES = $(wildcard $(POSTS_DIR)/*.Rmd)
+POSTS_MD_FILES = $(POSTS_RMD_FILES:%.Rmd=%.md)
 
 all : build
 
 lectures: data
 	make -C lectures
 	-mkdir $(WEBDIR)/files/lectures
-	cp $(wildcard $(LECTURE_DIR)/*_handout.pdf) $(WEBDIR)/files/lectures/
+	-cp $(wildcard $(LECTURE_DIR)/*_handout.pdf) $(WEBDIR)/files/lectures/
 
 labs: data
 	make -C labs
@@ -23,12 +27,15 @@ labs: data
 hw: data
 	make -C hw
 	-mkdir $(WEBDIR)/files/hw
-	cp $(HW_DIR)/hw*.html $(WEBDIR)/files/hw
+	-cp $(HW_DIR)/hw*.html $(WEBDIR)/files/hw
 
-web: $(WEB_MD_FILES)
+web: $(PAGES_MD_FILES) $(POSTS_MD_FILES) data labs
 
 web/pages/%.md: web/pages/%.Rmd
-	cd web/pages && $(R) -e 'knitr::knit("$(notdir $^)", output="$(notdir $@)")'
+	cd $(dir $^) && $(R) -e 'knitr::knit("$(notdir $^)")'
+
+web/posts/%.md: web/posts/%.Rmd
+	cd $(dir $^) && $(R) -e 'knitr::knit("$(notdir $^)")'
 
 build: data lectures hw labs web
 	cd $(WEBDIR); source venv/bin/activate; nikola build

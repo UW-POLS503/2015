@@ -1,7 +1,9 @@
 # Labs for 503
 
 - this directory is an RStudio project
-- all data should be in the `data` directory
+- all lab documents should compile correctly with if R has this directory as the working directory.
+- if labs use data it should either be in `../data` or loaded via URL.
+- all images used in labs go in the `images` directory
 
 ## Build
 
@@ -9,9 +11,5 @@ To build the data and labs
 ```console
 > make build
 ```
-
-## Data
-
-- `gapminder.csv`: [gapminder.org](http://gapminder.org) data packaged for R in [jennybd/gapminder](https://github.com/jennybc/gapminder).
 
 

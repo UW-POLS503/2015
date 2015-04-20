@@ -1,0 +1,128 @@
+---
+title: "Gauss Markov Simulations"
+author: "Jeffrey B. Arnold"
+date: "04/19/2015"
+output: html_document
+---
+
+```{r}
+library("broom")
+library("dplyr")
+library("ggplot2")
+library("mvtnorm")
+
+```
+
+
+```{r}
+library("mvtnorm")
+
+# Number of simulated datasets to generate
+sims <- 1000
+
+# Number of observations in each dataset
+n <- 100
+
+# True standard deviation of the regression errors
+sigma <- sqrt(2)
+
+# True parameters of the model
+b <- c(1, 2, 3, 4)
+
+# True means of the covariates
+mu_x <- c(0, 0, 0) + 1
+
+# Standard deviations of the covariates
+s_x <- rep(1, 3) * 2
+# correlation of the covariates
+cor_x <- diag(3)
+```
+
+```{r}
+#' Correlation + Standard deviation to Covariance Matrix
+sdcor2cov <- function(s, r = diag(length(s))) {
+  if (length(s) > 1) {
+    s <- diag(s)
+  } else {
+    s <- matrix(s)
+  }
+  s %*% r %*% s
+}
+sigma_x <- sdcor2cov(s_x, cor_x)
+
+# Create storage matrices for results
+# simulations <- vector(mode = "list", length = sims)
+# # Loop over the simulation runs
+# for (j in 1:sims) {
+# 
+#   # Draw the simulated covariates from their true
+#   # multivariate Normal distribution
+#   X <- rmvnorm(n, muX, SigmaX)
+# 
+#   # Create the simulated y by
+#   # adding together the systematic and stochastic
+#   # components, according to the true model
+#   mu <- cbind(1, X) %*% b
+#   y <- mu + rnorm(n) * sigma
+# 
+#   # Run a regression of the simulated y on the simulated X
+#   res <- lm(y ~ X)
+# 
+#   # Save these results as the next row in the storage matrices
+#   simulations[[j]] <- mutate(broom::tidy(res),
+#                              .sim = j)
+# }
+# #' convert back to list
+# simulations <- do.call(rbind, simulations)
+
+#' @param n Number of simulations
+#' @param x_mu mean of the X distribution
+#' @param x_Sigma covariance matrix of the X distribution
+#' @param sigma standard deviation of the error distribution
+sim_lin_normal <- function(n, b, x_mu, x_Sigma, sigma) {
+  
+  # Draw the simulated covariates from their true
+  # multivariate Normal distribution
+  X <- rmvnorm(n, x_mu, x_Sigma)
+  
+  # Create the simulated y by
+  # adding together the systematic and stochastic
+  # components, according to the true model
+  mu <- cbind(rep(1, n), X) %*% b
+  y <- mu + rnorm(n) * sigma
+  
+  # Run regression, and put coefficients, se, t-stat, and p-values in 
+  # a data frame
+  tidy(lm(y ~ X))
+}
+```
+
+Generate a simulations dataset with a value for each simulation. This will hold the output of the simulations. For each simulation, numbered in `.sim`, it rund the `sim_lin_normal` to randomly draw $y$s and $X$s, run a regression, and return a summary of the regression.
+```{r simulations}
+simulations <- 
+  data_frame(.sim = seq_len(sims)) %>%
+  group_by(.sim) %>% 
+  do(sim_lin_normal(n, b, muX, SigmaX, sigma))
+```
+
+
+```{r sim_summary}
+sim_summary <- simulations %>%
+  group_by(term) %>%
+  summarize(mean_estimate = mean(estimate),
+            sd_estimate = sd(estimate),
+            mean_std_error = sqrt(mean(std.error) ^ 2)) %>%
+  mutate(mean_t_stat = mean_estimate / mean_std_error)
+
+regnames <- function(n = 1) {
+  c("(Intercept)", paste0("X", seq_len(n - 1)))
+}
+```
+
+```{r}
+ggplot() +
+  geom_violin(data = simulations, mapping = aes(x = term, y = estimate)) +
+  geom_point(data = sim_summary, mapping = aes(x = term, y = avg_estimate))
+```
+
+
