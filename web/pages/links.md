@@ -62,5 +62,11 @@
 
 # LaTeX
 
+- [Not So Short Introduction to LaTeX](https://tobi.oetiker.ch/lshort/lshort.pdf)
+- Using LaTeX. You should find a good LaTeX friendly 
+    - [ShareLaTeX](https://www.sharelatex.com/about): a not free, online editor for collaboration.
+	- See <http://en.wikipedia.org/wiki/Comparison_of_TeX_editors>
+	- Emacs or Vim. If you have to ask, you are not ready.
+
 - Need to lookup a LaTeX symbol? Just draw it here: <http://detexify.kirelabs.org/classify.html>
 - Here's a couple of online LaTeX math equation editors: <http://www.sciweavers.org/free-online-latex-equation-editor>, <http://www.codecogs.com/latex/eqneditor.php> They seem fine, but a good LaTeX friendly text editor will have better capabilities
