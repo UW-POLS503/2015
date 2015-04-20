@@ -197,7 +197,6 @@ Given that this is my first time teaching this course, I expect many adjustments
 	
 ### Friday, April 17
 
-
 - Lab document: [.Rmd](labs/lab3.Rmd), [html](labs/lab3.html)
 - Readings
 
@@ -208,10 +207,12 @@ Given that this is my first time teaching this course, I expect many adjustments
 
 ### Tuesday, April 21
 
-- Gelman and Hill, Ch 3
-- @brambor_understanding_2006
+- Readings:
 
-### Friday, April 17
+    - Fox, Ch. 6, 9.3
+
+
+### Friday, April 24
 
 - Readings
 
@@ -227,13 +228,12 @@ Given that this is my first time teaching this course, I expect many adjustments
 	
 ### Friday, May 1
 
-TBD
 
-## Week 6: Outliers, Robust Regression, Bootstrapping
+## Week 6: Outliers, Robust Regression
 
 ### Tuesday, May 5
 
-- Fox, Ch 11, 19
+- Fox, Ch. 11, 19
 
 ### Friday, May 8
 
@@ -249,7 +249,7 @@ TBD
 
 TBD
 
-## Week 8: Prediction
+## Week 8: 
 
 ### Tuesday, May 19
 
@@ -259,7 +259,7 @@ TBD
 
 TBD
 
-## Week 9: Limited Dependent Variables, Robust standard errors
+## Week 9: 
 
 ### Tuesday, May 26
 
@@ -269,11 +269,11 @@ TBD
 
 TBD
 
-## Week 10: 
+## Week 10: Model Selection, Averaging and Validation, Bootstrapping
 
 ### Tuesday, June 2
 
-TBD
+- Fox, Ch. 22
 
 ### Friday, June 5
 
