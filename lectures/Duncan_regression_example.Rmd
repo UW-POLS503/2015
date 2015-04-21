@@ -1,0 +1,131 @@
+---
+title: "Duncan Prestige Example"
+author: "Jeffrey B. Arnold"
+date: "04/21/2015"
+output: html_document
+---
+
+This example will use Duncan's Occpational Prestige Data, which has data on prestige
+and other characteristics of 45 U.S. occupations in 1950. See the help page for 
+more info.
+This data is contained in the **car** package.
+```{r}
+library("car")
+data("Duncan")
+```
+
+```{r eval = FALSE}
+?Duncan
+```
+
+We'll also use a few other packages, which we should load now.
+```{r}
+library("ggplot")
+library("dplyr")
+library("broom")
+```
+
+
+The `Duncan` data frame contains the names of the profession as row names.
+This is something that is generally discouraged in modern R, so we will make a 
+new column named `occupation`.
+
+This uses the `$` to assign a value to a column in R.
+We've been using **dplyr** so much that we haven't had to do this, but it can be easier at times.
+```{r}
+Duncan$occupation <- rownames(Duncan)
+```
+This could have also been done using the dplyr function `add_rownames`.
+```{r eval = FALSE}
+# Duncan <- Duncan %>% add_rownames(var = "occupation")
+```
+
+```{r}
+ggplot(Duncan, aes(x = income, y = prestige, colour = type,
+                   label = occupation)) +
+  geom_text() +
+  theme_minimal() 
+```
+
+Instead, let's colour the points by education level
+```{r}
+ggplot(Duncan, aes(x = income, y = prestige, colour = education)) +
+  geom_point() +
+  theme_minimal() 
+```
+
+Run a regression of prestige on income and education
+```{r}
+mod_prestige_1 <- lm(prestige ~ income + education, data = Duncan)
+summary(mod_prestige_1)
+```
+
+Calcualate manually
+```{r}
+beta <- coef(mod_prestige_1)
+beta_vc <- vcov(mod_prestige_1)
+beta_se <- sqrt(diag(beta_vc))
+tstat <- beta / beta_se
+pval <- 2 * (1 - pt(tstat, mod_prestige_1$df.residual))
+```
+
+Confidence intervals
+```{r}
+confint(mod_prestige_1, level = 0.95)
+```
+Manually,
+```{r}
+lower_95 <- beta - qt(0.025, mod_prestige_1$df.residual) * beta_se
+upper_95 <- beta + qt(0.025, mod_prestige_1$df.residual) * beta_se
+```
+
+Creating a nice table
+```{r}
+library("stargazer")
+stargazer(mod_prestige_1, type = "text")
+```
+
+Using the broom package
+```{r}
+glance(mod_prestige_1)
+tidy(mod_prestige_1)
+glimpse(augment(mod_prestige_1))
+```
+
+Confidence intervals for expected values $\hat{y}$
+```{r}
+yhat <- predict(mod_prestige_1, interval = "confidence")
+```
+
+Note on help for `predict`. Predict works with many different types of analyses
+and object. You need to go to `?predict.lm` to get help for predict as it relates to `lm`.
+
+To plot, convert to a data_frame
+```{r}
+yhat_df <- as.data.frame(yhat) %>% add_rownames(var = "occupation")
+```
+
+Now it is easy to plot in ggplot
+```{r}
+ggplot() + 
+  geom_point(data = Duncan, aes(x = income, y = prestige)) + 
+```
+
+Now do it with hypothetical values. All values of income observed in the data, 
+but education at its mean.
+```{r}
+duncan_mean_education <- 
+  data.frame(education = mean(Duncan$eduation),
+             income = seq(min(income), max(income), length.out = 50))
+yhat2 <- 
+  as.data.frame(yhat = predict(mod_prestige_1, newdata = duncan_mean_education,
+                               inverval = "confidence"))
+
+augment(mod_prestige_1, newdata = duncan_mean_education) %>%
+  mutate(lower = .fitted + qt(0.025, mod_prestige_1$df.residual) * .se.fit,
+         upper = .fitted + qt(0.975, mod_prestige_1$df.residual) * .se.fit)
+
+```
+
+
+

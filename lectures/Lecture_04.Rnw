@@ -41,47 +41,257 @@ suppressPackageStartupMessages({
 \tableofcontents
 \end{frame}
 
-\section{SSE, TSS, and  SSreg}
+\section{Overview of Statistical Inference}
 
+% TODO: Change to a visualization
 \begin{frame}
-  
+  \frametitle{Statistical Inference}
+
+  \begin{itemize}
+  \item Population: $Y$
+  \item Parameters of interest: $\beta$ from $Y = \beta X + \epsilon$.
+  \item Sample: $y$
+  \item Sample statistics (estimates): $\vc{b}$
+  \item Since samples are random, different samples produce $\vc{b}$?
+    \begin{itemize}
+    \item How do we use the samples to the population parameters?
+    \item How do we quantify our uncertainty about that estimate?
+    \end{itemize}
+  \end{itemize}
+
 \end{frame}
 
 \begin{frame}
-  The linear regression population model is
+  \frametitle{Science is about Uncertainty}
+
+  \begin{itemize}
+  \item Knowledge is never certain
+  \item Goal: Estimating unknowns and \textbf{quantifying the uncertainty} of those estimates
+  \item Estimates without uncertainty are incomplete at best, useless or biased at worst
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{The Fundamental Problem of Statistical Inference}
+
+  \begin{itemize}
+  \item We have methods to calculate the probability of a sample and sample statistics \textbf{given}
+    we know the population parameters.
+  \item But we don't know the population parameters, so what do we do?
+  \item Two (three) main methods
+    \begin{itemize}
+    \item Frequentist: do not calculate the probability of the parameter
+      \begin{itemize}
+      \item Hypothesis testing: Assume a hypothesis and check if data is consistent with it.
+      \item Confidence intervals: find a plausible range of parameters
+      \end{itemize}
+    \item Bayesian: calculate the probability of the parameter
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\section{Difference of Means Example}
+
+\begin{frame}
+  \frametitle{Is US Economic Growth Higher Under Democratic Presidents than Republicans?}
+
+<<>>=
+gdp <- read.csv("../data/gdp.csv") %>%
+  mutate(party = plyr::mapvalues(party, c(-1, 1), c("Dem", "Rep")))
+
+ggplot(gdp, aes(x = party, y = grgdpch)) +
+  geom_boxplot() +
+  geom_point()
+
+@
+
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Is US Economic Growth Higher Under Democratic Presidents than Republicans?}
+
+<<>>=
+group_by(gdp, party) %>%
+  filter(! is.na(grgdpch)) %>%
+  summarise_each(funs(mean, sd, length), grgdpch)
+
+@
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Sampling Distribution of the Difference in Means}
+
+  \begin{itemize}[<+->]
+  \item Want to know $\mu_{D} - \mu_{R}$? (Difference in population means)
+  \item What is the sample? What is the population?
+  \item We will be making other dubious assumptions in this example: populations are independent, normal (not important).
+  \item Estimate is $\bar{x}_{D} - \bar{x}_{R}$ (Difference in sample means)
+  \item But sample is random, how do we characterize the uncertainty in our estimates?
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Sampling Distribution of the Difference in Means}
+
+  If we knew $\mu_{D}$, $\mu_{R}$, $\sigma_{R}$, $\sigma_{D}$, we could calculate the
+  distribution of $\bar{x}_{D} - \bar{x}_{R}$.
+
   \begin{equation*}
-    y = x \beta + \epsilon
+    \bar{x}_{D} - \bar{x}_{R} \sim N\left(\frac{\mu_{D} - \mu_{R}}{\sqrt{\frac{\sigma_{R}^{2}}{n_{R}} + \frac{\sigma_{D}^{2}}{n_{D}}}} \right)
   \end{equation*}
-  
-  What is an estimate of $\epsilon$?
+
+  But we don't know the population \dots{}
+
 \end{frame}
 
+\subsection{Significance Tests}
 
 \begin{frame}
-  
+  \frametitle{Logic of Significance Tests}
+
+  \begin{itemize}
+  \item Assume null $H_{0}$ and alternative $H_{a}$ hypotheses
+  \item Calculate the sampling distribution of the test statistic assuming $H_{0}$ is true
+  \item $p$-value is the probability of data (test statitics) equal or more extreme than the sample
+  \item (optional) At a pre-defined significance level  ($\alpha$),  reject $H_{0}$ if $p$-value less than $\alpha$, fail to reject if $p$-value greater than $\alpha$.
+  \end{itemize}
 \end{frame}
 
+\begin{frame}
+  \frametitle{Significance Test}
 
+  \begin{itemize}
+  \item Null hypothesis: $H_{0}: \mu_{D} - \mu_{R}= 0$
+  \item Alternative hypothesis: $H_{a}: \mu_{D} - \mu_{R} \neq 0$
+  \item The test statistic is
+    \begin{equation}
+      t = \frac{\bar{x}_{D} - \bar{x}_{R}}{se}
+    \end{equation}
+    where
+    \begin{equation*}
+      se = \frac{\sigma_{D}}{}
+    \end{equation*}
+  \item Which is distributed
+    \begin{equation*}
+      t \sim N
+      \left(
+        0,
+        \frac{\sigma_{R}^{2}}{n_{R}} + \frac{\sigma_{D}^{2}}{n_{D}}
+      \right)
+    \end{equation*}
+  \item But don't know $\sigma_{R}^{2}$ and $\sigma_{D}^{2}$.
+  \item Use $s_{R}^{2}$, $s_{D}^{2}$, $t$ distributed Student's t to acccount for uncertainty from estimating standard deviations.
+  \end{itemize}
+
+\end{frame}
 
 \begin{frame}
   \frametitle{t-distribution}
+
+  See \url|https://jrnold.shinyapps.io/tdist|
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{t-tests for difference of means in R}
+
+<<>>=
+t.test(grgdpch ~ party, # y ~ x
+       data = gdp, # dataset
+       mu = 0, # H_0: mu_1 - mu_2
+       conf.level = 0.95 # confidence level to use for CI
+)
+@
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Significance Tests}
   
+  \begin{itemize}
+  \item Two approaches:
+    \begin{itemize}
+    \item Fisher: $p$-value represents the level of evidence against $H_{0}$
+    \item Neyman-Pearson: choose a significance level $\alpha$ and reject null hypothesis if $p$-value is less than $\alpha$.
+    \end{itemize}
+  \item When making a decision of reject / not reject:
+    \begin{itemize}
+    \item Type I error: $H_{0}$ true, reject $H_{0}$
+    \item Type II error: $H_{0}$ false, fail to reject $H_{0}$ 
+    \end{itemize}
+  \item Power $1 - \Pr(\text{Type II error})$
+  \item Tests generally focus on Type I error
+    \begin{itemize}
+    \item ``conservative'' -- is it really?
+    \item much harder to calculate Type II errors
+    \end{itemize}
+  \end{itemize}
   
 \end{frame}
 
+\begin{frame}
+  \frametitle{How to report a confidence interval}
+
+  \begin{itemize}
+  \item Either of 
+    \begin{itemize}
+    \item Democratic presidents enjoyed growth rates 1.37 points higher (95\% CI: 0.01 to 2.72) than their Republican counterparts.
+    \item Democrats enjoyed 1.37 points higher growth than Republicans, with a 95 percent confidence interval of 0.01 to 2.72.
+    \end{itemize}
+  \item We could calculate any CI we wish: 90 percent, 80 percent, 50 percent, etc.
+  \item The most commonly used are: 90, 95, and 99.    
+  \end{itemize}
+  
+\end{frame}
+
+\subsection{Confidence Intervals}
+
+\begin{frame}
+  \frametitle{Logic of Confidence Intervals}
+  
+  \begin{itemize}[<+->]
+  \item Find a plausible range of values of the parameter: $[\bar{x}_{lower}, \bar{x}_{upper}]$
+  \item Only know probability of data given parameter value, so cannot calculate a probability distribution for a parameter value (Bayesian approach)
+  \item Frequentist approach: method to generate intervals which contain the true parameter $\mu$ in $C$\% of the samples.
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{What a $100 (1 - \alpha)$\% confidence interval means}
+  
+  \begin{description}
+  \item[Coverage] A $100 (1 - \alpha)$\% confidence interval for a parameter $\theta$, is an interval generated by a method that generates intervals that include the true parameter $\theta$ in $100 (1 - \alpha)$\% of samples.
+  \item[Rejection Region] A $100 (1 - \alpha)$\% confidence interval such that $H_{0}: \theta = \theta'$ cannot be rejected at the $\alpha$ significance level for all values of $\theta'$ in the interval, and $H_{0}: \theta = \theta'$ is rejected for all values of $\theta'$ outside the interval. (not all confidence intervals have this property).
+  \end{description}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Confidence levels for difference in means}
+
+  To get a $100(1 - \alpha)$\% confidence interval for a difference of means
+  \begin{equation*}
+    \bar{x}_{D} - \bar{x}_{R} \pm t_{\alpha / 2, \nu} \sqrt{\frac{s^{2}_{D}}{n_{D}} + \frac{s_{R}^{2}}{n_{R}}}
+  \end{equation*}
+  where $t_{\alpha / 2, \nu}$ is a critical value of the $t$ distribution such that the tails area of the distribution is $\alpha$. The value of $\nu$ is complicated.
+  
+\end{frame}
 
 \begin{frame}
   \frametitle{Conditional Probability}
-  
-  \begin{eqation}
+
+  \begin{equation*}
     p (A | B) = \frac{p (A \& B)}{P (B)}
-  \end{eqation}
+  \end{equation*}
 
   \begin{itemize}
   \item What if $A$ and $B$ are independent? \only<2>{$P(A | B) = P(A)$}
-  \item What is the sampling distribution? 
+  \item What is the sampling distribution?
   \end{itemize}
-  
+
 \end{frame}
 
 \begin{frame}
@@ -90,42 +300,75 @@ suppressPackageStartupMessages({
   \begin{align*}
     p (A | B) &= \frac{p (B | A) p(A)}{\sum_{A'} p (B | A') p (A')} \\
     &= \frac{p (B | A) p (A)}{\sum_{A'} p (B | A') p (A')} \\
-    &\propto 
+    &\propto p(B | A) p(B)
   \end{align*}
-  
+
 \end{frame}
 
+
+
 \begin{frame}
-  \frametitle{Statistical Inference for OLS}
-  
+  \frametitle{Confidence Intervals vs. Significance Tests}
+
+
   \begin{itemize}
-  \item Individual Coefficients $\beta_{k}$
+  \item Problems with \textbf{both}
+    \begin{itemize}
+    \item Simply commitment to a certain error rate, given \textbf{assumptions}. Does not account for \textbf{model uncertainty}.
+    \item ``File drawer problem'', ``fishing'': even if it makes sense on an individual test, multiple testing within a research project + selecting on significant results can result in
+    \end{itemize}
+  \item Problems with signficance tests that CI overcome
+    \begin{itemize}
+    \item tests are ``weak'' -
+    \item confidence intervals focus more on substantive significance (parameter values); $p$-values ignore all substantive signifance.
+    \end{itemize}
   \end{itemize}
-  
+
 \end{frame}
 
 \begin{frame}
-  \frametitle{Confidence Interval}
-  
-  \begin{block}{General Definition}
-    In repeated samples, $C$\% of samples have a $C$\% confidence interval that contains the population (true) parameter $\theta$.
-  \end{block}
-  
-  \begin{itemize}[<+->]
-  \item Not a statement about a sample interval, statement about the method
-  \item Each confidence interval either contains $\theta$ or not, there is no probability.
-    Probability that it contains the 
+  \frametitle{Confidence Intervals vs. Significance Tests}
+
+  \begin{itemize}
+  \item Confidence intervals often misinterpreted
+  \item Definition of confidence interval is awkward and not exactly what we want, so often interpreted as probability interval
+  \item But which is clearer?
+    \begin{itemize}
+    \item Compared to Republicans, the effect of Democratic presidents on the economy is
+      significantly positive at the 0.05 level.
+    \item Democratic presidents enjoyed 1.37 points higher growth than Republicans, with a
+      95 percent confidence interval of 0.01 to 2.72.
+    \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+\frametitle{Bayesian Statistics}
+
+\begin{frame}
+  \frametitle{Inference and Bayes Rule}
+
+  \begin{align*}
+    p (H | D) &= \frac{p (H | D) p(D)}{\sum_{H'} p (D | H') p (H')} \\
+    &= \frac{p (D | H) p (H)}{p(D)} \\
+    &\propto p(D | H) p(H)
+  \end{align*}
+
+  \begin{itemize}
+  \item $p(D | H)$ is the likelihood (related to the sampling distribution).
+  \item Where does $p(H)$ come from?
   \end{itemize}
-  
+
 \end{frame}
 
 \begin{frame}
   \frametitle{Bayesian and Frequentist Statistics}
 
-  In many research questions we are interested in the probability of the hypothesis $H$, given the data $D$:  $p(H | D)$. 
-  
+  In many research questions we are interested in the probability of the hypothesis $H$, given the data $D$:  $p(H | D)$.
+
   \begin{description}
-  \item[Frequentist] Assume a hypothesis, e.g. null hypothesis $H_{0}$, and calculate the probability 
+  \item[Frequentist] Assume a hypothesis, e.g. null hypothesis $H_{0}$, and calculate the probability
     of the data: $p(D | H_{0})$
   \item[Bayesian] Assume a prior distribution $p(H)$ and calculate the probability of the hypothesis
     given the data:
@@ -133,31 +376,193 @@ suppressPackageStartupMessages({
       p(H | D) \propto p(D | H) p(H)
     \end{equation*}
   \end{description}
-  
+
   \only<2>{\textbf{My Claim:} Even if using frequentist tests $p(D | H)$, a paper
     assigns prior probilities to hypotheses, e.g. lit review, logical arguments, etc. to make a Bayesian argument, $p(D | H) p(H)$.}
 
 \end{frame}
 
+\section{Statistical Inference for OLS}
+
 \begin{frame}
-  \frametitle{Power}
+  \frametitle{Statistical Inference for OLS}
+
+  \begin{itemize}
+  \item Individual Coefficients:
+    \begin{itemize}
+    \item Significance tests: $\beta_{k}$
+    \item Confidence intervals
+    \end{itemize}
+  \item Multiple coefficients:
+    \begin{itemize}
+    \item Significance test
+      \begin{itemize}
+      \item F-test on all slopes: $H_{0}: \beta_{1} = \dots = \beta_{k} = 0$
+      \item F-test on subset of slopes: $H_{0}: \beta_{1} = \dots = \beta_{k} = 0$
+      \item F-test on linear combinations of slopes: e.g $H_{0}: \beta_{1} - \beta_{2} = 0$.
+      \end{itemize}
+    \item Confidence regions
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Statistical Inference for Individual Coefficients for Simple Regression}
   
+  If all assumptions of Gauss-Markov hold,
+  \begin{equation*}
+    V(B) \sim N \left(
+      \beta, \frac{\sigma_{\epsilon}^{2}}{\sum {(x_{i} - \bar{x})}^{2}}
+    \right)
+  \end{equation*}
+  If $\epsilon$ not normal, approximate as $n \to \infty$
+  
+  \begin{itemize}
+  \item Test statistic for $H_{0}:\beta = \beta_{0}$ distributed Student's t with $n - k - 1$ df.
+    \begin{equation*}
+      t = \frac{\beta - \beta_{0}}{se}
+    \end{equation*}
+  \item Confidence interval is
+    \begin{equation*}
+      B \pm t_{\alpha / 2, n - k - 1} se
+    \end{equation*}
+  \item standard error is $V(B)$ with $\hat{\sigma}_{\epsilon}^{2}$ as an estimate of $\sigma_{\epsilon}$.
+  \end{itemize}
+\end{frame}    
+
+\begin{frame}
+  \frametitle{Estimate of $\sigma_{\epsilon}^{2}$}
+
+  Estimate $\sigma_{\epsilon}^{2}$ from the regression errors
+  \begin{equation*}
+    \hat{\epsilon} = \frac{\sum E_{i}^{2}}{n - k - 1}
+  \end{equation*}
+  \begin{itemize}
+  \item  $n - k - 1 = \text{(observations)} - \text{(variables)} - \text{(intercept)}$ is the degrees of freedom.
+  \item Similar to mean squared error, but to estimate population divide by degrees of freedom.
+  \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Statistical Inference for Individual Coefficients for Multiple Regression}
+  
+  If multiple variables, and Gauss-Markov assumptions hold, then 
+  \begin{equation*}
+    \vc{b} \sim MVN
+    \left(
+      \beta, \sigma_{\epsilon}^{2}
+      {\left(
+        \mat{X} \mat{X}'
+      \right)}^{-1}
+    \right)
+  \end{equation*}
+  
+  \begin{itemize}
+  \item analagous to the bivariate version
+    \begin{itemize}
+    \item calculates all standard errors simultaneously
+    \item covariances: $\vc{b}_{i}$ and $\vc{b}_{j}$ can be correlated
+    \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Statistical Inference for Individual Coefficients for Multiple Regression}
+
+  Standard error for a single coefficient
+  \begin{equation*}
+    SE(B_{j}) =  \sqrt{se^{2} (X' X)^{-1}_{jj}} = \frac{1}{\sqrt{1 - R^{2}_{j}}} \frac{se}{\sqrt{\sum {(x_{ij} - \bar{x}_{j})}^{2}}}
+  \end{equation*}
+
+  \begin{itemize}
+  \item Test statistic for $H_{0}:\beta = \beta_{0}$ distributed Student's t with $n - k - 1$ df.
+    \begin{equation*}
+      t = \frac{\beta - \beta_{0}}{se}
+    \end{equation*}
+  \item Confidence interval is
+    \begin{equation*}
+      B \pm t_{\alpha / 2, n - k - 1} se
+    \end{equation*}
+  \item standard error is $V(B)$ with $\hat{\sigma}_{\epsilon}^{2}$ as an estimate of $\sigma_{\epsilon}$.
+  \end{itemize}
+
   
 \end{frame}
 
 
 \begin{frame}
-  \frametitle{References}
-  
+  \frametitle{Confidence Interval}
+
+  \begin{block}{General Definition}
+    In repeated samples, $C$\% of samples have a $C$\% confidence interval that contains the population (true) parameter $\theta$.
+  \end{block}
+
+  \begin{itemize}[<+->]
+  \item Not a statement about a sample interval, statement about the method
+  \item Each confidence interval either contains $\theta$ or not, there is no probability.
+    Parameters are fixed, only samples are random.
+  \end{itemize}
+
+\end{frame}
+
+
+\section{Miscellaneous problems with significance testing}
+
+\begin{frame}
+  \frametitle{Overlapping confidence intervals does not mean difference is not statistically significant}
+
+  See \url{https://www.cscu.cornell.edu/news/statnews/Stnews73insert.pdf}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Significant and Not significant are not statistically significant}
+
   \begin{itemize}
-  \item Some slides derived from Christopher Adolph \textit{Linear Regression in Matrix Form / Propoerties \& Assumptions of Linear Regression}. Used with permission. <http://faculty.washington.edu/cadolph/503/topic3.pw.pdf>
+  \item Common example:
+    \begin{itemize}
+    \item Regression with several dummy variables
+    \item Coefficient of dummy variable of category A ($\beta_{A}$) is significant at 5\% level,
+      dummy variable of category B ($\beta_{B}$) is not significant at the 5\% level.
+    \item Common (wrong) interpretation: A and B are different
+    \item Correct procedures:
+      \begin{itemize}
+      \item Sigificance test with $H_{0}: \beta_{A} = \beta_{B}$
+      \item calculate confidence interval of $\beta_{A} - \beta_{B}$.
+      \end{itemize}
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Statistical and Substantive Significance}
+
+  \begin{itemize}
+  \item $p$-values are a function of estimated effect size ($B$) but also the sample size
+  \item $p$-values only show statistical signifiance, not substantive significance.
+  \item Confidence intervals can be more useful for displaying substantive significance
+  \end{itemize}
+
+\end{frame}
+
+% TODO: include example with means
+
+\begin{frame}
+  \frametitle{References}
+
+  \begin{itemize}
+  \item Some slides derived from Christopher Adolph \textit{Inference and Interpretation of Linear Regression}. Used with permission. <http://faculty.washington.edu/cadolph/503/topic4.pw.pdf>
   \item Material included from
     \begin{itemize}
     \item Fox Ch 6, 9.3
-    \item Angrist and Pischke, Chapter 3
     \end{itemize}
   \end{itemize}
-  
+
 \end{frame}
 
 \end{document}
