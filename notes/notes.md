@@ -5,6 +5,7 @@ Lab document
 - should be .Rmd, compile to
 - Learning Objectives at the top
 - Should it show solutions by default? If not, then it forces individuals to type in the solutions. Labs by Cetinkya-Rundel do not show results ([example](https://stat.duke.edu/courses/Spring15/sta101.001/post/labs/lab9.html)); Labs by Software carpentry do show results ([example](http://swcarpentry.github.io/r-novice-inflammation/01-starting-with-data.html)).
+- Tips http://swcarpentry.github.io/training-course/tips/
 - Follow advice from software carpentry templates
 
     - Software Carpentry Lesson Templates: http://software-carpentry.org/blog/2014/10/new-lesson-template-v2.html (the concepts, but not the details of implementation).

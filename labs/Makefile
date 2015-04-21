@@ -10,3 +10,5 @@ labs: $(LABS_HTML)
 
 %.html: %.Rmd
 	$(RSCRIPT) -e 'rmarkdown::render("$^", output_file="$@", runtime="static")'
+
+.PHONY: all build labs

@@ -49,6 +49,7 @@
             citecolor=CSSSTeal,
             urlcolor=CSSSTeal,
             filecolor=CSSSTeal,
+            linkcolor=,
             pdfborder={0 0 0}}
 
 % Beamer Stuff
@@ -63,27 +64,8 @@
 \author[\ShortName]{\LongName}
 \title[\CourseNumber]{\CourseNumber: \\ \CourseTitle}
 
-% \beamerdefaultoverlayspecification{<+->}
-
 % Make overbrace and underbrace overlay specification aware
 \renewcommand<>{\overbrace}[2]{\alt#3{\overbrace{#1}{#2}}{#1}}
 \renewcommand<>{\underbrace}[2]{\alt#3{\underbrace{#1}{#2}}{#1}}
 
 %\newenvironment{knitrout}{\setlength{\topsep}{0mm}}{} 
-
-\AtBeginPart{
-  \let\insertpartnumber\relax
-  \let\partname\relax
-  \frame{\partpage}
-}
-\AtBeginSection{
-  \let\insertsectionnumber\relax
-  \let\sectionname\relax
-  \frame{\sectionpage}
-}
-\AtBeginSubsection{
-  \let\insertsubsectionnumber\relax
-  \let\subsectionname\relax
-  \frame{\subsectionpage}
-}
-

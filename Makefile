@@ -31,22 +31,21 @@ hw: data
 
 web: $(PAGES_MD_FILES) $(POSTS_MD_FILES) data labs
 
-data: data/gapminder.csv
-
-data/gapminder.csv: data/gapminder.R
-	cd data && $(R) $(notdir $^)
-
 web/pages/%.md: web/pages/%.Rmd
 	cd $(dir $^) && $(R) -e 'knitr::knit("$(notdir $^)")'
 
 web/posts/%.md: web/posts/%.Rmd
 	cd $(dir $^) && $(R) -e 'knitr::knit("$(notdir $^)")'
 
-
-build: lectures hw labs web data
+build: data lectures hw labs web
 	cd $(WEBDIR); source venv/bin/activate; nikola build
 
 deploy: build
 	cd $(WEBDIR); source venv/bin/activate; nikola github_deploy
+
+data: data/gapminder.csv
+
+data/gapminder.csv: data/gapminder.R
+	cd data && $(R) $(notdir $^)
 
 .PHONY: lectures build build-deploy labs hw web data

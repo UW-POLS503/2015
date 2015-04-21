@@ -27,8 +27,7 @@ library("readr")
 
 ## Reading in data review:
 
-1. Download Iverson and Soskice data
-    a. (alternatively, see if you can figure out how to read in a file directly from a webpage)
+1. Download the data [iver.csv](http://pols503.github.io/pols_503_sp15/data/iver.csv)
 2. Generate summary statistics for all variables in the dataset (number of observations, min, max, median, mean, standard deviation)
 3. Plot the distributions of each numeric variable
 
@@ -163,10 +162,6 @@ povred.plot <- ggplot(iver, aes(povred)) + geom_histogram()
 povred.plot
 ```
 
-```
-## stat_bin: binwidth defaulted to range/30. Use 'binwidth = x' to adjust this.
-```
-
 ![](lab3_files/figure-html/unnamed-chunk-5-1.png) 
 
 ```r
@@ -174,19 +169,11 @@ enp.plot <- ggplot(iver, aes(enp)) + geom_histogram()
 enp.plot
 ```
 
-```
-## stat_bin: binwidth defaulted to range/30. Use 'binwidth = x' to adjust this.
-```
-
 ![](lab3_files/figure-html/unnamed-chunk-5-2.png) 
 
 ```r
 lnenp.plot <- ggplot(iver, aes(lnenp)) + geom_histogram()
 lnenp.plot
-```
-
-```
-## stat_bin: binwidth defaulted to range/30. Use 'binwidth = x' to adjust this.
 ```
 
 ![](lab3_files/figure-html/unnamed-chunk-5-3.png) 
@@ -892,7 +879,7 @@ residuals_multi
 ##             6             7             8             9            10 
 ##  1.393762e+01 -1.470128e+00 -2.179764e+01  6.687198e+00  1.017653e+01 
 ##            11            12            13            14 
-##  5.013162e+00 -8.881784e-16  1.132490e+01 -2.338434e+01
+##  5.013162e+00 -1.110223e-16  1.132490e+01 -2.338434e+01
 ```
 
 ```r
@@ -906,7 +893,7 @@ resid(lm_multi)
 ##             6             7             8             9            10 
 ##  1.393762e+01 -1.470128e+00 -2.179764e+01  6.687198e+00  1.017653e+01 
 ##            11            12            13            14 
-##  5.013162e+00 -8.881784e-16  1.132490e+01 -2.338434e+01
+##  5.013162e+00 -1.110223e-16  1.132490e+01 -2.338434e+01
 ```
 
 
