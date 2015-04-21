@@ -1,6 +1,6 @@
 <!--
-.. title: Notes on
-.. tags: draft
+.. title: Notes on R Markdown assignments
+.. date: 2015-04-21
 -->
 
 1. Do include both code and output. In general, you should show all your code and the output of that code,

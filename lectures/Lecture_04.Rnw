@@ -231,20 +231,6 @@ t.test(grgdpch ~ party, # y ~ x
   
 \end{frame}
 
-\begin{frame}
-  \frametitle{How to report a confidence interval}
-
-  \begin{itemize}
-  \item Either of 
-    \begin{itemize}
-    \item Democratic presidents enjoyed growth rates 1.37 points higher (95\% CI: 0.01 to 2.72) than their Republican counterparts.
-    \item Democrats enjoyed 1.37 points higher growth than Republicans, with a 95 percent confidence interval of 0.01 to 2.72.
-    \end{itemize}
-  \item We could calculate any CI we wish: 90 percent, 80 percent, 50 percent, etc.
-  \item The most commonly used are: 90, 95, and 99.    
-  \end{itemize}
-  
-\end{frame}
 
 \subsection{Confidence Intervals}
 
@@ -281,31 +267,31 @@ t.test(grgdpch ~ party, # y ~ x
 \end{frame}
 
 \begin{frame}
-  \frametitle{Conditional Probability}
-
-  \begin{equation*}
-    p (A | B) = \frac{p (A \& B)}{P (B)}
-  \end{equation*}
+  \frametitle{How to report a confidence interval}
 
   \begin{itemize}
-  \item What if $A$ and $B$ are independent? \only<2>{$P(A | B) = P(A)$}
-  \item What is the sampling distribution?
+  \item Either of 
+    \begin{itemize}
+    \item Democratic presidents enjoyed growth rates 1.37 points higher (95\% CI: 0.01 to 2.72) than their Republican counterparts.
+    \item Democrats enjoyed 1.37 points higher growth than Republicans, with a 95 percent confidence interval of 0.01 to 2.72.
+    \end{itemize}
+  \item We could calculate any CI we wish: 90 percent, 80 percent, 50 percent, etc.
+  \item The most commonly used are: 90, 95, and 99.    
   \end{itemize}
-
+  
 \end{frame}
+
+\section{Comments on Statistical Inference}
 
 \begin{frame}
-  \frametitle{Bayes Rule}
-
-  \begin{align*}
-    p (A | B) &= \frac{p (B | A) p(A)}{\sum_{A'} p (B | A') p (A')} \\
-    &= \frac{p (B | A) p (A)}{\sum_{A'} p (B | A') p (A')} \\
-    &\propto p(B | A) p(B)
-  \end{align*}
-
+  \frametitle{Fun Stuff}
+  
+  \begin{itemize}
+  \item \url{https://xkcd.com/882/}
+  \item \url{https://xkcd.com/1478/}
+  \end{itemize}
+  
 \end{frame}
-
-
 
 \begin{frame}
   \frametitle{Confidence Intervals vs. Significance Tests}
@@ -315,7 +301,7 @@ t.test(grgdpch ~ party, # y ~ x
   \item Problems with \textbf{both}
     \begin{itemize}
     \item Simply commitment to a certain error rate, given \textbf{assumptions}. Does not account for \textbf{model uncertainty}.
-    \item ``File drawer problem'', ``fishing'': even if it makes sense on an individual test, multiple testing within a research project + selecting on significant results can result in
+    \item ``File drawer problem'', ``fishing'': even if it makes sense on an individual test, multiple testing within a research project + selecting on significant results can result in biases.
     \end{itemize}
   \item Problems with signficance tests that CI overcome
     \begin{itemize}
@@ -343,12 +329,50 @@ t.test(grgdpch ~ party, # y ~ x
 
 \end{frame}
 
+\begin{frame}
+  \frametitle{Bayesian vs. Frequentist Statistics}
+  
+  \begin{itemize}
+  \item Confidence intervals and significance tests do not calculate the probability of hypotheses (parameters)
+  \item Bayesian statistics attempts to do so, but
+    \begin{itemize}
+    \item requires prior probability of the hypotheses
+    \item computationally, mathematically more difficult
+    \end{itemize}
+  \end{itemize}
+  
+\end{frame}
 
-\frametitle{Bayesian Statistics}
+
+\begin{frame}
+  \frametitle{Conditional Probability}
+
+  \begin{equation*}
+    p (A | B) = \frac{p (A \& B)}{P (B)}
+  \end{equation*}
+
+  \begin{itemize}
+  \item What if $A$ and $B$ are independent? \only<2>{$P(A | B) = P(A)$}
+  \item What is the sampling distribution?
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Bayes Rule}
+
+  \begin{align*}
+    p (A | B) &= \frac{p (B | A) p(A)}{\sum_{A'} p (B | A') p (A')} \\
+    &= \frac{p (B | A) p (A)}{\sum_{A'} p (B | A') p (A')} \\
+    &\propto p(B | A) p(B)
+  \end{align*}
+
+\end{frame}
 
 \begin{frame}
   \frametitle{Inference and Bayes Rule}
 
+  Want to find the probability of a hypotehsis $H$ given the data $D$:
   \begin{align*}
     p (H | D) &= \frac{p (H | D) p(D)}{\sum_{H'} p (D | H') p (H')} \\
     &= \frac{p (D | H) p (H)}{p(D)} \\
@@ -366,7 +390,6 @@ t.test(grgdpch ~ party, # y ~ x
   \frametitle{Bayesian and Frequentist Statistics}
 
   In many research questions we are interested in the probability of the hypothesis $H$, given the data $D$:  $p(H | D)$.
-
   \begin{description}
   \item[Frequentist] Assume a hypothesis, e.g. null hypothesis $H_{0}$, and calculate the probability
     of the data: $p(D | H_{0})$
