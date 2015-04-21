@@ -1,5 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>POLS/CS&amp;SS 503</title><link>http://pols503.github.io/pols_503_sp15/</link><description>Site for POLS/CS&amp;SS 503: Advanced Quantitative Political Methodology (University of Washington; Spring 2015)</description><atom:link href="http://pols503.github.io/pols_503_sp15/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><lastBuildDate>Mon, 20 Apr 2015 20:19:04 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>R Packages Warnings and Messages when Loading</title><link>http://pols503.github.io/pols_503_sp15/posts/package_loading_warnings_and_errors.html</link><dc:creator>Jeffrey B. Arnold</dc:creator><description>&lt;!--
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>POLS/CS&amp;SS 503</title><link>http://pols503.github.io/pols_503_sp15/</link><description>Site for POLS/CS&amp;SS 503: Advanced Quantitative Political Methodology (University of Washington; Spring 2015)</description><atom:link rel="self" type="application/rss+xml" href="http://pols503.github.io/pols_503_sp15/rss.xml"></atom:link><language>en</language><lastBuildDate>Tue, 21 Apr 2015 23:16:53 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Notes on R Markdown assignments</title><link>http://pols503.github.io/pols_503_sp15/posts/r_markdown_assignments.html</link><dc:creator>Jeffrey B. Arnold</dc:creator><description>&lt;!--
+.. title: Notes on R Markdown assignments
+.. date: 2015-04-21
+--&gt;
+
+&lt;ol style="list-style-type: decimal"&gt;
+&lt;li&gt;Do include both code and output. In general, you should show all your code and the output of that code, including graphs and&lt;/li&gt;
+&lt;li&gt;Do include words. Your homework should not be just code and output. You should explain in prose what you are doing, and more importantly why. Your w&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Do &lt;strong&gt;not&lt;/strong&gt; include &lt;strong&gt;extraneous&lt;/strong&gt; output. In general, you should include the output of your code. However, do not print large objects. Most commonly, do not print out large data frames. If you would like to show example lines from a large data frame use &lt;code&gt;head&lt;/code&gt; to show only the first few lines, or &lt;code&gt;glimpse&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class="sourceCode r"&gt;&lt;code class="sourceCode r"&gt;    &lt;span class="kw"&gt;library&lt;/span&gt;(&lt;span class="st"&gt;"gapminder"&lt;/span&gt;)
+    &lt;span class="kw"&gt;library&lt;/span&gt;(&lt;span class="st"&gt;"dplyr"&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 
+## Attaching package: 'dplyr'
+## 
+## The following object is masked from 'package:stats':
+## 
+##     filter
+## 
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class="sourceCode r"&gt;&lt;code class="sourceCode r"&gt;&lt;span class="co"&gt;# bad&lt;/span&gt;
+    &lt;span class="co"&gt;# gapminder&lt;/span&gt;
+
+    &lt;span class="co"&gt;# good&lt;/span&gt;
+    &lt;span class="kw"&gt;head&lt;/span&gt;(gapminder)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##       country continent year lifeExp      pop gdpPercap
+## 1 Afghanistan      Asia 1952  28.801  8425333  779.4453
+## 2 Afghanistan      Asia 1957  30.332  9240934  820.8530
+## 3 Afghanistan      Asia 1962  31.997 10267083  853.1007
+## 4 Afghanistan      Asia 1967  34.020 11537966  836.1971
+## 5 Afghanistan      Asia 1972  36.088 13079460  739.9811
+## 6 Afghanistan      Asia 1977  38.438 14880372  786.1134&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class="sourceCode r"&gt;&lt;code class="sourceCode r"&gt;    &lt;span class="kw"&gt;glimpse&lt;/span&gt;(gapminder)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Observations: 1704
+## Variables:
+## $ country   (fctr) Afghanistan, Afghanistan, Afghanistan, Afghanistan,...
+## $ continent (fctr) Asia, Asia, Asia, Asia, Asia, Asia, Asia, Asia, Asi...
+## $ year      (dbl) 1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992...
+## $ lifeExp   (dbl) 28.801, 30.332, 31.997, 34.020, 36.088, 38.438, 39.8...
+## $ pop       (dbl) 8425333, 9240934, 10267083, 11537966, 13079460, 1488...
+## $ gdpPercap (dbl) 779.4453, 820.8530, 853.1007, 836.1971, 739.9811, 78...&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Do not include warnings or messages unless the question asks for them. Examples of this include the message after using &lt;code&gt;geom_histogram&lt;/code&gt; without a &lt;code&gt;binwidth&lt;/code&gt; argument, or messages when loading certain packages. Either fix the code so that the warning or message no longer appears, or use &lt;code&gt;warning = FALSE&lt;/code&gt; or &lt;code&gt;message = FALSE&lt;/code&gt; in the code chunk to suppress that output.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Do format your assignment intelligently. Clearly indicate each problem with a header, as well as the parts of problems.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="references"&gt;
+
+&lt;/div&gt;
+</description><guid>http://pols503.github.io/pols_503_sp15/posts/r_markdown_assignments.html</guid><pubDate>Tue, 21 Apr 2015 07:00:00 GMT</pubDate></item><item><title>R Packages Warnings and Messages when Loading</title><link>http://pols503.github.io/pols_503_sp15/posts/package_loading_warnings_and_errors.html</link><dc:creator>Jeffrey B. Arnold</dc:creator><description>&lt;!--
 .. title: R Packages Warnings and Messages when Loading
 .. slug: package_loading_warnings_and_errors
 .. tags: R, error messages

@@ -207,6 +207,7 @@ Given that this is my first time teaching this course, I expect many adjustments
 
 ### Tuesday, April 21
 
+- [Deck 4](lectures/Lecture_04_handout.pdf)
 - Readings:
 
     - Fox, Ch. 6, 9.3

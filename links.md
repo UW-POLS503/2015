@@ -64,6 +64,7 @@
 
 - [Not So Short Introduction to LaTeX](https://tobi.oetiker.ch/lshort/lshort.pdf)
 - [LaTeX Wikibook](http://en.wikibooks.org/wiki/LaTeX)
+- [ShareLaTeX](https://www.sharelatex.com/learn/) documentation. Although geared towards the ShareLaTeX online editor, it is also good user-friendly introduction to LaTeX if the ShareLaTeX specific stuff is ignored.
 - Carolina Johnson's excellent LaTeX intro [pdf](http://staff.washington.edu/csjohns/503/WorkshopTemplate.pdf), [tex](http://staff.washington.edu/csjohns/503/WorkshopTemplate.tex)
 - Using LaTeX. You should find a good LaTeX friendly 
     - [ShareLaTeX](https://www.sharelatex.com/about): a not free, online editor for collaboration.
