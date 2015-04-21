@@ -1,0 +1,164 @@
+% Copyright (C) 2015 Jeffrey B. Arnold
+% License CC BY-NC-SA 4.0 http://creativecommons.org/licenses/by-nc-sa/4.0/
+<<init,echo=FALSE,results='hide',warning=FALSE,message=FALSE>>=
+source("init.R")
+@
+<<header>>=
+suppressPackageStartupMessages({
+  library("mvtnorm")
+})
+@
+
+
+\input{\jobname-options}
+\ifdefined\ishandout%
+  \documentclass[handout]{beamer}
+\else
+  \documentclass[]{beamer}
+\fi
+
+% HEADER HERE
+
+\input{includes.tex}
+
+
+\newcommand{\thetitle}{Sum of Squares, Total Sum of Squares, and $R^{2}$}
+\date{April 20, 2015}
+\title{\thetitle{}}
+\hypersetup{
+  pdftitle={\thetitle{}},
+  pdfkeywords={statistics}
+}
+
+\begin{document}
+
+\begin{frame}
+  \maketitle{}
+\end{frame}
+
+\begin{frame}
+\frametitle{Overview}
+\tableofcontents
+\end{frame}
+
+\section{SSE, TSS, and  SSreg}
+
+\begin{frame}
+  
+\end{frame}
+
+\begin{frame}
+  The linear regression population model is
+  \begin{equation*}
+    y = x \beta + \epsilon
+  \end{equation*}
+  
+  What is an estimate of $\epsilon$?
+\end{frame}
+
+
+\begin{frame}
+  
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{t-distribution}
+  
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Conditional Probability}
+  
+  \begin{eqation}
+    p (A | B) = \frac{p (A \& B)}{P (B)}
+  \end{eqation}
+
+  \begin{itemize}
+  \item What if $A$ and $B$ are independent? \only<2>{$P(A | B) = P(A)$}
+  \item What is the sampling distribution? 
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Bayes Rule}
+
+  \begin{align*}
+    p (A | B) &= \frac{p (B | A) p(A)}{\sum_{A'} p (B | A') p (A')} \\
+    &= \frac{p (B | A) p (A)}{\sum_{A'} p (B | A') p (A')} \\
+    &\propto 
+  \end{align*}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Statistical Inference for OLS}
+  
+  \begin{itemize}
+  \item Individual Coefficients $\beta_{k}$
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Confidence Interval}
+  
+  \begin{block}{General Definition}
+    In repeated samples, $C$\% of samples have a $C$\% confidence interval that contains the population (true) parameter $\theta$.
+  \end{block}
+  
+  \begin{itemize}[<+->]
+  \item Not a statement about a sample interval, statement about the method
+  \item Each confidence interval either contains $\theta$ or not, there is no probability.
+    Probability that it contains the 
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Bayesian and Frequentist Statistics}
+
+  In many research questions we are interested in the probability of the hypothesis $H$, given the data $D$:  $p(H | D)$. 
+  
+  \begin{description}
+  \item[Frequentist] Assume a hypothesis, e.g. null hypothesis $H_{0}$, and calculate the probability 
+    of the data: $p(D | H_{0})$
+  \item[Bayesian] Assume a prior distribution $p(H)$ and calculate the probability of the hypothesis
+    given the data:
+    \begin{equation*}
+      p(H | D) \propto p(D | H) p(H)
+    \end{equation*}
+  \end{description}
+  
+  \only<2>{\textbf{My Claim:} Even if using frequentist tests $p(D | H)$, a paper
+    assigns prior probilities to hypotheses, e.g. lit review, logical arguments, etc. to make a Bayesian argument, $p(D | H) p(H)$.}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Power}
+  
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{References}
+  
+  \begin{itemize}
+  \item Some slides derived from Christopher Adolph \textit{Linear Regression in Matrix Form / Propoerties \& Assumptions of Linear Regression}. Used with permission. <http://faculty.washington.edu/cadolph/503/topic3.pw.pdf>
+  \item Material included from
+    \begin{itemize}
+    \item Fox Ch 6, 9.3
+    \item Angrist and Pischke, Chapter 3
+    \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
+\end{document}
+

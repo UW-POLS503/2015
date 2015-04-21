@@ -34,9 +34,8 @@ sim_linear_normal_model <- function(m, x, b, signal = 1) {
     colnames(x) <- paste0("x", seq_len(ncol(x)) - 1L)
   }
   data_frame(sample = seq_len(m)) %>%
-    rowwise() %>%
+    group_by(sample) %>%
     do(cbind(data_frame(i = seq_len(n),
-                  sample = .$sample,
                   y = rnorm(n, mean = yhat, sd = sigma)),
              x))
 }

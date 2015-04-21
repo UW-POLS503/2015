@@ -126,3 +126,46 @@ ggplot() +
 ```
 
 
+```{r}
+#' Simulate data from a normal linear model with fixed X
+#' 
+#' @param n Number of observations
+#' @param b coefficients
+#' @param x model matrix.
+#' @param sigma standard deviation of the error distribution
+#' @returns numeric vector of the y values.
+sim_lin_normal_fixed_x <- function(b, X, sigma) {
+  
+  # Create the simulated y by
+  # adding together the systematic and stochastic
+  # components, according to the true model
+  n <- nrow(x)
+  mu <- cbind(rep(1, n), x) %*% b
+  y <- mu + rnorm(n) * sigma
+  
+  # Run regression, and put coefficients, se, t-stat, and p-values in 
+  # a data frame
+  tidy(lm(y ~ X))
+}
+
+n <- 15
+x <- matrix(rnorm(n))
+b <- c(0, 1)
+sigma <- 0.5
+m <- 1000
+
+simulations <- 
+  data_frame(.sim = seq_len(m)) %>%
+  group_by(.sim) %>% 
+  do(sim_lin_normal_fixed_x(b, x, sigma))
+
+filter(simulations, term == "X") %>%
+  {
+    ggplot(data = ., aes(x = estimate)) + 
+      geom_density() + 
+      stat_function(fun = dnorm,
+                    args = list(mean = mean(.$estimate), sd = sd(.$estimate)))
+    
+  }
+
+```
