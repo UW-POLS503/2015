@@ -1,6 +1,6 @@
 <!--
-.. title: Notes on
-.. tags: draft
+.. title: Notes on R Markdown assignments
+.. date: 2015-04-21
 -->
 
 1. Do include both code and output. In general, you should show all your code and the output of that code,
@@ -15,13 +15,6 @@
     
     ```r
     	library("gapminder")
-    ```
-    
-    ```
-    ## Error in library("gapminder"): there is no package called 'gapminder'
-    ```
-    
-    ```r
     	library("dplyr")
     ```
     
@@ -47,7 +40,13 @@
     ```
     
     ```
-    ## Error in head(gapminder): object 'gapminder' not found
+    ##       country continent year lifeExp      pop gdpPercap
+    ## 1 Afghanistan      Asia 1952  28.801  8425333  779.4453
+    ## 2 Afghanistan      Asia 1957  30.332  9240934  820.8530
+    ## 3 Afghanistan      Asia 1962  31.997 10267083  853.1007
+    ## 4 Afghanistan      Asia 1967  34.020 11537966  836.1971
+    ## 5 Afghanistan      Asia 1972  36.088 13079460  739.9811
+    ## 6 Afghanistan      Asia 1977  38.438 14880372  786.1134
     ```
     
     ```r
@@ -55,7 +54,14 @@
     ```
     
     ```
-    ## Error in nrow(tbl): object 'gapminder' not found
+    ## Observations: 1704
+    ## Variables:
+    ## $ country   (fctr) Afghanistan, Afghanistan, Afghanistan, Afghanistan,...
+    ## $ continent (fctr) Asia, Asia, Asia, Asia, Asia, Asia, Asia, Asia, Asi...
+    ## $ year      (dbl) 1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992...
+    ## $ lifeExp   (dbl) 28.801, 30.332, 31.997, 34.020, 36.088, 38.438, 39.8...
+    ## $ pop       (dbl) 8425333, 9240934, 10267083, 11537966, 13079460, 1488...
+    ## $ gdpPercap (dbl) 779.4453, 820.8530, 853.1007, 836.1971, 739.9811, 78...
     ```
 
 3. Do not include warnings or messages unless the question asks for them. Examples of this include
