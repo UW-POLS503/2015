@@ -128,7 +128,7 @@ group_by(gdp, party) %>%
   \item What is the sample? What is the population?
   \item We will be making other dubious assumptions in this example: populations are independent, normal (not important).
   \item Estimate is $\bar{x}_{D} - \bar{x}_{R}$ (Difference in sample means)
-  \item But sample is random, how do we characterize the uncertainty in our estimates?
+  \item But the observed sample is random, so how do we characterize the uncertainty in our estimates?
   \end{itemize}
 
 \end{frame}
@@ -140,7 +140,12 @@ group_by(gdp, party) %>%
   distribution of $\bar{x}_{D} - \bar{x}_{R}$.
 
   \begin{equation*}
-    \bar{x}_{D} - \bar{x}_{R} \sim N\left(\frac{\mu_{D} - \mu_{R}}{\sqrt{\frac{\sigma_{R}^{2}}{n_{R}} + \frac{\sigma_{D}^{2}}{n_{D}}}} \right)
+    (\bar{x}_{D} - \bar{x}_{R})
+    \sim N
+    \left(
+      \mu_{D} - \mu_{R},
+      \frac{\sigma_{R}^{2}}{n_{R}} + \frac{\sigma_{D}^{2}}{n_{D}} 
+    \right)
   \end{equation*}
 
   But we don't know the population \dots{}
@@ -155,35 +160,31 @@ group_by(gdp, party) %>%
   \begin{itemize}
   \item Assume null $H_{0}$ and alternative $H_{a}$ hypotheses
   \item Calculate the sampling distribution of the test statistic assuming $H_{0}$ is true
-  \item $p$-value is the probability of data (test statitics) equal or more extreme than the sample
+  \item $p$-value is the probability of data (test statistics) equal or more extreme than the sample
   \item (optional) At a pre-defined significance level  ($\alpha$),  reject $H_{0}$ if $p$-value less than $\alpha$, fail to reject if $p$-value greater than $\alpha$.
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Significance Test}
+  \frametitle{Significance Test for Difference in Means}
 
   \begin{itemize}
   \item Null hypothesis: $H_{0}: \mu_{D} - \mu_{R}= 0$
   \item Alternative hypothesis: $H_{a}: \mu_{D} - \mu_{R} \neq 0$
   \item The test statistic is
     \begin{equation}
-      t = \frac{\bar{x}_{D} - \bar{x}_{R}}{se}
+      t = \frac{\bar{x}_{D} - \bar{x}_{R}}{\se(\bar{x}_{D} - \bar{x}_{R})}
     \end{equation}
     where
     \begin{equation*}
-      se = \frac{\sigma_{D}}{}
+      \se(\bar{x}_{D} - \bar{x}_{R}) = 
+      \sqrt{
+        \frac{\sigma_{D}^{2}}{n_{D}} + 
+        \frac{\sigma_{R}^{2}}{n_{R}}
+      }
     \end{equation*}
-  \item Which is distributed
-    \begin{equation*}
-      t \sim N
-      \left(
-        0,
-        \frac{\sigma_{R}^{2}}{n_{R}} + \frac{\sigma_{D}^{2}}{n_{D}}
-      \right)
-    \end{equation*}
-  \item But don't know $\sigma_{R}^{2}$ and $\sigma_{D}^{2}$.
-  \item Use $s_{R}^{2}$, $s_{D}^{2}$, $t$ distributed Student's t to acccount for uncertainty from estimating standard deviations.
+  \item Since we don't know $\sigma_{R}^{2}$ and $\sigma_{D}^{2}$, use sample variances: $s_{R}^{2}$, $s_{D}^{2}$ as estimators.
+  \item Use $t$ distributed Student's t to account for uncertainty from estimating standard deviations. It would be distributed standard Normal if the population standard deviations were known.
   \end{itemize}
 
 \end{frame}
@@ -221,10 +222,10 @@ t.test(grgdpch ~ party, # y ~ x
     \item Type I error: $H_{0}$ true, reject $H_{0}$
     \item Type II error: $H_{0}$ false, fail to reject $H_{0}$ 
     \end{itemize}
-  \item Power $1 - \Pr(\text{Type II error})$
+  \item Power: $1 - \Pr(\text{Type II error})$
   \item Tests generally focus on Type I error
     \begin{itemize}
-    \item ``conservative'' -- is it really?
+    \item ``conservative'' -- is it really? It proritizes a hypothesis, and usually the null hypothesis has less evidence than the alternative.
     \item much harder to calculate Type II errors
     \end{itemize}
   \end{itemize}
@@ -303,11 +304,23 @@ t.test(grgdpch ~ party, # y ~ x
     \item Simply commitment to a certain error rate, given \textbf{assumptions}. Does not account for \textbf{model uncertainty}.
     \item ``File drawer problem'', ``fishing'': even if it makes sense on an individual test, multiple testing within a research project + selecting on significant results can result in biases.
     \end{itemize}
-  \item Problems with signficance tests that CI overcome
+  \item Problems with significance tests that CI overcome
     \begin{itemize}
-    \item tests are ``weak'' -
-    \item confidence intervals focus more on substantive significance (parameter values); $p$-values ignore all substantive signifance.
+    \item tests are ``weak'' - only show one result
+    \item confidence intervals focus more on substantive significance (parameter values); $p$-values ignore all substantive significance.
     \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Statistical and Substantive Significance}
+
+  \begin{itemize}
+  \item $p$-values are a function of estimated effect size ($B$) but also the sample size
+  \item $p$-values only show statistical significance, not substantive significance.
+  \item Confidence intervals can be more useful for displaying substantive significance
   \end{itemize}
 
 \end{frame}
@@ -372,7 +385,7 @@ t.test(grgdpch ~ party, # y ~ x
 \begin{frame}
   \frametitle{Inference and Bayes Rule}
 
-  Want to find the probability of a hypotehsis $H$ given the data $D$:
+  Want to find the probability of a hypothesis $H$ given the data $D$:
   \begin{align*}
     p (H | D) &= \frac{p (H | D) p(D)}{\sum_{H'} p (D | H') p (H')} \\
     &= \frac{p (D | H) p (H)}{p(D)} \\
@@ -401,7 +414,7 @@ t.test(grgdpch ~ party, # y ~ x
   \end{description}
 
   \only<2>{\textbf{My Claim:} Even if using frequentist tests $p(D | H)$, a paper
-    assigns prior probilities to hypotheses, e.g. lit review, logical arguments, etc. to make a Bayesian argument, $p(D | H) p(H)$.}
+    assigns prior probabilities to hypotheses, e.g. lit review, logical arguments, etc. to make a Bayesian argument, $p(D | H) p(H)$.}
 
 \end{frame}
 
@@ -433,7 +446,7 @@ t.test(grgdpch ~ party, # y ~ x
 \begin{frame}
   \frametitle{Statistical Inference for Individual Coefficients for Simple Regression}
   
-  If all assumptions of Gauss-Markov hold,
+  If all assumptions of Gauss-Markov hold, variance of sample coefficient $B$ is
   \begin{equation*}
     V(B) \sim N \left(
       \beta, \frac{\sigma_{\epsilon}^{2}}{\sum {(x_{i} - \bar{x})}^{2}}
@@ -444,25 +457,25 @@ t.test(grgdpch ~ party, # y ~ x
   \begin{itemize}
   \item Test statistic for $H_{0}:\beta = \beta_{0}$ distributed Student's t with $n - k - 1$ df.
     \begin{equation*}
-      t = \frac{\beta - \beta_{0}}{se}
+      t = \frac{B - \beta_{0}}{\se(B)}
     \end{equation*}
   \item Confidence interval is
     \begin{equation*}
-      B \pm t_{\alpha / 2, n - k - 1} se
+      B \pm t_{\alpha / 2, n - k - 1} \se(B)
     \end{equation*}
-  \item standard error is $V(B)$ with $\hat{\sigma}_{\epsilon}^{2}$ as an estimate of $\sigma_{\epsilon}$.
+  \item Where $\se(B)$ is $V(B)$ with $\hat{\sigma}_{\epsilon}^{2}$ as an estimate of $\sigma_{\epsilon}$.
   \end{itemize}
 \end{frame}    
 
 \begin{frame}
   \frametitle{Estimate of $\sigma_{\epsilon}^{2}$}
 
-  Estimate $\sigma_{\epsilon}^{2}$ from the regression errors
+  Estimate $\sigma_{\epsilon}^{2}$ from the regression squared errors:
   \begin{equation*}
-    \hat{\epsilon} = \frac{\sum E_{i}^{2}}{n - k - 1}
+    \hat{\sigma}_{\epsilon}^{2} = \frac{\sum E_{i}^{2}}{n - k - 1}
   \end{equation*}
   \begin{itemize}
-  \item  $n - k - 1 = \text{(observations)} - \text{(variables)} - \text{(intercept)}$ is the degrees of freedom.
+  \item  where $n - k - 1 = \text{(observations)} - \text{(variables)} - \text{(intercept)}$ is the degrees of freedom.
   \item Similar to mean squared error, but to estimate population divide by degrees of freedom.
   \end{itemize}
 
@@ -476,18 +489,18 @@ t.test(grgdpch ~ party, # y ~ x
   \begin{equation*}
     \vc{b} \sim MVN
     \left(
-      \beta, \sigma_{\epsilon}^{2}
+      \vc{\beta}, \sigma_{\epsilon}^{2}
       {\left(
-        \mat{X} \mat{X}'
+        \mat{X}' \mat{X}
       \right)}^{-1}
     \right)
   \end{equation*}
   
   \begin{itemize}
-  \item analagous to the bivariate version
+  \item analogous to the bivariate version
     \begin{itemize}
     \item calculates all standard errors simultaneously
-    \item covariances: $\vc{b}_{i}$ and $\vc{b}_{j}$ can be correlated
+    \item covariances: $B_{i}$ and $B_{j}$ can be correlated
     \end{itemize}
   \end{itemize}
   
@@ -498,7 +511,7 @@ t.test(grgdpch ~ party, # y ~ x
 
   Standard error for a single coefficient
   \begin{equation*}
-    SE(B_{j}) =  \sqrt{se^{2} (X' X)^{-1}_{jj}} = \frac{1}{\sqrt{1 - R^{2}_{j}}} \frac{se}{\sqrt{\sum {(x_{ij} - \bar{x}_{j})}^{2}}}
+    SE(B_{j}) =  \sqrt{\hat{\sigma}_{\epsilon} (X' X)^{-1}_{jj}} = \frac{1}{\sqrt{1 - R^{2}_{j}}} \frac{\hat{\sigma}_{\epsilon}}{\sqrt{\sum {(x_{ij} - \bar{x}_{j})}^{2}}}
   \end{equation*}
 
   \begin{itemize}
@@ -510,7 +523,7 @@ t.test(grgdpch ~ party, # y ~ x
     \begin{equation*}
       B \pm t_{\alpha / 2, n - k - 1} se
     \end{equation*}
-  \item standard error is $V(B)$ with $\hat{\sigma}_{\epsilon}^{2}$ as an estimate of $\sigma_{\epsilon}$.
+  \item Where $\hat{\sigma}_{\epsilon} = \frac{\sum_{i} E_{i}^{2}}{n - k - 1}$
   \end{itemize}
 
   
@@ -554,21 +567,10 @@ t.test(grgdpch ~ party, # y ~ x
     \item Common (wrong) interpretation: A and B are different
     \item Correct procedures:
       \begin{itemize}
-      \item Sigificance test with $H_{0}: \beta_{A} = \beta_{B}$
+      \item Significance test with $H_{0}: \beta_{A} = \beta_{B}$
       \item calculate confidence interval of $\beta_{A} - \beta_{B}$.
       \end{itemize}
     \end{itemize}
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}
-  \frametitle{Statistical and Substantive Significance}
-
-  \begin{itemize}
-  \item $p$-values are a function of estimated effect size ($B$) but also the sample size
-  \item $p$-values only show statistical signifiance, not substantive significance.
-  \item Confidence intervals can be more useful for displaying substantive significance
   \end{itemize}
 
 \end{frame}
@@ -590,3 +592,5 @@ t.test(grgdpch ~ party, # y ~ x
 
 \end{document}
 
+
+%%  LocalWords:  pre Neyman A' H' df
