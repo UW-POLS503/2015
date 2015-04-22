@@ -38,7 +38,7 @@
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/docs/Challenger_Analysis.html</loc>
-  <lastmod>2015-03-31</lastmod>
+  <lastmod>2015-04-01</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/getting_help_with_r.html</loc>
@@ -46,11 +46,11 @@
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/hw/hw1.html</loc>
-  <lastmod>2015-04-17</lastmod>
+  <lastmod>2015-04-21</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/hw/hw2.html</loc>
-  <lastmod>2015-04-20</lastmod>
+  <lastmod>2015-04-21</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/index.html</loc>
@@ -62,23 +62,23 @@
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/labs/Gauss_Markov_Simulations.html</loc>
-  <lastmod>2015-04-20</lastmod>
+  <lastmod>2015-04-21</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/labs/Lab3.html</loc>
-  <lastmod>2015-04-17</lastmod>
+  <lastmod>2015-04-21</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/labs/lab1.html</loc>
-  <lastmod>2015-04-20</lastmod>
+  <lastmod>2015-04-21</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/labs/lab2.html</loc>
-  <lastmod>2015-04-20</lastmod>
+  <lastmod>2015-04-21</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/labs/lab3.html</loc>
-  <lastmod>2015-04-20</lastmod>
+  <lastmod>2015-04-21</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/links.html</loc>
@@ -93,19 +93,15 @@
   <lastmod>2015-04-21</lastmod>
  </url>
  <url>
+  <loc>http://pols503.github.io/pols_503_sp15/package_loading_warnings_and_errors.html</loc>
+  <lastmod>2015-04-21</lastmod>
+ </url>
+ <url>
   <loc>http://pols503.github.io/pols_503_sp15/posts/index.html</loc>
   <lastmod>2015-04-21</lastmod>
  </url>
  <url>
-  <loc>http://pols503.github.io/pols_503_sp15/posts/package_loading_warnings_and_errors.html</loc>
-  <lastmod>2015-04-21</lastmod>
- </url>
- <url>
   <loc>http://pols503.github.io/pols_503_sp15/posts/r-warning-messages-involving-lc_type.html</loc>
-  <lastmod>2015-04-21</lastmod>
- </url>
- <url>
-  <loc>http://pols503.github.io/pols_503_sp15/posts/r_markdown_assignments.html</loc>
   <lastmod>2015-04-21</lastmod>
  </url>
  <url>
@@ -114,6 +110,10 @@
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/r_best_practices.html</loc>
+  <lastmod>2015-04-21</lastmod>
+ </url>
+ <url>
+  <loc>http://pols503.github.io/pols_503_sp15/r_markdown_assignments.html</loc>
   <lastmod>2015-04-21</lastmod>
  </url>
 </urlset>

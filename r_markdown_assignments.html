@@ -8,41 +8,59 @@ article: http://ogp.me/ns/article#
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Notes on R Markdown assignments | POLS/CS&amp;SS 503</title>
 
-                <link href="../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+                <link href="assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
 
-                <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.xml">
+                <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
 
-      <link rel="canonical" href="http://pols503.github.io/pols_503_sp15/posts/r_markdown_assignments.html">
+      <link rel="canonical" href="http://pols503.github.io/pols_503_sp15/r_markdown_assignments.html">
 
-            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-152x152.png" sizes="152x152">
-            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-60x60.png" sizes="60x60">
-            <link rel="icon" href="../favicon-128.png" sizes="128x128">
-            <link rel="icon" href="../favicon-96x96.png" sizes="96x96">
-            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-76x76.png" sizes="76x76">
-            <link rel="icon" href="../favicon-32x32.png" sizes="32x32">
-            <link rel="icon" href="../favicon-196x196.png" sizes="196x196">
-            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-120x120.png" sizes="120x120">
-            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-144x144.png" sizes="144x144">
-            <link rel="icon" href="../favicon-16x16.png" sizes="16x16">
-            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-114x114.png" sizes="114x114">
-            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-72x72.png" sizes="72x72">
-            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-57x57.png" sizes="57x57">
+            <link rel="icon" href="favicon-196x196.png" sizes="196x196">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-120x120.png" sizes="120x120">
+            <link rel="icon" href="favicon-32x32.png" sizes="32x32">
+            <link rel="icon" href="favicon-16x16.png" sizes="16x16">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-72x72.png" sizes="72x72">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-76x76.png" sizes="76x76">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-144x144.png" sizes="144x144">
+            <link rel="icon" href="favicon-96x96.png" sizes="96x96">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-60x60.png" sizes="60x60">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-114x114.png" sizes="114x114">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-152x152.png" sizes="152x152">
+            <link rel="icon" href="favicon-128.png" sizes="128x128">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-57x57.png" sizes="57x57">
 
 
-
-    
-        <!--[if lt IE 9]><script src="../assets/js/html5.js"></script><![endif]-->
 
     
+        <!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]-->
+
+    
+<link rel="stylesheet" href="assets/styles/default.css">
+
 
     
     <meta name="author" content="Jeffrey B. Arnold">
         <link rel="prev" href="package_loading_warnings_and_errors.html" title="R Packages Warnings and Messages when Loading" type="text/html">
         <meta property="og:site_name" content="POLS/CS&amp;SS 503">
     <meta property="og:title" content="Notes on R Markdown assignments">
-    <meta property="og:url" content="http://pols503.github.io/pols_503_sp15/posts/r_markdown_assignments.html">
-    <meta property="og:description" content="Do include both code and output. In general, you should show all your code and the output of that code, including graphs and
-Do include words. Your homework should not be just code and output. You sho">
+    <meta property="og:url" content="http://pols503.github.io/pols_503_sp15/r_markdown_assignments.html">
+    <meta property="og:description" content=".main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img { 
+  max-width:100%; 
+  height: auto; 
+}
+
+
+
+
+">
     <meta property="og:type" content="article">
     <meta property="article:published_time" content="2015-04-21T00:00:00-07:00">
 
@@ -74,7 +92,7 @@ Do include words. Your homework should not be just code and output. You sho">
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav">
                                 <li>
-<a href="../index.html">Syllabus</a>
+<a href="index.html">Syllabus</a>
             </li>
 <li class="dropdown">
 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Homeworks<b class="caret"></b></a>
@@ -88,10 +106,10 @@ Do include words. Your homework should not be just code and output. You sho">
 </ul>
                 </li>
 <li>
-<a href="../posts">Posts</a>
+<a href="posts">Posts</a>
                 </li>
 <li>
-<a href="../data.html">Data</a>
+<a href="data.html">Data</a>
             </li>
 <li class="dropdown">
 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages<b class="caret"></b></a>
@@ -117,7 +135,7 @@ Do include words. Your homework should not be just code and output. You sho">
 <a href="https://canvas.uw.edu/courses/964019">Canvas</a>
                 </li>
 <li>
-<a href="../links.html">Links</a>
+<a href="links.html">Links</a>
 
                 
             </li>
@@ -147,31 +165,46 @@ Do include words. Your homework should not be just code and output. You sho">
         <!--Body content-->
         <div class="row">
             
-<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article">
-        <header>
+<article class="storypage" itemscope="itemscope" itemtype="http://schema.org/Article">
+    <header>
             <h1 class="p-name entry-title" itemprop="headline name"><a href="#" class="u-url">Notes on R Markdown assignments</a></h1>
 
-        <div class="metadata">
-            <p class="byline author vcard"><span class="byline-name fn">Jeffrey B. Arnold</span></p>
-            <p class="dateline"><a href="#" rel="bookmark"><time class="published dt-published" datetime="2015-04-21T00:00:00-07:00" itemprop="datePublished" title="2015-04-21 00:00">2015-04-21 00:00</time></a></p>
-            
-        </div>
         
     </header>
-
     <div class="e-content entry-content" itemprop="articleBody text">
-    <!--
+    <div>
+<style type="text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img { 
+  max-width:100%; 
+  height: auto; 
+}
+</style>
+<div class="container-fluid main-container">
+
+
+
+
+<!--
 .. title: Notes on R Markdown assignments
 .. date: 2015-04-21
 -->
 
 <ol style="list-style-type: decimal">
-<li>Do include both code and output. In general, you should show all your code and the output of that code, including graphs and</li>
-<li>Do include words. Your homework should not be just code and output. You should explain in prose what you are doing, and more importantly why. Your w</li>
+<li>Do include both code and output. In general, you should show all your code and the output of that code, including graphs, output and tables.</li>
+<li>Do include words. Your homework should not be just code and output. You should explain in prose what you are doing, and more importantly why.</li>
 <li>
 <p>Do <strong>not</strong> include <strong>extraneous</strong> output. In general, you should include the output of your code. However, do not print large objects. Most commonly, do not print out large data frames. If you would like to show example lines from a large data frame use <code>head</code> to show only the first few lines, or <code>glimpse</code>.</p>
-<pre class="sourceCode r"><code class="sourceCode r">    <span class="kw">library</span>(<span class="st">"gapminder"</span>)
-    <span class="kw">library</span>(<span class="st">"dplyr"</span>)</code></pre>
+<pre class="r"><code>      library("gapminder")
+      library("dplyr")</code></pre>
 <pre><code>## 
 ## Attaching package: 'dplyr'
 ## 
@@ -182,11 +215,11 @@ Do include words. Your homework should not be just code and output. You sho">
 ## The following objects are masked from 'package:base':
 ## 
 ##     intersect, setdiff, setequal, union</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># bad</span>
-    <span class="co"># gapminder</span>
+<pre class="r"><code>  # bad
+      # gapminder
 
-    <span class="co"># good</span>
-    <span class="kw">head</span>(gapminder)</code></pre>
+      # good
+      head(gapminder)</code></pre>
 <pre><code>##       country continent year lifeExp      pop gdpPercap
 ## 1 Afghanistan      Asia 1952  28.801  8425333  779.4453
 ## 2 Afghanistan      Asia 1957  30.332  9240934  820.8530
@@ -194,7 +227,7 @@ Do include words. Your homework should not be just code and output. You sho">
 ## 4 Afghanistan      Asia 1967  34.020 11537966  836.1971
 ## 5 Afghanistan      Asia 1972  36.088 13079460  739.9811
 ## 6 Afghanistan      Asia 1977  38.438 14880372  786.1134</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r">    <span class="kw">glimpse</span>(gapminder)</code></pre>
+<pre class="r"><code>      glimpse(gapminder)</code></pre>
 <pre><code>## Observations: 1704
 ## Variables:
 ## $ country   (fctr) Afghanistan, Afghanistan, Afghanistan, Afghanistan,...
@@ -206,26 +239,35 @@ Do include words. Your homework should not be just code and output. You sho">
 </li>
 <li><p>Do not include warnings or messages unless the question asks for them. Examples of this include the message after using <code>geom_histogram</code> without a <code>binwidth</code> argument, or messages when loading certain packages. Either fix the code so that the warning or message no longer appears, or use <code>warning = FALSE</code> or <code>message = FALSE</code> in the code chunk to suppress that output.</p></li>
 <li><p>Do format your assignment intelligently. Clearly indicate each problem with a header, as well as the parts of problems.</p></li>
+<li><p>Do not use <code>install.packages</code> in your analysis. If you are using unusual packages make a note of it.</p></li>
 </ol>
-<div class="references">
+
 
 </div>
 
-    </div>
-    <aside class="postpromonav">
-    <nav>
-    
-            <ul class="pager">
-            <li class="previous">
-                <a href="package_loading_warnings_and_errors.html" rel="prev" title="R Packages Warnings and Messages when Loading">Previous post</a>
-            </li>
-        </ul>
+<script>
 
-    </nav>
-    </aside>
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</div>
+    </div>
     
 </article>
-
         </div>
         <!--End of body content-->
 
@@ -241,7 +283,7 @@ Source on <a href="http://github.com/pols503/pols_503_sp15/">github</a>
     </div>
 </div>
 
-            <script src="../assets/js/all-nocdn.js"></script>
+            <script src="assets/js/all-nocdn.js"></script>
     
 
 
@@ -263,6 +305,9 @@ Source on <a href="http://github.com/pols503/pols_503_sp15/">github</a>
   ga('send', 'pageview');
 
 </script>
+
+<script src="assets/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 
 </body>

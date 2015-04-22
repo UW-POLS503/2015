@@ -32,28 +32,9 @@ The argument `ask = FALSE` prevents R from asking you yes or no for each package
 ## Warning the following objects are masked
 
 If you load the **plyr** and **dplyr** packages you will get several messages about objects being "masked".
-
-```r
+```{r}
 library("plyr")
 library("dplyr")
-```
-
-```
-## 
-## Attaching package: 'dplyr'
-## 
-## The following objects are masked from 'package:plyr':
-## 
-##     arrange, count, desc, failwith, id, mutate, rename, summarise,
-##     summarize
-## 
-## The following object is masked from 'package:stats':
-## 
-##     filter
-## 
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
 ```
 This means that the new package has object (usually functions) with names that are the same as those of earlier loaded packages.
 In the above example, after loading **dplyr**, typing `filter` will use the function from the **dplyr** package and not the **base** (which is one of R's built-in packages) package. 
@@ -65,8 +46,7 @@ Sometimes packages include messages that are printed on loading.
 Although this is fine for interactive use in the console,
 these messages are unsightly in documents and you should hide them from your knitr output either by setting `messages = FALSE` in the code chunk with the function `suppressPackageStartupMessages` (remember TAB completion is your friend).
 E.g.
-
-```r
+```{r eval = FALSE}
 suppressPackageStartupMessages({
 library("ggplot2")
 library("dplyr")
