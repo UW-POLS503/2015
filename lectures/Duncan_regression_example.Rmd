@@ -2,7 +2,9 @@
 title: "Duncan Prestige Regression Example"
 author: "Jeffrey B. Arnold"
 date: "04/21/2015"
-output: html_document
+output:
+  html_document:
+    toc: yes
 ---
 
 This example will use Duncan's Occpational Prestige Data, which has data on prestige
@@ -19,8 +21,8 @@ data("Duncan")
 ```
 
 We'll also use a few other packages, which we should load now.
-```{r}
-library("ggplot")
+```{r message = FALSE}
+library("ggplot2")
 library("dplyr")
 library("broom")
 ```
@@ -32,22 +34,26 @@ new column named `occupation`.
 
 This uses the `$` to assign a value to a column in R.
 We've been using **dplyr** so much that we haven't had to do this, but it can be easier at times.
-```{r}
-Duncan$occupation <- rownames(Duncan)
-```
 This could have also been done using the dplyr function `add_rownames`.
-```{r eval = FALSE}
-# Duncan <- Duncan %>% add_rownames(var = "occupation")
+```{r}
+Duncan <- add_rownames(Duncan, var = "occupation")
+```
+Without **dplyr** we would have used
+```{r}
+# Duncan$occupation <- rownames(Duncan)
 ```
 
+## Scatterplots
+
+Before starting let's create a couple of scatterplots of the data.
+First, prestige vs. income, labeling the points, and coloring them by type.
 ```{r}
 ggplot(Duncan, aes(x = income, y = prestige, colour = type,
                    label = occupation)) +
   geom_text() +
   theme_minimal() 
 ```
-
-Instead, let's colour the points by education level
+Now, prestige vs. income, coloring the points by education level:
 ```{r}
 ggplot(Duncan, aes(x = income, y = prestige, colour = education)) +
   geom_point() +
@@ -56,53 +62,162 @@ ggplot(Duncan, aes(x = income, y = prestige, colour = education)) +
 
 Run a regression of prestige on income and education
 ```{r}
-mod_prestige_1 <- lm(prestige ~ income + education, data = Duncan)
-summary(mod_prestige_1)
+mod1 <- lm(prestige ~ income + education, data = Duncan)
+mod1_summary <- summary(mod1)
+mod1_summary
 ```
 
-Calcualate manually
+This extracts the coefficient estimates $\hat{\beta}$,
 ```{r}
-beta <- coef(mod_prestige_1)
-beta_vc <- vcov(mod_prestige_1)
+beta <- coef(mod1)
+```
+This extracts the variance covariance matrix of the coefficient estimatates $V(\hat{\beta})$.
+```{r}
+beta_vc <- vcov(mod1)
+```
+Standard errors of the coefficients are $se(\hat{\beta}) = \sqrt{diag(V(\hat{\beta}))}$,
+```{r}
 beta_se <- sqrt(diag(beta_vc))
+```
+The $t$-statistic of the hypothesis test $\beta = 0$ is $\frac{\hat{\beta}}{se(\hat{\beta})}$,
+```{r}
 tstat <- beta / beta_se
-pval <- 2 * (1 - pt(tstat, mod_prestige_1$df.residual))
+```
+And the $p$-value of the two-sided hypothesis test $H_0: \beta = 0$, $H_a: \beta \neq 0$ is,
+```{r}
+pval <- 2 * (1 - pt(tstat, mod1$df.residual))
+```
+This uses the `qt` function to calculate probabilities from the $t$-distribution.
+
+The degrees of freedom $n - k - 1$
+```{r}
+mod1$df.residual
+```
+The coefficients, $\hat{\beta}$:
+```{r}
+coef(mod1)
+```
+The coefficients can also be extracted directly from the element in the `lm` object
+```{r}
+mod1$coefficients
 ```
 
-Confidence intervals
+
+The fitted values, $\hat{y}$:
 ```{r}
-confint(mod_prestige_1, level = 0.95)
-```
-Manually,
-```{r}
-lower_95 <- beta - qt(0.025, mod_prestige_1$df.residual) * beta_se
-upper_95 <- beta + qt(0.025, mod_prestige_1$df.residual) * beta_se
+head(fitted(mod1))
+head(mod1$fitted)
 ```
 
-Creating a nice table
+The residuals, $\hat{epsilon} = y - \hat{y}$:
+```{r}
+head(residuals(mod1))
+head(mod1$residuals)
+```
+
+You can check that the residuals are $y - \hat{y}$,
+```{r}
+head(Duncan$prestige - fitted(mod1))
+```
+
+To get the data used in the regression back from the regression,
+```{r}
+head(model.frame(mod1))
+```
+To get the $y$ values (model or design matrix) used in the regression,
+```{r}
+head(model.response(model.frame(mod1)))
+```
+
+Note that if you have missing values in the regression, R has sophisticated but
+subtle ways of handling them, especially in `predict`. See the help for `na.omit` and follow links about `lm`.
+
+The `anova` function returns a table with the total, model, and residual sum of squares.
+```{r}
+anova(mod1)
+```
+
+
+## Result post-processing with broom
+
+[Broom](https://github.com/dgrtwo/broom) is a relatively new package that works well
+with the **dplyr** and `%>%` workflow by converting the results of common models into data frames that can be processed more easily than the default objects R returns.
+
+**broom** has three main functions, all of which return data frames (not lists, numeric vectors, or other types of object).
+`glance` returns a data frame with a single row summary of the model:
+```{r}
+glance(mod1)
+```
+`tidy` returns a data frame with a row for each coefficient estimate:
+```{r}
+tidy(mod1)
+```
+`augment` returns the original data frame used in the model with additional columns for fitted values, the standard errors of those fitted values, residuals, etc.
+```{r}
+head(augment(mod1))
+```
+
+
+## Coefficient Plots
+
+Also known as airplane plots or ropeladder plots:
+
+```{r}
+ggplot(tidy(mod1) %>% filter(term != "(Intercept)"), 
+       aes(x = term, y = estimate, 
+           ymin = estimate - 2 * std.error, 
+           ymax = estimate + 2 * std.error)) + 
+  geom_pointrange() + 
+  coord_flip()
+```
+
+This could also be done with the `coefplot` function from the **coefplot** package:
+```{r}
+library("coefplot")
+coefplot(mod1)
+```
+or to drop the intercept
+```{r}
+coefplot(mod1, coefficients = c("income", "education"))
+```
+Since internally `coefplot` uses **ggplot2**, you could also edit the object it returns.
+
+## Creating regression tables
+
+Several packages (**stargazer**, **texreg**, **apsrtable**) are useful for creating publication type regression tables. 
+**stargazer** and **texreg** are the most complete package. 
+Both allow output to either LaTeX or HTML tables for many types of statistical models.
+We'll use **stargazer** here:
 ```{r}
 library("stargazer")
-stargazer(mod_prestige_1, type = "text")
+stargazer(mod1, type = "text")
+```
+Now render that as html instead,
+```{r results = 'asis'}
+stargazer(mod1, type = "html")
+```
+Look at the source `.Rmd` file for this document; the chunk above used `results = "asis"`
+to print and render the HTML rather than R output.
+
+This usefulness of this function is apparent when multiple regressions are plotted:
+```{r results = "asis"}
+mod3 <- lm(prestige ~ income, data = Duncan)
+mod4 <- lm(prestige ~ income * type + education * type, data = Duncan)
+stargazer(mod1, mod3, mod4, type = "html")
 ```
 
-Using the broom package
+
+Addtionally, the packages **xtable** and **pander** are not a specific to the problem of creating regression tables, but since they are more genral purpose, they are good 
+for creating LaTeX / HTML / Markdown tables for a variety of R objects.
+
+## Predicted values
+
+Confidence intervals for finding `predicted` values:
 ```{r}
-glance(mod_prestige_1)
-
-
-ggplot(tidy(mod_prestige_1) %>% filter(term != "(Intercept)"), aes(x = term, y = estimate, ymin = estimate - 2 * std.error, ymax = estimate + 2 * std.error)) + geom_pointrange() + coord_flip()
-
-glimpse(augment(mod_prestige_1))
-
-
+yhat <- predict(mod1, interval = "confidence")
 ```
 
-Confidence intervals for expected values $\hat{y}$
-```{r}
-yhat <- predict(mod_prestige_1, interval = "confidence")
-```
-
-Note on help for `predict`. Predict works with many different types of analyses
+A note on help for `predict`: `predict` works with many different types of analyses
 and object. You need to go to `?predict.lm` to get help for predict as it relates to `lm`.
 
 To plot, convert to a data_frame
@@ -110,27 +225,95 @@ To plot, convert to a data_frame
 yhat_df <- as.data.frame(yhat) %>% add_rownames(var = "occupation")
 ```
 
-Now it is easy to plot in ggplot
+Now it is easy to plot in **ggplot2**
 ```{r}
 ggplot() + 
-  geom_point(data = Duncan, aes(x = income, y = prestige)) + 
+  geom_point(data = Duncan, aes(x = income, y = prestige))
 ```
 
 Now do it with hypothetical values. All values of income observed in the data, 
 but education at its mean.
 ```{r}
 duncan_mean_education <- 
-  data.frame(education = mean(Duncan$eduation),
-             income = seq(min(income), max(income), length.out = 50))
-yhat2 <- 
-  as.data.frame(yhat = predict(mod_prestige_1, newdata = duncan_mean_education,
-                               inverval = "confidence"))
-
-augment(mod_prestige_1, newdata = duncan_mean_education) %>%
-  mutate(lower = .fitted + qt(0.025, mod_prestige_1$df.residual) * .se.fit,
-         upper = .fitted + qt(0.975, mod_prestige_1$df.residual) * .se.fit)
-
+  data.frame(education = mean(Duncan$education),
+             income = seq(min(Duncan$income), max(Duncan$income),
+                          length.out = 50))
+mod1_predicted <- as.data.frame(predict(mod1, newdata = duncan_mean_education,
+                                interval = "confidence", conf.level = 0.95))         
+# augment(mod1, newdata = duncan_mean_education) %>%
+#   mutate(lower = .fitted + qt(0.025, mod1$df.residual) * .se.fit,
+#          upper = .fitted + qt(0.975, mod1$df.residual) * .se.fit)
 ```
+To plot this, we'll need to combine it back with the original data.
+```{r}
+mod1_predicted <- cbind(duncan_mean_education, mod1_predicted)
+```
+
+Now, let's plot the predicted values and the 95% confidence interval of predicted values as 
+income changes. Additionally, we'll plot the original values.
+```{r}
+ggplot() +
+  geom_line(data = mod1_predicted, mapping = aes(x = income, y = fit)) +
+  geom_ribbon(data = mod1_predicted, mapping = aes(x = income, ymin = lwr, ymax = upr),
+              alpha = 0.2) + 
+  geom_point(data = Duncan, mapping = aes(x = income, y = prestige)) + 
+  ylab("prestige")
+```
+Note that we use different datasets in each `geom`, and do not use any values in 
+`ggplot`. The `ggplot` function can provide default mappings in `aes` and a default
+dataset. But if you are using multiple datasets, it can be safter and less buggy to
+specify a `data` and `mapping` argument for each `geom` layer.
+
+For more interesting predicted value plots, let's run a regression with a categorical variable.
+```{r}
+mod2 <- lm(prestige ~ income + education + type, data = Duncan)
+mod2
+```
+
+Now, let's predict values for each type of occupation for all values of income, 
+holding education at its mean value.
+First, we need to create the data that will be used for the predicted values.
+This can be made easier with the function `expand.grid`, which returns a data frame
+with all combinations of its arguments.
+For example,
+```{r}
+expand.grid(a = 1:3, b = c("a", "b"))
+```
+With that information, let's create data frame with the values needed for prediction
+```{r}
+newdata_types_inc <-
+  expand.grid(type = unique(Duncan$type),
+              income = seq(min(Duncan$income), max(Duncan$income),
+                           length.out = 5),
+              education = mean(Duncan$education))
+# # Another method
+# newdata_types_inc <- 
+#   Duncan %>% {
+#     expand.grid(type = unique(.$type),
+#                 income = seq(min(.$income), max(.$income),
+#                             length.out = 5),
+#                 education = mean(.$education))
+#     }
+```
+
+Then, create predicted values and confidence intervals with either `predict` or
+`augment`.
+```{r}
+predicted_mod2 <- 
+  augment(mod2, newdata = newdata_types_inc) %>%
+  mutate(lower = .fitted + qt(0.025, mod2$df.residual) * .se.fit,
+         upper = .fitted + qt(0.975, mod2$df.residual) * .se.fit)
+```
+And then plot it,
+```{r}
+ggplot(predicted_mod2, aes(x = income, y = .fitted,
+                           ymin = lower, ymax = upper)) +
+  geom_line(mapping = aes(colour = type)) +
+  geom_ribbon(mapping = aes(fill = type), alpha = 0.2) +
+  ylab("prestige") + 
+  ggtitle("Predicted values of prestige by type, holding education constant")
+```
+
 
 
 
