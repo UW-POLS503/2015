@@ -880,7 +880,9 @@ SEARCH_FORM = """
 # Extra things you want in the pages HEAD tag. This will be added right
 # before </head>
 # (translatable)
-# EXTRA_HEAD_DATA = ""
+EXTRA_HEAD_DATA = """
+<link rel="stylesheet" href="/assets/styles/default.css">
+"""
 # Google Analytics or whatever else you use. Added to the bottom of <body>
 # in the default template (base.tmpl).
 # (translatable)
@@ -895,6 +897,9 @@ BODY_END = """
   ga('send', 'pageview');
 
 </script>
+
+<script src="/assets/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 """
 
 # The possibility to extract metadata from the filename by using a
@@ -1010,3 +1015,7 @@ GLOBAL_CONTEXT = {}
 # GLOBAL_CONTEXT as parameter when the template is about to be
 # rendered
 GLOBAL_CONTEXT_FILLER = []
+
+#-------------
+# RMarkdown plugin
+RMARKDOWN_QUIET = True
