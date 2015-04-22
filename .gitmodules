@@ -1,0 +1,3 @@
+[submodule "web/plugins/nikola_rmarkdown"]
+	path = web/plugins/nikola_rmarkdown
+	url = git@github.com:jrnold/nikola_rmarkdown.git

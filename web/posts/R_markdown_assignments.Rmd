@@ -4,25 +4,25 @@
 -->
 
 1. Do include both code and output. In general, you should show all your code and the output of that code,
-    including graphs and 
+    including graphs, output and tables.
 2. Do include words. Your homework should not be just code and output. You should explain in prose
-    what you are doing, and more importantly why. Your w
+    what you are doing, and more importantly why. 
 1. Do **not** include **extraneous** output. In general, you should include the output of your code.
     However, do not print large objects. Most commonly, do not print out large data frames. If you
 	would like to show example lines from a large data frame use `head` to show only the first few lines,
 	or `glimpse`.
 
     ```{r}
-	library("gapminder")
-	library("dplyr")
+	  library("gapminder")
+	  library("dplyr")
 
-    # bad
-	# gapminder
+      # bad
+	  # gapminder
 	
-	# good
-	head(gapminder)
-	glimpse(gapminder)
-	```
+	  # good
+	  head(gapminder)
+	  glimpse(gapminder)
+	  ```
 
 3. Do not include warnings or messages unless the question asks for them. Examples of this include
     the message after using `geom_histogram` without a `binwidth` argument, or messages when loading
@@ -31,4 +31,7 @@
 	or `message = FALSE` in the code chunk to suppress that output.
 	
 2. Do format your assignment intelligently. Clearly indicate each problem with a header, as well as the parts of problems.
+    
+3. Do not use `install.packages` in your analysis. If you are using unusual packages make a note
+    of it.
 

@@ -22,8 +22,8 @@ suppressPackageStartupMessages({
 \input{includes.tex}
 
 
-\newcommand{\thetitle}{Sum of Squares, Total Sum of Squares, and $R^{2}$}
-\date{April 20, 2015}
+\newcommand{\thetitle}{Statistical Inference for Regression}
+\date{April 21, 2015}
 \title{\thetitle{}}
 \hypersetup{
   pdftitle={\thetitle{}},
@@ -96,7 +96,7 @@ suppressPackageStartupMessages({
 \begin{frame}
   \frametitle{Is US Economic Growth Higher Under Democratic Presidents than Republicans?}
 
-<<>>=
+<<warning = FALSE>>=
 gdp <- read.csv("../data/gdp.csv") %>%
   mutate(party = plyr::mapvalues(party, c(-1, 1), c("Dem", "Rep")))
 
@@ -197,7 +197,7 @@ group_by(gdp, party) %>%
 \begin{frame}[fragile]
   \frametitle{t-tests for difference of means in R}
 
-<<>>=
+<<echo=TRUE>>=
 t.test(grgdpch ~ party, # y ~ x
        data = gdp, # dataset
        mu = 0, # H_0: mu_1 - mu_2
@@ -579,7 +579,7 @@ t.test(grgdpch ~ party, # y ~ x
   \frametitle{References}
 
   \begin{itemize}
-  \item Some slides derived from Christopher Adolph \textit{Inference and Interpretation of Linear Regression}. Used with permission. <http://faculty.washington.edu/cadolph/503/topic4.pw.pdf>
+  \item Some slides derived from Christopher Adolph \textit{Inference and Interpretation of Linear Regression}. Used with permission. \url{http://faculty.washington.edu/cadolph/503/topic4.pw.pdf}
   \item Material included from
     \begin{itemize}
     \item Fox Ch 6, 9.3

@@ -1,5 +1,5 @@
 ---
-title: "Duncan Prestige Example"
+title: "Duncan Prestige Regression Example"
 author: "Jeffrey B. Arnold"
 date: "04/21/2015"
 output: html_document
@@ -88,8 +88,13 @@ stargazer(mod_prestige_1, type = "text")
 Using the broom package
 ```{r}
 glance(mod_prestige_1)
-tidy(mod_prestige_1)
+
+
+ggplot(tidy(mod_prestige_1) %>% filter(term != "(Intercept)"), aes(x = term, y = estimate, ymin = estimate - 2 * std.error, ymax = estimate + 2 * std.error)) + geom_pointrange() + coord_flip()
+
 glimpse(augment(mod_prestige_1))
+
+
 ```
 
 Confidence intervals for expected values $\hat{y}$
