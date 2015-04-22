@@ -1,25 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>POLS/CS&amp;SS 503</title><link>http://pols503.github.io/pols_503_sp15/</link><description>Site for POLS/CS&amp;SS 503: Advanced Quantitative Political Methodology (University of Washington; Spring 2015)</description><atom:link rel="self" type="application/rss+xml" href="http://pols503.github.io/pols_503_sp15/rss.xml"></atom:link><language>en</language><lastBuildDate>Wed, 22 Apr 2015 06:38:59 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Notes on R Markdown assignments</title><link>http://pols503.github.io/pols_503_sp15/r_markdown_assignments.html</link><dc:creator>Jeffrey B. Arnold</dc:creator><description>&lt;div&gt;&lt;style type="text/css"&gt;
-.main-container {
-  max-width: 940px;
-  margin-left: auto;
-  margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
-img { 
-  max-width:100%; 
-  height: auto; 
-}
-&lt;/style&gt;
-&lt;div class="container-fluid main-container"&gt;
-
-
-
-
-&lt;!--
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>POLS/CS&amp;SS 503</title><link>http://pols503.github.io/pols_503_sp15/</link><description>Site for POLS/CS&amp;SS 503: Advanced Quantitative Political Methodology (University of Washington; Spring 2015)</description><atom:link rel="self" type="application/rss+xml" href="http://pols503.github.io/pols_503_sp15/rss.xml"></atom:link><language>en</language><lastBuildDate>Wed, 22 Apr 2015 22:04:13 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Notes on R Markdown assignments</title><link>http://pols503.github.io/pols_503_sp15/r_markdown_assignments.html</link><dc:creator>Jeffrey B. Arnold</dc:creator><description>&lt;div&gt;&lt;!--
 .. title: Notes on R Markdown assignments
 .. date: 2015-04-21
 --&gt;
@@ -64,51 +44,7 @@ img {
 &lt;li&gt;&lt;p&gt;Do not include warnings or messages unless the question asks for them. Examples of this include the message after using &lt;code&gt;geom_histogram&lt;/code&gt; without a &lt;code&gt;binwidth&lt;/code&gt; argument, or messages when loading certain packages. Either fix the code so that the warning or message no longer appears, or use &lt;code&gt;warning = FALSE&lt;/code&gt; or &lt;code&gt;message = FALSE&lt;/code&gt; in the code chunk to suppress that output.&lt;/p&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;Do format your assignment intelligently. Clearly indicate each problem with a header, as well as the parts of problems.&lt;/p&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;Do not use &lt;code&gt;install.packages&lt;/code&gt; in your analysis. If you are using unusual packages make a note of it.&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-
-&lt;/div&gt;
-
-&lt;script&gt;
-
-// add bootstrap table styles to pandoc tables
-$(document).ready(function () {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
-});
-
-&lt;/script&gt;
-
-&lt;!-- dynamically load mathjax for compatibility with self-contained --&gt;
-&lt;script&gt;
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-&lt;/script&gt;
-
-&lt;/div&gt;</description><guid>http://pols503.github.io/pols_503_sp15/r_markdown_assignments.html</guid><pubDate>Tue, 21 Apr 2015 07:00:00 GMT</pubDate></item><item><title>R Packages Warnings and Messages when Loading</title><link>http://pols503.github.io/pols_503_sp15/package_loading_warnings_and_errors.html</link><dc:creator>Jeffrey B. Arnold</dc:creator><description>&lt;div&gt;&lt;style type="text/css"&gt;
-.main-container {
-  max-width: 940px;
-  margin-left: auto;
-  margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
-img { 
-  max-width:100%; 
-  height: auto; 
-}
-&lt;/style&gt;
-&lt;div class="container-fluid main-container"&gt;
-
-
-
-
-&lt;!--
+&lt;/ol&gt;&lt;/div&gt;</description><guid>http://pols503.github.io/pols_503_sp15/r_markdown_assignments.html</guid><pubDate>Tue, 21 Apr 2015 07:00:00 GMT</pubDate></item><item><title>R Packages Warnings and Messages when Loading</title><link>http://pols503.github.io/pols_503_sp15/package_loading_warnings_and_errors.html</link><dc:creator>Jeffrey B. Arnold</dc:creator><description>&lt;div&gt;&lt;!--
 .. title: R Packages Warnings and Messages when Loading
 .. slug: package_loading_warnings_and_errors
 .. tags: R, error messages
@@ -130,23 +66,20 @@ img {
 &lt;div id="warning-the-following-objects-are-masked" class="section level2"&gt;
 &lt;h3&gt;Warning the following objects are masked&lt;/h3&gt;
 &lt;p&gt;If you load the &lt;strong&gt;plyr&lt;/strong&gt; and &lt;strong&gt;dplyr&lt;/strong&gt; packages you will get several messages about objects being “masked”.&lt;/p&gt;
-&lt;pre class="r"&gt;&lt;code&gt;library("plyr")
-library("dplyr")&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## 
-## Attaching package: 'dplyr'
+&lt;pre class="r"&gt;&lt;code&gt;library("plyr")&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## -------------------------------------------------------------------------
+## You have loaded plyr after dplyr - this is likely to cause problems.
+## If you need functions from both plyr and dplyr, please load plyr first, then dplyr:
+## library(plyr); library(dplyr)
+## -------------------------------------------------------------------------
 ## 
-## The following objects are masked from 'package:plyr':
+## Attaching package: 'plyr'
+## 
+## The following objects are masked from 'package:dplyr':
 ## 
 ##     arrange, count, desc, failwith, id, mutate, rename, summarise,
-##     summarize
-## 
-## The following object is masked from 'package:stats':
-## 
-##     filter
-## 
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union&lt;/code&gt;&lt;/pre&gt;
+##     summarize&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class="r"&gt;&lt;code&gt;library("dplyr")&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;This means that the new package has object (usually functions) with names that are the same as those of earlier loaded packages. In the above example, after loading &lt;strong&gt;dplyr&lt;/strong&gt;, typing &lt;code&gt;filter&lt;/code&gt; will use the function from the &lt;strong&gt;dplyr&lt;/strong&gt; package and not the &lt;strong&gt;base&lt;/strong&gt; (which is one of R’s built-in packages) package. If you need to use the &lt;code&gt;filter&lt;/code&gt; function in base R, you can refer to it explicitly with &lt;code&gt;::&lt;/code&gt;. For example, &lt;code&gt;base::filter&lt;/code&gt; will always use the function from the &lt;strong&gt;base&lt;/strong&gt; package; and &lt;code&gt;dplyr::filter&lt;/code&gt; will always use the function from the &lt;strong&gt;dplyr&lt;/strong&gt; package. Note that you can refer to functions in packages using &lt;code&gt;::&lt;/code&gt; without first loading the package using &lt;code&gt;library()&lt;/code&gt;. This can sometimes be useful if you want to use a function from a package, but don’t want to load the entire package.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id="package-startup-messages" class="section level2"&gt;
@@ -164,31 +97,7 @@ library("dplyr")
  --&gt;
 
 
-&lt;/div&gt;
-
-
-&lt;/div&gt;
-
-&lt;script&gt;
-
-// add bootstrap table styles to pandoc tables
-$(document).ready(function () {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
-});
-
-&lt;/script&gt;
-
-&lt;!-- dynamically load mathjax for compatibility with self-contained --&gt;
-&lt;script&gt;
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-&lt;/script&gt;
-
-&lt;/div&gt;</description><category>error messages</category><category>R</category><guid>http://pols503.github.io/pols_503_sp15/package_loading_warnings_and_errors.html</guid><pubDate>Mon, 20 Apr 2015 20:18:00 GMT</pubDate></item><item><title>R warning messages involving LC_TYPE</title><link>http://pols503.github.io/pols_503_sp15/posts/r-warning-messages-involving-lc_type.html</link><dc:creator>Jeffrey B. Arnold</dc:creator><description>&lt;!--
+&lt;/div&gt;&lt;/div&gt;</description><category>error messages</category><category>R</category><guid>http://pols503.github.io/pols_503_sp15/package_loading_warnings_and_errors.html</guid><pubDate>Mon, 20 Apr 2015 20:18:00 GMT</pubDate></item><item><title>R warning messages involving LC_TYPE</title><link>http://pols503.github.io/pols_503_sp15/posts/r-warning-messages-involving-lc_type.html</link><dc:creator>Jeffrey B. Arnold</dc:creator><description>&lt;!--
 .. title: R warning messages involving LC_TYPE
 .. slug: r-warning-messages-involving-lc_type
 .. date: 2015-04-18 13:50:40 UTC-07:00

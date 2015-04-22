@@ -153,9 +153,10 @@ Given that this is my first time teaching this course, I expect many adjustments
 ### Tuesday, March 31
 
 
-- [Deck 1](lectures/Lecture_01_handout.pdf)
+- [Deck 1](lectures/Lecture_01_handout.pdf
+)
+- In-class R Markdown example analysis: [Rmd source](docs/Challenger_Analysis.Rmd), [html output](docs/Challenger_Analysis.html)
 - Readings
-    - In-class R Markdown example analysis: [Rmd source](docs/Challenger_Analysis.Rmd), [html output](docs/Challenger_Analysis.html)
     - Gelman and Hill, Ch 2
     - Fox, Ch 2, 3 (review)
 
@@ -190,7 +191,9 @@ Given that this is my first time teaching this course, I expect many adjustments
 
 ### Tuesday, April 14
 
-- [Deck 3](lectures/Lecture_03_handout.pdf), [Sampling Distribution of linear regression example](https://raw.githubusercontent.com/POLS503/pols_503_sp15/master/lectures/Sampling_Distribution_Linear_Regression.Rmd), [Multiple regression coefficient anatomy](https://github.com/POLS503/pols_503_sp15/blob/master/lectures/multiple_regression_anatomy.R)
+- [Deck 3](lectures/Lecture_03_handout.pdf)
+- [Sampling Distribution of linear regression example](https://raw.githubusercontent.com/POLS503/pols_503_sp15/master/lectures/Sampling_Distribution_Linear_Regression.Rmd)
+- [Multiple regression coefficient anatomy](https://github.com/POLS503/pols_503_sp15/blob/master/lectures/multiple_regression_anatomy.R)
 - Readings:
 
     - Fox, Ch. 6, 9.3
@@ -208,6 +211,7 @@ Given that this is my first time teaching this course, I expect many adjustments
 ### Tuesday, April 21
 
 - [Deck 4](lectures/Lecture_04_handout.pdf)
+- Using R with the Duncan occupational prestige data [.Rmd](pages/Duncan_regression_example.Rmd), [.html](pages/Duncan_regression_example.html)
 - Readings:
 
     - Fox, Ch. 6, 9.3
