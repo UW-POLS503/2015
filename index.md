@@ -211,7 +211,7 @@ Given that this is my first time teaching this course, I expect many adjustments
 ### Tuesday, April 21
 
 - [Deck 4](lectures/Lecture_04_handout.pdf)
-- Using R with the Duncan occupational prestige data [.Rmd](pages/Duncan_regression_example.Rmd), [.html](pages/Duncan_regression_example.html)
+- Using R with the Duncan occupational prestige data [.Rmd](docs/Duncan_regression_example.Rmd), [.html](docs/Duncan_regression_example.html)
 - Readings:
 
     - Fox, Ch. 6, 9.3
