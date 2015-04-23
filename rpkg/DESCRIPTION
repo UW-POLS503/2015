@@ -1,0 +1,9 @@
+Package: pols503
+Title: R code for POLS 503
+Version: 0.0.0.9000
+Authors@R: person("Jeffrey", "Arnold", , "jeffrey.arnold@gmail.com", role = c("aut", "cre"))
+Description: Misc R code for POLS 503
+Depends: R (>= 3.2.0)
+Imports: dummy, tidyr
+License: GPL-3
+LazyData: true

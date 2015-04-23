@@ -1,5 +1,6 @@
-library("tidyr")
-library("dummy")
+#' @import tidyr
+#' @import
+#'
 
 to_dummy_ <- function(data, col, ..., remove = TRUE) {
   l <- dummies:::dummy.data.frame(data, names = col, ...)
@@ -31,4 +32,4 @@ from_dummy_ <- function(data, col, from, ... , default == NA, remove = TRUE) {
   append_df(data, catvar)
 }
 
-iris %>% to_dummy_("Species")
+
