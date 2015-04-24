@@ -11,4 +11,4 @@ Datasets used in this course
   Csv file from <http://staff.washington.edu/csjohns/503/rossoildata.csv>.
 - [nes00a.csv](data/nes00a.csv): Subset of data from the American National Election Studies ([ANES](http://www.electionstudies.org/)) 2000 survey.
   Csv file from <http://staff.washington.edu/csjohns/503/nes00a.csv>.
-- [ross_2012.csv](data/ross_2012.cv): csv file derived from: Michael L. Ross, 2012, "Replication data for: "The Oil Curse"", <http://hdl.handle.net/1902.1/17976>, Harvard Dataverse, V1
+- [ross_2012.csv](data/ross_2012.csv): csv file derived from: Michael L. Ross, 2012, "Replication data for: "The Oil Curse"", <http://hdl.handle.net/1902.1/17976>, Harvard Dataverse, V1
