@@ -1,4 +1,4 @@
-gSHELL = bash
+SHELL = bash
 R = Rscript
 WEBDIR = web
 LECTURE_DIR = lectures
