@@ -1,5 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>POLS/CS&amp;SS 503</title><link>http://pols503.github.io/pols_503_sp15/</link><description>Site for POLS/CS&amp;SS 503: Advanced Quantitative Political Methodology (University of Washington; Spring 2015)</description><atom:link rel="self" type="application/rss+xml" href="http://pols503.github.io/pols_503_sp15/rss.xml"></atom:link><language>en</language><lastBuildDate>Wed, 22 Apr 2015 22:04:13 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Notes on R Markdown assignments</title><link>http://pols503.github.io/pols_503_sp15/r_markdown_assignments.html</link><dc:creator>Jeffrey B. Arnold</dc:creator><description>&lt;div&gt;&lt;!--
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>POLS/CS&amp;SS 503</title><link>http://pols503.github.io/pols_503_sp15/</link><description>Site for POLS/CS&amp;SS 503: Advanced Quantitative Political Methodology (University of Washington; Spring 2015)</description><atom:link type="application/rss+xml" rel="self" href="http://pols503.github.io/pols_503_sp15/rss.xml"></atom:link><language>en</language><lastBuildDate>Fri, 24 Apr 2015 01:10:12 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Updated syllabus</title><link>http://pols503.github.io/pols_503_sp15/updated-syllabus.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;div&gt;&lt;style type="text/css"&gt;
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img { 
+  max-width:100%; 
+  height: auto; 
+}
+&lt;/style&gt;
+&lt;div class="container-fluid main-container"&gt;
+
+
+
+
+&lt;!--
+.. title: Updated syllabus
+.. slug: updated-syllabus
+.. date: 2015-04-23 18:08:22 UTC-07:00
+.. tags: admin
+.. category: 
+.. link: 
+.. description: 
+.. type: text
+.. author: Jeffrey Arnold
+--&gt;
+
+&lt;p&gt;I’ve updated the syllabus with my plans for the rest of the quarter. Of course, much of this will depend on how long it takes to cover the various material.&lt;/p&gt;
+
+
+&lt;/div&gt;
+
+&lt;script&gt;
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+&lt;/script&gt;
+
+&lt;!-- dynamically load mathjax for compatibility with self-contained --&gt;
+&lt;script&gt;
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+&lt;/script&gt;
+
+&lt;/div&gt;</description><category>admin</category><guid>http://pols503.github.io/pols_503_sp15/updated-syllabus.html</guid><pubDate>Fri, 24 Apr 2015 01:08:22 GMT</pubDate></item><item><title>Notes on R Markdown assignments</title><link>http://pols503.github.io/pols_503_sp15/r_markdown_assignments.html</link><dc:creator>Jeffrey B. Arnold</dc:creator><description>&lt;div&gt;&lt;!--
 .. title: Notes on R Markdown assignments
 .. date: 2015-04-21
 --&gt;
