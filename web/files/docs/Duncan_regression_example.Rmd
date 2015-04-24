@@ -102,8 +102,7 @@ The coefficients can also be extracted directly from the element in the `lm` obj
 mod1$coefficients
 ```
 
-
-The fitted values, $\hat{y}$:
+The fitted values, $\hat{y}$ (of the data used for fitting the regression).
 ```{r}
 head(fitted(mod1))
 head(mod1$fitted)
@@ -212,10 +211,37 @@ for creating LaTeX / HTML / Markdown tables for a variety of R objects.
 
 ## Predicted values
 
-Confidence intervals for finding `predicted` values:
+You could calculate predicted values manually. 
+For example, the predicted `prestige` from `mod1` of an occupation with an income of 41.9
+and an `education` of 52.5 is
+```{r}
+coef(mod1)["(Intercept)"] + coef(mod1)["income"] * 41.9 + coef(mod1)["education"] * 52.5
+```
+or 
+```{r}
+c(1, 41.9, 52.5) %*% coef(mod1)
+```
+
+However, it is much easier to calculate this with the `predict` function.
+If predict is used without a `newdata` argument it acts similarly to `fitted` and
+returns the predicted values for the data used to estimate the model (although it will include
+predicted values for missing data):
+```{r}
+head(predict(mod1))
+```
+
+But, if the `newdata` argument is used, then `predict` can be used to find the predicted
+values for new data points. 
+To calculate the predicted value of the example above:
+```{r}
+predict(mod1, newdata = data.frame(education = 52.5, income = 41.9))
+```
+
+You can find the confidence intervals by specifying `interval = "confidence"`.
 ```{r}
 yhat <- predict(mod1, interval = "confidence")
 ```
+
 
 A note on help for `predict`: `predict` works with many different types of analyses
 and object. You need to go to `?predict.lm` to get help for predict as it relates to `lm`.
