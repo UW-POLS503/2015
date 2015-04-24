@@ -6,11 +6,7 @@ LAB_DIR = labs
 HW_DIR = hw
 
 PAGES_DIR = $(WEBDIR)/pages
-PAGES_RMD_FILES = $(wildcard $(PAGES_DIR)/*.Rmd)
-PAGES_MD_FILES = $(PAGES_RMD_FILES:%.Rmd=%.md)
 POSTS_DIR = $(WEBDIR)/posts
-POSTS_RMD_FILES = $(wildcard $(POSTS_DIR)/*.Rmd)
-POSTS_MD_FILES = $(POSTS_RMD_FILES:%.Rmd=%.md)
 
 all : build
 
@@ -29,13 +25,7 @@ hw: data
 	-mkdir $(WEBDIR)/files/hw
 	-cp $(HW_DIR)/hw*.html $(WEBDIR)/files/hw
 
-web: $(PAGES_MD_FILES) $(POSTS_MD_FILES) data labs
-
-web/pages/%.md: web/pages/%.Rmd
-	cd $(dir $^) && $(R) -e 'knitr::knit("$(notdir $^)")'
-
-web/posts/%.md: web/posts/%.Rmd
-	cd $(dir $^) && $(R) -e 'knitr::knit("$(notdir $^)")'
+web: data labs
 
 build: data lectures hw labs web
 	cd $(WEBDIR); source venv/bin/activate; nikola build
