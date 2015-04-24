@@ -340,6 +340,3 @@ ggplot(predicted_mod2, aes(x = income, y = .fitted,
   ggtitle("Predicted values of prestige by type, holding education constant")
 ```
 
-
-
-
