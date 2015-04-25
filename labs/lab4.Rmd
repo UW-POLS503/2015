@@ -1,137 +1,170 @@
 ---
-title: 'POLS 503: Lab 4'
-author: "Sergio Garcia-Rios"
-date: "April 24, 2015"
+title: "POLS/CSSS 503"
+author: "Sergio Garcia-Rios - Jeff Arnold"
+date: "Friday, April 24, 2015"
 output:
   html_document:
-    highlight: default
+    theme: cosmo
+    toc: yes  
 ---
 
-This lab will use some libraries you've seen before
-```{r, echo=FALSE, messages=FALSE, alerts=FALSE}
-library("foreign")
-library("dplyr")
-library("ggplot2")
+
+For this lab we will use the replication [data]( https://dataverse.harvard.edu/dataset.xhtml?persistentId=hdl:1902.1/17976) from [Michael Ross](http://www.sscnet.ucla.edu/polisci/faculty/ross/)'s _"The Oil Curse: How Petroleum Wealth Shapes the Development of Nations."_  
+
+We will be exploring the relationship between oil dependency and democracy.
+
+## Initial Setup
+
+
+This lab will use some libraries you've seen before and we should load them now
+
+```{r, message=FALSE, warning=FALSE}
+library(dplyr)
+library(ggplot2)
+library(broom)
 ```
-Also, some that may be new to you
-```{r message = FALSE}
-library("broom")
-library("stargazer")
-library("coefplot")
-```
 
+## Reading in the Data
 
-## Data
+Read in the Ross data
 
-Download and and read in the Ross data
-```{r}
+```{r, results='hide'}
 rossdata <- read.csv("http://pols503.github.io/pols_503_sp15/data/ross_2012.csv",
                      stringsAsFactors = FALSE)
-```
 
-This is a pretty big data set, we do not need all the variables let subset our data to include only the variables we will use.
-
-Create a new data set containing only  `cty`, `year`, `polity`, `logoil_gdpcap2000_sup_Q_1`, `logGDPcap`, `oecd`:
- 
-```{r}
-dim(rossdata)
-```
- 
-```{r results='hide'}
-head(rossdata)
+head (rossdata)
 glimpse(rossdata)
 ```
 
+This is a pretty big data-set, we do not need all the variables let's subset our data to include only the variables we will use.
+
+### Challenge
+
+Create a new data-set containing only:
+
+-  `cty`
+-  `year`
+-  `polity` 
+-  `logoil_gdpcap2000_sup_Q_1`
+-  `logGDPcap`
+-  `oecd`
+
+Call this new data-frame `data`
 
 ```{r}
-rossdata2 <- rossdata %>% 
+data<-rossdata %>% 
   tbl_df() %>% 
-  select(cty, year, polity, logoil_gdpcap2000_sup_Q_1, logGDPcap, oecd) %>%
-  rename(oil = logoil_gdpcap2000_sup_Q_1, gdp = logGDPcap)
+  select(cty, year, polity, logoil_gdpcap2000_sup_Q_1, logGDPcap, oecd)
 ```
 
+Note that I am putting this new data-frame in a `tbl_df`. You don't have to do it but let's try to use as much `dplyr` as possible.
 
+
+## Data Management
+
+
+Some of those names are too long, we should change it to something meaningful and short. This can be done easily using `dplyr` and `rename`.
 
 ```{r}
-glimpse(rossdata2)
-rossdata2
-rossdata2 <- na.omit(rossdata2)
+data<-data %>%
+  rename(oil=logoil_gdpcap2000_sup_Q_1, gdp=logGDPcap)
 ```
 
-
+This data-frame is way easier to glimpse at:
 ```{r}
-rossdata2 %>%
+glimpse(data)
+
+data
+```
+
+A lot of missing values here. Let's omit them and then look at a summary of the data set
+```{r}
+data<-na.omit(data)
+data %>%
   summary()
 ```
 
+Finally! we are ready to start data-analyzing..
 
+## Sacatterplots
+
+
+We are going to be exploring the relationship between Democracy level (polity) and other covariates.
+
+Let's explore these relationships with plots.
+
+### Challenge
+
+Create a plot that explores the relationship between democracy level and at least another variable but try to include more than two covariates using different colors and shapes.
+
+We begin simple... 
+```{r}
+ggplot(data, aes(x = gdp, y = polity)) +
+  geom_point(position = position_jitter(height = .5),  size = 3) + 
+  theme_bw() 
+
+```
+
+Unfortunately, a simple scatter plot makes it hard to detect any relationship. However, `ggplot2` makes it easy to add different colors and shapes which might help identify trends.
 
 ```{r}
-ggplot(rossdata2, aes(x = gdp, y = polity, colour = oil, shape=factor(oecd))) +
+ggplot(data, aes(x = gdp, y = polity, colour = oil, shape=factor(oecd))) +
   geom_point(position = position_jitter(height = .5),  size = 3) + 
   theme_bw() 
 ```
 
-
-
 ```{r}
-ggplot(rossdata2, aes(x = gdp, y = polity, colour = factor(oecd))) +
-  geom_point(aes(size=(oil)),position = position_jitter(height = .5)) + 
+ggplot(data, aes(x = gdp, y = polity, colour = factor(oecd))) +
+  geom_point(aes(size=(oil)), position = position_jitter(height = .5)) + 
   theme_bw() 
 ```
 
-
-
-<div class="panel">
-5. What is the average level of democracy for observations where oil exports make up less than 10 percent of GDP?
-6. What is the average level of democracy among the top twenty percent of oil exporting countries in the year 1995?
-    What is the average among the bottom eighty percent?
-
-7. What is the difference between the average level of democracy among countries with GDP per capita of less than 
-    $10,000 and the average level among countries with greater than or equal to $10,000, for the year 1980? What is
-    this difference for 1990?
-8. Make an interesting scatterplot.
-</div>
-
-## 3. Modeling and Plotting Example 2 -- see Lab 2 for Example 1! 
+It seems like the higher the GDP the more democratic countries are, except if you are a high oil producer or a non-OECD. Let's explore these relationships using a regression.
 
 ```{r}
-
-model1 <- lm(polity ~ gdp, data=rossdata2)
+model1<-lm(polity ~ oil, data=data)
 summary(model1)
 ```
-
-
+Let's now include controls for GDP per capita and OECD membership
 ```{r}
-model2 <- lm(polity ~ gdp + oil + oecd, data=rossdata2)
+model2<-lm(polity ~ gdp + oil + oecd, data=data)
 summary(model2)
 ```
 
-- Which has a larger impact on the level of democracy: oil dependence or OECD membership?
-- Which has a larger impact on the level of democracy: oil dependence or GDP per capita?
+
+-  Which has a larger impact on the level of democracy: oil dependence or OECD membership?
+-  Which has a larger impact on the level of democracy: oil dependence or GDP per capital?
+
+Recall the OECD membership clustering? Let's try an interaction
 
 ```{r}
-model3 <- lm(polity ~ gdp + oil * oecd, data = rossdata2)
+model3<-lm(polity ~ gdp + oil*oecd, data=data)
 summary(model3)
 ```
 
 How would you interpret these results?
 
-**SIDE NOTE**: if you don't like the displays to use scientific notation (such as 1.846e-04):
-options(scipen=10)
 
-Suppose we want to calculate the predicted level of democracy for a country with GDP per capita of $5,000, no oil exports, and in the OECD:
 
+## Visualiazing Regression Results
+
+`broom` has three main functions, all of which return data frames (not lists, numeric vectors, or other types of object). `glance` returns a data frame with a single row summary of the model:
 
 ```{r}
 glance(model2)
+```
+`tidy` returns a data frame with a row for each coefficient estimate:
+```{r}
 tidy(model2)
 ```
-
-
+`augment` returns the original data frame used in the model with additional columns for fitted values, the standard errors of those fitted values, residuals, etc.
 ```{r}
 head(augment(model2))
+````
 
+How about a coefficient plot, roppeladder... etc.
+
+```{r}
 ggplot(tidy(model2) %>% filter(term != "(Intercept)"), 
        aes(x = term, y = estimate, 
            ymin = estimate - 2 * std.error, 
@@ -141,169 +174,150 @@ ggplot(tidy(model2) %>% filter(term != "(Intercept)"),
 
 ```
 
-
-```{r}
-coefplot(model2)
-```
-
-Since `coefplot` uses **ggplot2** to create its plots, it returns a `ggplot` object,
-which can be added to with other **ggplot2** functions
-```{r}
-coefplot(model2, coefficients = c("oecd", "oil", "gdp")) +
-  theme_bw()
+We can also use `coefplot` 
+```{r, warning=FALSE}
+library("coefplot")
+coefplot(model2, coefficients = c("oecd", "oil", "gdp"))
 ```
 
 
-Look at the help for coefplot
-```{r eval = FALSE}
-?coefplot
-```
+### Challenge
+-  What is wrong with this plot?
+-  Is it useful?
+-  Why? Why not?
 
-```{r}
-stargazer(model1, model2, model3, type = "text")
-```
+## Regression tables
 
+Several packages (`stargazer`, `texreg`, `apsrtable`) are useful for creating publication type regression tables. `stargazer` and `texreg` are the most complete package. Both allow output to either LaTeX or HTML tables for many types of statistical models. We'll use *stargazer* here:
 
-```{r}
-yhat <- predict(model1, interval = "confidence")
-yhat_df <- as.data.frame(yhat) %>%
-  add_rownames(var = "occupation")
-head(yhat_df)
+```{r results = 'asis', warning=FALSE, message=FALSE}
+library(stargazer)
+stargazer(model1, model2, model3, type = "html")
 ```
 
 
 
+## Predicted Values
+
+
+We are going to use `predict` to get predicted values. We first have to set up a `newdata` 
 ```{r}
-xnew <- data.frame(gdp = 5.9, oil = 0, oecd = 1)
+xnew <- list(gdp=5.9, oil=0, oecd=1)
+
 predict(model2, newdata=xnew, interval="confidence")
+
+xnew2 <- list(gdp=5.9, oil=0, oecd=0)
+
+predict(model2, newdata=xnew2, interval="confidence")
+
 ```
 
-
+What is  this really doing?
 ```{r}
-xnew <- list(gdp = 5.9, oil = 0, oecd = 0)
-predict(model2, newdata = xnew, interval = "confidence")
+model2
+names(model2)
+
+pe2<-model2$coefficients
+pe2
+1*pe2[1] + 5.9*pe2[2] + 0*pe2[3] + 1*pe2[4]
+
+
+1*pe2[1] + 5.9*pe2[2] + 0*pe2[3] + 0*pe2[4]
+
 ```
-
-
-
-What is this really doing?
-```{r}
-pe2 <- model2$coefficients
-1 * pe2[1] + 5000 * pe2[2] + 0 * pe2[3] + 1 * pe2[4]
-```
-
-same as the predicted value above. predict() applies the coefficients estimated by our model to hypothetical values of the independent variables. 
-
-Now what does our model predict for a country with GDP per capita of $10,000?
-
-```{r}
-xnew <- data.frame(gdp = 10000, oil = 0, oecd = 1)
-predict(model2, newdata = xnew, interval="confidence")
-```
-
 
 We can create a matrix of hypothetical data to obtain predictions for a range of values:
 
-create a vector of hypothetical values of GDP per capita
-
 ```{r}
-gdp_hyp <- seq(4, 11, by = 1)
-```
+
+# create a vector of hypothetical values of GDP per capita
+
+gdp.hyp <-seq(4,11,by=1)
+
+#create a matrix containing all hypothetical values, which are constant for the other covariates:
 
 
-create a matrix containing all hypothetical values, which are constant for the other covariates:
+xnew <- list(gdp=gdp.hyp, oil=rep(0, length(gdp.hyp)), oecd=rep(1, length(gdp.hyp)))
 
-```{r}
-xnew <- data.frame(gdp = gdp_hyp,
-                   oil = rep(0, length(gdp_hyp)),
-                   oecd = rep(1, length(gdp_hyp)))
 xnew
-
 ```
 
-
-What does this object mean?
-
-
+Now we feed this new data into `predict`
 ```{r}
-pred.res<-predict(model2, newdata=xnew, interval="confidence")
+pred.res <- predict(model2, newdata=xnew, interval="confidence")
+
 pred.res
 ```
 
+### Ploting Predicted Values
 
+To plot these predicted values we have to create a data frame containing both the predicted values generated by predict and the data used to generate those values 
 ```{r}
-mod2_predicted<-as.data.frame(pred.res)
+mod2_predicted <-as.data.frame(pred.res)
 mod2_pred_df <- cbind(xnew, mod2_predicted)
+
+mod2_pred_df
 ```
 
-
-
-
+We have now have a data-frame that can easily be taken by `ggplot`
 ```{r}
 ggplot() +
   geom_line(data = mod2_pred_df, mapping = aes(x = gdp, y = fit)) +
   geom_ribbon(data = mod2_pred_df, mapping = aes(x = gdp, ymin = lwr, ymax = upr),
               alpha = 0.2)+
-  ylab("prestige")+
+  ylab("Democracy")+
   theme_bw()
 ```
 
-
-Using prediction and plotting to interpret interaction terms:
-
-We will use the results of model 3 above:
+Now the model with the interaction.
 
 ```{r}
 summary(model3)
-```
 
+oil.hyp <- seq(0,11,by=1)
 
-```{r}
-oil_hyp <- seq(0,11,by=1)
+xnew1 <- list(oil=oil.hyp, gdp=rep(mean(data$gdp), length(oil.hyp)), oecd=rep(0, length(oil.hyp)))
 
-xnew1 <- list(oil = oil_hyp, gdp=rep(mean(rossdata2$gdp), length(oil_hyp)),
-              oecd=rep(0, length(oil_hyp)))
 xnew1
 
 pred.res1 <- predict(model3, newdata=xnew1, interval="confidence")
 pred.res1
-```
 
 
+xnew2 <- list(oil=oil.hyp, gdp=rep(mean(data$gdp), length(oil.hyp)), oecd=rep(1, length(oil.hyp)))
 
-Now repeat with oecd=1
-```{r}
-xnew2 <- data.frame(oil = oil_hyp, gdp = rep(mean(rossdata2$gdp), length(oil_hyp)),
-                    oecd=rep(1, length(oil_hyp)))
 xnew2
+
+
+pred.res2 <- predict(model3, newdata=xnew2, interval="confidence")
 ```
 
+### Challenge
 
-
-Make sure to name this object something different from the previous one; we need both to compare!
+How would you construct this data-frame to be used with `ggplot`?
 
 ```{r}
-pred.res2<-predict(model3, newdata=xnew2, interval="confidence")
+mod3_predicted_1 <- as.data.frame(pred.res1)
+mod3_pred_df_1  <- cbind(xnew1, mod3_predicted_1)
 
-mod3_predicted_1<-as.data.frame(pred.res1)
-mod3_pred_df_1 <- cbind(xnew1, mod3_predicted_1)
-
-mod3_predicted_2<-as.data.frame(pred.res2)
+mod3_predicted_2 <- as.data.frame(pred.res2)
 mod3_pred_df_2 <- cbind(xnew2, mod3_predicted_2)
 
-mod3_pred_df<-bind_rows(mod3_pred_df_1,mod3_pred_df_2)
+mod3_pred_df <- bind_rows(mod3_pred_df_1,mod3_pred_df_2)
+
+mod3_pred_df
 ```
 
-
-
+Now we can ggplot it
 ```{r}
-
 ggplot(mod3_pred_df, aes(x =oil , y = fit, 
                          ymin = lwr, ymax = upr)) +
   geom_line(mapping = aes(colour = factor(oecd))) +
-  geom_ribbon(mapping = aes(fill = factor(oecd)), alpha = 0.2) +
+  geom_ribbon(mapping = aes(fill = factor(oecd)), alpha = 0.7) +
   ylab("Democracy") + 
-  ggtitle("Predicted values of prestige by type, holding education constant")+
+  ggtitle("Predicted values of Democracy by GDP and OECD membership")+
+  scale_fill_discrete("OECD")+
+  scale_colour_discrete("OECD")+
   theme_bw()
 ```
 
@@ -311,5 +325,3 @@ ggplot(mod3_pred_df, aes(x =oil , y = fit,
 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
 R code is licensed under a [BSD 2-clause](http://www.r-project.org/Licenses/BSD_2_clause) license.
-
-
