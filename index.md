@@ -219,6 +219,8 @@ Given that this is my first time teaching this course, I expect many adjustments
 
 ### Friday, April 24
 
+- Lab document: [.Rmd](labs/lab4.Rmd), [html](labs/lab4.html)
+- Data: [ross_2012.csv](data/ross_2012.csv)
 - Readings
 
     - **stargazer** [vignette](http://cran.r-project.org/web/packages/stargazer/vignettes/stargazer.pdf)
