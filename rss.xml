@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>POLS/CS&amp;SS 503</title><link>http://pols503.github.io/pols_503_sp15/</link><description>Site for POLS/CS&amp;SS 503: Advanced Quantitative Political Methodology (University of Washington; Spring 2015)</description><atom:link href="http://pols503.github.io/pols_503_sp15/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><lastBuildDate>Sat, 25 Apr 2015 19:33:21 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Lab 4 posted</title><link>http://pols503.github.io/pols_503_sp15/posts/2015-04-25.html</link><dc:creator>Jeffrey B. Arnold</dc:creator><description>&lt;!--
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>POLS/CS&amp;SS 503</title><link>http://pols503.github.io/pols_503_sp15/</link><description>Site for POLS/CS&amp;SS 503: Advanced Quantitative Political Methodology (University of Washington; Spring 2015)</description><atom:link rel="self" type="application/rss+xml" href="http://pols503.github.io/pols_503_sp15/rss.xml"></atom:link><language>en</language><lastBuildDate>Sat, 25 Apr 2015 19:34:54 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Lab 4 posted</title><link>http://pols503.github.io/pols_503_sp15/posts/2015-04-25.html</link><dc:creator>Jeffrey B. Arnold</dc:creator><description>&lt;!--
 .. title: Lab 4 posted
 .. tags: announcement
 .. date: 2015-04-25
 --&gt;
 
-&lt;p&gt;I've updated the syllabus to include a link to &lt;a href="http://pols503.github.io/pols_503_sp15/posts/labs/lab4"&gt;Lab 4&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;I've updated the syllabus to include a link to &lt;a href="http://pols503.github.io/pols_503_sp15/labs/lab4.html"&gt;Lab 4&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Also, although less convenient, you can download or preview the labs before they are posted by going to &lt;a href="https://github.com/POLS503/pols_503_sp15/tree/master/labs"&gt;https://github.com/POLS503/pols_503_sp15/tree/master/labs&lt;/a&gt;.&lt;/p&gt;
 &lt;div class="references"&gt;
 
