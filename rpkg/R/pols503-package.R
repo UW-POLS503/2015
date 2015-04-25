@@ -2,7 +2,7 @@
 #' @import
 #'
 
-to_dummy_ <- function(data, col, ..., remove = TRUE) {
+to_dummies_ <- function(data, col, ..., remove = TRUE) {
   l <- dummies:::dummy.data.frame(data, names = col, ...)
   data <- tidyr:::append_df(data, l, which(names(data) == col))
   if (remove) {
@@ -11,7 +11,7 @@ to_dummy_ <- function(data, col, ..., remove = TRUE) {
   data
 }
 
-to_dummy <- function(data, col, ..., remove = TRUE) {
+to_dummies <- function(data, col, ..., remove = TRUE) {
   col <- col_name(substitute(col))
   to_dummy_(data, col, ..., remove = TRUE)
 }
@@ -32,4 +32,8 @@ from_dummy_ <- function(data, col, from, ... , default == NA, remove = TRUE) {
   append_df(data, catvar)
 }
 
+categorize_ <- function(data, ...) {
+
+
+}
 
