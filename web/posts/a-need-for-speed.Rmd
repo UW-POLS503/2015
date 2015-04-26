@@ -1,0 +1,24 @@
+<!--
+.. title: A Need for Speed
+.. slug: a-need-for-speed
+.. date: 2015-04-25 14:32:19 UTC-07:00
+.. tags: draft
+.. category: 
+.. link: 
+.. description: 
+.. type: text
+.. author: Jeffrey Arnold
+-->
+
+I heard that loading during Lab 4.
+This was due to a couple reasons.
+
+1. the computer lab computers have limited memory (for now)
+2. `read.csv` included in R is slow
+
+I can't fix the first, but the second is
+
+
+
+
+

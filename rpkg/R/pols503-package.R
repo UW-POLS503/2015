@@ -33,7 +33,5 @@ from_dummy_ <- function(data, col, from, ... , default == NA, remove = TRUE) {
 }
 
 categorize_ <- function(data, ...) {
-
-
 }
 
