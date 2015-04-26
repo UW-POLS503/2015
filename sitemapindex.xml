@@ -6,7 +6,7 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <sitemap>
   <loc>http://pols503.github.io/pols_503_sp15/categories/admin.xml</loc>
-  <lastmod>2015-04-24</lastmod>
+  <lastmod>2015-04-25</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://pols503.github.io/pols_503_sp15/categories/announcement.xml</loc>
@@ -14,7 +14,7 @@
  </sitemap>
  <sitemap>
   <loc>http://pols503.github.io/pols_503_sp15/categories/error-messages.xml</loc>
-  <lastmod>2015-04-21</lastmod>
+  <lastmod>2015-04-25</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://pols503.github.io/pols_503_sp15/categories/ols.xml</loc>
@@ -22,11 +22,11 @@
  </sitemap>
  <sitemap>
   <loc>http://pols503.github.io/pols_503_sp15/categories/r-errors.xml</loc>
-  <lastmod>2015-04-21</lastmod>
+  <lastmod>2015-04-25</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://pols503.github.io/pols_503_sp15/categories/r.xml</loc>
-  <lastmod>2015-04-21</lastmod>
+  <lastmod>2015-04-25</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://pols503.github.io/pols_503_sp15/categories/visualization.xml</loc>
@@ -34,7 +34,7 @@
  </sitemap>
  <sitemap>
   <loc>http://pols503.github.io/pols_503_sp15/categories/writing.xml</loc>
-  <lastmod>2015-04-21</lastmod>
+  <lastmod>2015-04-25</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://pols503.github.io/pols_503_sp15/rss.xml</loc>
