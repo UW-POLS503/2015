@@ -135,13 +135,13 @@ There are a couple places on campus that you can go to get additional statistica
 
 ### Required
 
-- @fox_applied_2008
-- @gelman_data_2006
-- @angrist_mostly_2009 (UW library eBook available)
+- Fox, John. 2008. *Applied Regression Analysis and Generalized Linear Models*. 2nd edition. Los Angeles: SAGE Publications, Inc.
+- Gelman, Andrew, and Jennifer Hill. 2006. *Data Analysis Using Regression and Multilevel/Hierarchical Models*. 1st edition. Cambridge ; New York: Cambridge University Press.
+- Angrist, Joshua D., and Jörn-Steffen Pischke. 2009. *Mostly Harmless Econometrics: An Empiricist’s Companion*. 1st edition. Princeton: Princeton University Press. (UW library eBook available)
 
 ### Optional
 
-- @zuur_beginners_2009 (UW library eBook available)
+- Zuur, Alain, Elena N. Ieno, and Erik Meesters. 2009. *A Beginner’s Guide to R*. Springer. (UW library eBook available)
 
 # Schedule and Topics
 
@@ -151,7 +151,6 @@ Given that this is my first time teaching this course, I expect many adjustments
 ## Week 1: Introduction to 503 and R, Math Review
 
 ### Tuesday, March 31
-
 
 - [Deck 1](lectures/Lecture_01_handout.pdf
 )
@@ -165,8 +164,9 @@ Given that this is my first time teaching this course, I expect many adjustments
 - Lab document: [.Rmd](labs/lab1.Rmd), [html](labs/lab1.html)
 - Data: [gapminder.csv](labs/gapminder.csv)
 - Readings:
-    - Complete Data Camp "Introduction to R", https://www.datacamp.com/courses/free-introduction-to-r
-    - @wickham_layered_2010
+
+    - Data Camp "Introduction to R", <https://www.datacamp.com/courses/free-introduction-to-r>
+    - Wickham, Hadley. 2010. ``A Layered Grammar of Graphics.'' *Journal of Computational and Graphical Statistics* 19(1): 3–28. <http://dx.doi.org/10.1198/jcgs.2009.07098>
 
 ## Week 2: Assumptions & Properties of the Linear Regression Model, Part I
 
@@ -175,7 +175,7 @@ Given that this is my first time teaching this course, I expect many adjustments
 - [Deck 2](lectures/Lecture_02_handout.pdf)
 - Readings: 
     - Matrix algebra readings. Read **any** of the following
-        - Moore @moore_mathematics_2013, Chapter 12 (on [Canvas](https://canvas.uw.edu/files/31074693/download?download_frd=1)).
+        - Moore, Will H., and David A. Siegel. 2013. *A Mathematics Course for Political and Social Research*. 1st edition. Princeton, NJ: Princeton University Press, Chapter 12 (on [Canvas](https://canvas.uw.edu/files/31074693/download?download_frd=1)).
         - Kevin Quinn's matrix algebra [handout](docs/matrix.pdf)
         - [CSSS Math Camp Lectures](http://www.csss.washington.edu/MathCamp/Lectures/) Section 4
 	- Fox, Ch. 5, 9.1--9.2
@@ -203,7 +203,7 @@ Given that this is my first time teaching this course, I expect many adjustments
 - Lab document: [.Rmd](labs/lab3.Rmd), [html](labs/lab3.html)
 - Readings
 
-    - @wickham_tidy_2014
+    - Wickham, Hadley. 2014. ``Tidy Data.'' *Journal of Statistical Software* 59(10). <http://www.jstatsoft.org/v59/i10/>.
     - Hadley Wickham, [tidyr vignette](http://cran.rstudio.com/web/packages/tidyr/vignettes/tidy-data.html)
 
 ## Week 4: Statistical Inference / Interpretation of the Linear Model

@@ -14,19 +14,19 @@ article: http://ogp.me/ns/article#
 
       <link rel="canonical" href="http://pols503.github.io/pols_503_sp15/r_best_practices.html">
 
-            <link rel="icon" href="favicon-96x96.png" sizes="96x96">
-            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-57x57.png" sizes="57x57">
-            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-152x152.png" sizes="152x152">
-            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-120x120.png" sizes="120x120">
-            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-114x114.png" sizes="114x114">
-            <link rel="icon" href="favicon-128.png" sizes="128x128">
-            <link rel="icon" href="favicon-16x16.png" sizes="16x16">
-            <link rel="icon" href="favicon-32x32.png" sizes="32x32">
-            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-144x144.png" sizes="144x144">
-            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-60x60.png" sizes="60x60">
             <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-72x72.png" sizes="72x72">
-            <link rel="icon" href="favicon-196x196.png" sizes="196x196">
+            <link rel="icon" href="favicon-128.png" sizes="128x128">
             <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-76x76.png" sizes="76x76">
+            <link rel="icon" href="favicon-16x16.png" sizes="16x16">
+            <link rel="icon" href="favicon-196x196.png" sizes="196x196">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-114x114.png" sizes="114x114">
+            <link rel="icon" href="favicon-96x96.png" sizes="96x96">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-120x120.png" sizes="120x120">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-144x144.png" sizes="144x144">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-152x152.png" sizes="152x152">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-60x60.png" sizes="60x60">
+            <link rel="icon" href="favicon-32x32.png" sizes="32x32">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-57x57.png" sizes="57x57">
 
 
 
@@ -44,7 +44,7 @@ article: http://ogp.me/ns/article#
     <meta property="og:url" content="http://pols503.github.io/pols_503_sp15/r_best_practices.html">
     <meta property="og:description" content="Style Guide
 It is important to follow a consistent and clear style when writing R.
-Follow the Hadley Wickham's Advanced R Style guide.
+Follow the Hadley Wickham’s Advanced R Style guide.
 Writing code in a consistent (and good) style will make is easier">
     <meta property="og:type" content="article">
     <meta property="article:published_time" content="2015-04-12T22:49:02.311518-07:00">
@@ -166,7 +166,7 @@ Writing code in a consistent (and good) style will make is easier">
 
 <h2 id="style">Style Guide</h2>
 <p>It is important to follow a consistent and clear style when writing R.</p>
-<p>Follow the Hadley Wickham's <em>Advanced R</em> <a href="http://adv-r.had.co.nz/Style.html">Style guide</a>.</p>
+<p>Follow the Hadley Wickham’s <em>Advanced R</em> <a href="http://adv-r.had.co.nz/Style.html">Style guide</a>.</p>
 <p>Writing code in a consistent (and good) style will make is easier for others and you to read your code. It will also result fewer bugs.</p>
 <p>For, example, if you do not put spaces around the assignment operator (<code>&lt;-</code>),</p>
 <pre class="sourceCode r"><code class="sourceCode r">x&lt;-<span class="dv">1</span></code></pre>
@@ -174,7 +174,7 @@ Writing code in a consistent (and good) style will make is easier">
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="dv">1</span></code></pre>
 <p>or</p>
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;<span class="st"> </span>-<span class="dv">1</span></code></pre>
-<p>Off the top of your head, do you know which one R is going to do? Yes, I've seen bugs due to this in real life.</p>
+<p>Off the top of your head, do you know which one R is going to do? Yes, I’ve seen bugs due to this in real life.</p>
 <h2 id="best-practices">Best Practices</h2>
 <p>These are some best practices for writing R code suggested by <a href="https://github.com/swcarpentry/r-novice-inflammation">Software Carpentry</a>. Many of these are applicable, although some are more specific to putting your analyses in R scripts rather than when writing your analyses in R Markdown documents.</p>
 <ol style="list-style-type: decimal">
@@ -211,22 +211,18 @@ That means you should avoid using `setwd()` *within* a script; instead you shoul
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">"my_genius_fxns.R"</span>)</code></pre>
 </li>
 <li><p>Keep your code modular. If a single function or loop gets too long, consider breaking it into smaller pieces.</p></li>
-<li><p>Don't repeat yourself. Automate! If you are repeating the same piece of code on multiple objects or files, use a loop or a function to do the same thing. The more you repeat yourself, the more likely you are to make a mistake.</p></li>
+<li><p>Don’t repeat yourself. Automate! If you are repeating the same piece of code on multiple objects or files, use a loop or a function to do the same thing. The more you repeat yourself, the more likely you are to make a mistake.</p></li>
 <li>
 <p>Manage all of your source files for a project in the same directory. Then use relative paths as necessary. For example, use</p>
 <pre class="sourceCode r"><code class="sourceCode r">dat &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">file =</span> <span class="st">"/files/dataset-2013-01.csv"</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)</code></pre>
 <p>rather than:</p>
 <pre class="sourceCode r"><code class="sourceCode r">dat &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">file =</span> <span class="st">"/Users/Karthik/Documents/sannic-project/files/dataset-2013-01.csv"</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)</code></pre>
 </li>
-<li><p>Don't save a session history (the default option in R, when it asks if you want an <code>RData</code> file). Instead, start in a clean environment so that older objects don't contaminate your current environment. This can lead to unexpected results, especially if the code were to be run on someone else's machine.</p></li>
-<li><p>Collaborate. Grab a buddy and practice "code review". We do it for methods and papers, why not code? Our code is a major scientific product and the result of a lot of hard work!</p></li>
+<li><p>Don’t save a session history (the default option in R, when it asks if you want an <code>RData</code> file). Instead, start in a clean environment so that older objects don’t contaminate your current environment. This can lead to unexpected results, especially if the code were to be run on someone else’s machine.</p></li>
+<li><p>Collaborate. Grab a buddy and practice “code review”. We do it for methods and papers, why not code? Our code is a major scientific product and the result of a lot of hard work!</p></li>
 </ol>
 <hr>
-<p>Copywrite © <a href="http://software-carpentry.org/">Software Carpentry</a>, [link to the license][cc-by-human]. Page derived from "[Best practices for using R and designing programs](https://raw.githubusercontent.com/swcarpentry/r-novice-inflammation/gh-pages/06-best-practices-R.Rmd"), with only minor edits.</p>
-<div class="references">
-
-</div>
-
+<p>Copywrite © <a href="http://software-carpentry.org/">Software Carpentry</a>, [link to the license][cc-by-human]. Page derived from “[Best practices for using R and designing programs](https://raw.githubusercontent.com/swcarpentry/r-novice-inflammation/gh-pages/06-best-practices-R.Rmd”), with only minor edits.</p>
     </div>
     
 </article>
