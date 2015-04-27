@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>POLS/CS&amp;SS 503 (significance testing)</title><link>http://pols503.github.io/pols_503_sp15/</link><description></description><atom:link href="http://pols503.github.io/pols_503_sp15/categories/significance-testing.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Mon, 27 Apr 2015 22:53:02 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>P-values and NHST Links</title><link>http://pols503.github.io/pols_503_sp15/posts/p-values-and-nhst-links.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
+.. title: P-values and NHST Links
+.. slug: p-values-and-nhst-links
+.. date: 2015-04-27 14:26:06 UTC-07:00
+.. tags: nhst, significance testing
+.. category: 
+.. link: 
+.. description: 
+.. type: text
+.. author: Jeffrey Arnold
+--&gt;
+
+&lt;p&gt;What follows are a multitude of links related to P-values and Null Hypothesis significance testings. Mabye you will find something interesting in all of it.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;John D. Cook, “Five Criticisms of Significance Testing” &lt;a href="http://www.johndcook.com/blog/2008/11/18/five-criticisms-of-significance-testing/"&gt;http://www.johndcook.com/blog/2008/11/18/five-criticisms-of-significance-testing/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Kelly McCaskey and Carlisle Rainey on using confidence intervals for substantive interpretations: &lt;a href="http://www.carlislerainey.com/papers/meaningful.pdf"&gt;http://www.carlislerainey.com/papers/meaningful.pdf&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;The Statistical Crisis in Science, &lt;a href="http://www.americanscientist.org/issues/pub/2014/6/the-statistical-crisis-in-science/2"&gt;http://www.americanscientist.org/issues/pub/2014/6/the-statistical-crisis-in-science/2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Nuzzo, Regina. 2014. “Scientific Method: Statistical Errors.” &lt;em&gt;Nature&lt;/em&gt; 506(7487): 150–52. &lt;a href="http://www.nature.com/doifinder/10.1038/506150a"&gt;http://www.nature.com/doifinder/10.1038/506150a&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Halsey, Lewis G., Douglas Curran-Everett, Sarah L. Vowler, and Gordon B. Drummond. 2015. “The Fickle P Value Generates Irreproducible Results.” &lt;em&gt;Nature Methods&lt;/em&gt; 12(3): 179–85. &lt;a href="http://www.nature.com/nmeth/journal/v12/n3/full/nmeth.3288.html"&gt;http://www.nature.com/nmeth/journal/v12/n3/full/nmeth.3288.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Ioannadis, “Why Most Published Research Findings are False” &lt;a href="http://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.0020124"&gt;http://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.0020124&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Colquhoun, David. 2014. “An Investigation of the False Discovery Rate and the Misinterpretation of P-Values.” &lt;em&gt;Royal Society Open Science&lt;/em&gt; 1(3): 140216. &lt;a href="http://rsos.royalsocietypublishing.org/content/1/3/140216"&gt;http://rsos.royalsocietypublishing.org/content/1/3/140216&lt;/a&gt;. See his blog post on it &lt;a href="https://storify.com/david_colquhoun/statistical-conundrums-screening-and-p-values"&gt;https://storify.com/david_colquhoun/statistical-conundrums-screening-and-p-values&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Ward, Michael D., Brian D. Greenhill, and Kristin M. Bakke. 2010. “The Perils of Policy by P-Value: Predicting Civil Conflicts.” &lt;em&gt;Journal of Peace Research&lt;/em&gt; 47(4): 363–75. &lt;a href="http://jpr.sagepub.com/content/47/4/363"&gt;http://jpr.sagepub.com/content/47/4/363&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Andrew Gelman, “Misunderstanding the p-value” &lt;a href="http://andrewgelman.com/2013/03/12/misunderstanding-the-p-value/"&gt;http://andrewgelman.com/2013/03/12/misunderstanding-the-p-value/&lt;/a&gt; pointing to a misunderstanding of P-values in this &lt;em&gt;New York Times&lt;/em&gt; column: &lt;a href="http://www.nytimes.com/2013/03/12/science/putting-a-value-to-real-in-medical-research.html"&gt;http://www.nytimes.com/2013/03/12/science/putting-a-value-to-real-in-medical-research.html&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;Geoff Cumming, “The Dance of the P-Values”, &lt;a href="https://www.youtube.com/watch?v=ez4DgdurRPg"&gt;https://www.youtube.com/watch?v=ez4DgdurRPg&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Gelman, Andrew. 2013. “P Values and Statistical Practice:” Epidemiology 24(1): 69–72. &lt;a href="http://content.wkhealth.com/linkback/openurl?sid=WKPTLP:landingpage&amp;amp;an=00001648-201301000-00010"&gt;http://content.wkhealth.com/linkback/openurl?sid=WKPTLP:landingpage&amp;amp;an=00001648-201301000-00010&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;A defense of &lt;span class="math"&gt;&lt;em&gt;P&lt;/em&gt;&lt;/span&gt;-values from the simplystatistics blog:&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://simplystatistics.org/2014/09/30/you-think-p-values-are-bad-i-say-show-me-the-data/"&gt;http://simplystatistics.org/2014/09/30/you-think-p-values-are-bad-i-say-show-me-the-data/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://simplystatistics.org/2014/02/14/on-the-scalability-of-statistical-procedures-why-the-p-value-bashers-just-dont-get-it/"&gt;http://simplystatistics.org/2014/02/14/on-the-scalability-of-statistical-procedures-why-the-p-value-bashers-just-dont-get-it/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href="http://simplystatistics.org/2012/01/06/p-values-and-hypothesis-testing-get-a-bad-rap-but-we/"&gt;http://simplystatistics.org/2012/01/06/p-values-and-hypothesis-testing-get-a-bad-rap-but-we/&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;Overlapping confidence intervals do not mean that two effects are not significantly different: &lt;a href="https://www.cscu.cornell.edu/news/statnews/Stnews73insert.pdf"&gt;https://www.cscu.cornell.edu/news/statnews/Stnews73insert.pdf&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Difference between significant and not significant is not itself statistically significant: &lt;a href="http://www.stat.columbia.edu/~gelman/research/published/signif4.pdf"&gt;http://www.stat.columbia.edu/~gelman/research/published/signif4.pdf&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Where does &lt;span class="math"&gt;&lt;em&gt;P&lt;/em&gt; = 0.05&lt;/span&gt; come from ?&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;“Why 0.05?” &lt;a href="http://www.jerrydallal.com/lhsp/p05.htm"&gt;http://www.jerrydallal.com/lhsp/p05.htm&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;OpenIntro Statistics, “WHy do we use 0.05?” &lt;a href="https://www.openintro.org/stat/why05.php"&gt;https://www.openintro.org/stat/why05.php&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Type S (Sign) and Type M (magnitude) errors: &lt;a href="http://andrewgelman.com/2004/12/29/type_1_type_2_t/"&gt;http://andrewgelman.com/2004/12/29/type_1_type_2_t/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;/li&gt;&lt;/ul&gt;</description><category>nhst</category><category>significance testing</category><guid>http://pols503.github.io/pols_503_sp15/posts/p-values-and-nhst-links.html</guid><pubDate>Mon, 27 Apr 2015 21:26:06 GMT</pubDate></item></channel></rss>

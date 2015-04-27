@@ -33,6 +33,10 @@
   <lastmod>2015-04-27</lastmod>
  </sitemap>
  <sitemap>
+  <loc>http://pols503.github.io/pols_503_sp15/categories/nhst.xml</loc>
+  <lastmod>2015-04-27</lastmod>
+ </sitemap>
+ <sitemap>
   <loc>http://pols503.github.io/pols_503_sp15/categories/ols.xml</loc>
   <lastmod>2015-04-27</lastmod>
  </sitemap>
@@ -46,6 +50,10 @@
  </sitemap>
  <sitemap>
   <loc>http://pols503.github.io/pols_503_sp15/categories/r.xml</loc>
+  <lastmod>2015-04-27</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>http://pols503.github.io/pols_503_sp15/categories/significance-testing.xml</loc>
   <lastmod>2015-04-27</lastmod>
  </sitemap>
  <sitemap>
