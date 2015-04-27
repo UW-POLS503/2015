@@ -1,0 +1,19 @@
+---
+title: "car methods"
+author: "Jeffrey B. Arnold"
+date: "04/26/2015"
+output: html_document
+---
+
+- CERES plot
+- Added Variable Plots: `avPlots`
+- `boxCox`, `boxTidwell`, `yjPower` transformations
+- Component residual: `crPlot`, `ceresPlot`
+- Nonlinar functions of estimated regression coefficients: `deltaMethod`
+- linear Hypothesis: `linearHypothesis`, `makeHypothesis`
+- Linear functions of estimated regression coefficients: 
+- DF betas: `dfbetasPlots`, `influencePlot`, `leveragePlot`, `outlierTest`
+- Variance inflaction `vif`
+- Non-Constant error variance `ncvTest`
+- R `qqplot`
+

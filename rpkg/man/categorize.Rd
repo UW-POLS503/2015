@@ -31,4 +31,8 @@ categorize(data.frame(a = 1:10, b = rep(0:1, 5)),
            "ge 5, b" = a >= 5 & b == 1,
            "gt 5, not b" = a >= 5 & b == 0)
 }
+\seealso{
+\code{\link[plyr]{revalue}}, \code{\link[plyr]{mapvalues}},
+  \code{\link{cut}}, \code{\link{switch}}
+}
 

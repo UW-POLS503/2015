@@ -13,6 +13,11 @@ append_df <- function (x, values, after = length(x)) {
   y
 }
 
+# From tidyr:::append_col
+append_col <- function (x, col, name, after = length(x)) {
+  append_df(x, setNames(list(col), name), after = after)
+}
+
 # From tidyr:::col_name
 col_name <- function (x, default = stop("Please supply column name",
                       call. = FALSE)) {
@@ -27,7 +32,48 @@ col_name <- function (x, default = stop("Please supply column name",
   stop("Invalid column specification", call. = FALSE)
 }
 
-# From tidyr:::append_col
-append_col <- function (x, col, name, after = length(x)) {
-  append_df(x, setNames(list(col), name), after = after)
+#' Create covariance matrix from standard deviations and correlation matrix
+#'
+#' A covariance matrix can be specified as,
+#' \deqn{\Sigma = diag(s) R diag(s)}
+#' where \eqn{\Sigma} is the covariance matrix, \eqn{diag(s)} is a diagonal matrix
+#' with the standard deviation on its diagonal, and \eqn{R} is the correlation matrix.
+#'
+#' @param sd \code{numeric} A vector of standard deviations
+#' @param cor \code{matrix} A correlation matrix.
+#' @return A covariance matrix.
+#' @export
+#' @example
+#' s <- c(1, 2)
+#' R <- matrix(c(1, 0.5, 0.5, 1), nrow = 2, ncol = 2)
+#' sdcor2cov(s )
+sdcor2cov <- function(sd, cor = diag(length(sd))) {
+  if (length(sd) > 1) {
+    sd <- diag(sd)
+  } else {
+    sd <- matrix(sd)
+  }
+  sd %*% cov2cor(cor) %*% sd
+}
+
+cov2sdcor <- function(x) {
+  list(cor = cov2cor(x), sd = sqrt(diag(x)))
+}
+
+#' Create an equicorrelated correlation matrix.
+#'
+#' A correlation matrix with all off diagonal correlations equal to \eqn{rho}.
+#'
+#' @param n Size of the matrix.
+#' @param rho The off diagonal correlations
+#' @return A correlation matrix.
+#' @export
+#' @example
+#' n <- 3
+#' rho <- 0.25
+#' equicor(n, rho)
+equicor <- function(n, rho) {
+  ret <- matrix(rho, nrow = n, ncol = n)
+  diag(ret) <- rep(1, n)
+  ret
 }

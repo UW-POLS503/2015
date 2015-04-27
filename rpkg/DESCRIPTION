@@ -4,9 +4,9 @@ Version: 0.0.0.9000
 Authors@R: c(person("Jeffrey", "Arnold", , "jeffrey.arnold@gmail.com",
                     role = c("aut", "cre")),
              person("Hadley", "Wickham", role = c("cph"),
-                    comment = "code from col_name, append_df"),
+                    comment = "some functions from tidyr"),
              person("RStudio", role = c("cph"),
-                    comment = "code from col_name, append_df"))
+                    comment = "some functions from tidyr"))
 Description: This package contains miscellaneous R code used in POLS 503.
 Depends: R (>= 3.2.0)
 Imports:
