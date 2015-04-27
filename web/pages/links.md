@@ -54,6 +54,7 @@
 
 ## General
 
+- [awesome-R](https://github.com/qinwf/awesome-R) a curated list of R frameworks, packages and software.
 - [Quick-R](http://www.statmethods.net/)
 - Jared Lander, [R for Everyone](http://www.amazon.com/Everyone-Advanced-Analytics-Graphics-Addison-Wesley/dp/0321888030) Teaches R assuming neither a programming or statistics background. One that I have considered and may consider in the future.
 - Peter Daalgard, *Introductory Statistics with R*
