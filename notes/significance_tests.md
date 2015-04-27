@@ -1,8 +1,5 @@
-## P-values and NHST
 
-- Where does 0.05 come from ?
 
-    - "Why 0.05?" <http://www.jerrydallal.com/lhsp/p05.htm>
 
 - P-values and false discovery rate
 
@@ -29,9 +26,6 @@
 	- http://simplystatistics.org/2014/09/30/you-think-p-values-are-bad-i-say-show-me-the-data/
 	- http://simplystatistics.org/2014/02/14/on-the-scalability-of-statistical-procedures-why-the-p-value-bashers-just-dont-get-it/
 
-- Overlapping confidence intervals do not mean that two effects are not significantly different: https://www.cscu.cornell.edu/news/statnews/Stnews73insert.pdf
-
-- Difference between significant and not significant is not itself statistically significant: http://www.stat.columbia.edu/~gelman/research/published/signif4.pdf
 
 - Type S and M Errors
 
