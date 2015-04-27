@@ -996,4 +996,51 @@
       </choose>
     </layout>
   </citation>
+  <bibliography hanging-indent="true" et-al-min="11" et-al-use-first="7" subsequent-author-substitute="&#8212;&#8212;&#8212;" entry-spacing="0">
+    <sort>
+      <key macro="contributors-sort"/>
+      <key variable="title"/>
+      <key variable="genre"/>
+      <key variable="issued"/>
+    </sort>
+    <layout suffix=".">
+      <group delimiter=". ">
+        <group delimiter=": ">
+          <group delimiter=", ">
+            <group delimiter=" ">
+              <group delimiter=". ">
+                <group delimiter=" ">
+                  <group delimiter=", ">
+                    <group delimiter=". ">
+                      <group delimiter=". ">
+                        <text macro="contributors"/>
+                        <text macro="title"/>
+                      </group>
+                      <text macro="description"/>
+                      <text macro="secondary-contributors"/>
+                      <group delimiter=", ">
+                        <text macro="container-title"/>
+                        <text macro="container-contributors"/>
+                        <text macro="locators-chapter"/>
+                      </group>
+                      <text macro="locators-join-with-period"/>
+                    </group>
+                    <text macro="locators-join-with-comma"/>
+                  </group>
+                  <text macro="locators-join-with-space"/>
+                </group>
+                <text macro="collection-title"/>
+                <text macro="issue-join-with-period"/>
+              </group>
+              <text macro="issue-join-with-space"/>
+            </group>
+            <text macro="issue-join-with-comma"/>
+            <text macro="locators-newspaper"/>
+          </group>
+          <text macro="locators-journal"/>
+        </group>
+        <text macro="access"/>
+      </group>
+    </layout>
+  </bibliography>
 </style>
