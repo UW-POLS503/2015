@@ -11,6 +11,12 @@
 #' @return A data frame consisting of \code{.data} with the additional column
 #'   \code{col}.
 #' @export
+#' @examples
+#' categorize(data.frame(a = 1:10, b = rep(0:1, 5)),
+#'            x,
+#'            "lt 5" = a < 5,
+#'            "ge 5, b" = a >= 5 & b == 1,
+#'            "gt 5, not b" = a >= 5 & b == 0)
 categorize <- function(.data, col, ..., .default = NA_character_) {
   stopifnot(is.data.frame(.data))
   col <- col_name(substitute(col))

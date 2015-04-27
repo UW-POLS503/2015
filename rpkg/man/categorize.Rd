@@ -24,4 +24,11 @@ A data frame consisting of \code{.data} with the additional column
 \description{
 Create a categorical variable from logical expressions on a data frame.
 }
+\examples{
+categorize(data.frame(a = 1:10, b = rep(0:1, 5)),
+           x,
+           "lt 5" = a < 5,
+           "ge 5, b" = a >= 5 & b == 1,
+           "gt 5, not b" = a >= 5 & b == 0)
+}
 
