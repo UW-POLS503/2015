@@ -31,4 +31,10 @@ A data frame.
 \description{
 \code{to_dummies} converts a column into multiple columns of dummy variables.
 }
+\examples{
+example_df <- data.frame(x = c(rep("a", 2), rep("b", 2)))
+to_dummies(example_df, x)
+to_dummies(example_df, x, remove = FALSE)
+to_dummies(example_df, x, drop_level = TRUE)
+}
 

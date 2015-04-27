@@ -9,11 +9,12 @@ Authors@R: c(person("Jeffrey", "Arnold", , "jeffrey.arnold@gmail.com",
                     comment = "code from col_name, append_df"))
 Description: This package contains miscellaneous R code used in POLS 503.
 Depends: R (>= 3.2.0)
-Imports: dummies,
+Imports:
   tidyr,
   lintr,
   knitr,
-  dplyr
+  dplyr,
+  pryr
 Suggests: testthat
 License: GPL-3
 LazyData: true

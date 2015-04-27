@@ -14,22 +14,21 @@
 categorize <- function(.data, col, ..., .default = NA_character_) {
   stopifnot(is.data.frame(.data))
   col <- col_name(substitute(col))
-  cats <- as.list(substitute(list(...))[-1])
-  cats <- cats[names(cats) != ""]
+  cats <- named_dots(...)
   # Default value if no expressions are TRUE
   .data[[col]] <- .default
-  not_true_yet <- seq_len(nrow(.data))
+  not_true_yet <- rep(TRUE, nrow(.data))
   for (category in names(cats)) {
     # Check if expr is true
     is_true <- as.logical(eval(cats[[category]],
-                               .data[not_true_yet, , drop = FALSE],
+                               .data,
                                parent.frame()))
     # Need to account for NAs
     is_true[is.na(is_true)] <- FALSE
     # Only update cols which haven't been previously true
-    to_change <- not_true_yet[is_true]
+    to_change <- is_true & not_true_yet
     .data[[col]][to_change] <- as.character(category)
-    not_true_yet <- not_true_yet[! is_true]
+    not_true_yet <- not_true_yet | to_change
   }
   .data
 }

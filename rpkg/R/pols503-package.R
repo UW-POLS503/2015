@@ -2,7 +2,7 @@
 #' @import lintr
 #' @import knitr
 #' @import dplyr
-#' @import dummies
+#' @importFrom pryr named_dots
 NULL
 
 # From tidyr:::append_df
@@ -27,3 +27,7 @@ col_name <- function (x, default = stop("Please supply column name",
   stop("Invalid column specification", call. = FALSE)
 }
 
+# From tidyr:::append_col
+append_col <- function (x, col, name, after = length(x)) {
+  append_df(x, setNames(list(col), name), after = after)
+}

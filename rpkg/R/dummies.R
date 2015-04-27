@@ -14,6 +14,11 @@
 #' @param sep \code{character} string to use as the separator in the new column
 #'   names.
 #' @return A data frame.
+#' @examples
+#' example_df <- data.frame(x = c(rep("a", 2), rep("b", 2)))
+#' to_dummies(example_df, x)
+#' to_dummies(example_df, x, remove = FALSE)
+#' to_dummies(example_df, x, drop_level = TRUE)
 #' @export
 to_dummies <- function(.data, col,
                         contrasts = NULL,
@@ -72,34 +77,65 @@ to_dummies_.data.frame <- function(.data, col,
   }
   .data
 }
-#
-# # debug(to_dummies)
-# test_df <- data.frame(x = c(rep("a", 2), rep("b", 2), rep("c", 2)),
-#                       y = 1)
-# to_dummies(test_df, "x")
-# to_dummies(test_df, "x", drop_level = TRUE)
-# to_dummies(test_df, "x", contrasts = "contr.sum")
-# to_dummies(test_df, "x", drop_level = TRUE, contrasts = "contr.sum")
-# to_dummies(mutate(test_df, x = ordered(x)), "x", drop_level = TRUE, sep = "")
 
+which_w_default <- function(x, y, default = NA) {
+  ret <- x[! is.na(y) & as.logical(y)]
+  if (length(ret) == 0) ret <- default
+  else ret <- ret[1]
+  ret
+}
 
-# to_dummies <- function(data, col, ..., remove = TRUE) {
-#   col <- col_name(substitute(col))
-#   to_dummies_(data, col, ..., remove = TRUE)
-# }
-#
-# which_w_default <- function(x, y, default = NA) {
-#   ret <- x[as.logical(y)]
-#   if (length(ret) == 0) ret <- default
-#   else ret <- ret[1]
-#   ret
-# }
-#
-# from_dummy_ <- function(data, col, from, ... , default = NA, remove = TRUE) {
-#   catvar <- gather(select(data, one_of(from)), .key, .value) %>%
-#     rowwise() %>%
-#     summarise(which_w_default(.key, .value)) %>%
-#     select(-.key, -.value)
-#   names(catvar) <- col
-#   append_df(data, catvar)
-# }
+#' Convert dummy variable columns to a categorical variable column
+#'
+#' \code{from_dummies} converts dummy variable columns to a categorical variable
+#' column.
+#'
+#' @param .data A data frame
+#' @param col The bare column name which will be created.
+#' @param from The columns which contain the dummy variables.
+#' @param remove If \code{TRUE}, then remove the input column from the output
+#'   data frame.
+#' @param default The value to use if no dummy variables match.
+#' @return A data frame.
+#' @examples
+#' example_df <- data.frame(a = c(1, 0, 0), b = c(0, 1, 0))
+#' from_dummies(example_df, x, c("a", "b"))
+#' from_dummies(example_df, x, c("a", "b"), remove = FALSE)
+#' from_dummies(example_df, x, c("a", "b"), default = "c")
+#' @export
+from_dummies <- function(.data, col, from, default = NA_character_,
+                         remove = TRUE) {
+  col <- col_name(substitute(col))
+  from_dummies_(.data, col, from, default = default, remove = remove)
+}
+
+#' Standard evaluation version of \code{from_dummies}.
+#'
+#' This is an S3 generic.
+#'
+#' @inheritParams from_dummies
+#' @export
+from_dummies_ <- function(.data, col, from, default = NA_character_,
+                          remove = TRUE) {
+  UseMethod("from_dummies_")
+}
+
+from_dummies_.data.frame <- function(.data, col, from, default = NA_character_,
+                                      remove = TRUE) {
+  stopifnot(is.character(col), length(col) == 1)
+  catvar <-
+    apply(.data[ , from, drop = FALSE], 1,
+          function(x) which_w_default(from, x, default = default))
+  .data <- append_col(.data, catvar, col)
+  if (remove) {
+    for (i in from) {
+      .data[[i]] <- NULL
+    }
+  }
+  .data
+}
+
+from_dummies_.tbl_df <- function(.data, col, from, default = NA_character_,
+                                 remove = TRUE) {
+  dplyr::tbl_df(NextMethod())
+}
