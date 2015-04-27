@@ -1,37 +1,29 @@
 #' @import tidyr
-#' @import
-#'
+#' @import lintr
+#' @import knitr
+#' @import dplyr
+#' @import dummies
+NULL
 
-to_dummies_ <- function(data, col, ..., remove = TRUE) {
-  l <- dummies:::dummy.data.frame(data, names = col, ...)
-  data <- tidyr:::append_df(data, l, which(names(data) == col))
-  if (remove) {
-    data[[col]] <- NULL
-  }
-  data
+# From tidyr:::append_df
+append_df <- function (x, values, after = length(x)) {
+  y <- append(x, values, after = after)
+  class(y) <- class(x)
+  attr(y, "row.names") <- attr(x, "row.names")
+  y
 }
 
-to_dummies <- function(data, col, ..., remove = TRUE) {
-  col <- col_name(substitute(col))
-  to_dummy_(data, col, ..., remove = TRUE)
-}
-
-which_w_default <- function(x, y, default = NA) {
-  ret <- x[as.logical(y)]
-  if (length(ret) == 0) ret <- default
-  else ret <- ret[1]
-  ret
-}
-
-from_dummy_ <- function(data, col, from, ... , default == NA, remove = TRUE) {
-  catvar <- gather(select(data, one_of(from)), .key, .value) %>%
-    rowwise() %>%
-    summarise(which_w_default(.key, .value)) %>%
-    select(-.key, -.value)
-  names(catvar) <- col
-  append_df(data, catvar)
-}
-
-categorize_ <- function(data, ...) {
+# From tidyr:::col_name
+col_name <- function (x, default = stop("Please supply column name",
+                      call. = FALSE)) {
+  if (is.character(x))
+    return(x)
+  if (identical(x, quote(expr = )))
+    return(default)
+  if (is.name(x))
+    return(as.character(x))
+  if (is.null(x))
+    return(x)
+  stop("Invalid column specification", call. = FALSE)
 }
 

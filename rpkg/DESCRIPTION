@@ -1,11 +1,19 @@
 Package: pols503
 Title: R code for POLS 503
 Version: 0.0.0.9000
-Authors@R: person("Jeffrey", "Arnold", , "jeffrey.arnold@gmail.com",
-                  role = c("aut", "cre"))
-Description: Misc R code for POLS 503
+Authors@R: c(person("Jeffrey", "Arnold", , "jeffrey.arnold@gmail.com",
+                    role = c("aut", "cre")),
+             person("Hadley", "Wickham", role = c("cph"),
+                    comment = "code from col_name, append_df"),
+             person("RStudio", role = c("cph"),
+                    comment = "code from col_name, append_df"))
+Description: This package contains miscellaneous R code used in POLS 503.
 Depends: R (>= 3.2.0)
-Imports: dummy, tidyr
+Imports: dummies,
+  tidyr,
+  lintr,
+  knitr,
+  dplyr
 Suggests: testthat
 License: GPL-3
 LazyData: true
