@@ -4,12 +4,12 @@
 \alias{categorize}
 \title{Create categorical column from expressions}
 \usage{
-categorize(.data, col, ..., .default = NA_character_)
+categorize(.data, .col, ..., .default = NA_character_)
 }
 \arguments{
 \item{.data}{A data frame}
 
-\item{col}{Bare column name}
+\item{.col}{Bare column name}
 
 \item{...}{Named expressions evaluating a logical value. The name will
 be used for the categorical variable. For}
@@ -26,10 +26,10 @@ Create a categorical variable from logical expressions on a data frame.
 }
 \examples{
 categorize(data.frame(a = 1:10, b = rep(0:1, 5)),
-           x,
-           "lt 5" = a < 5,
-           "ge 5, b" = a >= 5 & b == 1,
-           "gt 5, not b" = a >= 5 & b == 0)
+             x,
+             "lt 5" = a < 5,
+             "ge 5, b" = a >= 5 & b == 1,
+             "gt 5, not b" = a >= 5 & b == 0)
 }
 \seealso{
 \code{\link[plyr]{revalue}}, \code{\link[plyr]{mapvalues}},

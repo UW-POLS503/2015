@@ -14,7 +14,7 @@ Imports:
   lintr,
   knitr,
   dplyr,
-  pryr
+  lazyeval
 Suggests: testthat
 License: GPL-3
 LazyData: true
