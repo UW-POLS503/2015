@@ -47,12 +47,8 @@ col_name <- function (x, default = stop("Please supply column name",
 #' s <- c(1, 2)
 #' R <- matrix(c(1, 0.5, 0.5, 1), nrow = 2, ncol = 2)
 #' sdcor2cov(s )
-sdcor2cov <- function(sd, cor = diag(length(sd))) {
-  if (length(sd) > 1) {
-    sd <- diag(sd)
-  } else {
-    sd <- matrix(sd)
-  }
+sdcor2cov <- function(sd, cor = diag(1, nrow = length(sd), ncol = length(sd)) {
+  sd <- diag(sd, nrow = length(sd), ncol = length(sd))
   sd %*% cov2cor(cor) %*% sd
 }
 

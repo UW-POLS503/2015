@@ -19,12 +19,23 @@ the provided programs carefully to understand what is happening.
 For this assignment, I ask that you start with this code and edit it as needed.
 Do not 
 
-```{r setup, include=FALSE, results = 'hide', echo = FALSE}
+```{r setup, echo = TRUE}
 # This assignment will have some non-trivial computation.
 # This will set the options so that any computations that do not change are not
 # rerun.
 # See http://rmarkdown.rstudio.com/authoring_rcodechunks.html#caching
 knitr::opts_chunk$set(cache = TRUE)
+```
+
+
+This will use the standard [Hadleyverse](http://blog.revolutionanalytics.com/2015/03/hadleyverse.html) packages that we've been using in this course (**ggplot2**, **dplyr**, **tidyr**, **broom**).
+Additionally we will use **MASS**, an R package associated with the intro stats and R book *Modern Applied Statistics with S*, which has a function to sample from the multivariate normal distribution.
+```{r}
+library("dplyr")
+library("broom")
+library("tidyr")
+library("ggplot2")
+library("MASS")
 ```
 
 
@@ -34,11 +45,78 @@ $$
 $$
 This is usually more intuitive than the covariance itself.
 
+## Method 1
+
+We can use **dplyr** function do, but instead of an expression, use a function.
+This is an alternative method for the simulations using a function.
+
+n
+
+:  Number of simulations
+
+b
+
+: Coefficients
+
+X
+
+: Model matrix
+
+sigma
+
+: Standard deviation of the
+
+```{r}
+sim_linear_normal <- function(sims, obs, b, X, sigma) {
+  # Create a list to stor the results
+  simulations <- list()
+  # Create a progress bar
+  p <- progress_estimated(sims, min_time = 2)
+  # Loop over the simulation runs
+  for (j in 1:sims) {
+    # The conditional expectation of y given X
+    # i.e. y-hat, the fitted values, regression line
+    mu <- X %*% b
+    
+    # Simulate y from the conditional expection + error
+    # y = mu + e
+    # mu = X * b
+    # e ~ N(0, sigma)
+    y <- mu + rnorm(n, mean = 0, sd = sigma)
+    
+    # Run a regression of the simulated y on the simulated X
+    # Note that neither y nor X is in a data frame
+    # also X is a matrix
+    # R is cool with that
+    mod <- lm(y ~ X)
+    
+    # Create a data.frame with the coefficients, se using the broom function tidy
+    mod_df <- tidy(mod) %>%
+      # Add a column indicating the simulation number
+      mutate(.sim = j)
+      
+    # Save these results as the next element in the storage list
+    simulations[[j]] <- mod_df
+    
+    # Update the progress bar
+    p$tick()$print()
+  }
+  # Combine the list of data frames into a single data frame
+  simulations <- bind_rows(simulations)
+}
+
+```
+
 
 
 ```{r}
-library("MASS")
+sdcor2cov <- function(s, r = diag(length(s))) {
+  s <- diag(s, nrow = length(s), ncol = length(s))
+  s %*% r %*% s
+}
+```
 
+```{r}
 # Number of simulated datasets to generate
 sims <- 1000
 
@@ -52,127 +130,21 @@ sigma <- sqrt(2)
 b <- rep(1, 4)
 
 # True means of the covariates
-mu_x <- c(0, 0, 0) + 1
-
-sdcor2cov <- function(s, r = diag(length(s))) {
-  s <- diag(s, nrow = length(s), ncol = length(s))
-  s %*% r %*% s
-}
+mu_x <- rep(0, 3)
 
 # Standard deviations of the covariates
-s_x <- 1:3
+s_x <- rep(1, 3)
+
 # correlation of the covariates
 cor_x <- diag(3)
 # Create a covariance matrix
 sigma_x <- sdcor2cov(s_x, cor_x)
 ```
 
-## Method 1: for loop
-
 ```{r}
-# Create a list to stor the results
-simulations <- list()
-# Loop over the simulation runs
-for (j in 1:sims) {
-
-  # Draw the simulated covariates from their true
-  # multivariate Normal distribution
-  X <- cbind(1, mvrnorm(n, mu_x, sigma_x))
-
-  # Create the simulated y by
-  # adding together the systematic and stochastic
-  # components, according to the true model
-  mu <- X %*% b
-  y <- mu + rnorm(n) * sigma
-
-  # Run a regression of the simulated y on the simulated X
-  res <- lm(y ~ X)
-
-  # Save these results as the next element in the storage list
-  simulations[[j]] <- mutate(tidy(res), .sim = j)                
-}
-```
-This produces a list of data frames. We'd like them as one big data frame so 
-we can use the R function `bind_rows`.
-```{r}
-simulations <- bind_rows(simulations)
+sim_linear_normal_random_x(1000, 100, mu_x, sigma_x, sigma)
 ```
 
-## Method 2: do with an expression
-
-Read about the `do` function in **dplyr**. Not only can you run arbitrary
-
-```{r}
-simulations <- 
-  data_frame(.sim = seq_len(sims)) %>%
-  rowwise() %>% 
-  do({
-    # Draw the simulated covariates from their true
-    # multivariate Normal distribution
-    X <- mvrnorm(n, mu_x, sigma_x)
-
-    # Create the simulated y by
-    # adding together the systematic and stochastic
-    # components, according to the true model
-    mu <- cbind(1, X) %*% b
-    y <- mu + rnorm(n) * sigma
-
-    # Run a regression of the simulated y on the simulated X
-    res <- lm(y ~ X)
-
-    # Save these results as the next element in the storage list
-    mutate(tidy(res), .sim = .$.sim)  
-  })
-```
-
-
-## Method 3: dplyr do with a function
-
-We can use **dplyr** function do, but instead of an expression, use a function.
-This is an alternative method for the simulations using a function.
-
-n
-
-:  Number of simulations
-
-x_mu
-
-: Mean of the X distribution
-
-x_Sigma
-
-: Covariance matrix of the X distribution
-
-sigma
-
-: Standard deviation of the 
-
-```{r}
-sim_lin_normal <- function(n, b, x_mu, x_Sigma, sigma) {
-  
-  # Draw the simulated covariates from their true
-  # multivariate Normal distribution
-  X <- rmvnorm(n, x_mu, x_Sigma)
-  
-  # Create the simulated y by
-  # adding together the systematic and stochastic
-  # components, according to the true model
-  mu <- cbind(rep(1, n), X) %*% b
-  y <- mu + rnorm(n) * sigma
-  
-  # Run regression, and put coefficients, se, t-stat, and p-values in 
-  # a data frame
-  tidy(lm(y ~ X))
-}
-```
-
-Generate a simulations dataset with a value for each simulation. This will hold the output of the simulations. For each simulation, numbered in `.sim`, it run the `sim_lin_normal` to randomly draw $y$s and $X$s, run a regression, and return a summary of the regression.
-```{r simulations}
-simulations <- 
-  data_frame(.sim = seq_len(sims)) %>%
-  group_by(.sim) %>% 
-  do(sim_lin_normal(n, b, mu_x, sigma_x, sigma))
-```
 
 ## Post-processing
 
@@ -200,7 +172,6 @@ true_parameters <-
 ```
 
 
-
 ```{r}
 ggplot() +
   geom_violin(data = simulations, mapping = aes(x = term, y = estimate)) + 
@@ -222,11 +193,6 @@ ggplot() +
 ```
 
 ```{r}
-select(sim_summary, estimate_mean)
-```
-
-
-```{r}
 find_sigma <- function(x, b, signal = 1) {
   n <- nrow(x)
   k <- ncol(x)
@@ -237,47 +203,3 @@ find_sigma <- function(x, b, signal = 1) {
 }
 ```
 
-
-```{r}
-#' Simulate data from a normal linear model with fixed X
-#' 
-#' @param n Number of observations
-#' @param b coefficients
-#' @param x model matrix.
-#' @param sigma standard deviation of the error distribution
-#' @returns numeric vector of the y values.
-sim_linear_normal <- function(b, X, sigma) {
-  X <- as.data.frame(X)
-  
-  # Create the simulated y by
-  # adding together the systematic and stochastic
-  # components, according to the true model
-  n <- nrow(x)
-  mu <- cbind(rep(1, n), x) %*% b
-  y <- mu + rnorm(n) * sigma
-  
-  # Run regression, and put coefficients, se, t-stat, and p-values in 
-  # a data frame
-  tidy(lm(y ~ X))
-}
-
-n <- 15
-x <- matrix(rnorm(n))
-b <- c(0, 1)
-sigma <- 0.5
-m <- 1000
-
-simulations <- 
-  data_frame(.sim = seq_len(m)) %>%
-  group_by(.sim) %>% 
-  do(sim_linear_normal(b, x, sigma))
-
-filter(simulations, grepl(term, "^X")) %>% 
-  {
-    ggplot(data = ., aes(x = estimate)) + 
-      geom_density() + 
-      stat_function(fun = dnorm,
-                    args = list(mean = mean(.$estimate), sd = sd(.$estimate)))  
-  }
-
-```
