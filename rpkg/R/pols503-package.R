@@ -2,7 +2,7 @@
 #' @import lintr
 #' @import knitr
 #' @import dplyr
-#' @importFrom pryr named_dots
+#' @import lazyeval
 NULL
 
 # From tidyr:::append_df
@@ -43,16 +43,12 @@ col_name <- function (x, default = stop("Please supply column name",
 #' @param cor \code{matrix} A correlation matrix.
 #' @return A covariance matrix.
 #' @export
-#' @example
+#' @examples
 #' s <- c(1, 2)
 #' R <- matrix(c(1, 0.5, 0.5, 1), nrow = 2, ncol = 2)
-#' sdcor2cov(s )
+#' sdcor2cov(s, R)
 sdcor2cov <- function(sd, cor = diag(length(sd))) {
-  if (length(sd) > 1) {
-    sd <- diag(sd)
-  } else {
-    sd <- matrix(sd)
-  }
+  sd <- diag(sd, nrow = length(sd), ncol = length(sd))
   sd %*% cov2cor(cor) %*% sd
 }
 
@@ -68,7 +64,7 @@ cov2sdcor <- function(x) {
 #' @param rho The off diagonal correlations
 #' @return A correlation matrix.
 #' @export
-#' @example
+#' @examples
 #' n <- 3
 #' rho <- 0.25
 #' equicor(n, rho)
