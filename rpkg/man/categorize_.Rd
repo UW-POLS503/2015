@@ -4,10 +4,10 @@
 \alias{categorize_}
 \title{Create categorical column from expressions (standard evaluation)}
 \usage{
-categorize_(.data, col, dots, .default = NA_character_)
+categorize_(data, col, dots, default = NA_character_)
 }
 \arguments{
-\item{.data}{A data frame}
+\item{data}{A data frame}
 
 \item{col}{A character vector with the column name to hold the new categorical
 variable}
@@ -15,7 +15,7 @@ variable}
 \item{dots}{An object coercible into a \code{\link{lazy_dots}} object which
 contains the categories and conditions associated with them.}
 
-\item{.default}{Value for rows unmatched by any condition in \code{dots}.}
+\item{default}{Value for rows unmatched by any condition in \code{dots}.}
 
 \item{...}{Unused.}
 }

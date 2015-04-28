@@ -4,12 +4,12 @@
 \alias{categorize}
 \title{Create categorical column from expressions}
 \usage{
-categorize(.data, col, ..., .default = NA_character_)
+categorize(.data, .col, ..., .default = NA_character_)
 }
 \arguments{
 \item{.data}{A data frame}
 
-\item{col}{Bare column name}
+\item{.col}{Bare column name}
 
 \item{...}{Named expressions evaluating a logical value. The name will
 be used for the categorical variable. For}
