@@ -124,12 +124,12 @@ Example:
   party ID? intention to vote 10 minutes before voting? 
 
 \begin{marginfigure}
-\includegraphics{../lectures/images/Mediating_Variable_Diagram.pdf}
+\includegraphics{../images/Mediating_Variable_Diagram.pdf}
 \caption{$W$ is an indirect effect of $X$ on $Y$}
 \end{marginfigure}
 
 \begin{marginfigure}
-\includegraphics{../lectures/images/Confounding_Variable_Diagram.pdf}
+\includegraphics{../images/Confounding_Variable_Diagram.pdf}
 \caption{$W$ is a confounding variable of $X$ on $Y$}
 \end{marginfigure}
 
