@@ -50,13 +50,39 @@ $$
 \beta^*_1 = \beta_1 + \beta_2 \gamma_1
 $$
 
-- What is $\gamma_1$ in terms of covariances and variances?
-- When $\beta^*_1$ unbiased? (Two conditions)
+What is $\gamma_1$ in terms of covariances and variances?
+$$
+\gamma_1 = \frac{Cov(X_1, X_2)}{Var(X_1)}
+$$
 
-Notes:
+When is $\beta^*_1$ unbiased?
+- $\gamma_1 = 0$, which means that $Cov(X_1, X_2) = 0$; the omitted
+  variable is uncorrelated with the variabel of interest.
+- $\beta_2 = 0$, which means that the omitted variable is uncorelated with
+  the outcome variable.
 
-- Means that if you claim no OVB, you are claiming you have the true model and 
-  vice versa.
+Since the bias is $\gamma \beta_2$ you can also reason about the effect of an omitted variable if you have beliefs about the relationship between the omitted variable and the variable of interest, and the relationship between the omitted variable and the outcome variable.
+
+\begin{marginfigure}
+\begin{tabular}{lll}
+ $Cov(X_1, X_2)$ & $Cov(Y, X_2)$ & bias \\
+\hline
+ $+$      & $+$       & $+$  \\
+ $+$      & $-$       & $-$  \\
+ $-$      & $+$       & $-$  \\
+ $-$      & $-$       & $+$  
+\end{tabular}
+\caption{Sign of ommitted variable bias based on the relationship
+between $X_1$ and $X_2$ and the relationship between $X_2$ and $Y$.}
+\end{marginfigure}
+
+However, this only works with a single omitted variable.
+With multiple omitted variables reasoning about their effects becomes very difficult
+if not impossible.
+
+Notes
+
+- Means that if you claim no OVB, you are claiming you have the true model and  vice versa.
 - Misspecification from the wrong functional form of $X$s or missing interactions is a form of OVB.
 - OVB is a deterministic relationship between coefficients and equations, it is not
   about sampling.
@@ -98,12 +124,12 @@ Example:
   party ID? intention to vote 10 minutes before voting? 
 
 \begin{marginfigure}
-\includegraphics{images/Mediating_Variable_Diagram.pdf}
+\includegraphics{../lectures/images/Mediating_Variable_Diagram.pdf}
 \caption{$W$ is an indirect effect of $X$ on $Y$}
 \end{marginfigure}
 
 \begin{marginfigure}
-\includegraphics{images/Confounding_Variable_Diagram.pdf}
+\includegraphics{../lectures/images/Confounding_Variable_Diagram.pdf}
 \caption{$W$ is a confounding variable of $X$ on $Y$}
 \end{marginfigure}
 

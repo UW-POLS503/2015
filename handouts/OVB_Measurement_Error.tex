@@ -80,15 +80,38 @@ Y = (\beta_0 + \beta_2 \gamma_0) + (\beta_1 + \beta_2 \gamma_1) X_1 + (\epsilon_
 \beta^*_1 = \beta_1 + \beta_2 \gamma_1
 \]
 
-\begin{itemize}
-\itemsep1pt\parskip0pt\parsep0pt
-\item
-  What is \(\gamma_1\) in terms of covariances and variances?
-\item
-  When \(\beta^*_1\) unbiased? (Two conditions)
-\end{itemize}
+What is \(\gamma_1\) in terms of covariances and variances? \[
+\gamma_1 = \frac{Cov(X_1, X_2)}{Var(X_1)}
+\]
 
-Notes:
+When is \(\beta^*_1\) unbiased? - \(\gamma_1 = 0\), which means that
+\(Cov(X_1, X_2) = 0\); the omitted variable is uncorrelated with the
+variabel of interest. - \(\beta_2 = 0\), which means that the omitted
+variable is uncorelated with the outcome variable.
+
+Since the bias is \(\gamma \beta_2\) you can also reason about the
+effect of an omitted variable if you have beliefs about the relationship
+between the omitted variable and the variable of interest, and the
+relationship between the omitted variable and the outcome variable.
+
+\begin{marginfigure}
+\begin{tabular}{lll}
+ $Cov(X_1, X_2)$ & $Cov(Y, X_2)$ & bias \\
+\hline
+ $+$      & $+$       & $+$  \\
+ $+$      & $-$       & $-$  \\
+ $-$      & $+$       & $-$  \\
+ $-$      & $-$       & $+$  
+\end{tabular}
+\caption{Sign of ommitted variable bias based on the relationship
+between $X_1$ and $X_2$ and the relationship between $X_2$ and $Y$.}
+\end{marginfigure}
+
+However, this only works with a single omitted variable. With multiple
+omitted variables reasoning about their effects becomes very difficult
+if not impossible.
+
+Notes
 
 \begin{itemize}
 \itemsep1pt\parskip0pt\parsep0pt
@@ -156,12 +179,12 @@ Example:
 \end{itemize}
 
 \begin{marginfigure}
-\includegraphics{images/Mediating_Variable_Diagram.pdf}
+\includegraphics{../lectures/images/Mediating_Variable_Diagram.pdf}
 \caption{$W$ is an indirect effect of $X$ on $Y$}
 \end{marginfigure}
 
 \begin{marginfigure}
-\includegraphics{images/Confounding_Variable_Diagram.pdf}
+\includegraphics{../lectures/images/Confounding_Variable_Diagram.pdf}
 \caption{$W$ is a confounding variable of $X$ on $Y$}
 \end{marginfigure}
 
