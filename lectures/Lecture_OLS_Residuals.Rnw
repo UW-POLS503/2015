@@ -1,0 +1,346 @@
+% Copyright (C) 2015 Jeffrey B. Arnold
+% License CC BY-NC-SA 4.0 http://creativecommons.org/licenses/by-nc-sa/4.0/
+<<init,echo=FALSE,results='hide',warning=FALSE,message=FALSE>>=
+LECTURE_NUM <- "Heterosked"
+source("init.R")
+@
+<<header>>=
+suppressPackageStartupMessages({
+  library("mvtnorm")
+  library("MASS")
+})
+@
+
+\input{\jobname-options}
+\ifdefined\ishandout%
+  \documentclass[handout]{beamer}
+\else
+  \documentclass[]{beamer}
+\fi
+
+% HEADER HERE
+
+\input{includes.tex}
+
+
+\newcommand{\thetitle}{Residuals in OLS: Non-normality, Heteroskedasticity}
+\date{April 28, 2015}
+\title{\thetitle{}}
+\hypersetup{
+  pdftitle={\thetitle{}},
+  pdfkeywords={statistics}
+}
+
+\begin{document}
+
+\begin{frame}
+  \maketitle{}
+\end{frame}
+
+\begin{frame}
+\frametitle{Overview}
+\tableofcontents
+\end{frame}
+
+\section{Non-Normal Errors}
+
+\begin{frame}
+  \frametitle{Non-normal errors}
+
+  Suppose that errors $\epsilon$ have $E(\epsilon) = 0$, but not normal distribution
+
+  \begin{itemize}
+  \item $\vc{b}$ still unbiased
+  \item $\var(\vc{b})$ incorrect in small samples
+  \item Still BLUE, but not MVUE
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{How to diagnose non-normal errors?}
+
+  Graphical methods
+  \begin{itemize}
+  \item Plot studentized residuals against theoretical $t$-quantiles.
+    \begin{itemize}
+    \item Studentized residuals (approximately standardized to have std dev of 1)
+      \begin{equation*}
+        E^{*}_{i} \approx \frac{E_{i}}{S_{E}}
+      \end{equation*}
+    \end{itemize}
+  \item Density plot
+  \item Box-plot
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{SLID}
+
+\begin{itemize}
+\item Example in Fox
+\item Survey of Labour Income and Dynamics (Canada)
+\item 3,997 employed individuals between 16--65 residing in Ontario
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+<<>>=
+library("car")
+mod_slid <- lm(wages ~ sex + age + education, data = SLID)
+summary(mod_slid)
+@
+
+\end{frame}
+
+\begin{frame}
+<<>>=
+qqPlot(mod_slid)
+@
+\end{frame}
+
+\begin{frame}
+<<>>=
+ggplot(augment(mod_slid), aes(x = .std.resid)) +
+  geom_density() +
+  stat_function(fun = dnorm, colour = "red") +
+  theme_minimal()
+@
+\end{frame}
+
+\section{Heteroskedasticity}
+
+\begin{frame}
+  \begin{block}{Homoskedasticity}
+    \begin{itemize}
+    \item equal variance
+    \item $\var(\epsilon_{i}) = \sigma^{2}$ for all obs
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{Heteroskedasticity}
+    \begin{itemize}
+    \item unequal variance
+    \item Some $\var(\epsilon_{i}) \neq \var(\epsilon_{j})$
+    \item In both cases, errors are uncorrelated
+      $\cov(\epsilon_{i}, \epsilon_{j}) = 0$ if $i \neq j$.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Homoskedasticity for a continuous X}
+<<>>=
+n <- 200
+s <- sqrt(2)
+y <- rnorm(n, sd = s)
+x <- rnorm(n)
+ggplot(data_frame(y = y, x = x), aes(x = x, y = y)) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+    scale_y_continuous(expression(hat(epsilson))) +
+  theme_minimal()
+@
+\end{frame}
+
+\begin{frame}
+\frametitle{Heteroskedasticity for a continuous X}
+
+<<>>=
+s <- sqrt(2)
+x <- runif(n, 0, 4)
+y <- rnorm(n, sd = s) * x
+ggplot(data_frame(y = y, x = x), aes(x = x, y = y)) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  scale_y_continuous(expression(hat(epsilson))) +
+  theme_minimal()
+@
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Homoskedasticity with Binary Explantory Variables}
+<<>>=
+y <- rnorm(n)
+x <- c(rep(0, n / 2), rep(1, n / 2))
+ggplot(data_frame(x = x,
+                  y = y),
+       aes(x = factor(x), y = y)) +
+  geom_point(position = position_jitter(width = 0.2, height = 0)) +
+  scale_y_continuous(expression(hat(epsilson))) +
+  theme_minimal()
+@
+\end{frame}
+
+\begin{frame}
+\frametitle{Heteroskedasticity with Binary Explantory Variables}
+<<>>=
+y <- rnorm(n)
+x <- c(rep(0, n / 2), rep(1, n / 2))
+ggplot(data_frame(x = x,
+                  y = y * ifelse(x, 1, 4)),
+       aes(x = factor(x), y = y)) +
+  geom_point(position = position_jitter(width = 0.2, height = 0)) +
+  scale_x_discrete("x") +
+  theme_minimal()
+@
+\end{frame}
+
+\begin{frame}
+\frametitle{Unusual Heteroskedasticity}
+<<>>=
+heterosked <- Vectorize(function(x) {
+  if (x < -1) 0.5
+  else if (x < 0) 3
+  else if (x < 1) 0.1
+  else 1
+})
+x <- rnorm(n)
+y <- rnorm(n, sd = heterosked(x))
+ggplot(data_frame(x = x,
+                  y = y),
+       aes(x = x, y = y)) +
+  geom_point(position = position_jitter(width = 0.2, height = 0)) +
+  scale_x_discrete("x") +
+  theme_minimal()
+@
+
+%% \begin{equation*}
+%% \sigma_{\epsilon} =
+%% \begin{cases}
+%% 0.5 & \text{if $x < -1$} \\
+%% 3  & \text{if $-1 \leq x 0$} \\
+%% 0.1 & \text{if $0 \leq x 1$} \\
+%% 1 & \text{if $x \geq 1$}
+%% \end{cases}
+%% \end{equation*}
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Diagnosing heteroskedasticity?}
+
+  \begin{block}{Diagnosing}
+    \begin{itemize}
+    \item Plot $E$ against $\hat{Y}$ - sometimes $E^2$ or $|E|$ or $\log \hat{Y}$.
+    \item R function \verb|residualPlots|
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{Tests}
+    \begin{itemize}
+    \item All tests of the form regress residuals on functions of $X$ (Breusch-Pagan, White) \verb|car::ncvTest|
+    \item Are robust standard errors different from classic standard errors?
+    \end{itemze}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{What does heteroskedasticity do?}
+
+  Violates some of the Gauss-Markov Assumptions.
+  \begin{itemize}
+  \item Point estimate is still unbiased: $E(\vc{b}) = \beta$
+  \item But, variance wrong: $V(\vc{b}) \neq \sigma_{\epsilon}^{2} (\mat{X} ' \mat{X})^{-1}$
+  \item And OLS is not BLUE or MVUE
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{What to do about Heteroskedasticity}
+  \begin{block}{Weighted Least Squares}
+    If you know the form of the heteroskedasticity
+  \end{block}
+
+  \begin{block}{Heteroskedasticity consistent standard errors}
+    If you don't.
+  \end{block}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Weighted Least Squares}
+
+  Like OLS, but weight each observation
+  \begin{equation*}
+    \hat{\beta}_{WLS} = (\mat{X}' \mat{W} \mat{X})^{-1} \mat{X} \mat{W} \vc{y}
+  \end{equation*}
+  where $\mat{W}$ is a diagonal matrix with $\diag(\mat{W}) = (w_{1}^{2}, w_{2}^{2}, \dots, w_{n}^{2})$
+
+  This minimizes the weighted sum of squares
+  \begin{equation*}
+    \hat{\beta}_{WLS} = \argmin_{\beta} \sum w_{i}^{2} (y_{i} - \vc{x}_{i} \beta)^{2}
+  \end{equation*}
+
+  Note $\hat{\beta}_{WLS} \neq \hat{\beta}_{OLS}$, but both are unbiased if form of heteroskedasticity known.
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Where do the weights in WLS come from?}
+
+  Weights are such that
+  \begin{equation*}
+    y_{i} \sim N( \mat{X} \beta, \sigma^{2}_{\epsilon} / w_{i}^{2})
+  \end{equation*}
+
+  \begin{block}{Example}
+    You have a survey and are using average values from counties.
+    What weights should you use? What is the justification?
+  \end{block}
+
+\end{frame}
+
+\begin{frame}
+
+  \begin{block}{What if you had no idea what $\sigma_{i}^{2}$ was?}
+    What would you use as an estimates?
+  \end{block}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{, robust}
+  \subtitle{White, robust, sandwich or heteroskedasticity consistent standard errors}
+
+  \begin{itemize}[<+->]
+  \item Use $\vc{b}$ from OLS, only correct the $V(\vc{b})$
+  \item Since $\E(\epsilon_{i}) = 0$, $\var(\epsilon_{i}) = \sigma_{i}^{2} = E(\epsilon_{i}^{2})$
+  \item So use $E_{i}^{2}$ as estimate of $\sigma_{i}^{2}$
+  \item Then
+    \begin{equation*}
+      \tilde{V}(\vc{b}) = (\mat{X}' \mat{X})^{-1} \mat{X}' \hat{\Sigma} \mat{X} (\mat{X}' \mat{X})^{-1}
+    \end{equation*}
+  \item Where $\hat{\Sigma} = \diag(E^{2}_{1}, \dots, E^{2}_{n})$
+  \item R functions \verb|hccm| in \textbf{car}.
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Thoughts on Heteroskedasticity}
+
+  \begin{itemize}
+  \item Affects standard errors, not bias
+  \item Non-constant error variance only an issue when ratio of largest to smallest variance is $\geq 4$ (Fox)
+  \item If using robust standard errors, always compare them to classical standard errors
+  \item Angrist and Pischke suggest using max of robust and classical standard errors
+  \item Tests tell you if it is a problem, visualization needed to get ideas how to fix it
+  \item \textbf{MOST IMPORTANT}: problems with residuals point to misspecification issues
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Residuals related to specifications of the model}
+
+  \href{http://spark.rstudio.com/minebocek/slr_diag/}{Diagnostics for Simple Linear Regression}
+
+\end{frame}
+
+
+\end{document}
