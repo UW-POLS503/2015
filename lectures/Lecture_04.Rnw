@@ -93,7 +93,7 @@ suppressPackageStartupMessages({
 
 \section{Difference of Means Example}
 
-\begin{frame}
+\begin{frame}[fragile]
   \frametitle{Is US Economic Growth Higher Under Democratic Presidents than Republicans?}
 
 <<warning = FALSE>>=
@@ -111,7 +111,7 @@ ggplot(gdp, aes(x = party, y = grgdpch)) +
 \begin{frame}[fragile]
   \frametitle{Is US Economic Growth Higher Under Democratic Presidents than Republicans?}
 
-<<>>=
+<<warning=FALSE>>=
 group_by(gdp, party) %>%
   filter(! is.na(grgdpch)) %>%
   summarise_each(funs(mean, sd, length), grgdpch)

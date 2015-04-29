@@ -188,7 +188,7 @@
   \frametitle{Space Shuttle Challenger Exploded in 1986}
   
   \begin{center}
-    \includegraphics{oChallenger_explosion.jpg}
+    \includegraphics{Challenger_explosion.jpg}
   \end{center}
   
 \end{frame}
