@@ -234,7 +234,8 @@ PAGES = (
 # The format is a dictionary of {source: relative destination}.
 # Default is:
 FILES_FOLDERS = {'files': '',
-                 '../data': 'data'}
+                 '../data': 'data',
+                 '../images': 'images'}
 # Which means copy 'files' into 'output'
 
 # One or more folders containing listings to be processed and stored into
