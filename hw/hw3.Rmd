@@ -1,7 +1,7 @@
 ---
 title: "POLS 503: Homework 3"
 author: "Jeffrey B. Arnold, Christopher Adolph"
-date: "April 27, 2015"
+date: "April 29, 2015"
 output:
   html_document:
     toc: true
@@ -16,99 +16,85 @@ called Monte Carlo experimentation.
 Although you will not have to write much R code, you will need to read through
 the provided programs carefully to understand what is happening.
 
-For this assignment, I ask that you start with this code and edit it as needed.
-Do not 
+Monte Carlo experiments always produce the same results as analytic proofs for the specific
+case considered. Each method has advantages and disadvantages: proofs are more general and
+elegant, but are not always possible. MC experiments are much easier to construct and can
+always be carried out, but findings from these experiments only apply to the specific scenario under study.
+Where proofs are available, they are generally preferable to Monte Carlo experiments, but
+proofs of the properties of more complicated models are sometimes impossible or impractically difficult.
+This is almost always the case for the properties of models applied to small samples of
+data.
+Here, we use Monte Carlo not out of necessity but for pedagogical purposes, as a tool to
+gain a more intuitive and hands-on understanding of least squares and its properties.
+See Fox for a more formal treatment of the Gauss-Markov theorem.
 
+
+For this assignment, I ask that you start with the R markdown file and edit it as needed.
+
+# Setup 
+
+This assignment will have some non-trivial computation.
+This will set the knitr options so that any computations that do not change are not rerun.
+See <http://rmarkdown.rstudio.com/authoring_rcodechunks.html#caching> for more information about what this is doing.
 ```{r setup, echo = TRUE}
-# This assignment will have some non-trivial computation.
-# This will set the options so that any computations that do not change are not
-# rerun.
-# See http://rmarkdown.rstudio.com/authoring_rcodechunks.html#caching
 knitr::opts_chunk$set(cache = TRUE)
 ```
 
-
 This will use the standard [Hadleyverse](http://blog.revolutionanalytics.com/2015/03/hadleyverse.html) packages that we've been using in this course (**ggplot2**, **dplyr**, **tidyr**, **broom**).
-Additionally we will use **MASS**, an R package associated with the intro stats and R book *Modern Applied Statistics with S*, which has a function to sample from the multivariate normal distribution.
+Additionally we will use **MASS**, an R package associated with the intro stats and R book *Modern Applied Statistics with S*, which has a function to sample from the multivariate normal distribution. Be sure to **MASS** before **dplyr** since it also contains a function named `select`.
 ```{r}
+library("MASS")
+library("ggplot2")
 library("dplyr")
 library("broom")
 library("tidyr")
-library("ggplot2")
-library("MASS")
+
 ```
 
 
-Calculate a covariance matrix, $\Sigma$ from a standard deviation $s$ and a correlation matrix $P$
+# Simulate a Linear Regression
+
 $$
-\Sigma = diag(s) P diag(s)
+\begin{aligned}[t]
+y &= X \beta + \epsilon \\
+\epsilon &\sim N(0, \sigma^2)
+\end{aligned}
 $$
-This is usually more intuitive than the covariance itself.
 
-## Method 1
+We are going to draw samples 
+$$
+\begin{aligned}[t]
+Y &= \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + \epsilon \\
+\epsilon & \sim N(0, \sigma^2)
+\end{aligned}
+$$
+where
+$$
+\begin{aligned}[t]
+\beta_0 &= 0 \\
+\beta_1 &= \beta_2 = \beta_3 = 1 \\
+\sigma &= 1
+\end{aligned}
+$$
 
-We can use **dplyr** function do, but instead of an expression, use a function.
-This is an alternative method for the simulations using a function.
 
-n
+First we are going to go over the code to generate a single sample and estimate a regression of it.
+Then we are going to wrap that code in a for loop to simulate many samples, and wrap that whole thing in a function in order to be able to easily change parameters of the simulation without repeating ourselves.
 
-:  Number of simulations
-
-b
-
-: Coefficients
-
-X
-
-: Model matrix
-
-sigma
-
-: Standard deviation of the
-
+For a simulation we are going to need to set some parameters.
+The number of observations in the sample:
 ```{r}
-sim_linear_normal <- function(sims, obs, b, X, sigma) {
-  # Create a list to stor the results
-  simulations <- list()
-  # Create a progress bar
-  p <- progress_estimated(sims, min_time = 2)
-  # Loop over the simulation runs
-  for (j in 1:sims) {
-    # The conditional expectation of y given X
-    # i.e. y-hat, the fitted values, regression line
-    mu <- X %*% b
-    
-    # Simulate y from the conditional expection + error
-    # y = mu + e
-    # mu = X * b
-    # e ~ N(0, sigma)
-    y <- mu + rnorm(n, mean = 0, sd = sigma)
-    
-    # Run a regression of the simulated y on the simulated X
-    # Note that neither y nor X is in a data frame
-    # also X is a matrix
-    # R is cool with that
-    mod <- lm(y ~ X)
-    
-    # Create a data.frame with the coefficients, se using the broom function tidy
-    mod_df <- tidy(mod) %>%
-      # Add a column indicating the simulation number
-      mutate(.sim = j)
-      
-    # Save these results as the next element in the storage list
-    simulations[[j]] <- mod_df
-    
-    # Update the progress bar
-    p$tick()$print()
-  }
-  # Combine the list of data frames into a single data frame
-  simulations <- bind_rows(simulations)
-}
-
+n <- 128
 ```
 
-
-
+Covariances are not particularly intuitive, so it may be easier to decompose the covariance into a correlation matrix and the standard deviations of the variables. 
+A covariance matrix, $\Sigma$ can be decomposed into a standard deviation $s$ and a correlation matrix $R$,
+$$
+\DeclareMathOperator{\diag}{diag}
+\Sigma = S R S
+$$
+where $S$ is a diagonal matrix with the standard deviations $s$ on its diagonal.
+This function will make that calculation simpler.
 ```{r}
 sdcor2cov <- function(s, r = diag(length(s))) {
   s <- diag(s, nrow = length(s), ncol = length(s))
@@ -117,36 +103,159 @@ sdcor2cov <- function(s, r = diag(length(s))) {
 ```
 
 ```{r}
-# Number of simulated datasets to generate
-sims <- 1000
+X_mean <- rep(0, 3)
+```
 
-# Number of observations in each dataset
-n <- 100
+Standard deviations of the covariates
+```{r}
+X_sd <- rep(1, 3)
+X_cor <- diag(3)
+```
+Now calculate the covariance matrix,
+```{r}
+X_cov <- sdcor2cov(X_sd, X_cor)
+```
+Draw a sample of $n$ observations of $X$ from $N(\mu_X, \Sigma_X)$
+```{r}
+X <- mvrnorm(n, X_mean, X_Sigma, empirical = TRUE)
+```
+The option `empirical = TRUE` is used to make sure that although $X$ is randomly sampled,
+it is adjusted to so that the sample mean and covariance are $\mu_X$ and $\Sigma_X$.
+```{r}
+round(cor(X), 1)
+round(apply(X, 2, mean), 1)
+```
 
-# True standard deviation of the regression errors
-sigma <- sqrt(2)
+The true parameters of the model
+```{r}
+beta <- c(0, 1, 1, 1)
+```
 
-# True parameters of the model
-b <- rep(1, 4)
+True standard deviation of the regression errors, which we'll set to $\sigma = 1.7$ [^1]
+```{r}
+sigma <- 1.7
+```
 
-# True means of the covariates
-mu_x <- rep(0, 3)
+[^1]: This choice of $\sigma$ gives an $R^2 = 0.5$.
 
-# Standard deviations of the covariates
-s_x <- rep(1, 3)
+Now, we want to sample `y` from this population, given this `X`.
+Calculate the expected value of the outcome conditional on the covariates, $E(Y | X)$,
+```{r}
+mu <- cbind(1, X) %*% beta
+```
+The `cbind(1, X)` is used to put a column of 1s as an intercept in the regression.
+Then sample the errors, $\epsilon \sim N(0, \sigma^2)$,
+```{r}
+epsilon <- rnorm(n, mean = 0, sd = sigma)
+```
+Now combine the systematic ($E(Y | X)$) and stochastic $\epsilon$ components to generate the values of $y$ in the sample,
+```{r}
+y <- mu + epsilon
+```
+Now, we can run a regression on the sample
+```{r}
+mod <- lm(y ~ X)
+```
+We will use the `tidy` function from the **broom** package to put the coefficients in a data frame (something that will be especially useful when storing the results from many simulations) 
+```{r}
+mod_df <- tidy(mod)
+```
+The coefficients of the OLS regression on the parameter should be similar to, but not exactly, those of the population from which it was drawn.
+```{r}
+mod_df
+```
 
-# correlation of the covariates
-cor_x <- diag(3)
-# Create a covariance matrix
-sigma_x <- sdcor2cov(s_x, cor_x)
+However, drawing one sample is not enough for a simulation study. We want to repeat this many times in order to evaluate how well the estimator works.
+We will do this by wrapping the code above in a for loop, to repeat the simulations many times, and put it all in a function, so that we can change the values of $n$, $\beta$, $\sigma^2$, and $X$ that we use.
+The following function will run `sims` simulations, in which it draws a sample of size `obs` where $\beta$ is `beta`, $X$ is `X`, and $\sigma$ is `sigma`.
+This function returns a data frame with the results of all the simulations. 
+Each row is a coefficient (column `term`) for a simulation (column `.sim`):
+```{r}
+sim_lin_norm <- function(sims, beta, X, sigma) {
+  # get number of obs from the rows of X
+  n <- nrow(X)
+  # Create a list to stor the results
+  simulations <- list()
+  # Create a progress bar because we're impatient
+  p <- progress_estimated(sims, min_time = 2)
+  # Loop over the simulation runs
+  for (j in 1:sims) {
+    # Draw y
+    mu <- cbind(1, X) %*% beta
+    epsilon <- rnorm(n, mean = 0, sd = sigma)
+    y <- mu + epsilon
+    # Run a regression
+    mod <- lm(y ~ X)
+    # Save the coefficients in a data frame
+    mod_df <- tidy(mod) %>%
+      # Add a column indicating the simulation number
+      mutate(.sim = j)
+    # Add hetrosked consistent se to the data
+    mod_df[["std.error.robust"]] <- sqrt(diag(car::hccm(mod)))
+    # Save these results as the next element in the storage list
+    simulations[[j]] <- mod_df
+    # Update the progress bar
+    p$tick()$print()
+  }
+  # Combine the list of data frames into a single data frame
+  bind_rows(simulations)
+}
+
 ```
 
 ```{r}
-sim_linear_normal_random_x(1000, 100, mu_x, sigma_x, sigma)
+sim_lin_norm_meas_err <- function(sims, beta, X, sigma, reliability) {
+  n <- nrow(X)
+  k <- ncol(X)
+  simulations <- list()
+  # Create a progress bar because we're impatient
+  p <- progress_estimated(sims, min_time = 2)
+  # -----
+  # NEW: measurement error variance
+  Sigma_meas <- diag(apply(X, 2, var) * (1 - reliability) / reliability,
+                     nrow = k, ncol = k)
+  # ----
+  # Loop over the simulation runs
+  for (j in 1:sims) {
+    # Draw y
+    mu <- cbind(1, X) %*% beta
+    epsilon <- rnorm(n, mean = 0, sd = sigma)
+    y <- mu + epsilon
+    # ------
+    # NEW: observed X
+    # add measurement error to original X
+    Xobs <- as.data.frame(X + mvrnorm(n, mu = rep(0, k), Sigma = Sigma_meas))
+    colnames(Xobs) <- paste("X", 1:k, sep = "")
+    # ------
+    # Run a regression
+    mod <- lm(y ~ ., data = Xobs)
+    # Save the coefficients in a data frame
+    mod_df <- tidy(mod) %>%
+      # Add a column indicating the simulation number
+      mutate(.sim = j)
+    # Add hetrosked consistent se to the data
+    mod_df[["std.error.robust"]] <- sqrt(diag(car::hccm(mod)))
+    # Save these results as the next element in the storage list
+    simulations[[j]] <- mod_df
+    # Update the progress bar
+    p$tick()$print()
+  }
+  # Combine the list of data frames into a single data frame
+  bind_rows(simulations)
+}
 ```
 
 
-## Post-processing
+Let's draw 1000 samples using the values that we used before:
+```{r}
+sim0_n16 <- sim_lin_norm(2048, beta, mvrnorm(16, X_mean, X_cov), sigma)
+sim0_n64 <- sim_lin_norm(2048, beta, mvrnorm(64, X_mean, X_cov), sigma)
+sim0_n2048 <- sim_lin_norm(2048, beta, mvrnorm(2048, X_mean, X_cov), sigma)
+```
+and look at the results
+```{r}
+head(sim0_n16)
+```
 
 Whever method we've used, once we generate the simulations we can summarize
 them in various ways.
@@ -154,52 +263,139 @@ them in various ways.
 The output is a data frame with a row for each iteration, coefficient value.
 
 ```{r sim_summary}
-sim_summary <- simulations %>%
+summarize_sims <- function(.data, beta) {
+  ret <- .data %>%
   group_by(term) %>%
   summarize(estimate_mean = mean(estimate),
+            estimate_median = median(estimate),
             estimate_sd = sd(estimate),
-            se_mean = sqrt(mean(std.error) ^ 2)) %>%
-  mutate(t_stat_mean = mean_estimate / mean_std_error)
-
-make_term_names <- function(n) {
-  c("(Intercept)", paste0("X", 1:(length(b) - 1)))
-}
-
-true_parameters <- 
-  data.frame(estimate = b,
-             term = make_term_names(length(b)))
-
-```
-
-
-```{r}
-ggplot() +
-  geom_violin(data = simulations, mapping = aes(x = term, y = estimate)) + 
-  geom_point(data = true_parameters, 
-             mapping = aes(x = term, y = estimate), colour = "red")
-
-ggplot() +
-  geom_density(data = simulations, mapping = aes(x = estimate)) +
-  geom_vline(data = true_parameters,
-             mapping = aes(xintercept = estimate), colour = "red") +
-  facet_wrap( ~ term)
-
-
-ggplot() +
-  geom_boxplot(data = simulations, mapping = aes(x = term, y = estimate)) + 
-  geom_point(data = true_parameters, 
-             mapping = aes(x = term, y = estimate), colour = "red")
-
-```
-
-```{r}
-find_sigma <- function(x, b, signal = 1) {
-  n <- nrow(x)
-  k <- ncol(x)
-  yhat <- x %*% b
-  ybar <- mean(yhat)
-  TSS <- sum((yhat - ybar) ^ 2)
-  TSS / signal / n
+            estimate_p025 = quantile(estimate, 0.025),
+            estimate_p975 = quantile(estimate, 0.975),
+            se_mean = sqrt(mean(std.error) ^ 2),
+            se_robust_mean = sqrt(mean(std.error.robust) ^ 2),
+            tstat_mean = mean(statistic),
+            pval_mean = mean(p.value))
+  ret[["param_true"]] <- beta
+  ret
 }
 ```
 
+For a linear regression find the value of $\sigma 
+```{r}
+
+```
+
+# Problem
+
+Different sample sizes. $n = 16, 64, 2048$.
+
+Set the correlation between $x_1$ and $x_2$ to 0.3, 0.7, and 0.95 (These correspond to $R^2$ of the regression of $X_1$ on $X_2$ of about 0.1, 0.5, and 0.90).
+
+What happens if you set the regression to $X$.
+
+Set the correlation between $x_1$ and $x_3$ to 0, and the correlation between $x_1$, $x_2$, 
+and $x_3$ to 0.1 0.7, -0.7, and 0.99. What are the results in each case?
+Estimate the regression of $X_1$ on $X_2$, and do NOT include X_3.
+
+Heteroskedasticity. $X$, heterosked with 
+
+```{r}
+sim_lin_norm_heterosk <- function(sims, beta, X, sigma, gamma) {
+  n <- nrow(X)
+  simulations <- list()
+  p <- progress_estimated(sims, min_time = 2)
+  for (j in 1:sims) {
+    mu <- cbind(1, X) %*% beta
+    # ------------ 
+    # NEW: variance varies by each observation
+    sigma <- sqrt(cbind(1, X) %*% gamma)
+    # ------------
+    epsilon <- rnorm(n, mean = 0, sd = sigma)
+    y <- mu + epsilon
+    # Run a regression
+    mod <- lm(y ~ X)
+    # Save the coefficients in a data frame
+    # and Add a column indicating the simulation number
+    mod_df <- tidy(mod) %>%
+      mutate(.sim = j)
+    mod_df[["std.error.robust"]] <- sqrt(diag(car::hccm(mod)))
+    simulations[[j]] <- mod_df
+    p$tick()$print()
+  }
+  bind_rows(simulations)
+}
+```
+
+The arguments to this function are the same except for the the argument ommit,
+which ommits columns of X.
+```{r}
+sim_lin_norm_omitted <- function(sims, beta, X, sigma, omit) {
+  n <- nrow(X)
+  k <- ncol(X)
+  # ------
+  # NEW: ensure colnames of X are consistent despite omitting some in lm
+  colnames(X) <- paste("X", 1:k, sep = "")
+  # ------
+  simulations <- list()
+  p <- progress_estimated(sims, min_time = 2)
+  for (j in 1:sims) {
+    mu <- cbind(1, X) %*% beta
+    epsilon <- rnorm(n, mean = 0, sd = sigma)
+    y <- mu + epsilon
+    # ---------
+    # NEW: omit columns of X
+    # Look up paste and setdiff function to see what they does
+    Xomit <- as.data.frame(X)[ , setdiff(1:k, omit)]
+    # ~ . means use all variables from `data` on the RHS of the formula
+    mod <- lm(y ~ . , data = Xomit)
+    # ---------
+    mod_df <- tidy(mod) %>%
+      mutate(.sim = j)
+    mod_df[["std.error.robust"]] <- sqrt(diag(car::hccm(mod)))
+    simulations[[j]] <- mod_df
+    p$tick()$print()
+  }
+  # Combine the list of data frames into a single data frame
+  bind_rows(simulations)
+}
+```
+
+```{r}
+sim_lin_norm_ma1 <- function(sims, beta, X, sigma, p = 0.5) {
+  n <- nrow(X)
+  k <- ncol(X)
+  simulations <- list()
+  p <- progress_estimated(sims, min_time = 2)
+  for (j in 1:sims) {
+    mu <- cbind(1, X) %*% beta
+    epsilon <- rnorm(n, mean = 0, sd = sigma)
+    y <- mu + epsilon
+    # ---------
+    # NEW: omit columns of X
+    # Look up paste and setdiff function to see what they does
+    Xomit <- as.data.frame(X)[ , setdiff(1:k, omit)]
+    # ~ . 
+    mod <- lm(y ~ . , data = Xomit)
+    # ---------
+    mod_df <- tidy(mod) %>%
+      mutate(.sim = j)
+    mod_df[["std.error.robust"]] <- sqrt(diag(car::hccm(mod)))
+    simulations[[j]] <- mod_df
+    p$tick()$print()
+  }
+  # Combine the list of data frames into a single data frame
+  bind_rows(simulations)
+}
+```
+
+Draw X from an MA(1), where 
+$$
+x_{k,i} = \mu_{k}+ \rho x_{k,i-1} + \epsilon_{x_{k,i}}
+$$
+
+
+* * *
+
+Derived from of Christopher Adolph, "Problem Set 3", *POLS/CSSS 503*, University of Washington, Spring 2014. <http://faculty.washington.edu/cadolph/503/503hw3.pdf>. Used with permission.
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
