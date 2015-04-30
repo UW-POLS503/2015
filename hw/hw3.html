@@ -10,7 +10,7 @@
 
 <meta name="author" content="Jeffrey B. Arnold, Christopher Adolph" />
 
-<meta name="date" content="2015-04-29" />
+<meta name="date" content="2015-04-30" />
 
 <title>POLS 503: Homework 3</title>
 
@@ -64,13 +64,16 @@ img {
 <div id="header">
 <h1 class="title">POLS 503: Homework 3</h1>
 <h4 class="author"><em>Jeffrey B. Arnold, Christopher Adolph</em></h4>
-<h4 class="date"><em>April 29, 2015</em></h4>
+<h4 class="date"><em>April 30, 2015</em></h4>
 </div>
 
 <div id="TOC">
 <ul>
 <li><a href="#setup">Setup</a></li>
-<li><a href="#simulate-a-linear-regression">Simulate a Linear Regression</a></li>
+<li><a href="#simulate-a-linear-regression">Simulate a Linear Regression</a><ul>
+<li><a href="#single-iteration">Single Iteration</a></li>
+<li><a href="#multiple-iterations">Multiple iterations</a></li>
+</ul></li>
 <li><a href="#problem">Problem</a></li>
 </ul>
 </div>
@@ -80,7 +83,7 @@ img {
 <p>For this assignment, I ask that you start with the R markdown file and edit it as needed.</p>
 <div id="setup" class="section level1">
 <h1>Setup</h1>
-<p>This assignment will have some non-trivial computation. This will set the knitr options so that any computations that do not change are not rerun. See <a href="http://rmarkdown.rstudio.com/authoring_rcodechunks.html#caching" class="uri">http://rmarkdown.rstudio.com/authoring_rcodechunks.html#caching</a> for more information about what this is doing.</p>
+<p>This assignment has some non-trivial computation. The following code sets the knitr options to cache the results of computations, so that any computations that do not change are not rerun. See <a href="http://rmarkdown.rstudio.com/authoring_rcodechunks.html#caching" class="uri">http://rmarkdown.rstudio.com/authoring_rcodechunks.html#caching</a> for more information about what this is doing.</p>
 <pre class="r"><code>knitr::opts_chunk$set(cache = TRUE)</code></pre>
 <p>This will use the standard <a href="http://blog.revolutionanalytics.com/2015/03/hadleyverse.html">Hadleyverse</a> packages that we’ve been using in this course (<strong>ggplot2</strong>, <strong>dplyr</strong>, <strong>tidyr</strong>, <strong>broom</strong>). Additionally we will use <strong>MASS</strong>, an R package associated with the intro stats and R book <em>Modern Applied Statistics with S</em>, which has a function to sample from the multivariate normal distribution. Be sure to <strong>MASS</strong> before <strong>dplyr</strong> since it also contains a function named <code>select</code>.</p>
 <pre class="r"><code>library(&quot;MASS&quot;)
@@ -91,44 +94,50 @@ library(&quot;tidyr&quot;)</code></pre>
 </div>
 <div id="simulate-a-linear-regression" class="section level1">
 <h1>Simulate a Linear Regression</h1>
-<p><span class="math">\[
-\begin{aligned}[t]
-y &amp;= X \beta + \epsilon \\
-\epsilon &amp;\sim N(0, \sigma^2)
-\end{aligned}
-\]</span></p>
-<p>We are going to draw samples <span class="math">\[
+<ol style="list-style-type: decimal">
+<li>Define a population</li>
+<li><p>For <span class="math">\(m\)</span> times</p></li>
+<li>draw a sample from the population</li>
+<li>run OLS on that sample</li>
+<li><p>save coefficients, standard errors, etc. from that sample</p></li>
+<li><p>Compare the distributions of coefficients or other statistics from the samples to see how well OLS recovers the parameters of the population.</p></li>
+</ol>
+<p>We’ll start with an example in which the population satisfies all the Gauss-Markov assumptions and we run correctly specified regression on samples drawn from that population. <span class="math">\[
 \begin{aligned}[t]
 Y &amp;= \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + \epsilon \\
 \epsilon &amp; \sim N(0, \sigma^2)
 \end{aligned}
-\]</span> where <span class="math">\[
+\]</span> The specific values of <span class="math">\[
 \begin{aligned}[t]
 \beta_0 &amp;= 0 \\
 \beta_1 &amp;= \beta_2 = \beta_3 = 1 \\
 \sigma &amp;= 1
 \end{aligned}
 \]</span></p>
-<p>First we are going to go over the code to generate a single sample and estimate a regression of it. Then we are going to wrap that code in a for loop to simulate many samples, and wrap that whole thing in a function in order to be able to easily change parameters of the simulation without repeating ourselves.</p>
-<p>For a simulation we are going to need to set some parameters. The number of observations in the sample:</p>
-<pre class="r"><code>n &lt;- 128</code></pre>
-<p>Covariances are not particularly intuitive, so it may be easier to decompose the covariance into a correlation matrix and the standard deviations of the variables. A covariance matrix, <span class="math">\(\Sigma\)</span> can be decomposed into a standard deviation <span class="math">\(s\)</span> and a correlation matrix <span class="math">\(R\)</span>, <span class="math">\[
+<p>First, we are going to go over the code to generate a single sample and run OLS on it. Then, we are going to wrap that code in a for loop to be able to run a simulation with many samples, and wrap that in a function in order to be able to easily change parameters of the simulation without repeating ourselves.</p>
+<div id="single-iteration" class="section level2">
+<h2>Single Iteration</h2>
+<p>Generate some values of <span class="math">\(X\)</span> that we will use in the samples. Recall that the sampling distributions of OLS coefficients and the Gauss-Markov theorem are defined for a fixed <span class="math">\(X\)</span>. So, we will randomly generate covariates, but use the same set of covariates for all simulations. Although linear regression does not require covariates to be distributed multivariate normal, we will generate <span class="math">\(X\)</span> by drawing a sample of size <span class="math">\(n\)</span> from a multivariate normal distribution with mean <span class="math">\(\mu_X\)</span> and covariance matrix <span class="math">\(\Sigma_X\)</span>. <span class="math">\[
+X_i \sim N(\mu_X, \Sigma_X) \text{ for $i = 1, \dots, n$.}
+\]</span> Since covariances are not particularly intuitive, so it may be easier to decompose the covariance into a correlation matrix and the standard deviations of the variables. A covariance matrix, <span class="math">\(\Sigma\)</span> can be decomposed into a standard deviation <span class="math">\(s\)</span> and a correlation matrix <span class="math">\(R\)</span>, <span class="math">\[
 \DeclareMathOperator{\diag}{diag}
 \Sigma = S R S
-\]</span> where <span class="math">\(S\)</span> is a diagonal matrix with the standard deviations <span class="math">\(s\)</span> on its diagonal. This function will make that calculation simpler.</p>
+\]</span> where <span class="math">\(S\)</span> is a diagonal matrix with the standard deviations <span class="math">\(s\)</span> on its diagonal. The following function will make that calculation simpler.</p>
 <pre class="r"><code>sdcor2cov &lt;- function(s, r = diag(length(s))) {
   s &lt;- diag(s, nrow = length(s), ncol = length(s))
   s %*% r %*% s
 }</code></pre>
-<pre class="r"><code>X_mean &lt;- rep(0, 3)</code></pre>
-<p>Standard deviations of the covariates</p>
-<pre class="r"><code>X_sd &lt;- rep(1, 3)
-X_cor &lt;- diag(3)</code></pre>
-<p>Now calculate the covariance matrix,</p>
-<pre class="r"><code>X_cov &lt;- sdcor2cov(X_sd, X_cor)</code></pre>
-<p>Draw a sample of <span class="math">\(n\)</span> observations of <span class="math">\(X\)</span> from <span class="math">\(N(\mu_X, \Sigma_X)\)</span></p>
-<pre class="r"><code>X &lt;- mvrnorm(n, X_mean, X_Sigma, empirical = TRUE)</code></pre>
-<p>The option <code>empirical = TRUE</code> is used to make sure that although <span class="math">\(X\)</span> is randomly sampled, it is adjusted to so that the sample mean and covariance are <span class="math">\(\mu_X\)</span> and <span class="math">\(\Sigma_X\)</span>.</p>
+<p>In this example, we will use a sample of size <span class="math">\(n = 128\)</span>, with <span class="math">\(k = 3\)</span> variables drawn from a multivariate normal distribution with mean <span class="math">\(\mu_X = (0, 0, 0)\)</span>, standard deviations of <span class="math">\(s_X = (1, 1, 1)\)</span>, and independent variables, <span class="math">\[
+R_X = \begin{matrix} 1 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 \end{matrix}
+\]</span> This is equivalent to sampling each variable independently from a standard normal distribution.</p>
+<pre class="r"><code>n &lt;- 128
+mu_X &lt;- rep(0, 3)
+s_X &lt;- rep(1, 3)
+R_X &lt;- diag(3)
+Sigma_X &lt;- sdcor2cov(s_X, R_X)</code></pre>
+<p>We draw the sample using the <strong>MASS</strong> function <code>mvrnorm</code>,</p>
+<pre class="r"><code>X &lt;- mvrnorm(n, mu_X, Sigma_X, empirical = TRUE)</code></pre>
+<p>The option <code>empirical = TRUE</code> is used to make sure that although <span class="math">\(X\)</span> is randomly sampled, it is adjusted to so that the sample mean and covariance are equal to <span class="math">\(\mu_X\)</span> and <span class="math">\(\Sigma_X\)</span>,</p>
 <pre class="r"><code>round(cor(X), 1)</code></pre>
 <pre><code>##      [,1] [,2] [,3]
 ## [1,]    1    0    0
@@ -136,28 +145,35 @@ X_cor &lt;- diag(3)</code></pre>
 ## [3,]    0    0    1</code></pre>
 <pre class="r"><code>round(apply(X, 2, mean), 1)</code></pre>
 <pre><code>## [1] 0 0 0</code></pre>
-<p>The true parameters of the model</p>
+<p>We’ll set the true parameters of the model so that the intercept is 0, and the slope coefficients are all 1.</p>
 <pre class="r"><code>beta &lt;- c(0, 1, 1, 1)</code></pre>
-<p>True standard deviation of the regression errors, which we’ll set to <span class="math">\(\sigma = 1.7\)</span> <a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+<p>And we’ll set the standard deviation of the regression errors so that that the <span class="math">\(R^2\)</span> of the regression is 0.5, meaning that the regression explains half the variance in <span class="math">\(y\)</span>.</p>
 <pre class="r"><code>sigma &lt;- 1.7</code></pre>
+<p>This defines a population equation of <span class="math">\[
+y \sim 
+\mu_y = 
+\]</span></p>
 <p>Now, we want to sample <code>y</code> from this population, given this <code>X</code>. Calculate the expected value of the outcome conditional on the covariates, <span class="math">\(E(Y | X)\)</span>,</p>
-<pre class="r"><code>mu &lt;- cbind(1, X) %*% beta</code></pre>
-<p>The <code>cbind(1, X)</code> is used to put a column of 1s as an intercept in the regression. Then sample the errors, <span class="math">\(\epsilon \sim N(0, \sigma^2)\)</span>,</p>
-<pre class="r"><code>epsilon &lt;- rnorm(n, mean = 0, sd = sigma)</code></pre>
+<pre class="r"><code>mu_y &lt;- cbind(1, X) %*% beta</code></pre>
+<p>The expression <code>cbind(1, X)</code> adds a column of 1s as an intercept in the regression to the covariates in <span class="math">\(X\)</span>. Then sample the errors, <span class="math">\(\epsilon \sim N(0, \sigma^2)\)</span>,</p>
+<pre class="r"><code>epsilon_y &lt;- rnorm(n, mean = 0, sd = sigma)</code></pre>
 <p>Now combine the systematic (<span class="math">\(E(Y | X)\)</span>) and stochastic <span class="math">\(\epsilon\)</span> components to generate the values of <span class="math">\(y\)</span> in the sample,</p>
-<pre class="r"><code>y &lt;- mu + epsilon</code></pre>
-<p>Now, we can run a regression on the sample</p>
+<pre class="r"><code>y &lt;- mu_y + epsilon_y</code></pre>
+<p>Now that we have a sample, we will run an OLS regression on it to estimate the parameters of the population,</p>
 <pre class="r"><code>mod &lt;- lm(y ~ X)</code></pre>
-<p>We will use the <code>tidy</code> function from the <strong>broom</strong> package to put the coefficients in a data frame (something that will be especially useful when storing the results from many simulations)</p>
+<p>We will use the <code>tidy</code> function from the <strong>broom</strong> package convert the coefficients, standard errors, p-values, and t-values in a data frame (something that will be especially useful when storing the results from many simulations)</p>
 <pre class="r"><code>mod_df &lt;- tidy(mod)</code></pre>
 <p>The coefficients of the OLS regression on the parameter should be similar to, but not exactly, those of the population from which it was drawn.</p>
 <pre class="r"><code>mod_df</code></pre>
-<pre><code>##          term  estimate std.error statistic      p.value
-## 1 (Intercept) 1.0657973 0.1376119  7.744949 9.806433e-12
-## 2          X1 1.3932187 0.1383052 10.073510 1.034011e-16
-## 3          X2 1.0502721 0.1383052  7.593874 2.035016e-11
-## 4          X3 0.9847916 0.1383052  7.120424 1.961853e-10</code></pre>
-<p>However, drawing one sample is not enough for a simulation study. We want to repeat this many times in order to evaluate how well the estimator works. We will do this by wrapping the code above in a for loop, to repeat the simulations many times, and put it all in a function, so that we can change the values of <span class="math">\(n\)</span>, <span class="math">\(\beta\)</span>, <span class="math">\(\sigma^2\)</span>, and <span class="math">\(X\)</span> that we use. The following function will run <code>sims</code> simulations, in which it draws a sample of size <code>obs</code> where <span class="math">\(\beta\)</span> is <code>beta</code>, <span class="math">\(X\)</span> is <code>X</code>, and <span class="math">\(\sigma\)</span> is <code>sigma</code>. This function returns a data frame with the results of all the simulations. Each row is a coefficient (column <code>term</code>) for a simulation (column <code>.sim</code>):</p>
+<pre><code>##          term   estimate std.error statistic      p.value
+## 1 (Intercept) 0.09112352 0.1519990 0.5995006 5.499329e-01
+## 2          X1 1.29067333 0.1525963 8.4580914 6.346658e-14
+## 3          X2 1.15219681 0.1525963 7.5506216 8.171963e-12
+## 4          X3 0.93487885 0.1525963 6.1264850 1.097365e-08</code></pre>
+</div>
+<div id="multiple-iterations" class="section level2">
+<h2>Multiple iterations</h2>
+<p>However, drawing one sample is not enough for a simulation study. We want to repeat this many times in order to generate sampling distributions in order to evaluate how well the estimator works. We will do this by wrapping the code above in a for loop, to repeat the simulations many times, and put it all in a function, so that we can change the values of <span class="math">\(n\)</span>, <span class="math">\(\beta\)</span>, <span class="math">\(\sigma^2\)</span>, and <span class="math">\(X\)</span> that we use. The following function will run <code>sims</code> simulations, in which it draws a sample of size <code>obs</code> where <span class="math">\(\beta\)</span> is <code>beta</code>, <span class="math">\(X\)</span> is <code>X</code>, and <span class="math">\(\sigma\)</span> is <code>sigma</code>. This function returns a data frame with the results of all the simulations. Each row is a coefficient (column <code>term</code>) for a simulation (column <code>.sim</code>):</p>
 <pre class="r"><code>sim_lin_norm &lt;- function(sims, beta, X, sigma) {
   # get number of obs from the rows of X
   n &lt;- nrow(X)
@@ -187,60 +203,21 @@ X_cor &lt;- diag(3)</code></pre>
   # Combine the list of data frames into a single data frame
   bind_rows(simulations)
 }</code></pre>
-<pre class="r"><code>sim_lin_norm_meas_err &lt;- function(sims, beta, X, sigma, reliability) {
-  n &lt;- nrow(X)
-  k &lt;- ncol(X)
-  simulations &lt;- list()
-  # Create a progress bar because we're impatient
-  p &lt;- progress_estimated(sims, min_time = 2)
-  # -----
-  # NEW: measurement error variance
-  Sigma_meas &lt;- diag(apply(X, 2, var) * (1 - reliability) / reliability,
-                     nrow = k, ncol = k)
-  # ----
-  # Loop over the simulation runs
-  for (j in 1:sims) {
-    # Draw y
-    mu &lt;- cbind(1, X) %*% beta
-    epsilon &lt;- rnorm(n, mean = 0, sd = sigma)
-    y &lt;- mu + epsilon
-    # ------
-    # NEW: observed X
-    # add measurement error to original X
-    Xobs &lt;- as.data.frame(X + mvrnorm(n, mu = rep(0, k), Sigma = Sigma_meas))
-    colnames(Xobs) &lt;- paste(&quot;X&quot;, 1:k, sep = &quot;&quot;)
-    # ------
-    # Run a regression
-    mod &lt;- lm(y ~ ., data = Xobs)
-    # Save the coefficients in a data frame
-    mod_df &lt;- tidy(mod) %&gt;%
-      # Add a column indicating the simulation number
-      mutate(.sim = j)
-    # Add hetrosked consistent se to the data
-    mod_df[[&quot;std.error.robust&quot;]] &lt;- sqrt(diag(car::hccm(mod)))
-    # Save these results as the next element in the storage list
-    simulations[[j]] &lt;- mod_df
-    # Update the progress bar
-    p$tick()$print()
-  }
-  # Combine the list of data frames into a single data frame
-  bind_rows(simulations)
-}</code></pre>
 <p>Let’s draw 1000 samples using the values that we used before:</p>
-<pre class="r"><code>sim0_n16 &lt;- sim_lin_norm(2048, beta, mvrnorm(16, X_mean, X_cov), sigma)
-sim0_n64 &lt;- sim_lin_norm(2048, beta, mvrnorm(64, X_mean, X_cov), sigma)
-sim0_n2048 &lt;- sim_lin_norm(2048, beta, mvrnorm(2048, X_mean, X_cov), sigma)</code></pre>
+<pre class="r"><code>sim0_n16 &lt;- sim_lin_norm(2048, beta, mvrnorm(16, mu_X, Sigma_X), sigma)
+sim0_n64 &lt;- sim_lin_norm(2048, beta, mvrnorm(64, mu_X, Sigma_X), sigma)
+sim0_n2048 &lt;- sim_lin_norm(2048, beta, mvrnorm(2048, mu_X, Sigma_X), sigma)</code></pre>
 <p>and look at the results</p>
 <pre class="r"><code>head(sim0_n16)</code></pre>
 <pre><code>## Source: local data frame [6 x 7]
 ## 
-##          term  estimate std.error statistic    p.value .sim
-## 1 (Intercept) 0.4632731 0.6061898 0.7642377 0.45948998    1
-## 2          X1 1.2625549 0.7138601 1.7686307 0.10234334    1
-## 3          X2 1.2528522 0.6988742 1.7926719 0.09825058    1
-## 4          X3 0.2366373 0.5795640 0.4083023 0.69024325    1
-## 5 (Intercept) 0.1312669 0.7173288 0.1829941 0.85785800    2
-## 6          X1 0.4521343 0.8447394 0.5352353 0.60226524    2
+##          term   estimate std.error statistic     p.value .sim
+## 1 (Intercept)  0.6003851 0.5613454  1.069547 0.305865769    1
+## 2          X1  1.7805771 0.6434673  2.767160 0.017051411    1
+## 3          X2  2.3405462 0.6777412  3.453451 0.004774483    1
+## 4          X3  1.4518286 0.3686355  3.938386 0.001968634    1
+## 5 (Intercept) -1.0575277 0.3188317 -3.316884 0.006145537    2
+## 6          X1  0.4905328 0.3654751  1.342178 0.204380709    2
 ## Variables not shown: std.error.robust (dbl)</code></pre>
 <p>Whever method we’ve used, once we generate the simulations we can summarize them in various ways.</p>
 <p>The output is a data frame with a row for each iteration, coefficient value.</p>
@@ -260,23 +237,7 @@ sim0_n2048 &lt;- sim_lin_norm(2048, beta, mvrnorm(2048, X_mean, X_cov), sigma)</
   ret
 }</code></pre>
 <p>For a linear regression find the value of $</p>
-<pre class="r"><code>find_sigma &lt;- function(X, b, r2 = sqrt(0.5)) {
-  n &lt;- nrow(X)
-  k &lt;- ncol(X)
-  yhat &lt;- X %*% b
-  # Var(Y) = E(Var(Y|X)) + Var(E(Y|X))
-  ybar &lt;- mean(yhat)
-  # Model sum of squares
-  ssm &lt;- sum((yhat - ybar) ^ 2)
-  # calc sum of squared errors
-  sse &lt;- (1 - r2) / r2 * ssm
-  # R^2 = 1 - SSE / (SSM + SSE)
-  # (1 - R^2) * (SSM + SSE) = SSE 
-  # (1 - R^2) * SSM = SSE - (1 - R^2) * SSE
-  # ((1 - R^2) * SSM) / R^2 = SSE
-  # return sigma (assume population)
-  sqrt(sse / n)
-}</code></pre>
+</div>
 </div>
 <div id="problem" class="section level1">
 <h1>Problem</h1>
@@ -327,7 +288,7 @@ sim0_n2048 &lt;- sim_lin_norm(2048, beta, mvrnorm(2048, X_mean, X_cov), sigma)</
     # NEW: omit columns of X
     # Look up paste and setdiff function to see what they does
     Xomit &lt;- as.data.frame(X)[ , setdiff(1:k, omit)]
-    # ~ . 
+    # ~ . means use all variables from `data` on the RHS of the formula
     mod &lt;- lm(y ~ . , data = Xomit)
     # ---------
     mod_df &lt;- tidy(mod) %&gt;%
@@ -367,15 +328,48 @@ sim0_n2048 &lt;- sim_lin_norm(2048, beta, mvrnorm(2048, X_mean, X_cov), sigma)</
 <p>Draw X from an MA(1), where <span class="math">\[
 x_{k,i} = \mu_{k}+ \rho x_{k,i-1} + \epsilon_{x_{k,i}}
 \]</span></p>
+<pre class="r"><code>sim_lin_norm_meas_err &lt;- function(sims, beta, X, sigma, reliability) {
+  n &lt;- nrow(X)
+  k &lt;- ncol(X)
+  simulations &lt;- list()
+  # Create a progress bar because we're impatient
+  p &lt;- progress_estimated(sims, min_time = 2)
+  # -----
+  # NEW: measurement error variance
+  Sigma_meas &lt;- diag(apply(X, 2, var) * (1 - reliability) / reliability,
+                     nrow = k, ncol = k)
+  # ----
+  # Loop over the simulation runs
+  for (j in 1:sims) {
+    # Draw y
+    mu &lt;- cbind(1, X) %*% beta
+    epsilon &lt;- rnorm(n, mean = 0, sd = sigma)
+    y &lt;- mu + epsilon
+    # ------
+    # NEW: observed X
+    # add measurement error to original X
+    Xobs &lt;- as.data.frame(X + mvrnorm(n, mu = rep(0, k), Sigma = Sigma_meas))
+    colnames(Xobs) &lt;- paste(&quot;X&quot;, 1:k, sep = &quot;&quot;)
+    # ------
+    # Run a regression
+    mod &lt;- lm(y ~ ., data = Xobs)
+    # Save the coefficients in a data frame
+    mod_df &lt;- tidy(mod) %&gt;%
+      # Add a column indicating the simulation number
+      mutate(.sim = j)
+    # Add hetrosked consistent se to the data
+    mod_df[[&quot;std.error.robust&quot;]] &lt;- sqrt(diag(car::hccm(mod)))
+    # Save these results as the next element in the storage list
+    simulations[[j]] &lt;- mod_df
+    # Update the progress bar
+    p$tick()$print()
+  }
+  # Combine the list of data frames into a single data frame
+  bind_rows(simulations)
+}</code></pre>
 <hr />
 <p>Derived from of Christopher Adolph, “Problem Set 3”, <em>POLS/CSSS 503</em>, University of Washington, Spring 2014. <a href="http://faculty.washington.edu/cadolph/503/503hw3.pdf" class="uri">http://faculty.washington.edu/cadolph/503/503hw3.pdf</a>. Used with permission.</p>
 <p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,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" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
-</div>
-<div class="footnotes">
-<hr />
-<ol>
-<li id="fn1"><p>This choice of <span class="math">\(\sigma\)</span> gives an <span class="math">\(R^2 = 0.5\)</span>.<a href="#fnref1">↩</a></p></li>
-</ol>
 </div>
 
 

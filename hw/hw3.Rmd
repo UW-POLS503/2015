@@ -1,7 +1,7 @@
 ---
 title: "POLS 503: Homework 3"
 author: "Jeffrey B. Arnold, Christopher Adolph"
-date: "April 29, 2015"
+date: "April 30, 2015"
 output:
   html_document:
     toc: true
@@ -33,8 +33,9 @@ For this assignment, I ask that you start with the R markdown file and edit it a
 
 # Setup 
 
-This assignment will have some non-trivial computation.
-This will set the knitr options so that any computations that do not change are not rerun.
+This assignment has some non-trivial computation.
+The following code sets the knitr options to cache the results of computations, so 
+that any computations that do not change are not rerun.
 See <http://rmarkdown.rstudio.com/authoring_rcodechunks.html#caching> for more information about what this is doing.
 ```{r setup, echo = TRUE}
 knitr::opts_chunk$set(cache = TRUE)
@@ -48,27 +49,30 @@ library("ggplot2")
 library("dplyr")
 library("broom")
 library("tidyr")
-
 ```
-
 
 # Simulate a Linear Regression
 
-$$
-\begin{aligned}[t]
-y &= X \beta + \epsilon \\
-\epsilon &\sim N(0, \sigma^2)
-\end{aligned}
-$$
+1. Define a population
+2. For $m$ times
 
-We are going to draw samples 
+   1. draw a sample from the population
+   2. run OLS on that sample
+   3. save coefficients, standard errors, etc. from that sample
+   
+3. Compare the distributions of coefficients or other statistics from the 
+    samples to see how well OLS recovers the parameters of the population.
+    
+We'll start with an example in which the population satisfies all the Gauss-Markov
+assumptions and we run correctly specified regression on samples drawn from that 
+population.
 $$
 \begin{aligned}[t]
 Y &= \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + \epsilon \\
 \epsilon & \sim N(0, \sigma^2)
 \end{aligned}
 $$
-where
+The specific values of 
 $$
 \begin{aligned}[t]
 \beta_0 &= 0 \\
@@ -77,24 +81,26 @@ $$
 \end{aligned}
 $$
 
+First, we are going to go over the code to generate a single sample and run OLS on it.
+Then, we are going to wrap that code in a for loop to be able to run a simulation with many samples, and wrap that in a function in order to be able to easily change parameters of the simulation without repeating ourselves.
 
-First we are going to go over the code to generate a single sample and estimate a regression of it.
-Then we are going to wrap that code in a for loop to simulate many samples, and wrap that whole thing in a function in order to be able to easily change parameters of the simulation without repeating ourselves.
+## Single Iteration
 
-For a simulation we are going to need to set some parameters.
-The number of observations in the sample:
-```{r}
-n <- 128
-```
-
-Covariances are not particularly intuitive, so it may be easier to decompose the covariance into a correlation matrix and the standard deviations of the variables. 
+Generate some values of $X$ that we will use in the samples.
+Recall that the sampling distributions of OLS coefficients and the Gauss-Markov theorem are defined for a fixed $X$. 
+So, we will randomly generate covariates, but use the same set of covariates for all simulations.
+Although linear regression does not require covariates to be distributed multivariate normal, we will generate $X$ by drawing a sample of size $n$ from a multivariate normal distribution with mean $\mu_X$ and covariance matrix $\Sigma_X$.
+$$
+X_i \sim N(\mu_X, \Sigma_X) \text{ for $i = 1, \dots, n$.}
+$$
+Since covariances are not particularly intuitive, so it may be easier to decompose the covariance into a correlation matrix and the standard deviations of the variables. 
 A covariance matrix, $\Sigma$ can be decomposed into a standard deviation $s$ and a correlation matrix $R$,
 $$
 \DeclareMathOperator{\diag}{diag}
 \Sigma = S R S
 $$
 where $S$ is a diagonal matrix with the standard deviations $s$ on its diagonal.
-This function will make that calculation simpler.
+The following function will make that calculation simpler.
 ```{r}
 sdcor2cov <- function(s, r = diag(length(s))) {
   s <- diag(s, nrow = length(s), ncol = length(s))
@@ -102,61 +108,64 @@ sdcor2cov <- function(s, r = diag(length(s))) {
 }
 ```
 
+In this example, we will use a sample of size $n = 128$, with $k = 3$ variables drawn from a multivariate normal distribution with mean $\mu_X = (0, 0, 0)$, standard deviations of $s_X = (1, 1, 1)$, and independent variables,
+$$
+R_X = \begin{matrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{matrix}
+$$
+This is equivalent to sampling each variable independently from a standard normal distribution.
 ```{r}
-X_mean <- rep(0, 3)
+n <- 128
+mu_X <- rep(0, 3)
+s_X <- rep(1, 3)
+R_X <- diag(3)
+Sigma_X <- sdcor2cov(s_X, R_X)
 ```
-
-Standard deviations of the covariates
+We draw the sample using the **MASS** function `mvrnorm`,
 ```{r}
-X_sd <- rep(1, 3)
-X_cor <- diag(3)
-```
-Now calculate the covariance matrix,
-```{r}
-X_cov <- sdcor2cov(X_sd, X_cor)
-```
-Draw a sample of $n$ observations of $X$ from $N(\mu_X, \Sigma_X)$
-```{r}
-X <- mvrnorm(n, X_mean, X_Sigma, empirical = TRUE)
+X <- mvrnorm(n, mu_X, Sigma_X, empirical = TRUE)
 ```
 The option `empirical = TRUE` is used to make sure that although $X$ is randomly sampled,
-it is adjusted to so that the sample mean and covariance are $\mu_X$ and $\Sigma_X$.
+it is adjusted to so that the sample mean and covariance are equal to $\mu_X$ and $\Sigma_X$,
 ```{r}
 round(cor(X), 1)
 round(apply(X, 2, mean), 1)
 ```
 
-The true parameters of the model
+We'll set the true parameters of the model so that the intercept is 0, and the slope coefficients are all 1.
 ```{r}
 beta <- c(0, 1, 1, 1)
 ```
-
-True standard deviation of the regression errors, which we'll set to $\sigma = 1.7$ [^1]
+And we'll set the standard deviation of the regression errors so that that the $R^2$ of the regression is 0.5, meaning that the regression explains half the variance in $y$.
 ```{r}
 sigma <- 1.7
 ```
 
-[^1]: This choice of $\sigma$ gives an $R^2 = 0.5$.
+This defines a population equation of
+$$
+y \sim 
+\mu_y = 
+$$
 
 Now, we want to sample `y` from this population, given this `X`.
 Calculate the expected value of the outcome conditional on the covariates, $E(Y | X)$,
 ```{r}
-mu <- cbind(1, X) %*% beta
+mu_y <- cbind(1, X) %*% beta
 ```
-The `cbind(1, X)` is used to put a column of 1s as an intercept in the regression.
+The expression `cbind(1, X)` adds a column of 1s as an intercept in the regression to the covariates in $X$.
 Then sample the errors, $\epsilon \sim N(0, \sigma^2)$,
 ```{r}
-epsilon <- rnorm(n, mean = 0, sd = sigma)
+epsilon_y <- rnorm(n, mean = 0, sd = sigma)
 ```
 Now combine the systematic ($E(Y | X)$) and stochastic $\epsilon$ components to generate the values of $y$ in the sample,
 ```{r}
-y <- mu + epsilon
+y <- mu_y + epsilon_y
 ```
-Now, we can run a regression on the sample
+
+Now that we have a sample, we will run an OLS regression on it to estimate the parameters of the population,
 ```{r}
 mod <- lm(y ~ X)
 ```
-We will use the `tidy` function from the **broom** package to put the coefficients in a data frame (something that will be especially useful when storing the results from many simulations) 
+We will use the `tidy` function from the **broom** package convert the coefficients, standard errors, p-values, and t-values in a data frame (something that will be especially useful when storing the results from many simulations) 
 ```{r}
 mod_df <- tidy(mod)
 ```
@@ -165,7 +174,9 @@ The coefficients of the OLS regression on the parameter should be similar to, bu
 mod_df
 ```
 
-However, drawing one sample is not enough for a simulation study. We want to repeat this many times in order to evaluate how well the estimator works.
+## Multiple iterations
+
+However, drawing one sample is not enough for a simulation study. We want to repeat this many times in order to generate sampling distributions in order to evaluate how well the estimator works.
 We will do this by wrapping the code above in a for loop, to repeat the simulations many times, and put it all in a function, so that we can change the values of $n$, $\beta$, $\sigma^2$, and $X$ that we use.
 The following function will run `sims` simulations, in which it draws a sample of size `obs` where $\beta$ is `beta`, $X$ is `X`, and $\sigma$ is `sigma`.
 This function returns a data frame with the results of all the simulations. 
@@ -203,54 +214,12 @@ sim_lin_norm <- function(sims, beta, X, sigma) {
 
 ```
 
-```{r}
-sim_lin_norm_meas_err <- function(sims, beta, X, sigma, reliability) {
-  n <- nrow(X)
-  k <- ncol(X)
-  simulations <- list()
-  # Create a progress bar because we're impatient
-  p <- progress_estimated(sims, min_time = 2)
-  # -----
-  # NEW: measurement error variance
-  Sigma_meas <- diag(apply(X, 2, var) * (1 - reliability) / reliability,
-                     nrow = k, ncol = k)
-  # ----
-  # Loop over the simulation runs
-  for (j in 1:sims) {
-    # Draw y
-    mu <- cbind(1, X) %*% beta
-    epsilon <- rnorm(n, mean = 0, sd = sigma)
-    y <- mu + epsilon
-    # ------
-    # NEW: observed X
-    # add measurement error to original X
-    Xobs <- as.data.frame(X + mvrnorm(n, mu = rep(0, k), Sigma = Sigma_meas))
-    colnames(Xobs) <- paste("X", 1:k, sep = "")
-    # ------
-    # Run a regression
-    mod <- lm(y ~ ., data = Xobs)
-    # Save the coefficients in a data frame
-    mod_df <- tidy(mod) %>%
-      # Add a column indicating the simulation number
-      mutate(.sim = j)
-    # Add hetrosked consistent se to the data
-    mod_df[["std.error.robust"]] <- sqrt(diag(car::hccm(mod)))
-    # Save these results as the next element in the storage list
-    simulations[[j]] <- mod_df
-    # Update the progress bar
-    p$tick()$print()
-  }
-  # Combine the list of data frames into a single data frame
-  bind_rows(simulations)
-}
-```
-
 
 Let's draw 1000 samples using the values that we used before:
 ```{r}
-sim0_n16 <- sim_lin_norm(2048, beta, mvrnorm(16, X_mean, X_cov), sigma)
-sim0_n64 <- sim_lin_norm(2048, beta, mvrnorm(64, X_mean, X_cov), sigma)
-sim0_n2048 <- sim_lin_norm(2048, beta, mvrnorm(2048, X_mean, X_cov), sigma)
+sim0_n16 <- sim_lin_norm(2048, beta, mvrnorm(16, mu_X, Sigma_X), sigma)
+sim0_n64 <- sim_lin_norm(2048, beta, mvrnorm(64, mu_X, Sigma_X), sigma)
+sim0_n2048 <- sim_lin_norm(2048, beta, mvrnorm(2048, mu_X, Sigma_X), sigma)
 ```
 and look at the results
 ```{r}
@@ -393,6 +362,48 @@ $$
 x_{k,i} = \mu_{k}+ \rho x_{k,i-1} + \epsilon_{x_{k,i}}
 $$
 
+
+```{r}
+sim_lin_norm_meas_err <- function(sims, beta, X, sigma, reliability) {
+  n <- nrow(X)
+  k <- ncol(X)
+  simulations <- list()
+  # Create a progress bar because we're impatient
+  p <- progress_estimated(sims, min_time = 2)
+  # -----
+  # NEW: measurement error variance
+  Sigma_meas <- diag(apply(X, 2, var) * (1 - reliability) / reliability,
+                     nrow = k, ncol = k)
+  # ----
+  # Loop over the simulation runs
+  for (j in 1:sims) {
+    # Draw y
+    mu <- cbind(1, X) %*% beta
+    epsilon <- rnorm(n, mean = 0, sd = sigma)
+    y <- mu + epsilon
+    # ------
+    # NEW: observed X
+    # add measurement error to original X
+    Xobs <- as.data.frame(X + mvrnorm(n, mu = rep(0, k), Sigma = Sigma_meas))
+    colnames(Xobs) <- paste("X", 1:k, sep = "")
+    # ------
+    # Run a regression
+    mod <- lm(y ~ ., data = Xobs)
+    # Save the coefficients in a data frame
+    mod_df <- tidy(mod) %>%
+      # Add a column indicating the simulation number
+      mutate(.sim = j)
+    # Add hetrosked consistent se to the data
+    mod_df[["std.error.robust"]] <- sqrt(diag(car::hccm(mod)))
+    # Save these results as the next element in the storage list
+    simulations[[j]] <- mod_df
+    # Update the progress bar
+    p$tick()$print()
+  }
+  # Combine the list of data frames into a single data frame
+  bind_rows(simulations)
+}
+```
 
 * * *
 
