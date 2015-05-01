@@ -1,0 +1,7 @@
+#problems {
+    counter-reset:h2
+}
+#problems h2:before {
+    counter-increment: h2;
+    content: "Problem " counter(h2);
+}
