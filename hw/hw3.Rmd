@@ -110,7 +110,7 @@ sdcor2cov <- function(s, r = diag(length(s))) {
 
 In this example, we will use a sample of size $n = 128$, with $k = 3$ variables drawn from a multivariate normal distribution with mean $\mu_X = (0, 0, 0)$, standard deviations of $s_X = (1, 1, 1)$, and independent variables,
 $$
-R_X = \begin{matrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{matrix}
+R_X = \begin{bmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix}
 $$
 This is equivalent to sampling each variable independently from a standard normal distribution.
 ```{r}
@@ -135,7 +135,7 @@ We'll set the true parameters of the model so that the intercept is 0, and the s
 ```{r}
 beta <- c(0, 1, 1, 1)
 ```
-And we'll set the standard deviation of the regression errors so that that the $R^2$ of the regression is 0.5, meaning that the regression explains half the variance in $y$.
+And we'll set the standard deviation of the regression errors such that that the $R^2$ of the regression is approximately 0.5.
 ```{r}
 sigma <- 1.7
 ```

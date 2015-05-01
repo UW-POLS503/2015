@@ -128,7 +128,7 @@ X_i \sim N(\mu_X, \Sigma_X) \text{ for $i = 1, \dots, n$.}
   s %*% r %*% s
 }</code></pre>
 <p>In this example, we will use a sample of size <span class="math">\(n = 128\)</span>, with <span class="math">\(k = 3\)</span> variables drawn from a multivariate normal distribution with mean <span class="math">\(\mu_X = (0, 0, 0)\)</span>, standard deviations of <span class="math">\(s_X = (1, 1, 1)\)</span>, and independent variables, <span class="math">\[
-R_X = \begin{matrix} 1 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 \end{matrix}
+R_X = \begin{bmatrix} 1 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 \end{bmatrix}
 \]</span> This is equivalent to sampling each variable independently from a standard normal distribution.</p>
 <pre class="r"><code>n &lt;- 128
 mu_X &lt;- rep(0, 3)
