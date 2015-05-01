@@ -9,11 +9,15 @@ output:
 ---
 This lab will use some libraries you've seen before, and one you may not have. We'll load them all now.
 
+```{r, results = 'hide', echo = FALSE}
+knitr::opts_chunk$set(tidy = TRUE, tidy.opts = list(width.cutoff = 60))
+```
+
 ```{r, message=FALSE, warning=FALSE}
-library(MASS)
-library(dplyr)
-library(ggplot2)
-library(broom)
+library("MASS")
+library("dplyr")
+library("ggplot2")
+library("broom")
 ```
 
 ## More useful tools
