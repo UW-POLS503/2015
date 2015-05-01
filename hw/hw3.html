@@ -38,6 +38,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 </script>
 
 
+<link href="data:text/css,%23problems%20%7B%0A%20%20%20%20counter%2Dreset%3Ah2%0A%7D%0A%23problems%20h2%3Abefore%20%7B%0A%20%20%20%20counter%2Dincrement%3A%20h2%3B%0A%20%20%20%20content%3A%20%22Problem%20%22%20counter%28h2%29%3B%0A%7D%0A" rel="stylesheet" type="text/css" />
 
 </head>
 
@@ -70,15 +71,18 @@ img {
 <div id="TOC">
 <ul>
 <li><a href="#setup">Setup</a></li>
-<li><a href="#simulate-a-linear-regression">Simulate a Linear Regression</a><ul>
+<li><a href="#simulation-example">Simulation Example</a><ul>
 <li><a href="#single-iteration">Single Iteration</a></li>
 <li><a href="#multiple-iterations">Multiple iterations</a></li>
 </ul></li>
-<li><a href="#problem">Problem</a></li>
+<li><a href="#problems">Problems</a><ul>
+<li><a href="#section"></a></li>
+<li><a href="#section-1"></a></li>
+</ul></li>
 </ul>
 </div>
 
-<p>The purpose of this homework is to provide a guided, hands-on tour through the properties of the least squares estimator, especially under common violations of the GaussMarkov assumptions. We will work through a series of programs which use simulated data –- i.e., data created with known properties –- to investigate how these violations affect the accuracy and precision of least squares estimates of slope parameters. Using repeated study of simulated datasets to explore the properties of statistical models is called Monte Carlo experimentation. Although you will not have to write much R code, you will need to read through the provided programs carefully to understand what is happening.</p>
+<p>The purpose of this homework is to provide a guided, hands-on tour through the properties of the least squares estimator, especially under common violations of the Gauss Markov assumptions. We will work through a series of programs which use simulated data –- i.e., data created with known properties –- to investigate how these violations affect the accuracy and precision of least squares estimates of slope parameters. Using repeated study of simulated datasets to explore the properties of statistical models is called Monte Carlo experimentation. Although you will not have to write much R code, you will need to read through the provided programs carefully to understand what is happening.</p>
 <p>Monte Carlo experiments always produce the same results as analytic proofs for the specific case considered. Each method has advantages and disadvantages: proofs are more general and elegant, but are not always possible. MC experiments are much easier to construct and can always be carried out, but findings from these experiments only apply to the specific scenario under study. Where proofs are available, they are generally preferable to Monte Carlo experiments, but proofs of the properties of more complicated models are sometimes impossible or impractically difficult. This is almost always the case for the properties of models applied to small samples of data. Here, we use Monte Carlo not out of necessity but for pedagogical purposes, as a tool to gain a more intuitive and hands-on understanding of least squares and its properties. See Fox for a more formal treatment of the Gauss-Markov theorem.</p>
 <p>For this assignment, I ask that you start with the R markdown file and edit it as needed.</p>
 <div id="setup" class="section level1">
@@ -92,14 +96,17 @@ library(&quot;dplyr&quot;)
 library(&quot;broom&quot;)
 library(&quot;tidyr&quot;)</code></pre>
 </div>
-<div id="simulate-a-linear-regression" class="section level1">
-<h1>Simulate a Linear Regression</h1>
+<div id="simulation-example" class="section level1">
+<h1>Simulation Example</h1>
+<p>The outline of a simulation is:</p>
 <ol style="list-style-type: decimal">
 <li>Define a population</li>
-<li><p>For <span class="math">\(m\)</span> times</p></li>
+<li><p>Repeat the following <span class="math">\(m\)</span> times:</p>
+<ol style="list-style-type: decimal">
 <li>draw a sample from the population</li>
 <li>run OLS on that sample</li>
-<li><p>save coefficients, standard errors, etc. from that sample</p></li>
+<li>save coefficients, standard errors, etc. from that sample</li>
+</ol></li>
 <li><p>Compare the distributions of coefficients or other statistics from the samples to see how well OLS recovers the parameters of the population.</p></li>
 </ol>
 <p>We’ll start with an example in which the population satisfies all the Gauss-Markov assumptions and we run correctly specified regression on samples drawn from that population. <span class="math">\[
@@ -114,7 +121,7 @@ Y &amp;= \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + \epsilon \\
 \sigma &amp;= 1
 \end{aligned}
 \]</span></p>
-<p>First, we are going to go over the code to generate a single sample and run OLS on it. Then, we are going to wrap that code in a for loop to be able to run a simulation with many samples, and wrap that in a function in order to be able to easily change parameters of the simulation without repeating ourselves.</p>
+<p>First, we will write code to generate a single sample and run OLS on it. Then, we will wrap that that code in a for loop to be able to run a simulation with many samples, and wrap that in a function in order to be able to easily change parameters of the simulation without repeating ourselves.</p>
 <div id="single-iteration" class="section level2">
 <h2>Single Iteration</h2>
 <p>Generate some values of <span class="math">\(X\)</span> that we will use in the samples. Recall that the sampling distributions of OLS coefficients and the Gauss-Markov theorem are defined for a fixed <span class="math">\(X\)</span>. So, we will randomly generate covariates, but use the same set of covariates for all simulations. Although linear regression does not require covariates to be distributed multivariate normal, we will generate <span class="math">\(X\)</span> by drawing a sample of size <span class="math">\(n\)</span> from a multivariate normal distribution with mean <span class="math">\(\mu_X\)</span> and covariance matrix <span class="math">\(\Sigma_X\)</span>. <span class="math">\[
@@ -147,7 +154,7 @@ Sigma_X &lt;- sdcor2cov(s_X, R_X)</code></pre>
 <pre><code>## [1] 0 0 0</code></pre>
 <p>We’ll set the true parameters of the model so that the intercept is 0, and the slope coefficients are all 1.</p>
 <pre class="r"><code>beta &lt;- c(0, 1, 1, 1)</code></pre>
-<p>And we’ll set the standard deviation of the regression errors so that that the <span class="math">\(R^2\)</span> of the regression is 0.5, meaning that the regression explains half the variance in <span class="math">\(y\)</span>.</p>
+<p>And we’ll set the standard deviation of the regression errors such that that the <span class="math">\(R^2\)</span> of the regression is approximately 0.5.</p>
 <pre class="r"><code>sigma &lt;- 1.7</code></pre>
 <p>This defines a population equation of <span class="math">\[
 y \sim 
@@ -173,7 +180,7 @@ y \sim
 </div>
 <div id="multiple-iterations" class="section level2">
 <h2>Multiple iterations</h2>
-<p>However, drawing one sample is not enough for a simulation study. We want to repeat this many times in order to generate sampling distributions in order to evaluate how well the estimator works. We will do this by wrapping the code above in a for loop, to repeat the simulations many times, and put it all in a function, so that we can change the values of <span class="math">\(n\)</span>, <span class="math">\(\beta\)</span>, <span class="math">\(\sigma^2\)</span>, and <span class="math">\(X\)</span> that we use. The following function will run <code>sims</code> simulations, in which it draws a sample of size <code>obs</code> where <span class="math">\(\beta\)</span> is <code>beta</code>, <span class="math">\(X\)</span> is <code>X</code>, and <span class="math">\(\sigma\)</span> is <code>sigma</code>. This function returns a data frame with the results of all the simulations. Each row is a coefficient (column <code>term</code>) for a simulation (column <code>.sim</code>):</p>
+<p>However, drawing one sample is not enough for a simulation study. We want to repeat this many times in order to generate a sampling distribution in order to evaluate how well the estimator works. We will do this by wrapping the code above in a for loop, to repeat the simulations many times, and put it all in a function, so that we can change the values of <span class="math">\(n\)</span>, <span class="math">\(\beta\)</span>, <span class="math">\(\sigma^2\)</span>, and <span class="math">\(X\)</span> that we use. The following function will run <code>sims</code> simulations, in which it draws a sample of size <code>obs</code> where <span class="math">\(\beta\)</span> is <code>beta</code>, <span class="math">\(X\)</span> is <code>X</code>, and <span class="math">\(\sigma\)</span> is <code>sigma</code>. This function returns a data frame with the results of all the simulations. Each row is a coefficient (column <code>term</code>) for a simulation (column <code>.sim</code>):</p>
 <pre class="r"><code>sim_lin_norm &lt;- function(sims, beta, X, sigma) {
   # get number of obs from the rows of X
   n &lt;- nrow(X)
@@ -203,24 +210,21 @@ y \sim
   # Combine the list of data frames into a single data frame
   bind_rows(simulations)
 }</code></pre>
-<p>Let’s draw 1000 samples using the values that we used before:</p>
-<pre class="r"><code>sim0_n16 &lt;- sim_lin_norm(2048, beta, mvrnorm(16, mu_X, Sigma_X), sigma)
-sim0_n64 &lt;- sim_lin_norm(2048, beta, mvrnorm(64, mu_X, Sigma_X), sigma)
-sim0_n2048 &lt;- sim_lin_norm(2048, beta, mvrnorm(2048, mu_X, Sigma_X), sigma)</code></pre>
+<p>Let’s draw 1,024 samples using the values that we used before:</p>
+<pre class="r"><code>sim0 &lt;- sim_lin_norm(1024, beta, mvrnorm(16, mu_X, Sigma_X), sigma)</code></pre>
 <p>and look at the results</p>
-<pre class="r"><code>head(sim0_n16)</code></pre>
+<pre class="r"><code>head(sim0)</code></pre>
 <pre><code>## Source: local data frame [6 x 7]
 ## 
-##          term   estimate std.error statistic     p.value .sim
-## 1 (Intercept)  0.6003851 0.5613454  1.069547 0.305865769    1
-## 2          X1  1.7805771 0.6434673  2.767160 0.017051411    1
-## 3          X2  2.3405462 0.6777412  3.453451 0.004774483    1
-## 4          X3  1.4518286 0.3686355  3.938386 0.001968634    1
-## 5 (Intercept) -1.0575277 0.3188317 -3.316884 0.006145537    2
-## 6          X1  0.4905328 0.3654751  1.342178 0.204380709    2
+##          term   estimate std.error  statistic      p.value .sim
+## 1 (Intercept)  0.5692753 0.2828104  2.0129223 6.711479e-02    1
+## 2          X1  1.0984535 0.2264239  4.8513136 3.973560e-04    1
+## 3          X2  1.1218453 0.2047454  5.4792221 1.408797e-04    1
+## 4          X3  1.6122526 0.2360055  6.8314190 1.819638e-05    1
+## 5 (Intercept) -0.3077606 0.4777739 -0.6441553 5.315946e-01    2
+## 6          X1  1.3034532 0.3825158  3.4075796 5.196428e-03    2
 ## Variables not shown: std.error.robust (dbl)</code></pre>
-<p>Whever method we’ve used, once we generate the simulations we can summarize them in various ways.</p>
-<p>The output is a data frame with a row for each iteration, coefficient value.</p>
+<p>Now with all the simulations in hand, we can summarize the simulation results and compare them to the population parameters. The following funciton takes a the data frame generated by the simulation function and a vector of the original parameters, and generates a summary data frame with one row per coefficient.</p>
 <pre class="r"><code>summarize_sims &lt;- function(.data, beta) {
   ret &lt;- .data %&gt;%
   group_by(term) %&gt;%
@@ -236,12 +240,28 @@ sim0_n2048 &lt;- sim_lin_norm(2048, beta, mvrnorm(2048, mu_X, Sigma_X), sigma)</
   ret[[&quot;param_true&quot;]] &lt;- beta
   ret
 }</code></pre>
-<p>For a linear regression find the value of $</p>
+<p>Using the previous results, the a summary is</p>
+<pre class="r"><code>summarize_sims(sim0, beta)</code></pre>
+<pre><code>## Source: local data frame [4 x 11]
+## 
+##          term estimate_mean estimate_median estimate_sd estimate_p025
+## 1 (Intercept)   -0.00745856    -0.001620653   0.4470532    -0.8650703
+## 2          X1    0.99914378     0.993218758   0.3370575     0.3399028
+## 3          X2    1.01068200     1.013910281   0.3165930     0.3965739
+## 4          X3    1.00500504     1.005658423   0.3583234     0.2880152
+## Variables not shown: estimate_p975 (dbl), se_mean (dbl), se_robust_mean
+##   (dbl), tstat_mean (dbl), pval_mean (dbl), param_true (dbl)</code></pre>
+<p>The following problems</p>
 </div>
 </div>
-<div id="problem" class="section level1">
-<h1>Problem</h1>
-<p>Different sample sizes. <span class="math">\(n = 16, 64, 2048\)</span>.</p>
+<div id="problems" class="section level1">
+<h1>Problems</h1>
+<div id="section" class="section level2">
+<h2></h2>
+<p>How does the sample size effect the estimates of <span class="math">\(\beta\)</span> in OLS? Run simulations with sample sizes of 16, 64, 256, and 1024. How does the bias change as sample size increases? How does the variance of the <span class="math">\(\beta\)</span> estimate change as sample size increases?</p>
+</div>
+<div id="section-1" class="section level2">
+<h2></h2>
 <p>Set the correlation between <span class="math">\(x_1\)</span> and <span class="math">\(x_2\)</span> to 0.3, 0.7, and 0.95 (These correspond to <span class="math">\(R^2\)</span> of the regression of <span class="math">\(X_1\)</span> on <span class="math">\(X_2\)</span> of about 0.1, 0.5, and 0.90).</p>
 <p>What happens if you set the regression to <span class="math">\(X\)</span>.</p>
 <p>Set the correlation between <span class="math">\(x_1\)</span> and <span class="math">\(x_3\)</span> to 0, and the correlation between <span class="math">\(x_1\)</span>, <span class="math">\(x_2\)</span>, and <span class="math">\(x_3\)</span> to 0.1 0.7, -0.7, and 0.99. What are the results in each case? Estimate the regression of <span class="math">\(X_1\)</span> on <span class="math">\(X_2\)</span>, and do NOT include X_3.</p>
@@ -370,6 +390,7 @@ x_{k,i} = \mu_{k}+ \rho x_{k,i-1} + \epsilon_{x_{k,i}}
 <hr />
 <p>Derived from of Christopher Adolph, “Problem Set 3”, <em>POLS/CSSS 503</em>, University of Washington, Spring 2014. <a href="http://faculty.washington.edu/cadolph/503/503hw3.pdf" class="uri">http://faculty.washington.edu/cadolph/503/503hw3.pdf</a>. Used with permission.</p>
 <p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,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" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
+</div>
 </div>
 
 

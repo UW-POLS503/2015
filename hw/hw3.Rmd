@@ -4,30 +4,25 @@ author: "Jeffrey B. Arnold, Christopher Adolph"
 date: "April 30, 2015"
 output:
   html_document:
-    toc: true
+    css: "custom.css"
+    pandoc_options: [
+      "--section-divs"
+    ]
 ---
 
-The purpose of this homework is to provide a guided, hands-on tour through the properties
-of the least squares estimator, especially under common violations of the GaussMarkov
-assumptions. 
-We will work through a series of programs which use simulated data –- i.e., data created with known properties –- to investigate how these violations affect the accuracy and precision of least squares estimates of slope parameters. 
-Using repeated study of simulated datasets to explore the properties of statistical models is
-called Monte Carlo experimentation.
+The purpose of this homework is to provide a guided, hands-on tour through the properties of the least squares estimator, especially under common violations of the Gauss Markov assumptions. 
+We will work through a series of programs which use simulated data --- i.e., data created with known properties --- to investigate how these violations affect the accuracy and precision of least squares estimates of slope parameters. 
+Using repeated study of simulated datasets to explore the properties of statistical models is called Monte Carlo experimentation.
 Although you will not have to write much R code, you will need to read through
 the provided programs carefully to understand what is happening.
 
-Monte Carlo experiments always produce the same results as analytic proofs for the specific
-case considered. Each method has advantages and disadvantages: proofs are more general and
-elegant, but are not always possible. MC experiments are much easier to construct and can
-always be carried out, but findings from these experiments only apply to the specific scenario under study.
-Where proofs are available, they are generally preferable to Monte Carlo experiments, but
-proofs of the properties of more complicated models are sometimes impossible or impractically difficult.
-This is almost always the case for the properties of models applied to small samples of
-data.
-Here, we use Monte Carlo not out of necessity but for pedagogical purposes, as a tool to
-gain a more intuitive and hands-on understanding of least squares and its properties.
+Monte Carlo experiments always produce the same results as analytic proofs for the specific case considered.
+Each method has advantages and disadvantages: proofs are more general and elegant, but are not always possible.
+Monte Carlo experiments are much easier to construct and can always be carried out, but findings from these experiments only apply to the specific scenario under study.
+Where proofs are available, they are generally preferable to Monte Carlo experiments, but proofs of the properties of more complicated models are sometimes impossible or impractically difficult.
+This is almost always the case for the properties of models applied to small samples of data.
+Here, we use Monte Carlo not out of necessity but for pedagogical purposes, as a tool to gain a more intuitive and hands-on understanding of least squares and its properties.
 See Fox for a more formal treatment of the Gauss-Markov theorem.
-
 
 For this assignment, I ask that you start with the R markdown file and edit it as needed.
 
@@ -43,22 +38,26 @@ knitr::opts_chunk$set(cache = TRUE)
 
 This will use the standard [Hadleyverse](http://blog.revolutionanalytics.com/2015/03/hadleyverse.html) packages that we've been using in this course (**ggplot2**, **dplyr**, **tidyr**, **broom**).
 Additionally we will use **MASS**, an R package associated with the intro stats and R book *Modern Applied Statistics with S*, which has a function to sample from the multivariate normal distribution. Be sure to **MASS** before **dplyr** since it also contains a function named `select`.
+A few of the functions will use **assertthat**, which contains functions to test for errors in order to catch bugs.
 ```{r}
 library("MASS")
 library("ggplot2")
 library("dplyr")
 library("broom")
+library("asserthat")
 library("tidyr")
 ```
 
-# Simulate a Linear Regression
+# Simulation Example
+
+The outline of a simulation is:
 
 1. Define a population
-2. For $m$ times
+2. Repeat the following $m$ times:
 
-   1. draw a sample from the population
-   2. run OLS on that sample
-   3. save coefficients, standard errors, etc. from that sample
+    1. draw a sample from the population
+    2. run OLS on that sample
+    3. save coefficients, standard errors, etc. from that sample
    
 3. Compare the distributions of coefficients or other statistics from the 
     samples to see how well OLS recovers the parameters of the population.
@@ -81,8 +80,8 @@ $$
 \end{aligned}
 $$
 
-First, we are going to go over the code to generate a single sample and run OLS on it.
-Then, we are going to wrap that code in a for loop to be able to run a simulation with many samples, and wrap that in a function in order to be able to easily change parameters of the simulation without repeating ourselves.
+First, we will write code to generate a single sample and run OLS on it.
+Then, we will wrap that that code in a for loop to be able to run a simulation with many samples, and wrap that in a function in order to be able to easily change parameters of the simulation without repeating ourselves.
 
 ## Single Iteration
 
@@ -176,13 +175,18 @@ mod_df
 
 ## Multiple iterations
 
-However, drawing one sample is not enough for a simulation study. We want to repeat this many times in order to generate sampling distributions in order to evaluate how well the estimator works.
+However, drawing one sample is not enough for a simulation study.
+We want to repeat this many times in order to generate a sampling distribution in order to evaluate how well the estimator works.
 We will do this by wrapping the code above in a for loop, to repeat the simulations many times, and put it all in a function, so that we can change the values of $n$, $\beta$, $\sigma^2$, and $X$ that we use.
 The following function will run `sims` simulations, in which it draws a sample of size `obs` where $\beta$ is `beta`, $X$ is `X`, and $\sigma$ is `sigma`.
 This function returns a data frame with the results of all the simulations. 
 Each row is a coefficient (column `term`) for a simulation (column `.sim`):
 ```{r}
 sim_lin_norm <- function(sims, beta, X, sigma) {
+  # Error checking so that bugs are caught quicker :-)
+  assert_that(length(beta) == (ncol(X) + 1))
+  assert_that(length(sigma) == 1)
+  assert_that(length(sims) == 1)
   # get number of obs from the rows of X
   n <- nrow(X)
   # Create a list to stor the results
@@ -213,24 +217,17 @@ sim_lin_norm <- function(sims, beta, X, sigma) {
 }
 
 ```
-
-
-Let's draw 1000 samples using the values that we used before:
+Let's draw 1,024 samples using the values that we used before:
 ```{r}
-sim0_n16 <- sim_lin_norm(2048, beta, mvrnorm(16, mu_X, Sigma_X), sigma)
-sim0_n64 <- sim_lin_norm(2048, beta, mvrnorm(64, mu_X, Sigma_X), sigma)
-sim0_n2048 <- sim_lin_norm(2048, beta, mvrnorm(2048, mu_X, Sigma_X), sigma)
+sim0 <- sim_lin_norm(1024, beta, mvrnorm(16, mu_X, Sigma_X), sigma)
 ```
 and look at the results
 ```{r}
-head(sim0_n16)
+head(sim0)
 ```
 
-Whever method we've used, once we generate the simulations we can summarize
-them in various ways.
-
-The output is a data frame with a row for each iteration, coefficient value.
-
+Now with all the simulations in hand, we can summarize the simulation results and compare them to the population parameters.
+The following funciton takes a the data frame generated by the simulation function and a vector of the original parameters, and generates a summary data frame with one row per coefficient.
 ```{r sim_summary}
 summarize_sims <- function(.data, beta) {
   ret <- .data %>%
@@ -248,57 +245,121 @@ summarize_sims <- function(.data, beta) {
   ret
 }
 ```
-
-For a linear regression find the value of $\sigma 
+Using the previous results, the a summary is 
 ```{r}
-
+summarize_sims(sim0, beta)
 ```
 
-# Problem
+The following problems
 
-Different sample sizes. $n = 16, 64, 2048$.
+# Problems {#problems}
 
-Set the correlation between $x_1$ and $x_2$ to 0.3, 0.7, and 0.95 (These correspond to $R^2$ of the regression of $X_1$ on $X_2$ of about 0.1, 0.5, and 0.90).
+##
 
-What happens if you set the regression to $X$.
+In this problem, we are going to generate samples from a population 
 
-Set the correlation between $x_1$ and $x_3$ to 0, and the correlation between $x_1$, $x_2$, 
-and $x_3$ to 0.1 0.7, -0.7, and 0.99. What are the results in each case?
-Estimate the regression of $X_1$ on $X_2$, and do NOT include X_3.
+Generate an $X$ with $k = 3$ *independent* variables with $\mu_X = (0, 0, 0)$, $\s_X = (1, 1, 1)$, for sample sizes of 8, 64, 512, 4096.
+```{r}
+# mu_X <- c(0, 0, 0)
+# s_X <- c(1, 1, 1)
+# R_X <- diag(3) # 3 x 3 identity matrix
+# Sigma_X <- sdcor2cov(s_X, R_X)
+# X <- mvrnom(???, mean = c(0, 0, 0), empirical = TRUE)
+```
+For $X$ use the previous values of $\mu_X = (0, 0, 0)$, $\Sigma_X = \diag{(1, 1, 1)}$, and remember to set `empirical = TRUE` when using `mvrnorm`.
+Use the previous settings of $\beta = c(0, 1, 1, 1)$, and $\sigma = 1.7$
 
-Heteroskedasticity. $X$, heterosked with 
+How does the bias of $\hat{\beta}$ change as sample size increases?
+How does the variance of $\hat{beta}$ change as the sample size increases?
+
+## Partial Collinearity
+
+In the previous problem, the covariates were independent.
+Now, consider the case when the covariates are correlated.
+As before let the number of variables be $k = 3$, and $\mu_X = (0, 0, 0)$, and 
+$s_X = (1, 1, 1)$.
+Consider the following cases, 
+
+- $cor(X_1, X_2) = 0.5$
+- $cor(X_1, X_2) = 0.95$
+- $cor(X_1, X_2) = -0.5$
+- $cor(X_1, X_2) = -0.95$
+
+In all cases $cor(X_1, X_3) = cor(X_2, X_3) = 0$.
+Let $n = 128$ in all cases.
+Let $\beta = (0, 1, 1, 1)$ and $\sigma = 1.7$
+
+How does the bias of $\hat{\beta}$ change with the correlation between $x_1$ and $x_2$?
+How does the variance change? Consider $\hat{\beta}_1$, $\hat{\beta}_2$, and $\hat{\beta}_3$.
+
+## P-values, Type I and II errors
 
 ```{r}
-sim_lin_norm_heterosk <- function(sims, beta, X, sigma, gamma) {
-  n <- nrow(X)
-  simulations <- list()
-  p <- progress_estimated(sims, min_time = 2)
-  for (j in 1:sims) {
-    mu <- cbind(1, X) %*% beta
-    # ------------ 
-    # NEW: variance varies by each observation
-    sigma <- sqrt(cbind(1, X) %*% gamma)
-    # ------------
-    epsilon <- rnorm(n, mean = 0, sd = sigma)
-    y <- mu + epsilon
-    # Run a regression
-    mod <- lm(y ~ X)
-    # Save the coefficients in a data frame
-    # and Add a column indicating the simulation number
-    mod_df <- tidy(mod) %>%
-      mutate(.sim = j)
-    mod_df[["std.error.robust"]] <- sqrt(diag(car::hccm(mod)))
-    simulations[[j]] <- mod_df
-    p$tick()$print()
-  }
-  bind_rows(simulations)
-}
+k <- 4
+mu_X <- rep(0, k)
+s_X <- rep(1, k)
+R_X <- diag(k)
+Sigma_X <- sdcor2cov(s_X, R_X)
+n <- 1024
+X <- mvrnorm(n, mu_X, Sigma_X, empirical = TRUE)
 ```
 
-The arguments to this function are the same except for the the argument ommit,
-which ommits columns of X.
+
 ```{r}
-sim_lin_norm_omitted <- function(sims, beta, X, sigma, omit) {
+beta <- c(0, 0, 0.1, 0.5, 1)
+sigma <- 1.9 # R^2 of about 0.25
+```
+
+Using $p = 0.05$, probability of Type I errors for each variable, the probability of Type II errors.
+```{r}
+sim1 <- sim_lin_norm(1024, X = X, beta = beta, sigma = sigma)
+```
+
+For each parameter, plot the density of its $p$-values from simulations.
+What do they look like?
+```{r}
+ggplot(sim1, aes(x = p.value)) +
+  geom_density() +
+  geom_rug() +
+  facet_wrap( ~ term, scale = "free")
+```
+
+For each parameter, calculate the proportion of `p.value < 0.05` for each parameter.
+Suppose the null hypothesis $H_0: \beta_i = 0$ for all parameters.
+What is the probability of a Type I or Type II error for each parameter.
+```{r}
+group_by(sim1, term) %>%
+  summarize(pct = mean(p.value < 0.05))
+```
+
+For each parameter, plot the distribution of its estimates *conditional* on it being significant at $p < 0.05$. 
+How does the sampling distribution conditional on statistical significance relate to the unconditional sampling distribution? 
+```{r}
+ggplot(group_by(sim1, term) %>%
+      filter(p.value < 0.05), aes(x = estimate)) +
+  geom_density() +
+  geom_rug() + 
+  facet_wrap( ~ term, scale = "free")
+  
+```
+
+Repeat those analyses using a smaller sample size, $n = 32$, and a larger sample
+size $n = 1024$.
+
+## Collinearity
+
+Use the same settings in the previous question, but set $cor(X_1, X_2) = 1$.
+What happens? Why? 
+
+## Omitted Variable Bias
+
+The following function, `sim_lin_norm_omitted` allows you omit variables when estimating the sample regressions. 
+The arguments to this function are the same as `sim_lin_norm` except for the the argument `omit`, which takes a vector of the columns to omit from $X$ when estimating the sample regression.
+```{r}
+sim_lin_norm_omitted <- function(sims, beta, X, sigma, omit = integer(0)) {
+  assert_that(length(sigma) == 1)
+  assert_that(length(sims) == 1)
+  assert_that(length(beta) == (ncol(X) + 1))
   n <- nrow(X)
   k <- ncol(X)
   # ------
@@ -329,81 +390,126 @@ sim_lin_norm_omitted <- function(sims, beta, X, sigma, omit) {
 }
 ```
 
+Set the correlation between $x_1$ and $x_3$ to 0, and the correlation between $x_1$, $x_2$, 
+and $x_3$ to 0.1 0.7, -0.7, and 0.99. What are the results in each case?
+Estimate the regression of $X_1$ on $X_2$, and do NOT include $X_3$.
+
+## Heteroskedasticity 
+
+
 ```{r}
-sim_lin_norm_ma1 <- function(sims, beta, X, sigma, p = 0.5) {
+sim_lin_norm_heterosk <- function(sims, beta, X, sigma, gamma) {
+  assert_that(length(beta) == (ncol(X) + 1))
+  assert_that(length(gamma) == (ncol(X) + 1))
+  assert_that(length(sigma) == 1)
+  assert_that(length(sims) == 1)
   n <- nrow(X)
-  k <- ncol(X)
   simulations <- list()
   p <- progress_estimated(sims, min_time = 2)
   for (j in 1:sims) {
     mu <- cbind(1, X) %*% beta
+    # ------------ 
+    # NEW: variance varies by each observation
+    sigma <- sqrt(cbind(1, X) %*% gamma)
+    # ------------
     epsilon <- rnorm(n, mean = 0, sd = sigma)
     y <- mu + epsilon
-    # ---------
-    # NEW: omit columns of X
-    # Look up paste and setdiff function to see what they does
-    Xomit <- as.data.frame(X)[ , setdiff(1:k, omit)]
-    # ~ . 
-    mod <- lm(y ~ . , data = Xomit)
-    # ---------
-    mod_df <- tidy(mod) %>%
-      mutate(.sim = j)
-    mod_df[["std.error.robust"]] <- sqrt(diag(car::hccm(mod)))
-    simulations[[j]] <- mod_df
-    p$tick()$print()
-  }
-  # Combine the list of data frames into a single data frame
-  bind_rows(simulations)
-}
-```
-
-Draw X from an MA(1), where 
-$$
-x_{k,i} = \mu_{k}+ \rho x_{k,i-1} + \epsilon_{x_{k,i}}
-$$
-
-
-```{r}
-sim_lin_norm_meas_err <- function(sims, beta, X, sigma, reliability) {
-  n <- nrow(X)
-  k <- ncol(X)
-  simulations <- list()
-  # Create a progress bar because we're impatient
-  p <- progress_estimated(sims, min_time = 2)
-  # -----
-  # NEW: measurement error variance
-  Sigma_meas <- diag(apply(X, 2, var) * (1 - reliability) / reliability,
-                     nrow = k, ncol = k)
-  # ----
-  # Loop over the simulation runs
-  for (j in 1:sims) {
-    # Draw y
-    mu <- cbind(1, X) %*% beta
-    epsilon <- rnorm(n, mean = 0, sd = sigma)
-    y <- mu + epsilon
-    # ------
-    # NEW: observed X
-    # add measurement error to original X
-    Xobs <- as.data.frame(X + mvrnorm(n, mu = rep(0, k), Sigma = Sigma_meas))
-    colnames(Xobs) <- paste("X", 1:k, sep = "")
-    # ------
     # Run a regression
-    mod <- lm(y ~ ., data = Xobs)
+    mod <- lm(y ~ X)
     # Save the coefficients in a data frame
+    # and Add a column indicating the simulation number
     mod_df <- tidy(mod) %>%
-      # Add a column indicating the simulation number
       mutate(.sim = j)
-    # Add hetrosked consistent se to the data
     mod_df[["std.error.robust"]] <- sqrt(diag(car::hccm(mod)))
-    # Save these results as the next element in the storage list
     simulations[[j]] <- mod_df
-    # Update the progress bar
+    p$tick()$print()
+  }
+  bind_rows(simulations)
+}
+```
+
+## Truncated Dependent Variable
+
+This problem considers what happens when there is a truncated dependent variable.
+The following function is similar to `sim_lin_norm`, but all `y_i` where all `y` less than a given quantile are dropped before the regression is run. 
+This is specified by the `truncation` argument.
+The default value `truncation = 0.5` means all values of $y$ less than the median are dropped before running a regression.
+```{r}
+sim_lin_norm_truncated <- function(sims, beta, X, sigma, truncation = 0.5) {
+  assert_that(length(beta) == (ncol(X) + 1))
+  assert_that(length(gamma) == (ncol(X) + 1))
+  assert_that(length(sigma) == 1)
+  assert_that(length(sims) == 1)
+  n <- nrow(X)
+  simulations <- list()
+  p <- progress_estimated(sims, min_time = 2)
+  for (j in 1:sims) {
+    mu <- cbind(1, X) %*% beta
+    epsilon <- rnorm(n, mean = 0, sd = sigma)
+    y <- mu + epsilon
+    # -------
+    # NEW: drop cases in which y > mean(y)
+    y_gt_mean <- y < quantile(y, prob = truncation)
+    yobs <- y[y_gt_mean, ]
+    Xobs <- X[y_gt_mean, ]
+    # -------
+    # Run a regression
+    mod <- lm(yobs ~ Xobs)
+    # Save the coefficients in a data frame
+    # and Add a column indicating the simulation number
+    mod_df <- tidy(mod) %>%
+      mutate(.sim = j)
+    mod_df[["std.error.robust"]] <- sqrt(diag(car::hccm(mod)))
+    simulations[[j]] <- mod_df
+    p$tick()$print()
+  }
+  bind_rows(simulations)
+}
+``` 
+
+For this problem, use only a single covariate.
+Use a number of variables $k = 1$, sampled from a normal with $\mu_X = 0$,$\s_X = 1$, and $\R_X = 1$.
+Although only one variable is used, you can still use `mvrnorm` to sample $X$.
+Let $\beta = (0, 1)$ and $\sigma = 1$.
+
+How does varying the sample size affect the bias and variance of $\hat{\beta}$? 
+Try values of $n$ of 8, 64, 128, 1024.
+
+## Serial Correlation
+
+```{r}
+sim_lin_norm_ma1 <- function(sims, beta, X, sigma, rho = 0.5) {
+  assert_that(length(beta) == (ncol(X) + 1))
+  assert_that(length(sigma) == 1)
+  assert_that(length(sims) == 1)
+  assert_that(all(rho >= 0 & rho <= 1))
+  n <- nrow(X)
+  k <- ncol(X)
+  simulations <- list()
+  p <- progress_estimated(sims, min_time = 2)
+  for (j in 1:sims) {
+    mu <- cbind(1, X) %*% beta
+    # ---------
+    # NEW: generate y with serially correlated errors
+    lag_epsilson <- rep(0, k)
+    for (i in 1:n) {
+      epsilon <- rnorm(1, mean = 0, sd = sigma)
+      y <- mu[i, ] + rho * lag_epsilon + epsilon
+      lag_epsilon <- epsilon
+    }
+    # ---------
+    mod <- lm(y ~ X)
+    mod_df <- tidy(mod) %>%
+      mutate(.sim = j)
+    mod_df[["std.error.robust"]] <- sqrt(diag(car::hccm(mod)))
+    simulations[[j]] <- mod_df
     p$tick()$print()
   }
   # Combine the list of data frames into a single data frame
   bind_rows(simulations)
 }
 ```
+
 
 * * *
 
