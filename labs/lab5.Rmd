@@ -10,7 +10,8 @@ output:
 This lab will use some libraries you've seen before, and one you may not have. We'll load them all now.
 
 ```{r, results = 'hide', echo = FALSE}
-knitr::opts_chunk$set(tidy = TRUE, tidy.opts = list(width.cutoff = 60))
+knitr::opts_chunk$set(tidy = TRUE,
+                      tidy.opts = list(width.cutoff = 60, indent = 2))
 ```
 
 ```{r, message=FALSE, warning=FALSE}
@@ -26,9 +27,9 @@ z <- rnorm(10, mean=100, sd=1) # draw randomly from the normal distribution
 z1 <- runif(10,0,1) #draw from a uniform distribution between min and max values
 sample(z, 2) # samples two numbers from the z vector
 sort(z) # puts z in (ascending) order.
-sort(z, decreasing=T)
-sample(c("red","blue","yellow","green"),10,replace=T)
-sample(c("red","blue","yellow","green"),3,replace=F) #note you cannot have a higher number of draws when replace=F
+sort(z, decreasing=TRUE)
+sample(c("red","blue","yellow","green"),10,replace=TRUE)
+sample(c("red","blue","yellow","green"),3,replace=FALSE) #note you cannot have a higher number of draws when replace=FALSE
 
 
 which(data2$id=="CAN") # tells you the position(s) where the condition is met
@@ -41,7 +42,7 @@ a <- 10
 if (a==10) print("Yes, a is 10.")
 print("This gets printed no matter what value a was.")
 ```
-The statement immediately after the if statement is run only when the argument in parentheses evalues to TRUE.  Try #setting 'a' to another value and see what happens.
+The statement immediately after the if statement is run only when the argument in parentheses evaluates to TRUE.  Try #setting 'a' to another value and see what happens.
 
 
 **Note: use braces {} after the if statement if you want multiple commands to be executed when the condition is met:**
@@ -49,7 +50,9 @@ The statement immediately after the if statement is run only when the argument i
 if (a==10) {
     print("Yes, a is 10.")
     print("Because a is 10 I'm doing this too.")
-    } else print("DIDNT WORK")
+} else {
+	print("DIDNT WORK")
+}
 
 print("This gets printed no matter what value a was.")
 ```
@@ -128,10 +131,11 @@ arrange(na_table, desc(Proportion_remaining))
 ```
 
 
-## Another loop example, with regressions: 
-Run a separate regression model for each year in the dataset and summarize changing magnitude of effects (hint, this is really easy to do with dplyr and broom,in case you needed illustration of why the packages are useful and not just extra things to learn!)
+## Another loop example, with regressions:
 
-First, set up a vector of all unique years in the dataframe
+Run a separate regression model for each year in the dataset and summarize changing magnitude of effects (hint, this is really easy to do with **dplyr** and **broom**, in case you needed illustration of why the packages are useful and not just extra things to learn!)
+
+First, set up a vector of all unique years in the data frame
 ```{r}
 uy <- unique(data$year)
 ```
@@ -141,7 +145,7 @@ Then, create a dichotomous variable of whether a country is a democracy or not:
 data <- mutate(data, dem_indicator = polity >= 8)
 ```
 
-Next we create a dataframe of empty vectors in which  to store the regression results:
+Next we create a data frame of empty vectors in which  to store the regression results:
 ```{r}
 results <- data_frame(
   year = uy,
@@ -166,7 +170,9 @@ for(i in 1:length(uy)){
     results$oil_se[i] <- sqrt(diag(vcov(res_temp)))[3]
     results$df[i] <- res_temp$df
     }
-  else print(paste("Year", uy[i], "does not have enough complete observations.", sep = " "))
+  else {
+    print(paste("Year", uy[i], "does not have enough complete observations.", sep = " "))
+  }
 }
 ```
 
@@ -176,7 +182,7 @@ Let's look at our results:
 results
 ```
 
-Challenge: Combine dplyr and broom to replicate the loop above without using a loop?
+Challenge: Combine **dplyr** and **broom** to replicate the loop above without using a loop?
 
 ```{r}
 ggplot(results, aes(x = year)) + geom_line(aes(y = dem_coef)) + geom_ribbon(aes(ymin = dem_coef + qt(.025, results$df) * dem_se, 
@@ -200,7 +206,7 @@ Create a range of hypothetical years to get expected values:
 year_range <- seq.int(from=min(sprinters$year), to=max(sprinters$year), by=2)
 ```
 
-Create a dataframe that will relate years to the estimated expected values and CIs (currently empty columns):
+Create a data frame that will relate years to the estimated expected values and CIs (currently empty columns):
 ```{r}
 expected <- data_frame(
   year = year_range,
@@ -213,7 +219,7 @@ expected <- data_frame(
   )
 ```
 
-Get the coefficients and vcmatrix from the model:
+Get the coefficients and variance-covariance matrix from the model:
 ```{r}
 pe<-coef(sprinter_model)
 vc<-vcov(sprinter_model)
@@ -226,7 +232,7 @@ simbetas<-mvrnorm(1000, pe, vc)
 ```
 
 
-Set up a loop that goes through all  alues in year.range, with FEMALE set to 0
+Set up a loop that goes through all  values in year.range, with FEMALE set to 0
 ```{r}
 for (i in 1:length(year_range)){
   # define the covariate values for the current scenario  - must be in the same order as in model2$coefficientsorder: (Int) year women sprinters$year:sprinters$women
@@ -306,7 +312,7 @@ doors <- c(1,0,0) # The car (1) and the goats (0)
 cars.stay <- 0 # Save times cars won with first choice here
 cars.switch <- 0 # Save times cars won from switching here
 for (i in 1:sims) {
-  random.doors <- sample(doors,3,replace=F)
+  random.doors <- sample(doors,3,replace=FALSE)
 	cars.stay <- cars.stay + random.doors[1] #First choose "door number 1"
 	cars.switch <- cars.switch + sort(random.doors[2:3])[2] #Do you understand what this line of code is doing?
   #cars.switch <- cars.switch + (sum(random.doors[2:3])) # an alternative approach
@@ -328,6 +334,7 @@ paste("Probability of a car from switching to 2nd door", cars.switch/sims, sep="
 **Bonus question: Modify your quote to answer the question for varying class sizes.**
 
 #### Here is one solution, as talked through in class:
+
 ```{r}
 size <- 20
 sims <- 100000
@@ -340,4 +347,9 @@ for (i in 1:sims) {
 prob <- score/sims
 paste("The probability of at least one shared birthday in a class of 20 students is", round(prob,2))
 ```
+
+* * *
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+R code is licensed under a [BSD 2-clause](http://www.r-project.org/Licenses/BSD_2_clause) license.
 
