@@ -7,9 +7,10 @@ output:
     theme: cosmo
     toc: yes  
 ---
-This lab will use some libraries you've seen before and we should load them now
+This lab will use some libraries you've seen before, and one you may not have. We'll load them all now.
 
 ```{r, message=FALSE, warning=FALSE}
+library(MASS)
 library(dplyr)
 library(ggplot2)
 library(broom)
@@ -111,7 +112,7 @@ for(i in 1:numcountries){
 
 cbind(uc,country_obs,country_na,country_na/country_obs)
 ```
-**Challenge: Why are there quotes around the numbers? How might you fix this?**
+*Challenge: Why are there quotes around the numbers? How might you fix this?*
 
 ```{r results = 'hide'}
 na_table <- data_frame("Country" = uc, 
@@ -179,7 +180,7 @@ ggplot(results, aes(x = year)) + geom_line(aes(y = dem_coef)) + geom_ribbon(aes(
                                                                             alpha = 1/3)
 ```
 
-Challenge: create a similar plot to explore how the effect of oil has changed over time.
+*Challenge: create a similar plot to explore how the effect of oil has changed over time.*
 
 ## Another example: Using simulations to summarize a regression model:
 This is basically an alternate way to work through part 1.e. of Homework 2
@@ -216,7 +217,6 @@ vc<-vcov(sprinter_model)
 
 Take 1000 draws from the multivariate normal distribution:
 ```{r}
-library(MASS)
 simbetas<-mvrnorm(1000, pe, vc)
 
 ```
@@ -234,8 +234,8 @@ for (i in 1:length(year_range)){
   # calculate the 1000 predictions:
   pred.current<- simbetas %*% x.current
   # Now slot the mean, lowerCI and upperCI values into the appropriate positions in the results vectors:
-  expected$EVs_male[i]<-mean(pred.current)
-  expected$lowerCIs_male[i]<-sort(pred.current)[25] #for illustration; quantile is a better way to do this, see CIs for women below
+  expected$EVs_male[i] <- mean(pred.current)
+  expected$lowerCIs_male[i] <- sort(pred.current)[25] #for illustration; quantile is a better way to do this, see CIs for women below
   expected$upperCIs_male[i]<-sort(pred.current)[975]
 } # close i loop
 ```
@@ -252,9 +252,9 @@ for (i in 1:length(year_range)){
   # calculate the 1000 predictions:
   pred.current<- simbetas %*% x.current
   # Now slot the mean, lowerCI and upperCI values into the appropriate positions in the results vectors:
-  expected$EVs_female[i]<-mean(pred.current)
-  expected$lowerCIs_female[i]<-quantile(pred.current,.025)
-  expected$upperCIs_female[i]<-quantile(pred.current,.975)
+  expected$EVs_female[i] <- mean(pred.current)
+  expected$lowerCIs_female[i] <- quantile(pred.current,.025)
+  expected$upperCIs_female[i] <- quantile(pred.current,.975)
 } # close i loop
 ```
 
@@ -264,7 +264,7 @@ sprinters_plot <- ggplot(expected)
 sprinters_plot + geom_line(aes(x = year, y = EVs_male)) + geom_ribbon(aes(x = year, ymin = lowerCIs_male, ymax = upperCIs_male), alpha = 1/3)
 ```
 
-Challenge: plot the line for women
+*Challenge: plot the line for women*
 ```{r}
 sprinters_plot <- sprinters_plot + geom_line(aes(x = year, y = EVs_male)) + geom_ribbon(aes(x = year, ymin = lowerCIs_male, ymax = upperCIs_male), alpha = 1/3)
 sprinters_plot + geom_line(aes(x = year, y = EVs_female)) + geom_ribbon(aes(x = year, ymin = lowerCIs_female, ymax = upperCIs_female), alpha = 1/3)
@@ -318,7 +318,8 @@ paste("Probability of a car from switching to 2nd door", cars.switch/sims, sep="
 ## 5. EXERCISE: THE BIRTHDAY PROBLEM
 
 **Question: What is the probability that at least two students will share the same birthday in a class of 20?**
-Use a simulation method to answer this.  (Ignore leap years.)
+
+*Use a simulation method to answer this.  (Ignore leap years.)*
 
 **Bonus question: Modify your quote to answer the question for varying class sizes.**
 
