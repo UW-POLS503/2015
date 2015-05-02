@@ -320,7 +320,6 @@ In these simulations we will generally, but not exclusively, be concerned with t
 First, compare the average value of $\hat\beta$ to the population parameters $\beta$.
 This is what is nice about simulations, we know what the correct answer should be!
 ```{r error=TRUE}
-print(select)
 select(sim0_summary, estimate_mean, beta_true)
 ```
 If an estimator is unbiased, then the mean of its sampling distribution should be equal to the true parameter value.
@@ -416,6 +415,7 @@ Y_i &= 0 + 0 \cdot x_{1,i} + 0.1 \cdot x_{2,i} + 0.5 \cdot x_{3,i} + 1 \cdot x_{
 \end{aligned}
 $$
 The covariates, $X$, are independent, with means, $\mu_X = (0, 0, 0)$, and standard deviations, $s_X = (1, 1, 1)$. Use $n = 128$.
+<!-- \sigma^2 = 1.9 is R^2 of approx 0.25 -->
 
 - For each parameter, plot the density of its $p$-values from simulations.
   What do they look like?
@@ -527,7 +527,7 @@ The arguments for it are the same as `sim_lin_norm` except for
 :    A vector of coefficients for $\log \sigma^2 = \gamma_0 + \gamma_1 x_1 + \dots + \gamma_k x_k$. Like `beta` it should have length `k + 1`.
 
 ```{r}
-sim_lin_norm_heterosk <- function(m, n, mu_X, s_X, R_X, beta, sigma, gamma) {
+sim_lin_norm_heterosked <- function(m, n, mu_X, s_X, R_X, beta, sigma, gamma) {
   assert_that(length(s_X) == length(mu_X),
               ncol(R_X) == nrow(R_X),
               ncol(R_X) == length(mu_X),
@@ -567,22 +567,23 @@ Y_i &= 0 + 1 \cdot x_1 + 1 \cdot x_2 \epsilon_i \\
 \end{aligned}
 $$
 
-```{r}
-knit_formatR <- function(source, ...) {
-  tmpfn <- tempfile()
-  purl(source, output = tmpfn, documentation = 2L)
-  tidy_source(source, ...)
-}
-```
+We will run several simulations with different values of $\gamma_1$ to vary to heteroskedasticity: 
 
+- $\gamma_1 = 0$ no heteroskedasticity
+- $\gamma_1 = 0.2$ low
+- $\gamma_1 = 0.7$ high
 
+Before running the simulation draw a single sample of $y$ from a population with each of those values of $\gamma_1$.
+You should be able to extract the relevant code from `sim_lin_norm_heterosked`.
+Regress $y$ on $x_1$ and $x_2$ and plot the residuals of this regression against $x_1$.
 
-Run `sim_lin_norm_heterosk` and vary the amount of heteroskedasticity by varying $\gamma_1$; let $\gamma_1 = 0$ (no heteroskedasticity), and $\gamma_1 = 1$ and answer how heteroskedasticity affects the following:
+Run `sim_lin_norm_heterosked` for each of those values of $\gamma_1$. 
+How does heteroskedasticity affect
 
-- The bias of each $\hat{\beta}_j$?
-- The variance of $\hat{\beta}_j$?
-- The bias of the standard error of each $\hat{\beta}_j$?
-- The bias of the robust standard error of each $\hat{\beta}_j$?
+- the bias of each $\hat{\beta}_j$?
+- the variance of $\hat{\beta}_j$?
+- the bias of the standard error of each $\hat{\beta}_j$?
+- the bias of the robust standard error of each $\hat{\beta}_j$?
 
 Remember to consider how heteroskedasticity in $x_1$ affects the estimates of heteroskedasticity in $x_2$.
 
@@ -647,7 +648,8 @@ sim_lin_norm_truncated <- function(m, n, mu_X, s_X, R_X, beta, sigma, truncation
 For this problem, use only a single covariate, with $\mu_X = 0$,$s_X = 1$, and $R_X = 1$. 
 Let $\beta = (0, 1)$ and $\sigma = 1$.
 
-Before running simulations, try a few
+Before running simulations  with `sim_lin_normal_trunc`, 
+write code to simulate a function from 
 
 Run several simulations with `sim_lin_normal_trunc` and vary the sample size.
 How does the sample size affect fhte following: 
@@ -661,16 +663,31 @@ In particular, does the effect of truncation on $\beta{\beta}$ decrease if we in
 ## Serial Correlation (Optional)
 
 **This problem you can do for fun.**
+I had written this, but I think the homework may be getting a little long.
+However, many of you are dealing with data in a panel format, this may be useful information. 
+You will find that serial correlation is similar to heteroskedasticity in its effects on the estimates of OLS.
 
 In this problem, we'll consider how serial correlation in errors and covariates affects OLS estimates.
 Serial correlation in the errors means that the errors are correlated over time.
 In this problem, the population we will use is
 $$
-Y = \beta_0 + \sum_{j = 1}^k \beta_j x_{j} + \epsilon_{i} + \rho \epsilon_{i - 1} 
+Y_i = \beta_0 + \sum_{j = 1}^k \beta_j x_{j,i} + \epsilon_{i} + \rho \epsilon_{i - 1} 
 $$
 This is a moving average process of order 1, or MA(1).
 If $\rho \neq 0$, then the $y_i$'s will be serially correlated.
-However, in the simulation we will run an OLS regression that does not account for this serial correlation in the errors.
+
+Additionally, for each covariate, the present value will now depend on the random part of the previous value, such that,
+$$
+x_{k,i} = \mu_{x_k} + \rho_{x_k} \upsilon_{x_{k,i-1}} + \upsilon_{x_{k,i}} 
+$$
+This is a moving average of order 1, or MA(1). If $p_k \neq 0$ for some $k$, that $x_k$ is also serially correlated.
+
+However, the regression run on each sample will be an OLS regression that does not attempt to account for serial correlation,
+$$
+y_i = \hat\beta_0 + \hat\beta_1 x_{}
+$$
+
+The function `sim_lin_norm_ma`
 
 `rho`
 
@@ -690,7 +707,7 @@ sim_lin_norm_ma1 <- function(m, n, mu_X, s_X, R_X, beta, sigma,
               length(beta) == (length(mu_X) + 1),
               length(rho_X) == length(mu_X),
               all(rho >= 0 & rho <= 1),
-              all(rho_X >= 0 & rho_X <= 1)
+              all(rho_X >= 0 & rho_X <= 1))
   k <- length(mu_X)
   X <- mvrnorm_ma(n, mu_X, sdcor2cov(s_X, R_X), rho = rho_X, empirical = TRUE)
   simulations <- list()
@@ -718,23 +735,37 @@ sim_lin_norm_ma1 <- function(m, n, mu_X, s_X, R_X, beta, sigma,
 }
 ```
 
-The population 
-Additionally, for each covariate, the present value will now depend on the random part of the previous value, such that,
+In these simulations, the population model is
 $$
-x_{k,i} = \mu_{x_k} + \rho_{x_k} \epsilon_{x_{k,i-1}} + \epsilon_{x_{k,i}} 
+\begin{aligned}[t]
+Y_i &= 0 + 1 \cdot x_1 + 1 \cdot x_2 + 1 \cdot x_3 + \epsilon_i + \rho \epsilon_{i - 1} \\
+\epsilon_i &\sim N(0, \sigma^2) \\
+\sigma^2 &= 1.7 \\
+\epsilon_{0} &= 0
+\end{aligned}
 $$
-This is a moving average of order 1, or MA(1). If $p_k \neq 0$ for some $k$, that $x_k$ is also serially correlated.
-To generate serially correlated $X$ like this, use the function `mvrnorm_ma`, from the package for this course, **pols503**. 
-For example to generate three covariates from 
+where $\rho$ will vary with simulations.
+The covariates $x$ are drawn from 
+$$
+\begin{aligned}[t]
+x_{j,i} &= 0 + \upsilon_{j,i} + \rho_{X,j} \upsilon_{j,i} & \text{for $j = 1, 2, 3$} \\
+\upsilon &= N(0, I_3) \\
+\rho_{X} &= (0, 0.5, 0.9) \\
+\upsilon_0 &= 0
+\end{aligned}
+$$
+Thus $x_1$ has no serial correlation, $x_2$ has moderate serial correlation, and $x_3$ has high serial correlation.
 
 Compare the bias and variance of $\hat{\beta}$ under the following scenarios.
-How does serial correlation in $y$ or $X$ influence OLS estimates? 
 
-- $\rho = 0$, $\rho_{x_k} = 0$ for all covariates $k$
-- $\rho = 0.5$, $\rho_{x_k} = 0.5$ for all covariates $k$
-- $\rho = 0.9$, $\rho_{x_k} = 0.9$ for all covariates $k$
-- $\rho = 0.5$, $\rho_{x_k} = 0$ for all covariates $k$
-- $\rho = 0$, $\rho_{x_k} = 0.5$ for all covariates $k$
+- $\rho = 0$, no serial correlation in the errors of $y$.
+- $\rho = 0.5$, moderate serial correlation in the errors of $y$
+- $\rho = 0.9$, high serial correlation in the error of $y$.
+
+How does serial correlation in $y$ and $X$ influence OLS estimates?
+Consider bias and variance of the estimates of $\hat\beta$. 
+Also consider the bias of the standard error of $\hat\beta$.
+Does using robust standard errors help?
 
 [^randomx]: Although the statistical theory of OLS works (thankfully) for random $X$,
     as long as certain conditions are met. See Fox (2nd ed.), Ch 9.6. 
