@@ -336,24 +336,23 @@ but some simulations may consider other questions.
 
 # Problems {#problems}
 
-The problems of this assignment will use various simulations similar to the ones in the previous section 
+The problems of this assignment will use various simulations similar to the one in the previous section 
 
 ## Linear Normal Model with Homoskedasticity
 
-Generate an $X$ with $k = 3$ *independent* variables with $\mu_X = (0, 0, 0)$, $s_X = (1, 1, 1)$, for sample sizes of 8, 64, 512, 4096.
-For $X$ use the previous values of $\mu_X = (0, 0, 0)$, $\Sigma_X = \diag{(1, 1, 1)}$, and remember to set `empirical = TRUE` when using `mvrnorm`.
-Use the previous settings of $\beta = c(0, 1, 1, 1)$, and $\sigma = 1.7$
+In this problem, we will use `sim_lin_normal` to understand how OLS recovers parameters when the population meets the Gauss-Markov assumptions.
+For all these simulations use 3 covariates that have $\mu_X = (0, 0, 0)$, $s_X = (1, 1, 1)$, and are are independent.
+Let $\beta = c(0, 1, 1, 1)$, and $\sigma = 1.7$
 
-How does the bias of $\hat{\beta}$ change as sample size increases?
-How does the variance of $\hat{beta}$ change as the sample size increases?
+Run several simulations varying the sample size to determine the following:
+
+- How does the bias of $\hat{\beta}$ change as sample size increases?
+- How does the variance of $\hat{beta}$ change as the sample size increases?
 
 ## Correlated Variables
 
-In the previous problem, the covariates were independent.
-Now, consider the case when the covariates are correlated.
-As before let the number of variables be $k = 3$, and $\mu_X = (0, 0, 0)$, and 
-$s_X = (1, 1, 1)$.
-Consider the following cases, 
+In the previous problem, the covariates were assumed to be independent.
+Use `sim_lin_normal` and the previous settings, but with the 
 
 - $\cor(X_1, X_2) = 0.5$
 - $\cor(X_1, X_2) = 0.95$
@@ -552,9 +551,7 @@ sim_lin_norm_truncated <- function(sims, n, mu_X, s_X, R_X, beta, sigma, truncat
 }
 ``` 
 
-For this problem, use only a single covariate.
-Use a number of variables $k = 1$, sampled from a normal with $\mu_X = 0$,$s_X = 1$, and $R_X = 1$.
-Although only one variable is used, you can still use `MASS::mvrnorm` to sample $X$.
+For this problem, use only a single covariate, with $\mu_X = 0$,$s_X = 1$, and $R_X = 1$. 
 Let $\beta = (0, 1)$ and $\sigma = 1$.
 
 How does varying the sample size affect the bias and variance of $\hat{\beta}$? 
