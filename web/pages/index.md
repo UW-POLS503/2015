@@ -257,6 +257,8 @@ Given that this is my first time teaching this course, I expect many adjustments
 	
 ### Friday, May 1
 
+- Lab document: [.Rmd](labs/lab5.Rmd), [html](labs/lab5.html)
+
 ## Week 6: Outliers, Robust Regression
 
 ### Tuesday, May 5
