@@ -70,9 +70,9 @@ All of the simulations in this assignment will follow the same structure:
 
     1. Draw a sample from the population
     2. Run OLS on that sample
-    3. Save statsistics from the regression on that sample.
+    3. Save statistics from the regression on that sample.
    
-3. Compare the distributions of the sample statatics to see how well OLS recovers
+3. Compare the distributions of the sample statistics to see how well OLS recovers
     the parameters of the population.
   
 In this section, we will work through an example in which the population satisfies
@@ -113,7 +113,7 @@ Although linear regression does not require covariates to be distributed multiva
 $$
 X_i \sim N(\mu_X, \Sigma_X) \text{ for $i = 1, \dots, n$.}
 $$
-Since covariances are not particularly intuitive, so it may be easier to decompose the covariance into a correlation matrix and the standard deviations of the variables. 
+Since covariance matrices are not particularly intuitive, so it may be easier to decompose the covariance into a correlation matrix and the standard deviations of the variables. 
 A covariance matrix, $\Sigma$ can be decomposed into a standard deviation $s$ and a correlation matrix $R$,
 $$
 \Sigma = S R S
@@ -199,7 +199,7 @@ We will do this by (1) wrapping the code from the previous section in a for loop
 
 Thus, we will define a function, named `sim_lin_norm`.
 The code for this function is in the chunk below. 
-The function iself takes several arguments
+The function itself takes several arguments
 
 sims
 
@@ -306,7 +306,7 @@ sim0_summary <- summarize_sims(sim0, beta)
 sim0_summary
 ```
 
-In these simulations we will genally, but not exclusively, be concerned with the bias and efficiency of the estimates.
+In these simulations we will generally, but not exclusively, be concerned with the bias and efficiency of the estimates.
 
 First, compare the average value of $\hat\beta$ to the population parameters $\beta$.
 This is what is nice about simulations, we know what the correct answer should be!
@@ -352,20 +352,20 @@ Run several simulations varying the sample size to determine the following:
 ## Correlated Variables
 
 In the previous problem, the covariates were assumed to be independent.
-Use `sim_lin_normal` and the previous settings, but with the 
+Now, we will evaluate the propoerties of OLS estimates when covariates are correlated.
+Use `sim_lin_normal` and the previous settings, but adjust the correlation matrix between the variables. Consider the following correlations. 
 
-- $\cor(X_1, X_2) = 0.5$
-- $\cor(X_1, X_2) = 0.95$
-- $\cor(X_1, X_2) = -0.5$
-- $\cor(X_1, X_2) = -0.95$
+- $\cor(x_1, x_2) = 0.5$
+- $\cor(x_1, x_2) = 0.95$
+- $\cor(x_1, x_2) = -0.5$
+- $\cor(x_1, x_2) = -0.95$
 
-In all cases $\cor(X_1, X_3) = \cor(X_2, X_3) = 0$.
+In all cases, $\cor(X_1, X_3) = \cor(X_2, X_3) = 0$.
 Let $n = 128$ in all cases.
-Let $\beta = (0, 1, 1, 1)$ and $\sigma = 1.7$
 
 How does the bias of $\hat{\beta}$ change with the correlation between $x_1$ and $x_2$?
 How does the variance change?
-Consider $\hat{\beta}_1$, $\hat{\beta}_2$, and $\hat{\beta}_3$.
+Remember to consider the effects on *all* the estimates: $\hat{\beta}_1$, $\hat{\beta}_2$, and $\hat{\beta}_3$.
 
 ## Collinearity
 
@@ -375,25 +375,12 @@ Why?
 
 ## P-values, Type I and II errors
 
-```{r}
-k <- 4
-mu_X <- rep(0, k)
-s_X <- rep(1, k)
-R_X <- diag(k)
-Sigma_X <- sdcor2cov(s_X, R_X)
-n <- 1024
-X <- MASS::mvrnorm(n, mu_X, Sigma_X, empirical = TRUE)
-```
+In this problem we will explore how $p$-values and Type I and II errors vary between samples.
 
-```{r}
-beta <- c(0, 0, 0.1, 0.5, 1)
-sigma <- 1.9 # R^2 of about 0.25
-```
-
-Using $p = 0.05$, probability of Type I errors for each variable, the probability of Type II errors.
-```{r}
-sim1 <- sim_lin_norm(1024, X = X, beta = beta, sigma = sigma)
-```
+In these simulations, there are 4 variables. 
+All variables should have mean 0, standard deviation 1, and be independent.
+Let $\beta = (0, 0, 0.1, 0.5, 1)$, and let $\sigma = 1.9$, which is an $R^2$ of about 0.25.
+Run 1,024 iterations of `sim_lin_norm` and use the results to answer the following questions:
 
 - For each parameter, plot the density of its $p$-values from simulations.
   What do they look like?
@@ -407,7 +394,7 @@ size $n = 1024$. What changes, if anything?
 
 ## Omitted Variable Bias
 
-The following function, `sim_lin_norm_omitted` samples from a linear, normal model with homoskedastic errors, but allows you to run a mispecified regression on the samples by omitting variables. 
+The following function, `sim_lin_norm_omitted` samples from a linear, normal model with homoskedastic errors, but allows you to run a misspecified regression on the samples by omitting variables. 
 The arguments to this function are the same as `sim_lin_norm` except for 
 
 omit
@@ -466,7 +453,7 @@ Y_i &= \beta_0 + \sum_{j = 1}^k x_{j,i} + \epsilon_i \\
 \log \sigma_i^2 &= \gamma_0 + \sum_{j = 1}^k \gamma_j x_{j,i}
 \end{aligned}
 $$
-Note that now $\sigma^2$ varies with each observation, and is a function of $x$.
+Note that $\sigma^2$ varies with each observation, and is a function of $x$.
 
 The function `sim_lin_norm_hereosk` will simulate from that population, but still estimate OLS regressions on each sample.
 The arguments for it are the same as `sim_lin_norm` except for
