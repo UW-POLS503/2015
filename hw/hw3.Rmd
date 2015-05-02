@@ -205,9 +205,17 @@ sims
 
 :    The number of simulations to run
 
-X
+mu_X
 
-:    The covariate matrix to use. Do *not* include an intercept.
+:    The means of the covariates in $X$.
+
+s_X
+
+:    The standard deviations of the covariates in $X$.
+
+R_X
+
+:    The correlation matrix for the covariates in $X$.
 
 beta
 
