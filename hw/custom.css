@@ -8,3 +8,17 @@
 #problems h2 {
   font-size: 20px;
 }
+
+/* Definition list */
+  dt {
+    float: left;
+    clear: left;
+    width: 100px;
+    text-align: left;
+    font-weight: normal;
+    font-family: "Courier New", Courier, monospace;
+  }
+  dd {
+    margin: 0 0 0 110px;
+    padding: 0 0 0.5em 0;
+  }
