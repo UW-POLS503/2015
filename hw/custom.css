@@ -3,5 +3,8 @@
 }
 #problems h2:before {
     counter-increment: h2;
-    content: "Problem " counter(h2);
+    content: "Problem " counter(h2) ": ";
+}
+#problems h2 {
+  font-size: 20px;
 }
