@@ -230,40 +230,46 @@ Given that this is my first time teaching this course, I expect many adjustments
 
 ### Tuesday, Apr 28
 
-- More on p-values and significance testin
+- More on p-values and significance testing
 
     - Nuzzo, Regina. 2014. ``Scientific Method: Statistical Errors.'' *Nature* 506(7487): 150–52. <http://www.nature.com/doifinder/10.1038/506150a>
 
 - Omitted Variable Bias
 
+    - [Omitted Variable Bias handout](handout/OVB_Measurement_Error.pdf)
     - Fox, Ch. 6.3
     - Agrist and Pischke, Ch. 3.2.2
 
-- Collinearity
-
-    - Fox Ch 13 (13.1, skim the rest)
-
-- Measurement error
-
-    - Fox. Ch. 6.4
 
 - Heteroskedasticity and misspecification
 
+    - [OLS Residuals deck](lectures/Lecture_OLS_Residuals_presentation.pdf)
     - Fox, Ch 12.1--12.3
     - Angrist and Pischke, Ch. 8
 	- King, Gary, and Margaret E. Roberts. 2015. ``How Robust Standard Errors Expose Methodological Problems They Do Not Fix, and What to Do About It.'' Political Analysis 23(2): 159–79. <http://pan.oxfordjournals.org/content/23/2/159>
 
 - Mispecification, Transforming Covariates
 
+    - See Christopher Adolph's slides from 503 last year <http://faculty.washington.edu/cadolph/503/topic5.pw.pdf>
     - Fox, Ch. 4, Ch 17.1--17.3
 	- Gelman and Hill, Ch. 4.1--4.3, 4.5-4.6
 	- Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006. “Understanding Interaction Models: Improving Empirical Analyses.” Political Analysis 14(1): 63–82. <http://pan.oxfordjournals.org/content/14/1/63>
 	
 ### Friday, May 1
 
+- Lab document: [.Rmd](labs/lab5.Rmd), [html](labs/lab5.html)
+
 ## Week 6: Outliers, Robust Regression
 
 ### Tuesday, May 5
+
+- Measurement error
+
+    - Fox. Ch. 6.4
+
+- Collinearity
+
+    - Fox Ch 13 (13.1, skim the rest)
 
 - Model Fit and Selection
 

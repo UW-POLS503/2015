@@ -1,0 +1,112 @@
+---
+title: "Sampling Distribution of a linear regresion"
+author: "Jeffrey B. Arnold"
+date: "04/14/2015"
+output: html_document
+---
+
+```{r}
+library("dplyr")
+library("tidyr")
+library("broom")
+library("ggplot2")
+#' Simulate from a linear normal model
+#'
+#' Draws samples from a 
+#' 
+#' @param m integer. Number of simulations
+#' @param x numeric. Explanatory variables, including the intercept.
+#' @param b numeric. Parameter values.
+#' @param signal numeric. Ratio of regression sum of squares to sum of squared errors.
+#'    Used to generate sigma in a way robust to changes in scale of y.
+#' @return 
+sim_linear_normal_model <- function(m, x, b, signal = 1) {
+  n <- nrow(x)
+  k <- ncol(x)
+  yhat <- x %*% b
+  ybar <- mean(yhat)
+  TSS <- sum((yhat - ybar) ^ 2)
+  SSE <- TSS / signal
+  # use 1/n since this is the population not a sample
+  sigma <- sqrt((1 / n) * SSE)
+  print(sigma)
+  if (is.null(colnames(x))) {
+    colnames(x) <- paste0("x", seq_len(ncol(x)) - 1L)
+  }
+  data_frame(sample = seq_len(m)) %>%
+    group_by(sample) %>%
+    do(cbind(data_frame(i = seq_len(n),
+                  y = rnorm(n, mean = yhat, sd = sigma)),
+             x))
+}
+```
+
+Sample from a population 
+$$
+\begin{aligned}[t]
+y_i &= 1 + 2 x + \epsilon_i \\
+\epsilon_i &\sim N(0, \sigma_{epsilon})
+\end{aligned}
+$$
+```{r}
+n <- 1000
+x <- cbind(rep(1, n), rnorm(n))
+b <- c(1, 2)
+signal = 1
+m <- 100
+
+y_samples <- sim_linear_normal_model(m, x, b, signal = signal)
+
+sample_coef <- y_samples %>%
+  ungroup() %>%
+  group_by(sample) %>%
+  do(tidy(lm(y ~ x1, data = .)))
+```
+
+
+Plot the 1st 4 samples in separate plots
+```{r}
+ggplot(filter(y_samples, sample <= 4), aes(x = x1, y = y,
+                                           colour = factor(sample))) +
+  geom_point(alpha = 0.2) +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap( ~ sample, nrow = 2)
+```
+
+
+Plot the 1st 4 samples in the same plot
+```{r}
+ggplot(filter(y_samples, sample <= 4), aes(x = x1, y = y,
+                                           colour = factor(sample))) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_minimal()
+```
+
+Plot all the samples and their regression lines
+```{r}
+ggplot(y_samples, aes(x = x1, y = y, group = factor(sample))) +
+  geom_point(alpha = 0.2) +
+  geom_smooth(method = "lm", se = FALSE, alpha = 0.2) +
+  theme_minimal()
+```
+
+Individual sampling distributions of $\alpha$, $\beta$.
+They look about normal, and are asymptotically normal.
+```{r}
+ggplot(sample_coef, aes(x = estimate)) +
+  geom_density() +
+  geom_rug() +
+  facet_wrap(~ term, nrow = 1) +
+  theme_minimal()
+```
+
+Joint sampling distribution of $\alpha$, $\beta$. It is approximately normal.
+```{r}
+ggplot(select(sample_coef, sample, term, estimate) %>% spread(term, estimate),
+       aes(x = `(Intercept)`, y = `x1`)) +
+  stat_density2d(aes(fill=..density..), geom="tile", contour = FALSE) +
+  geom_density2d(colour = "white") +
+  geom_point()
+
+```
