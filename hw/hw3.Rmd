@@ -205,9 +205,14 @@ sims
 
 :    The number of simulations to run
 
+n
+
+:    The number of observations    
+
 mu_X
 
-:    The means of the covariates in $X$.
+:    The means of the covariates in $X$. The number of covariates do not need to 
+     be specified as it is inferred from the length of `mu_X`.
 
 s_X
 
@@ -230,13 +235,14 @@ This function returns a data frame with the results of all the simulations.
 Each row is a coefficient (column `term`) for a simulation (column `.sim`)
 
 ```{r}
-sim_lin_norm <- function(sims, X, beta, sigma) {
+sim_lin_norm <- function(sims, n, mu_X, s_X, R_X, beta, sigma) {
   # Error checking so that bugs are caught quicker :-)
-  assert_that(length(beta) == (ncol(X) + 1))
-  assert_that(length(sigma) == 1)
-  assert_that(length(sims) == 1)
-  # get number of obs from the rows of X
-  n <- nrow(X)
+  assert_that(length(s_X) == length(mu_X),
+              ncol(R_X) == nrow(R_X),
+              ncol(R_X) == length(mu_X),
+              length(beta) == (length(mu_X) + 1))
+  # Generate an X
+  X <- mvrnorm(n, mu_X, sdcor2cov(s_X, R_X), empirical = TRUE)
   # Create a list to stor the results
   simulations <- list()
   # Create a progress bar because we're impatient
@@ -410,12 +416,15 @@ omit
 :    A vector of integers of the columns to omit from X when estimating the sample regression.
 
 ```{r}
-sim_lin_norm_omitted <- function(sims, beta, X, sigma, omit = integer(0)) {
-  assert_that(length(sigma) == 1)
-  assert_that(length(sims) == 1)
-  assert_that(length(beta) == (ncol(X) + 1))
-  n <- nrow(X)
-  k <- ncol(X)
+sim_lin_norm_omitted <- function(sims, n, mu_X, s_X, R_X, beta, sigma,
+                                 omit = integer(0)) {
+  assert_that(length(s_X) == length(mu_X),
+              ncol(R_X) == nrow(R_X),
+              ncol(R_X) == length(mu_X),
+              length(beta) == (length(mu_X) + 1))
+  # Generate an X
+  k <- length(mu_X)
+  X <- MASS::mvrnorm(n, mu_X, sdcor2cov(s_X, R_X), empirical = TRUE)
   # ------
   # NEW: ensure colnames of X are consistent despite omitting some in lm
   colnames(X) <- paste("X", 1:k, sep = "")
@@ -468,12 +477,13 @@ gamma
 :    A vector of coefficients for $\log \sigma^2 = \gamma_0 + \gamma_1 x_1 + \dots + \gamma_k x_k$. Like `beta` it should have length `k + 1`.
 
 ```{r}
-sim_lin_norm_heterosk <- function(sims, X, beta, sigma, gamma) {
-  assert_that(length(beta) == (ncol(X) + 1))
-  assert_that(length(gamma) == (ncol(X) + 1))
-  assert_that(length(sigma) == 1)
-  assert_that(length(sims) == 1)
-  n <- nrow(X)
+sim_lin_norm_heterosk <- function(sims, n, mu_X, s_X, R_X, beta, sigma, gamma) {
+  assert_that(length(s_X) == length(mu_X),
+              ncol(R_X) == nrow(R_X),
+              ncol(R_X) == length(mu_X),
+              length(beta) == (length(mu_X) + 1),
+              length(gamma) == (length(mu_X) + 1))
+  X <- MASS::mvrnorm(n, mu_X, sdcor2cov(s_X, R_X), empirical = TRUE)
   simulations <- list()
   p <- progress_estimated(sims, min_time = 2)
   for (j in 1:sims) {
@@ -514,12 +524,8 @@ truncation
 :    The quantile of truncation. All sampled $y_i$ with values less than that quantile are dropped before the regression is run.
      The default value `truncation = 0.5` means all values of $y$ less than the median are dropped before running the regression.
 ```{r}
-sim_lin_norm_truncated <- function(sims, beta, X, sigma, truncation = 0.5) {
-  assert_that(length(beta) == (ncol(X) + 1))
-  assert_that(length(gamma) == (ncol(X) + 1))
-  assert_that(length(sigma) == 1)
-  assert_that(length(sims) == 1)
-  n <- nrow(X)
+sim_lin_norm_truncated <- function(sims, n, mu_X, s_X, R_X, beta, sigma, truncation = 0.5) {
+  X <- MASS::mvrnorm(n, mu_X, sdcor2cov(s_X, R_X), empirical = TRUE)
   simulations <- list()
   p <- progress_estimated(sims, min_time = 2)
   for (j in 1:sims) {
@@ -570,14 +576,22 @@ rho
 
 :   A value between 0 and 1 determining the serial correlation of the errors.
 
+rho
+
+:   A value between 0 and 1 determining the serial correlation of the covariates in $X$.
+    This assumes that the serial correlation in all $X$ is the same.
+
 ```{r}
-sim_lin_norm_ma1 <- function(sims, beta, X, sigma, rho = 0.5) {
-  assert_that(length(beta) == (ncol(X) + 1))
-  assert_that(length(sigma) == 1)
-  assert_that(length(sims) == 1)
-  assert_that(all(rho >= 0 & rho <= 1))
-  n <- nrow(X)
-  k <- ncol(X)
+sim_lin_norm_ma1 <- function(sims, n, mu_X, s_X, R_X, beta, sigma,
+                             rho = 0.5, rho_X = 0) {
+  assert_that(length(s_X) == length(mu_X),
+              ncol(R_X) == nrow(R_X),
+              ncol(R_X) == length(mu_X),
+              length(beta) == (length(mu_X) + 1),
+              rho >= 0 && rho <= 1,
+              rho_X >= 0 && rho <= 1)
+  k <- length(mu_X)
+  X <- mvrnorm_ma(n, mu_X, sdcor2cov(s_X, R_X), rho = rho_X, empirical = TRUE)
   simulations <- list()
   p <- progress_estimated(sims, min_time = 2)
   for (j in 1:sims) {
@@ -620,10 +634,10 @@ How does serial correlation in $y$ or $X$ influence OLS estimates?
 - $\rho = 0.5$, $\rho_{x_k} = 0$ for all covariates $k$
 - $\rho = 0$, $\rho_{x_k} = 0.5$ for all covariates $k$
 
-[randomx]: Although the statistical theory of OLS works (thankfully) for random $X$,
+[^randomx]: Although the statistical theory of OLS works (thankfully) for random $X$,
     as long as certain conditions are met. See Fox (2nd ed.), Ch 9.6. 
-    
-[samplingdv]: See Ashworth, Scott, Joshua D. Clinton, Adam Meirowitz, and Kristopher W.         Ramsay. 2008. ``Design, Inference, and the Strategic Logic of Suicide Terrorism.'' *American Political Science Review() 102(02): 269–73. <http://journals.cambridge.org/article_S0003055408080167>
+ 
+[^samplingdv]: See Ashworth, Scott, Joshua D. Clinton, Adam Meirowitz, and Kristopher W. Ramsay. 2008. ``Design, Inference, and the Strategic Logic of Suicide Terrorism.'' *American Political Science Review() 102(02): 269–73. <http://journals.cambridge.org/article_S0003055408080167>
 
 * * *
 

@@ -128,7 +128,7 @@ y_i &amp;= \hat\beta_0 + \sum_{j = 1}^k \hat\beta_j x_{i,j} + \hat\epsilon_i \\
 <h2>Single Iteration</h2>
 <div id="drawing-x" class="section level3">
 <h3>Drawing <span class="math">\(X\)</span></h3>
-<p>First, we need to generate some values of <span class="math">\(X\)</span> that we will use in the samples. Recall that the sampling distributions of OLS coefficients and the Gauss-Markov theorem are defined for a fixed <span class="math">\(X\)</span>.[^randomx] So, we will randomly generate data for the covariates, but use the same set of covariates for all simulations. Although linear regression does not require covariates to be distributed multivariate normal, we will generate <span class="math">\(X\)</span> by drawing a sample of size <span class="math">\(n\)</span> from a multivariate normal distribution with mean <span class="math">\(\mu_X\)</span> and covariance matrix <span class="math">\(\Sigma_X\)</span>. <span class="math">\[
+<p>First, we need to generate some values of <span class="math">\(X\)</span> that we will use in the samples. Recall that the sampling distributions of OLS coefficients and the Gauss-Markov theorem are defined for a fixed <span class="math">\(X\)</span>.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> So, we will randomly generate data for the covariates, but use the same set of covariates for all simulations. Although linear regression does not require covariates to be distributed multivariate normal, we will generate <span class="math">\(X\)</span> by drawing a sample of size <span class="math">\(n\)</span> from a multivariate normal distribution with mean <span class="math">\(\mu_X\)</span> and covariance matrix <span class="math">\(\Sigma_X\)</span>. <span class="math">\[
 X_i \sim N(\mu_X, \Sigma_X) \text{ for $i = 1, \dots, n$.}
 \]</span> Since covariances are not particularly intuitive, so it may be easier to decompose the covariance into a correlation matrix and the standard deviations of the variables. A covariance matrix, <span class="math">\(\Sigma\)</span> can be decomposed into a standard deviation <span class="math">\(s\)</span> and a correlation matrix <span class="math">\(R\)</span>, <span class="math">\[
 \Sigma = S R S
@@ -178,11 +178,11 @@ Sigma_X &lt;- sdcor2cov(s_X, R_X)</code></pre>
 <pre class="r"><code>mod_df &lt;- tidy(mod)</code></pre>
 <p>The coefficients of the OLS regression on the parameter should be similar to, but not exactly, those of the population from which it was drawn.</p>
 <pre class="r"><code>mod_df</code></pre>
-<pre><code>##          term  estimate std.error statistic      p.value
-## 1 (Intercept) 0.5253923 0.1687827  3.112834 2.300980e-03
-## 2          X1 0.8976037 0.1694459  5.297289 5.178450e-07
-## 3          X2 1.1872501 0.1694459  7.006664 1.375409e-10
-## 4          X3 0.9035299 0.1694459  5.332263 4.428894e-07</code></pre>
+<pre><code>##          term   estimate std.error  statistic      p.value
+## 1 (Intercept) -0.1456124 0.1458924 -0.9980812 3.201837e-01
+## 2          X1  0.8472047 0.1464656  5.7843243 5.579364e-08
+## 3          X2  1.0614178 0.1464656  7.2468730 3.991682e-11
+## 4          X3  1.0056319 0.1464656  6.8659927 2.816720e-10</code></pre>
 </div>
 </div>
 <div id="multiple-iterations" class="section level2">
@@ -193,8 +193,11 @@ Sigma_X &lt;- sdcor2cov(s_X, R_X)</code></pre>
 <dt>sims</dt>
 <dd><p>The number of simulations to run</p>
 </dd>
+<dt>n</dt>
+<dd><p>The number of observations</p>
+</dd>
 <dt>mu_X</dt>
-<dd><p>The means of the covariates in <span class="math">\(X\)</span>.</p>
+<dd><p>The means of the covariates in <span class="math">\(X\)</span>. The number of covariates do not need to be specified as it is inferred from the length of <code>mu_X</code>.</p>
 </dd>
 <dt>s_X</dt>
 <dd><p>The standard deviations of the covariates in <span class="math">\(X\)</span>.</p>
@@ -210,13 +213,14 @@ Sigma_X &lt;- sdcor2cov(s_X, R_X)</code></pre>
 </dd>
 </dl>
 <p>This function returns a data frame with the results of all the simulations. Each row is a coefficient (column <code>term</code>) for a simulation (column <code>.sim</code>)</p>
-<pre class="r"><code>sim_lin_norm &lt;- function(sims, X, beta, sigma) {
+<pre class="r"><code>sim_lin_norm &lt;- function(sims, n, mu_X, s_X, R_X, beta, sigma) {
   # Error checking so that bugs are caught quicker :-)
-  assert_that(length(beta) == (ncol(X) + 1))
-  assert_that(length(sigma) == 1)
-  assert_that(length(sims) == 1)
-  # get number of obs from the rows of X
-  n &lt;- nrow(X)
+  assert_that(length(s_X) == length(mu_X),
+              ncol(R_X) == nrow(R_X),
+              ncol(R_X) == length(mu_X),
+              length(beta) == (length(mu_X) + 1))
+  # Generate an X
+  X &lt;- mvrnorm(n, mu_X, sdcor2cov(s_X, R_X), empirical = TRUE)
   # Create a list to stor the results
   simulations &lt;- list()
   # Create a progress bar because we're impatient
@@ -245,18 +249,10 @@ Sigma_X &lt;- sdcor2cov(s_X, R_X)</code></pre>
 }</code></pre>
 <p>Let’s draw 1,024 samples using the values that we used before and look at the results.</p>
 <pre class="r"><code>m &lt;- 1024
-sim0 &lt;- sim_lin_norm(m, X, beta, sigma)
-head(sim0)</code></pre>
-<pre><code>## Source: local data frame [6 x 7]
-## 
-##          term  estimate std.error statistic      p.value .sim
-## 1 (Intercept) 0.1797671 0.1457394  1.233483 2.197285e-01    1
-## 2          X1 0.8670892 0.1463121  5.926301 2.857849e-08    1
-## 3          X2 1.0945156 0.1463121  7.480693 1.179740e-11    1
-## 4          X3 0.9525977 0.1463121  6.510726 1.675149e-09    1
-## 5 (Intercept) 0.2828765 0.1424816  1.985355 4.931176e-02    2
-## 6          X1 1.1881410 0.1430415  8.306270 1.445903e-13    2
-## Variables not shown: std.error.robust (dbl)</code></pre>
+sim0 &lt;- sim_lin_norm(m, X, beta, sigma)</code></pre>
+<pre><code>## Error: length(s_X) not equal to length(mu_X)</code></pre>
+<pre class="r"><code>head(sim0)</code></pre>
+<pre><code>## Error in head(sim0): object 'sim0' not found</code></pre>
 <p>Now with all the simulations in hand, we can summarize the results and compare them to the population parameters to evaluate how well OLS works. The following function, <code>summarize_sims</code> takes a data frame generated by the simulation function and a vector of the original parameters, and generates a summary data frame with one row per coefficient.</p>
 <pre class="r"><code>summarize_sims &lt;- function(.data, beta) {
   ret &lt;- .data %&gt;%
@@ -275,17 +271,10 @@ head(sim0)</code></pre>
   ret
 }</code></pre>
 <p>Using the previous results, the summary is</p>
-<pre class="r"><code>sim0_summary &lt;- summarize_sims(sim0, beta)
-sim0_summary</code></pre>
-<pre><code>## Source: local data frame [4 x 12]
-## 
-##          term estimate_mean estimate_median estimate_sd estimate_p025
-## 1 (Intercept)  -0.001000728    0.0007264292   0.1530321    -0.3163012
-## 2          X1   1.004010360    0.9975855528   0.1477335     0.7188910
-## 3          X2   0.998444631    0.9991485829   0.1489057     0.7067574
-## 4          X3   1.001415615    0.9953904166   0.1535729     0.7068848
-## Variables not shown: estimate_p975 (dbl), se_mean (dbl), se_robust_mean
-##   (dbl), tstat_mean (dbl), pval_mean (dbl), n_sims (int), beta_true (dbl)</code></pre>
+<pre class="r"><code>sim0_summary &lt;- summarize_sims(sim0, beta)</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'sim0' not found</code></pre>
+<pre class="r"><code>sim0_summary</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'sim0_summary' not found</code></pre>
 <p>In these simulations we will genally, but not exclusively, be concerned with the bias and efficiency of the estimates.</p>
 <p>First, compare the average value of <span class="math">\(\hat\beta\)</span> to the population parameters <span class="math">\(\beta\)</span>. This is what is nice about simulations, we know what the correct answer should be!</p>
 <pre class="r"><code>print(select)</code></pre>
@@ -295,32 +284,14 @@ sim0_summary</code></pre>
 ## }
 ## &lt;environment: namespace:dplyr&gt;</code></pre>
 <pre class="r"><code>select(sim0_summary, estimate_mean, beta_true)</code></pre>
-<pre><code>## Source: local data frame [4 x 2]
-## 
-##   estimate_mean beta_true
-## 1  -0.001000728         0
-## 2   1.004010360         1
-## 3   0.998444631         1
-## 4   1.001415615         1</code></pre>
+<pre><code>## Error in select_(.data, .dots = lazyeval::lazy_dots(...)): object 'sim0_summary' not found</code></pre>
 <p>If an estimator is unbiased, then the mean of its sampling distribution should be equal to the true parameter value. Note that these may not be exactly the same due to the randomness from taking a sample; this is called Monte Carlo error.</p>
 <p>Second, we are interested in the standard deviation of the <span class="math">\(\hat\beta\)</span> estimates, We will often be interested in how the standard deviation of the estimator changes with inputs to the simulation.</p>
 <pre class="r"><code>select(sim0_summary, estimate_sd)</code></pre>
-<pre><code>## Source: local data frame [4 x 1]
-## 
-##   estimate_sd
-## 1   0.1530321
-## 2   0.1477335
-## 3   0.1489057
-## 4   0.1535729</code></pre>
+<pre><code>## Error in select_(.data, .dots = lazyeval::lazy_dots(...)): object 'sim0_summary' not found</code></pre>
 <p>Third, we will be interested in whether the standard error, which is sample estimate of the standard deviation of the sampling distribution, is a good estimate of the actual sampling distribution of <span class="math">\(\hat\beta\)</span>. The mean standard errors of the simulations are in row <code>se_mean</code>,.</p>
 <pre class="r"><code>select(sim0_summary, estimate_sd, se_mean)</code></pre>
-<pre><code>## Source: local data frame [4 x 2]
-## 
-##   estimate_sd   se_mean
-## 1   0.1530321 0.1496817
-## 2   0.1477335 0.1502699
-## 3   0.1489057 0.1502699
-## 4   0.1535729 0.1502699</code></pre>
+<pre><code>## Error in select_(.data, .dots = lazyeval::lazy_dots(...)): object 'sim0_summary' not found</code></pre>
 <p>If <code>se_mean</code> is not equal (or very close) to the <code>estimate_sd</code>, then the standard errors calculated from samples are biased estimates of the standard deviation of the sampling distribution of <span class="math">\(\hat{\beta}\)</span>.</p>
 <p>Those are the most common questions we will consider in the simulations, but some simulations may consider other questions.</p>
 </div>
@@ -362,6 +333,7 @@ X &lt;- MASS::mvrnorm(n, mu_X, Sigma_X, empirical = TRUE)</code></pre>
 sigma &lt;- 1.9 # R^2 of about 0.25</code></pre>
 <p>Using <span class="math">\(p = 0.05\)</span>, probability of Type I errors for each variable, the probability of Type II errors.</p>
 <pre class="r"><code>sim1 &lt;- sim_lin_norm(1024, X = X, beta = beta, sigma = sigma)</code></pre>
+<pre><code>## Error in sim_lin_norm(1024, X = X, beta = beta, sigma = sigma): unused argument (X = X)</code></pre>
 <ul>
 <li>For each parameter, plot the density of its <span class="math">\(p\)</span>-values from simulations. What do they look like?</li>
 <li>For each parameter, calculate the proportion of <code>p.value &lt; 0.05</code> for each parameter. Suppose the null hypothesis <span class="math">\(H_0: \beta_i = 0\)</span> for all parameters. What is the probability of a Type I or Type II error for each parameter.</li>
@@ -377,12 +349,15 @@ sigma &lt;- 1.9 # R^2 of about 0.25</code></pre>
 <dd><p>A vector of integers of the columns to omit from X when estimating the sample regression.</p>
 </dd>
 </dl>
-<pre class="r"><code>sim_lin_norm_omitted &lt;- function(sims, beta, X, sigma, omit = integer(0)) {
-  assert_that(length(sigma) == 1)
-  assert_that(length(sims) == 1)
-  assert_that(length(beta) == (ncol(X) + 1))
-  n &lt;- nrow(X)
-  k &lt;- ncol(X)
+<pre class="r"><code>sim_lin_norm_omitted &lt;- function(sims, n, mu_X, s_X, R_X, beta, sigma,
+                                 omit = integer(0)) {
+  assert_that(length(s_X) == length(mu_X),
+              ncol(R_X) == nrow(R_X),
+              ncol(R_X) == length(mu_X),
+              length(beta) == (length(mu_X) + 1))
+  # Generate an X
+  k &lt;- length(mu_X)
+  X &lt;- MASS::mvrnorm(n, mu_X, sdcor2cov(s_X, R_X), empirical = TRUE)
   # ------
   # NEW: ensure colnames of X are consistent despite omitting some in lm
   colnames(X) &lt;- paste(&quot;X&quot;, 1:k, sep = &quot;&quot;)
@@ -426,12 +401,13 @@ Y_i &amp;= \beta_0 + \sum_{j = 1}^k x_{j,i} + \epsilon_i \\
 <dd><p>A vector of coefficients for <span class="math">\(\log \sigma^2 = \gamma_0 + \gamma_1 x_1 + \dots + \gamma_k x_k\)</span>. Like <code>beta</code> it should have length <code>k + 1</code>.</p>
 </dd>
 </dl>
-<pre class="r"><code>sim_lin_norm_heterosk &lt;- function(sims, X, beta, sigma, gamma) {
-  assert_that(length(beta) == (ncol(X) + 1))
-  assert_that(length(gamma) == (ncol(X) + 1))
-  assert_that(length(sigma) == 1)
-  assert_that(length(sims) == 1)
-  n &lt;- nrow(X)
+<pre class="r"><code>sim_lin_norm_heterosk &lt;- function(sims, n, mu_X, s_X, R_X, beta, sigma, gamma) {
+  assert_that(length(s_X) == length(mu_X),
+              ncol(R_X) == nrow(R_X),
+              ncol(R_X) == length(mu_X),
+              length(beta) == (length(mu_X) + 1),
+              length(gamma) == (length(mu_X) + 1))
+  X &lt;- MASS::mvrnorm(n, mu_X, sdcor2cov(s_X, R_X), empirical = TRUE)
   simulations &lt;- list()
   p &lt;- progress_estimated(sims, min_time = 2)
   for (j in 1:sims) {
@@ -457,7 +433,7 @@ Y_i &amp;= \beta_0 + \sum_{j = 1}^k x_{j,i} + \epsilon_i \\
 </div>
 <div id="truncated-dependent-variable" class="section level2">
 <h2>Truncated Dependent Variable</h2>
-<p>This problem considers what happens when there is a truncated dependent variable. This is also called sampling on the dependent variable, which is a research design problem not unknown to political science research.[^samplingdv]</p>
+<p>This problem considers what happens when there is a truncated dependent variable. This is also called sampling on the dependent variable, which is a research design problem not unknown to political science research.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
 <p>The population is a linear normal model with homoskedastic errors. However, in each sample, all <span class="math">\(y_i\)</span> which are less than a quantile <span class="math">\(q\)</span> are dropped before the regression is estimated. For example, if <span class="math">\(q = 0.5\)</span>, all <span class="math">\(y\)</span> that are less than the median are dropped.</p>
 <p>The function <code>sim_lin_norm_trucated</code>, is similar to the <code>sim_lin_norm</code> function except for the argument</p>
 <dl>
@@ -465,12 +441,8 @@ Y_i &amp;= \beta_0 + \sum_{j = 1}^k x_{j,i} + \epsilon_i \\
 <dd><p>The quantile of truncation. All sampled <span class="math">\(y_i\)</span> with values less than that quantile are dropped before the regression is run. The default value <code>truncation = 0.5</code> means all values of <span class="math">\(y\)</span> less than the median are dropped before running the regression.</p>
 </dd>
 </dl>
-<pre class="r"><code>sim_lin_norm_truncated &lt;- function(sims, beta, X, sigma, truncation = 0.5) {
-  assert_that(length(beta) == (ncol(X) + 1))
-  assert_that(length(gamma) == (ncol(X) + 1))
-  assert_that(length(sigma) == 1)
-  assert_that(length(sims) == 1)
-  n &lt;- nrow(X)
+<pre class="r"><code>sim_lin_norm_truncated &lt;- function(sims, n, mu_X, s_X, R_X, beta, sigma, truncation = 0.5) {
+  X &lt;- MASS::mvrnorm(n, mu_X, sdcor2cov(s_X, R_X), empirical = TRUE)
   simulations &lt;- list()
   p &lt;- progress_estimated(sims, min_time = 2)
   for (j in 1:sims) {
@@ -507,14 +479,20 @@ Y = \beta_0 + \sum_{j = 1}^k \beta_j x_{j} + \epsilon_{i} + \rho \epsilon_{i - 1
 <dt>rho</dt>
 <dd><p>A value between 0 and 1 determining the serial correlation of the errors.</p>
 </dd>
+<dt>rho</dt>
+<dd><p>A value between 0 and 1 determining the serial correlation of the covariates in <span class="math">\(X\)</span>. This assumes that the serial correlation in all <span class="math">\(X\)</span> is the same.</p>
+</dd>
 </dl>
-<pre class="r"><code>sim_lin_norm_ma1 &lt;- function(sims, beta, X, sigma, rho = 0.5) {
-  assert_that(length(beta) == (ncol(X) + 1))
-  assert_that(length(sigma) == 1)
-  assert_that(length(sims) == 1)
-  assert_that(all(rho &gt;= 0 &amp; rho &lt;= 1))
-  n &lt;- nrow(X)
-  k &lt;- ncol(X)
+<pre class="r"><code>sim_lin_norm_ma1 &lt;- function(sims, n, mu_X, s_X, R_X, beta, sigma,
+                             rho = 0.5, rho_X = 0) {
+  assert_that(length(s_X) == length(mu_X),
+              ncol(R_X) == nrow(R_X),
+              ncol(R_X) == length(mu_X),
+              length(beta) == (length(mu_X) + 1),
+              rho &gt;= 0 &amp;&amp; rho &lt;= 1,
+              rho_X &gt;= 0 &amp;&amp; rho &lt;= 1)
+  k &lt;- length(mu_X)
+  X &lt;- mvrnorm_ma(n, mu_X, sdcor2cov(s_X, R_X), rho = rho_X, empirical = TRUE)
   simulations &lt;- list()
   p &lt;- progress_estimated(sims, min_time = 2)
   for (j in 1:sims) {
@@ -549,11 +527,17 @@ x_{k,i} = \mu_{x_k} + \rho_{x_k} \epsilon_{x_{k,i-1}} + \epsilon_{x_{k,i}}
 <li><span class="math">\(\rho = 0.5\)</span>, <span class="math">\(\rho_{x_k} = 0\)</span> for all covariates <span class="math">\(k\)</span></li>
 <li><span class="math">\(\rho = 0\)</span>, <span class="math">\(\rho_{x_k} = 0.5\)</span> for all covariates <span class="math">\(k\)</span></li>
 </ul>
-<p>[randomx]: Although the statistical theory of OLS works (thankfully) for random <span class="math">\(X\)</span>, as long as certain conditions are met. See Fox (2nd ed.), Ch 9.6.</p>
 <hr />
 <p>Derived from of Christopher Adolph, “Problem Set 3”, <em>POLS/CSSS 503</em>, University of Washington, Spring 2014. <a href="http://faculty.washington.edu/cadolph/503/503hw3.pdf" class="uri">http://faculty.washington.edu/cadolph/503/503hw3.pdf</a>. Used with permission.</p>
 <p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,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" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
 </div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Although the statistical theory of OLS works (thankfully) for random <span class="math">\(X\)</span>, as long as certain conditions are met. See Fox (2nd ed.), Ch 9.6.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>See Ashworth, Scott, Joshua D. Clinton, Adam Meirowitz, and Kristopher W. Ramsay. 2008. ``Design, Inference, and the Strategic Logic of Suicide Terrorism.’’ *American Political Science Review() 102(02): 269–73. <a href="http://journals.cambridge.org/article_S0003055408080167" class="uri">http://journals.cambridge.org/article_S0003055408080167</a><a href="#fnref2">↩</a></p></li>
+</ol>
 </div>
 
 
