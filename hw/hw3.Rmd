@@ -46,7 +46,7 @@ knitr::opts_chunk$set(cache = TRUE)
 This will use the standard [Hadleyverse](http://blog.revolutionanalytics.com/2015/03/hadleyverse.html) packages that we've been using in this course (**ggplot2**, **dplyr**, **tidyr**, **broom**).
 A few of the functions will use **assertthat**, which contains functions to test for errors in functions.
 Finally, it will use a function from a package written for this course, **pols503**.
-You need to install **pols503** using `devtools::install_github("POLS503/r-pols503")`
+
 ```{r message = FALSE}
 library("ggplot2")
 library("dplyr")
@@ -54,6 +54,10 @@ library("broom")
 library("assertthat")
 library("tidyr")
 library("pols503")
+```
+If you do not have **pols503** installed you need **devtools** installed, and then run
+```{r eval = FALSE}
+devtools::install_github("POLS503/r-pols503")
 ```
 Additionally we will use some functions from **MASS** and **car**, but we will not load them since they contain some function names that conflict with those in packages that we are using.
 
