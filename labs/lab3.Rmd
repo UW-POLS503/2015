@@ -2,9 +2,6 @@
 title: "POLS 503: Lab 3"
 author: "Carolina Johnson"
 date: "April 17, 2015"
-output:
-  html_document:
-    keep_md: true
 ---
 ```{r echo = FALSE, results = 'hide'}
 knitr::opts_chunk$set(warning = TRUE, message = TRUE)

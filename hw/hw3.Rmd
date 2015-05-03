@@ -2,11 +2,6 @@
 title: "POLS 503: Problem Set 3"
 author: "Jeffrey B. Arnold, Christopher Adolph"
 date: "April 30, 2015"
-output:
-  html_document:
-    css: "custom.css"
-    pandoc_options: [
-    ]
 ---
 
 $$

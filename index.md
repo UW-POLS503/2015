@@ -200,6 +200,8 @@ Given that this is my first time teaching this course, I expect many adjustments
 	
 ### Friday, April 17
 
+[Problem Set 1](hw/hw1.html) Due
+
 - Lab document: [.Rmd](labs/lab3.Rmd), [html](labs/lab3.html)
 - Readings
 
@@ -261,7 +263,10 @@ Given that this is my first time teaching this course, I expect many adjustments
 
 ## Week 6: Outliers, Robust Regression
 
+
 ### Tuesday, May 5
+
+[Problem Set 2](hw/hw2.html) Due
 
 - Measurement error
 
@@ -298,6 +303,8 @@ TBD
 ## Week 7: Causal Inference I
 
 ### Tuesday, May 12
+
+[Problem Set 3](hw/hw3.html) Due
 
 Potential outcomes framework, regression, matching
 
