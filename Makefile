@@ -24,7 +24,7 @@ handouts:
 labs: data
 	make -C labs
 	-mkdir $(WEBDIR)/files/labs
-	-cp $(LAB_DIR)/*.Rmd $(LAB_DIR)/*.html $(WEBDIR)/files/labs
+	-cp $(LAB_DIR)/*.Rmd $(LAB_DIR)/*.html $(WEBDIR)/files/labs/
 
 hw: data
 	make -C hw

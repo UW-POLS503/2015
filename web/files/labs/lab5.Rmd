@@ -2,10 +2,6 @@
 title: "Lab 5 - Loops and simulations"
 author: "Carolina Johnson"
 date: "Friday May 1, 2015"
-output:
-  html_document:
-    theme: cosmo
-    toc: yes  
 ---
 This lab will use some libraries you've seen before, and one you may not have. We'll load them all now.
 
@@ -76,8 +72,8 @@ Read in the Ross data from last week's lab (selecting and renaming variables as 
 rossdata <- read.csv("http://pols503.github.io/pols_503_sp15/data/ross_2012.csv",
                      stringsAsFactors = FALSE)
 
-data <- rossdata %>% 
-  tbl_df() %>% 
+data <- rossdata %>%
+  tbl_df() %>%
   select(cty, year, polity, logoil_gdpcap2000_sup_Q_1, logGDPcap, oecd)
 
 data <- data %>% rename(oil=logoil_gdpcap2000_sup_Q_1, loggdp=logGDPcap)
@@ -122,9 +118,9 @@ cbind(uc,country_obs,country_na,country_na/country_obs)
 *Challenge: Why are there quotes around the numbers? How might you fix this?*
 
 ```{r results = 'hide'}
-na_table <- data_frame("Country" = uc, 
-                       "All_obs" = country_obs, 
-                       "Remaining_obs" = country_na, 
+na_table <- data_frame("Country" = uc,
+                       "All_obs" = country_obs,
+                       "Remaining_obs" = country_na,
                        "Proportion_remaining" = round(country_na/country_obs,2))
 
 arrange(na_table, desc(Proportion_remaining))
@@ -185,7 +181,7 @@ results
 Challenge: Combine **dplyr** and **broom** to replicate the loop above without using a loop?
 
 ```{r}
-ggplot(results, aes(x = year)) + geom_line(aes(y = dem_coef)) + geom_ribbon(aes(ymin = dem_coef + qt(.025, results$df) * dem_se, 
+ggplot(results, aes(x = year)) + geom_line(aes(y = dem_coef)) + geom_ribbon(aes(ymin = dem_coef + qt(.025, results$df) * dem_se,
                                                                                 ymax = dem_coef + qt(.975, results$df) * dem_se),
                                                                             alpha = 1/3)
 ```
@@ -207,14 +203,14 @@ year_range <- seq.int(from=min(sprinters$year), to=max(sprinters$year), by=2)
 ```
 
 Create a data frame that will relate years to the estimated expected values and CIs (currently empty columns):
-```{r}
+```{r tidy=FALSE}
 expected <- data_frame(
   year = year_range,
   # point estimates from model for men
   EVs_male = rep(NA, length(year_range)),
   lowerCIs_male = rep(NA, length(year_range)),
   upperCIs_male = rep(NA, length(year_range)),
-  # point estimates for women
+  # point estimates from model for women
   EVs_female = rep(NA, length(year_range)),
   lowerCIs_female = rep(NA, length(year_range)),
   upperCIs_female = rep(NA, length(year_range))
@@ -235,31 +231,37 @@ simbetas<-mvrnorm(1000, pe, vc)
 
 
 Set up a loop that goes through all  values in year.range, with FEMALE set to 0
-```{r}
-for (i in 1:length(year_range)){
-  # define the covariate values for the current scenario  - must be in the same order as in model2$coefficientsorder: (Int) year women sprinters$year:sprinters$women
-  x.current<-c(1,    #(Intercept)
-               year_range[i],  #year
-               0,    # women
-               year_range[i] * 0   # year*women
+We need define the covariate values for the current scenario.
+These must be in the same order as in `model2$coefficients`:
+`(Intercept)`, `year`, `women`, `year:women`.
+
+```{r tidy=FALSE}
+for (i in 1:length(year_range)) {
+  x.current <- c("(Intercept)" = 1,
+                 "year" = year_range[i],
+                 "women" = 0,
+                 "year:women" = year_range[i] * 0
   )
   # calculate the 1000 predictions:
-  pred.current<- simbetas %*% x.current
-  # Now slot the mean, lowerCI and upperCI values into the appropriate positions in the results vectors:
+  pred.current <- simbetas %*% x.current
+  # Now slot the mean, lowerCI and upperCI values into the appropriate
+  # positions in the results vectors:
   expected$EVs_male[i] <- mean(pred.current)
-  expected$lowerCIs_male[i] <- sort(pred.current)[25] #for illustration; quantile is a better way to do this, see CIs for women below
+  # for illustration; quantile is a better way to do this
+  # see CIs for women below
+  expected$lowerCIs_male[i] <- sort(pred.current)[25]
   expected$upperCIs_male[i]<-sort(pred.current)[975]
 } # close i loop
 ```
 
 Now repeat that same loop, but change to FEMALE=1 (both in the base term and the int. term)
 ```{r}
-for (i in 1:length(year_range)){
+for (i in 1:length(year_range)) {
   # define the covariate values for the current scenario
-  x.current<-c(1,
-               year_range[i],
-               1,
-               year_range[i] * 1
+  x.current<-c("(Intercept)" = 1,
+               "year" = year_range[i],
+               "women" = 1,
+               "year:women" = year_range[i] * 1
   )
   # calculate the 1000 predictions:
   pred.current<- simbetas %*% x.current
@@ -272,7 +274,7 @@ for (i in 1:length(year_range)){
 
 #Plotting
 ```{r}
-sprinters_plot <- ggplot(expected) 
+sprinters_plot <- ggplot(expected)
 sprinters_plot + geom_line(aes(x = year, y = EVs_male)) + geom_ribbon(aes(x = year, ymin = lowerCIs_male, ymax = upperCIs_male), alpha = 1/3)
 ```
 
@@ -349,9 +351,3 @@ for (i in 1:sims) {
 prob <- score/sims
 paste("The probability of at least one shared birthday in a class of 20 students is", round(prob,2))
 ```
-
-* * *
-
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
-R code is licensed under a [BSD 2-clause](http://www.r-project.org/Licenses/BSD_2_clause) license.
-

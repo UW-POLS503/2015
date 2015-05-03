@@ -1,8 +1,6 @@
----
-title: 'Lab 2: Graphing and Data Manipulation'
-author: "Jeffrey B. Arnold and Sergio Garcia-Rios"
-date: "April 10, 2015"
----
+# Lab 2: Graphing and Data Manipulation
+Jeffrey B. Arnold and Sergio Garcia-Rios  
+April 10, 2015  
 
 The objectives of this lab are
 
@@ -13,7 +11,8 @@ The objectives of this lab are
 
 We will be using the following libraries in this `dplyr` and `ggplot2` so make sure to install and load those libraries:
 
-```{r, libraries, warning = FALSE, message = FALSE}
+
+```r
 library("dplyr")
 library("ggplot2")
 library("gapminder")
@@ -23,7 +22,8 @@ library("gapminder")
 
 Misssing data is particularly important
 
-```{r}
+
+```r
 foo <- c(1, 2, NA, 3, 4)
 ```
 
@@ -41,9 +41,15 @@ foo <- c(1, 2, NA, 3, 4)
 The function `na.omit` is particularly useful.
 It removes any row in a dataset with a missing value in *any* column.
 For example,
-```{r}
+
+```r
 dfrm <- data.frame(x = c(NA, 2, NA, 4), y = c(NA, NA, 7, 8))
 na.omit(dfrm)
+```
+
+```
+##   x y
+## 4 4 8
 ```
 
 
@@ -55,7 +61,8 @@ In this lab, you will be using the same data, but as it is distributed in **gapm
 
 To load a dataset included with an R package, use the `data()` function.
 You can see which datasets are included in a package,
-```{r eval=FALSE}
+
+```r
 data(package = "gapminder")
 ```
 
@@ -67,7 +74,8 @@ data(package = "gapminder")
 - Pull up the help page for the "gapminder" dataset
 
 Load the gapminder data
-```{r}
+
+```r
 data("gapminder")
 ```
 
@@ -89,12 +97,42 @@ Most data manipulations can be done by combining these verbs together --- someth
 -  `sample_n()` and `sample_frac()`: select a random sample of rows
 
 **dplyr** also offers the function `glimpse` to quickly view the data
-```{r}
+
+```r
 glimpse(gapminder)
 ```
+
+```
+## Observations: 1704
+## Variables:
+## $ country   (fctr) Afghanistan, Afghanistan, Afghanistan, Afghanistan,...
+## $ continent (fctr) Asia, Asia, Asia, Asia, Asia, Asia, Asia, Asia, Asi...
+## $ year      (dbl) 1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992...
+## $ lifeExp   (dbl) 28.801, 30.332, 31.997, 34.020, 36.088, 38.438, 39.8...
+## $ pop       (dbl) 8425333, 9240934, 10267083, 11537966, 13079460, 1488...
+## $ gdpPercap (dbl) 779.4453, 820.8530, 853.1007, 836.1971, 739.9811, 78...
+```
 or `tbl_df` - which will print out the data frame more similarly to `head`
-```{r}
+
+```r
 tbl_df(gapminder)
+```
+
+```
+## Source: local data frame [1,704 x 6]
+## 
+##        country continent year lifeExp      pop gdpPercap
+## 1  Afghanistan      Asia 1952  28.801  8425333  779.4453
+## 2  Afghanistan      Asia 1957  30.332  9240934  820.8530
+## 3  Afghanistan      Asia 1962  31.997 10267083  853.1007
+## 4  Afghanistan      Asia 1967  34.020 11537966  836.1971
+## 5  Afghanistan      Asia 1972  36.088 13079460  739.9811
+## 6  Afghanistan      Asia 1977  38.438 14880372  786.1134
+## 7  Afghanistan      Asia 1982  39.854 12881816  978.0114
+## 8  Afghanistan      Asia 1987  40.822 13867957  852.3959
+## 9  Afghanistan      Asia 1992  41.674 16317921  649.3414
+## 10 Afghanistan      Asia 1997  41.763 22227415  635.3414
+## ..         ...       ...  ...     ...      ...       ...
 ```
 
 ## Exploring our Data
@@ -105,7 +143,8 @@ We want to explore the relationship between life expectancy and GDP.
 Let's use some `dplyr` verbs to explore our data.
 For you Stata users missing "if statements" let's begin with `filter()`
 
-```{r results='hide'}
+
+```r
 filter(gapminder, lifeExp < 29)
 filter(gapminder, country == "Rwanda")
 filter(gapminder, country %in% c("Rwanda", "Afghanistan"))
@@ -115,16 +154,19 @@ You can combine filter statements.
 Including multiple logical statements is equivalent to combining them with "and".
 This will give all observations in "Africa", before 1966, and which have
 a life expectancy less than 40.
-```{r results='hide'}
+
+```r
 filter(gapminder, continent == "Africa", year < 1966, lifeExp < 40)
 ```
 That is equivalent to
-```{r results='hide'}
+
+```r
 filter(gapminder, continent == "Africa" & year < 1966 & lifeExp < 40)
 ```
 To combine logical statements with "or" you need to explicitly use `|`.
 To find observations from Afghanistan or Albania,
-```{r results='hide'}
+
+```r
 filter(gapminder, country == "Afghanistan" | country == "Albania")
 ```
 
@@ -137,7 +179,8 @@ This is going to change your data analytical life.
 ## Use `select()` to subset the data on variables or columns.
 
 Most of the times we don't need to see all the variables and are often interested in just a few of them. Here’s a conventional call:
-```{r results='hide'}
+
+```r
 select(gapminder, year, lifeExp)
 ```
 
@@ -145,12 +188,18 @@ select(gapminder, year, lifeExp)
 
 Using a combination of `filter`, `select` and and `slice` show only year and life expectancy of Cambodia for the first two observations
 
-```{r}
+
+```r
 gapminder %>%
   filter(country == "Cambodia") %>%
   select(year, lifeExp) %>%
   slice(1:2)
+```
 
+```
+##   year lifeExp
+## 1 1952  39.417
+## 2 1957  41.366
 ```
 
 **Challenge** Use `mutate()` to add  new variables
@@ -159,17 +208,31 @@ Imagine we wanted to recover each country’s GDP. We do have data for populatio
 
 -  Yes we multiply, let's create a new variable called GDP that brings back the gross amount
 
-```{r}
+
+```r
 gapminder <- gapminder %>%
 mutate(gdp = pop * gdpPercap)
 
 gapminder %>% glimpse
 ```
 
+```
+## Observations: 1704
+## Variables:
+## $ country   (fctr) Afghanistan, Afghanistan, Afghanistan, Afghanistan,...
+## $ continent (fctr) Asia, Asia, Asia, Asia, Asia, Asia, Asia, Asia, Asi...
+## $ year      (dbl) 1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992...
+## $ lifeExp   (dbl) 28.801, 30.332, 31.997, 34.020, 36.088, 38.438, 39.8...
+## $ pop       (dbl) 8425333, 9240934, 10267083, 11537966, 13079460, 1488...
+## $ gdpPercap (dbl) 779.4453, 820.8530, 853.1007, 836.1971, 739.9811, 78...
+## $ gdp       (dbl) 6567086330, 7585448670, 8758855797, 9648014150, 9678...
+```
+
 So... GDP is almost useless because it doesn't give a base line and that is why we often use per capita, but a baseline is often more useful, how about comparing it to another country sat, USA? Yes USA, USA, USA!
 
 Let's  create first an object containing only US data, we use `filter` here
-```{r}
+
+```r
 just_usa <- gapminder %>%
   filter(country == "United States") %>%
   select(year, gdpPercap) %>%
@@ -178,44 +241,95 @@ just_usa <- gapminder %>%
 
 We can join (or merge) the dataset to the gapminder data using the `left_join` function.
 There are are several ways to merge datasets with **dplyr** (left join, right join, inner join, and outer join which differ in which oberservations it matches and keep).
-```{r}
+
+```r
 gapminder <- left_join(gapminder, just_usa, by = c("year")) %>%
   mutate(gdpPercapRel = gdpPercap / usa_gdpPercap)
 ```
 
 Now, summarize the relative GDP
-```{r}
+
+```r
 gapminder %>%
   select(gdpPercapRel) %>%
   summary
+```
 
+```
+##   gdpPercapRel     
+##  Min.   :0.006168  
+##  1st Qu.:0.052423  
+##  Median :0.146476  
+##  Mean   :0.278566  
+##  3rd Qu.:0.390212  
+##  Max.   :7.746863
 ```
 
 Nice, now we can do something like this:
 
 Look at the GDP per capita  of Mexico and Canada relative to US by year
-```{r}
+
+```r
 gapminder %>%
   filter(country %in% c("United States", "Canada", "Mexico")) %>%
   select(country, year, gdpPercap, usa_gdpPercap, gdpPercapRel) %>%
   glimpse()
 ```
 
+```
+## Observations: 36
+## Variables:
+## $ country       (fctr) Canada, Canada, Canada, Canada, Canada, Canada,...
+## $ year          (dbl) 1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, ...
+## $ gdpPercap     (dbl) 11367.161, 12489.950, 13462.486, 16076.588, 1897...
+## $ usa_gdpPercap (dbl) 13990.48, 14847.13, 16173.15, 19530.37, 21806.04...
+## $ gdpPercapRel  (dbl) 0.8124925, 0.8412368, 0.8323975, 0.8231586, 0.86...
+```
+
 
 ## `arrange`
 
 Because the world is not always ordered the way we want it
-```{r}
+
+```r
 gapminder %>%
   arrange(year, country) %>%
   glimpse()
+```
 
+```
+## Observations: 1704
+## Variables:
+## $ country       (fctr) Afghanistan, Albania, Algeria, Angola, Argentin...
+## $ continent     (fctr) Asia, Europe, Africa, Africa, Americas, Oceania...
+## $ year          (dbl) 1952, 1952, 1952, 1952, 1952, 1952, 1952, 1952, ...
+## $ lifeExp       (dbl) 28.801, 55.230, 43.077, 30.015, 62.485, 69.120, ...
+## $ pop           (dbl) 8425333, 1282697, 9279525, 4232095, 17876956, 86...
+## $ gdpPercap     (dbl) 779.4453, 1601.0561, 2449.0082, 3520.6103, 5911....
+## $ gdp           (dbl) 6567086330, 2053669902, 22725632678, 14899557133...
+## $ usa_gdpPercap (dbl) 13990.48, 13990.48, 13990.48, 13990.48, 13990.48...
+## $ gdpPercapRel  (dbl) 0.05571254, 0.11443895, 0.17504816, 0.25164324, ...
+```
 
+```r
 gapminder %>%
   filter(year == 2007) %>%
   arrange(- lifeExp) %>%
   glimpse()
+```
 
+```
+## Observations: 142
+## Variables:
+## $ country       (fctr) Japan, Hong Kong, China, Iceland, Switzerland, ...
+## $ continent     (fctr) Asia, Asia, Europe, Europe, Oceania, Europe, Eu...
+## $ year          (dbl) 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, ...
+## $ lifeExp       (dbl) 82.603, 82.208, 81.757, 81.701, 81.235, 80.941, ...
+## $ pop           (dbl) 127467972, 6980412, 301931, 7554661, 20434176, 4...
+## $ gdpPercap     (dbl) 31656.068, 39724.979, 36180.789, 37506.419, 3443...
+## $ gdp           (dbl) 4.035135e+12, 2.772967e+11, 1.092410e+10, 2.8334...
+## $ usa_gdpPercap (dbl) 42951.65, 42951.65, 42951.65, 42951.65, 42951.65...
+## $ gdpPercapRel  (dbl) 0.7370163, 0.9248766, 0.8423608, 0.8732241, 0.80...
 ```
 
 ** Challenge
@@ -239,42 +353,68 @@ Instead plots are built up from component functions.
 5. facet: create mini-plots of data subsets
 
 Let's continue using the gapminder data, take another look at it
-```{r}
+
+```r
 glimpse(gapminder)
+```
+
+```
+## Observations: 1704
+## Variables:
+## $ country       (fctr) Afghanistan, Afghanistan, Afghanistan, Afghanis...
+## $ continent     (fctr) Asia, Asia, Asia, Asia, Asia, Asia, Asia, Asia,...
+## $ year          (dbl) 1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, ...
+## $ lifeExp       (dbl) 28.801, 30.332, 31.997, 34.020, 36.088, 38.438, ...
+## $ pop           (dbl) 8425333, 9240934, 10267083, 11537966, 13079460, ...
+## $ gdpPercap     (dbl) 779.4453, 820.8530, 853.1007, 836.1971, 739.9811...
+## $ gdp           (dbl) 6567086330, 7585448670, 8758855797, 9648014150, ...
+## $ usa_gdpPercap (dbl) 13990.48, 14847.13, 16173.15, 19530.37, 21806.04...
+## $ gdpPercapRel  (dbl) 0.05571254, 0.05528699, 0.05274798, 0.04281523, ...
 ```
 
 Great, let the plotting begin:
 
-```{r eval=FALSE}
+
+```r
 ggplot(gapminder, aes(x = gdpPercap, y = lifeExp))
 ```
 This gives an error message because there is nothing to plot yet!
 
 This just initializes the plot object, it is better if you assign it to an object, `p` is good enough
-```{r}
+
+```r
 p <- ggplot(gapminder, aes(x = gdpPercap, y = lifeExp))
 ```
 
 No we can add `geoms`
-```{r}
+
+```r
 p + geom_point()
 ```
 
+![](lab2_files/figure-html/unnamed-chunk-22-1.png) 
+
 That look okay but it would probably look be better if we log transform
-```{r}
+
+```r
 p_l <- ggplot(gapminder, aes(x = log10(gdpPercap), y = lifeExp))
 p_l + geom_point()
 ```
 
+![](lab2_files/figure-html/unnamed-chunk-23-1.png) 
+
 A better way to log transform
-```{r}
+
+```r
 p + geom_point() + scale_x_log10()
 ```
 
-Let's make that stick
-```{r}
-p <- p + scale_x_log10()
+![](lab2_files/figure-html/unnamed-chunk-24-1.png) 
 
+Let's make that stick
+
+```r
+p <- p + scale_x_log10()
 ```
 
 Common workflow: gradually build up the plot you want,  re-define the object 'p' as you develop "keeper" commands.
@@ -282,40 +422,70 @@ Note that in the reassigning we excluded the `geom`.
 
 
 Now, let continent variable to aesthetic color
-```{r}
-p + geom_point(aes(color = continent))
 
+```r
+p + geom_point(aes(color = continent))
 ```
 
+![](lab2_files/figure-html/unnamed-chunk-26-1.png) 
+
 In full detail, up to now:
-```{r}
+
+```r
 ggplot(gapminder, aes(x = gdpPercap, y = lifeExp, color = continent)) +
   geom_point() +
   scale_x_log10()
 ```
+
+![](lab2_files/figure-html/unnamed-chunk-27-1.png) 
 Let's address over-plotting: SET alpha transparency and size to a value
-```{r}
+
+```r
 p + geom_point(alpha = (1 / 3), size = 3)
 ```
+
+![](lab2_files/figure-html/unnamed-chunk-28-1.png) 
 Add now a fitted curve or line
-```{r}
+
+```r
 p + geom_point() + geom_smooth()
+```
+
+![](lab2_files/figure-html/unnamed-chunk-29-1.png) 
+
+```r
 p + geom_point() + geom_smooth(lwd = 2, se = FALSE)
+```
+
+![](lab2_files/figure-html/unnamed-chunk-29-2.png) 
+
+```r
 p + geom_smooth(lwd = 1, se = FALSE, method = "lm") + geom_point()
 ```
+
+![](lab2_files/figure-html/unnamed-chunk-29-3.png) 
 That's great but I actually want to revive our interest in continents!
-```{r}
+
+```r
 p + aes(color = continent) + geom_point() + geom_smooth(lwd = 3, se = FALSE)
 ```
+
+![](lab2_files/figure-html/unnamed-chunk-30-1.png) 
 Facetting: another way to exploit a factor
-```{r}
+
+```r
 p + geom_point(alpha = (1 / 3), size = 3) + facet_wrap(~ continent)
 ```
+
+![](lab2_files/figure-html/unnamed-chunk-31-1.png) 
 Still want lines? Let's add them
-```{r}
+
+```r
 p + geom_point(alpha = (1 / 3), size = 3) + facet_wrap(~ continent) +
   geom_smooth(lwd = 2, se = FALSE)
 ```
+
+![](lab2_files/figure-html/unnamed-chunk-32-1.png) 
 
 **Challenge**
 
@@ -325,7 +495,8 @@ p + geom_point(alpha = (1 / 3), size = 3) + facet_wrap(~ continent) +
 
 
 
-```{r}
+
+```r
 # plot lifeExp against year
 # y <- ggplot(gDat, aes(x = year, y = lifeExp)) + geom_point()
 
@@ -341,17 +512,20 @@ p + geom_point(alpha = (1 / 3), size = 3) + facet_wrap(~ continent) +
 ```
 
 What if I am only interrested in the US?
-```{r}
+
+```r
 ggplot(filter(gapminder, country == "United States"),
        aes(x = year, y = lifeExp)) +
   geom_line() +
   geom_point()
-
 ```
+
+![](lab2_files/figure-html/unnamed-chunk-34-1.png) 
 
 Let just look at five countries
 
-```{r}
+
+```r
 some_countries <- c("United States", "Canada", "Rwanda", "Cambodia", "Mexico")
 ggplot(filter(gapminder, country %in% some_countries),
        aes(x = year, y = lifeExp, color = country)) +
@@ -359,28 +533,36 @@ ggplot(filter(gapminder, country %in% some_countries),
   geom_point()
 ```
 
+![](lab2_files/figure-html/unnamed-chunk-35-1.png) 
+
 
 So what's up with Mexico?
 
 * Nafta? Higher GDP?
 
 Not really...
-```{r}
+
+```r
 ggplot(subset(gapminder, country %in% some_countries),
        aes(x = year, y = lifeExp, color = country)) +
   geom_line() +
   geom_point(aes(size=gdpPercap))
 ```
 
+![](lab2_files/figure-html/unnamed-chunk-36-1.png) 
+
 You can change the way the plot looks overall using `theme`
 
-```{r}
+
+```r
 ggplot(subset(gapminder, country %in% some_countries),
        aes(x = year, y = lifeExp, color = country)) +
   geom_line() +
   geom_point(aes(size=gdpPercap)) +
   theme_minimal()
 ```
+
+![](lab2_files/figure-html/unnamed-chunk-37-1.png) 
 
 In addition to the themes included with ggplot, several other themes are available in the [ggthemes](http://cran.r-project.org/web/packages/ggthemes/index.html) package.
 

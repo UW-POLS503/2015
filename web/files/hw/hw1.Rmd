@@ -1,5 +1,5 @@
 ---
-title: Homework 1
+title: "POLS/CSSS 503: Problem Set 1"
 author: Jeffrey B. Arnold, Christopher Adolph
 date: April 10, 2015
 ---

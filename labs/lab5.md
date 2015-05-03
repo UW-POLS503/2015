@@ -1,16 +1,12 @@
----
-title: "Lab 5 - Loops and simulations"
-author: "Carolina Johnson"
-date: "Friday May 1, 2015"
----
+# Lab 5 - Loops and simulations
+Carolina Johnson  
+Friday May 1, 2015  
 This lab will use some libraries you've seen before, and one you may not have. We'll load them all now.
 
-```{r, results = 'hide', echo = FALSE}
-knitr::opts_chunk$set(tidy = TRUE,
-                      tidy.opts = list(width.cutoff = 60, indent = 2))
-```
 
-```{r, message=FALSE, warning=FALSE}
+
+
+```r
 library("MASS")
 library("dplyr")
 library("ggplot2")
@@ -18,47 +14,86 @@ library("broom")
 ```
 
 ## More useful tools
-```{r eval=FALSE}
-z <- rnorm(10, mean=100, sd=1) # draw randomly from the normal distribution
-z1 <- runif(10,0,1) #draw from a uniform distribution between min and max values
-sample(z, 2) # samples two numbers from the z vector
-sort(z) # puts z in (ascending) order.
-sort(z, decreasing=TRUE)
-sample(c("red","blue","yellow","green"),10,replace=TRUE)
-sample(c("red","blue","yellow","green"),3,replace=FALSE) #note you cannot have a higher number of draws when replace=FALSE
+
+```r
+z <- rnorm(10, mean = 100, sd = 1)  # draw randomly from the normal distribution
+z1 <- runif(10, 0, 1)  #draw from a uniform distribution between min and max values
+sample(z, 2)  # samples two numbers from the z vector
+sort(z)  # puts z in (ascending) order.
+sort(z, decreasing = TRUE)
+sample(c("red", "blue", "yellow", "green"), 10, replace = TRUE)
+sample(c("red", "blue", "yellow", "green"), 3, replace = FALSE)  #note you cannot have a higher number of draws when replace=FALSE
 
 
-which(data2$id=="CAN") # tells you the position(s) where the condition is met
+which(data2$id == "CAN")  # tells you the position(s) where the condition is met
 which.max(z1)
 ```
 
 ### IF conditions
-```{r}
+
+```r
 a <- 10
-if (a==10) print("Yes, a is 10.")
+if (a == 10) print("Yes, a is 10.")
+```
+
+```
+## [1] "Yes, a is 10."
+```
+
+```r
 print("This gets printed no matter what value a was.")
+```
+
+```
+## [1] "This gets printed no matter what value a was."
 ```
 The statement immediately after the if statement is run only when the argument in parentheses evaluates to TRUE.  Try #setting 'a' to another value and see what happens.
 
 
 **Note: use braces {} after the if statement if you want multiple commands to be executed when the condition is met:**
-```{r}
-if (a==10) {
-    print("Yes, a is 10.")
-    print("Because a is 10 I'm doing this too.")
-} else {
-	print("DIDNT WORK")
-}
 
+```r
+if (a == 10) {
+  print("Yes, a is 10.")
+  print("Because a is 10 I'm doing this too.")
+} else {
+  print("DIDNT WORK")
+}
+```
+
+```
+## [1] "Yes, a is 10."
+## [1] "Because a is 10 I'm doing this too."
+```
+
+```r
 print("This gets printed no matter what value a was.")
+```
+
+```
+## [1] "This gets printed no matter what value a was."
 ```
 
 
 ## FOR loops
-```{r}
-for (i in 1:10){
+
+```r
+for (i in 1:10) {
   print(i^2)
-  } # close the i loop
+}  # close the i loop
+```
+
+```
+## [1] 1
+## [1] 4
+## [1] 9
+## [1] 16
+## [1] 25
+## [1] 36
+## [1] 49
+## [1] 64
+## [1] 81
+## [1] 100
 ```
 
 You can put as many lines of code as you want in between the {} braces, including other for loops and if statements, and whatever else you want.
@@ -68,32 +103,35 @@ You can put as many lines of code as you want in between the {} braces, includin
 
 Read in the Ross data from last week's lab (selecting and renaming variables as appropriate:
 
-```{r, results='hide'}
-rossdata <- read.csv("http://pols503.github.io/pols_503_sp15/data/ross_2012.csv",
-                     stringsAsFactors = FALSE)
 
-data <- rossdata %>%
-  tbl_df() %>%
-  select(cty, year, polity, logoil_gdpcap2000_sup_Q_1, logGDPcap, oecd)
+```r
+rossdata <- read.csv("http://pols503.github.io/pols_503_sp15/data/ross_2012.csv", 
+  stringsAsFactors = FALSE)
 
-data <- data %>% rename(oil=logoil_gdpcap2000_sup_Q_1, loggdp=logGDPcap)
+data <- rossdata %>% tbl_df() %>% select(cty, year, polity, logoil_gdpcap2000_sup_Q_1, 
+  logGDPcap, oecd)
+
+data <- data %>% rename(oil = logoil_gdpcap2000_sup_Q_1, loggdp = logGDPcap)
 ```
 
 We're going to examine the extent of missing data by country (what proportion of each country's observations remain after listwise deletion?)
 
 First, create a list of every country name
-```{r results = 'hide'}
+
+```r
 uc <- unique(data$cty)
 uc
 ```
 
 Then calculate the number of countries in the dataset:
-```{r}
+
+```r
 numcountries <- length(uc)
 ```
 
 Then create empty vectors to hold our results (we'll use them in the ``for`` loop)
-```{r}
+
+```r
 country_obs <- rep(NA, numcountries)
 country_na <- rep(NA, numcountries)
 ```
@@ -105,23 +143,23 @@ Next, we write the loop. This loop is going to go through each individual countr
 
 After evaluating these questions for each country, and storing the results in two different vectors, the loop will repeat the same tasks for the next country.  The counter variable ``i`` simply goes up by 1 for each iteration of the loop. By referencing ``uc[i]``, we are asking the lines of code inside the loop to apply to the first country, then the second country, then the third, and so on...
 
-```{r results = 'hide'}
-for(i in 1:numcountries){
-  tempdata <- filter(data, cty == uc[i]) # alternative way you could subset: data[data$cty==uc[i],]
-	na_omit_tempdata <- na.omit(tempdata)
-	country_obs[i] <- nrow(tempdata)
-	country_na[i] <- nrow(na_omit_tempdata)
-	}
 
-cbind(uc,country_obs,country_na,country_na/country_obs)
+```r
+for (i in 1:numcountries) {
+  tempdata <- filter(data, cty == uc[i])  # alternative way you could subset: data[data$cty==uc[i],]
+  na_omit_tempdata <- na.omit(tempdata)
+  country_obs[i] <- nrow(tempdata)
+  country_na[i] <- nrow(na_omit_tempdata)
+}
+
+cbind(uc, country_obs, country_na, country_na/country_obs)
 ```
 *Challenge: Why are there quotes around the numbers? How might you fix this?*
 
-```{r results = 'hide'}
-na_table <- data_frame("Country" = uc,
-                       "All_obs" = country_obs,
-                       "Remaining_obs" = country_na,
-                       "Proportion_remaining" = round(country_na/country_obs,2))
+
+```r
+na_table <- data_frame(Country = uc, All_obs = country_obs, Remaining_obs = country_na, 
+  Proportion_remaining = round(country_na/country_obs, 2))
 
 arrange(na_table, desc(Proportion_remaining))
 ```
@@ -132,59 +170,94 @@ arrange(na_table, desc(Proportion_remaining))
 Run a separate regression model for each year in the dataset and summarize changing magnitude of effects (hint, this is really easy to do with **dplyr** and **broom**, in case you needed illustration of why the packages are useful and not just extra things to learn!)
 
 First, set up a vector of all unique years in the data frame
-```{r}
+
+```r
 uy <- unique(data$year)
 ```
 
 Then, create a dichotomous variable of whether a country is a democracy or not:
-```{r}
+
+```r
 data <- mutate(data, dem_indicator = polity >= 8)
 ```
 
 Next we create a data frame of empty vectors in which  to store the regression results:
-```{r}
-results <- data_frame(
-  year = uy,
-  dem_coef = rep(NA, length(uy)),
-  dem_se = rep(NA, length(uy)),
-  oil_coef = rep(NA, length(uy)),
-  oil_se = rep(NA, length(uy)),
-  df = rep(NA, length(uy))
-  )
+
+```r
+results <- data_frame(year = uy, dem_coef = rep(NA, length(uy)), 
+  dem_se = rep(NA, length(uy)), oil_coef = rep(NA, length(uy)), 
+  oil_se = rep(NA, length(uy)), df = rep(NA, length(uy)))
 ```
 
 And now we make a loop that checks if we have enough complete observations and runs a regression for every year, and then stores the coefficients and standard errors.
 
-```{r}
-for(i in 1:length(uy)){
-	tempdata <- filter(data, year == uy[i])
-	if (nrow(na.omit(subset(tempdata, select = c("oil", "dem_indicator")))) > 1) {
+
+```r
+for (i in 1:length(uy)) {
+  tempdata <- filter(data, year == uy[i])
+  if (nrow(na.omit(subset(tempdata, select = c("oil", "dem_indicator")))) > 
+    1) {
     res_temp <- lm(loggdp ~ dem_indicator + oil, data = tempdata)
     results$dem_coef[i] <- coef(res_temp)[2]
     results$dem_se[i] <- sqrt(diag(vcov(res_temp)))[2]
     results$oil_coef[i] <- coef(res_temp)[3]
     results$oil_se[i] <- sqrt(diag(vcov(res_temp)))[3]
     results$df[i] <- res_temp$df
-    }
-  else {
-    print(paste("Year", uy[i], "does not have enough complete observations.", sep = " "))
+  } else {
+    print(paste("Year", uy[i], "does not have enough complete observations.", 
+      sep = " "))
   }
 }
 ```
 
+```
+## [1] "Year 1960 does not have enough complete observations."
+## [1] "Year 2005 does not have enough complete observations."
+## [1] "Year 2006 does not have enough complete observations."
+## [1] "Year 2007 does not have enough complete observations."
+## [1] "Year 2008 does not have enough complete observations."
+```
+
 Let's look at our results:
 
-```{r}
+
+```r
 results
+```
+
+```
+## Source: local data frame [49 x 6]
+## 
+##    year dem_coef    dem_se  oil_coef     oil_se df
+## 1  1960       NA        NA        NA         NA NA
+## 2  1961 1.679977 0.2763964 0.1005288 0.06661178 75
+## 3  1962 1.645672 0.2702138 0.1073934 0.05995149 79
+## 4  1963 1.653651 0.2848843 0.1621315 0.05506358 80
+## 5  1964 1.676043 0.2817644 0.1767575 0.05583928 82
+## 6  1965 1.554957 0.2833735 0.1704798 0.05558666 84
+## 7  1966 1.548866 0.2739414 0.1873855 0.05198915 90
+## 8  1967 1.571676 0.2734880 0.1883067 0.05132226 91
+## 9  1968 1.604186 0.2758615 0.1926321 0.05101896 92
+## 10 1969 1.744052 0.2644320 0.1886678 0.04720075 94
+## ..  ...      ...       ...       ...        ... ..
 ```
 
 Challenge: Combine **dplyr** and **broom** to replicate the loop above without using a loop?
 
-```{r}
-ggplot(results, aes(x = year)) + geom_line(aes(y = dem_coef)) + geom_ribbon(aes(ymin = dem_coef + qt(.025, results$df) * dem_se,
-                                                                                ymax = dem_coef + qt(.975, results$df) * dem_se),
-                                                                            alpha = 1/3)
+
+```r
+ggplot(results, aes(x = year)) + geom_line(aes(y = dem_coef)) + 
+  geom_ribbon(aes(ymin = dem_coef + qt(0.025, results$df) * 
+    dem_se, ymax = dem_coef + qt(0.975, results$df) * dem_se), 
+    alpha = 1/3)
 ```
+
+```
+## Warning in loop_apply(n, do.ply): Removed 5 rows containing missing values
+## (geom_path).
+```
+
+![](lab5_files/figure-html/unnamed-chunk-18-1.png) 
 
 *Challenge: create a similar plot to explore how the effect of oil has changed over time.*
 
@@ -192,18 +265,23 @@ ggplot(results, aes(x = year)) + geom_line(aes(y = dem_coef)) + geom_ribbon(aes(
 This is basically an alternate way to work through part 1.e. of Homework 2
 
 Load the data and run the basic regression with interaction:
-```{r}
-sprinters <- read.csv ("http://pols503.github.io/pols_503_sp15/data/sprinters.csv", na.strings=".")
-sprinter_model <- lm(finish ~ year * women, data=sprinters)
+
+```r
+sprinters <- read.csv("http://pols503.github.io/pols_503_sp15/data/sprinters.csv", 
+  na.strings = ".")
+sprinter_model <- lm(finish ~ year * women, data = sprinters)
 ```
 
 Create a range of hypothetical years to get expected values:
-```{r}
-year_range <- seq.int(from=min(sprinters$year), to=max(sprinters$year), by=2)
+
+```r
+year_range <- seq.int(from = min(sprinters$year), to = max(sprinters$year), 
+  by = 2)
 ```
 
 Create a data frame that will relate years to the estimated expected values and CIs (currently empty columns):
-```{r tidy=FALSE}
+
+```r
 expected <- data_frame(
   year = year_range,
   # point estimates from model for men
@@ -218,15 +296,16 @@ expected <- data_frame(
 ```
 
 Get the coefficients and variance-covariance matrix from the model:
-```{r}
-pe<-coef(sprinter_model)
-vc<-vcov(sprinter_model)
+
+```r
+pe <- coef(sprinter_model)
+vc <- vcov(sprinter_model)
 ```
 
 Take 1000 draws from the multivariate normal distribution:
-```{r}
-simbetas<-mvrnorm(1000, pe, vc)
 
+```r
+simbetas <- mvrnorm(1000, pe, vc)
 ```
 
 
@@ -235,7 +314,8 @@ We need define the covariate values for the current scenario.
 These must be in the same order as in `model2$coefficients`:
 `(Intercept)`, `year`, `women`, `year:women`.
 
-```{r tidy=FALSE}
+
+```r
 for (i in 1:length(year_range)) {
   x.current <- c("(Intercept)" = 1,
                  "year" = year_range[i],
@@ -255,35 +335,43 @@ for (i in 1:length(year_range)) {
 ```
 
 Now repeat that same loop, but change to FEMALE=1 (both in the base term and the int. term)
-```{r}
+
+```r
 for (i in 1:length(year_range)) {
   # define the covariate values for the current scenario
-  x.current<-c("(Intercept)" = 1,
-               "year" = year_range[i],
-               "women" = 1,
-               "year:women" = year_range[i] * 1
-  )
+  x.current <- c(`(Intercept)` = 1, year = year_range[i], women = 1, 
+    `year:women` = year_range[i] * 1)
   # calculate the 1000 predictions:
-  pred.current<- simbetas %*% x.current
-  # Now slot the mean, lowerCI and upperCI values into the appropriate positions in the results vectors:
+  pred.current <- simbetas %*% x.current
+  # Now slot the mean, lowerCI and upperCI values into the
+  # appropriate positions in the results vectors:
   expected$EVs_female[i] <- mean(pred.current)
-  expected$lowerCIs_female[i] <- quantile(pred.current,.025)
-  expected$upperCIs_female[i] <- quantile(pred.current,.975)
-} # close i loop
+  expected$lowerCIs_female[i] <- quantile(pred.current, 0.025)
+  expected$upperCIs_female[i] <- quantile(pred.current, 0.975)
+}  # close i loop
 ```
 
 #Plotting
-```{r}
+
+```r
 sprinters_plot <- ggplot(expected)
-sprinters_plot + geom_line(aes(x = year, y = EVs_male)) + geom_ribbon(aes(x = year, ymin = lowerCIs_male, ymax = upperCIs_male), alpha = 1/3)
+sprinters_plot + geom_line(aes(x = year, y = EVs_male)) + geom_ribbon(aes(x = year, 
+  ymin = lowerCIs_male, ymax = upperCIs_male), alpha = 1/3)
 ```
+
+![](lab5_files/figure-html/unnamed-chunk-26-1.png) 
 
 *Challenge: plot the line for women*
-```{r}
-sprinters_plot <- sprinters_plot + geom_line(aes(x = year, y = EVs_male)) + geom_ribbon(aes(x = year, ymin = lowerCIs_male, ymax = upperCIs_male), alpha = 1/3)
-sprinters_plot + geom_line(aes(x = year, y = EVs_female)) + geom_ribbon(aes(x = year, ymin = lowerCIs_female, ymax = upperCIs_female), alpha = 1/3)
 
+```r
+sprinters_plot <- sprinters_plot + geom_line(aes(x = year, y = EVs_male)) + 
+  geom_ribbon(aes(x = year, ymin = lowerCIs_male, ymax = upperCIs_male), 
+    alpha = 1/3)
+sprinters_plot + geom_line(aes(x = year, y = EVs_female)) + geom_ribbon(aes(x = year, 
+  ymin = lowerCIs_female, ymax = upperCIs_female), alpha = 1/3)
 ```
+
+![](lab5_files/figure-html/unnamed-chunk-27-1.png) 
 
 
 
@@ -310,20 +398,35 @@ On Let's Make a Deal, host Monty Hall offers you the following choice:
 *Do all of the above many many times
 *Print the fraction of times a car was found
 
-```{r}
-sims <- 10000 # Simulations run
-doors <- c(1,0,0) # The car (1) and the goats (0)
-cars.stay <- 0 # Save times cars won with first choice here
-cars.switch <- 0 # Save times cars won from switching here
+
+```r
+sims <- 10000  # Simulations run
+doors <- c(1, 0, 0)  # The car (1) and the goats (0)
+cars.stay <- 0  # Save times cars won with first choice here
+cars.switch <- 0  # Save times cars won from switching here
 for (i in 1:sims) {
-  random.doors <- sample(doors,3,replace=FALSE)
-	cars.stay <- cars.stay + random.doors[1] #First choose "door number 1"
-	cars.switch <- cars.switch + sort(random.doors[2:3])[2] #Do you understand what this line of code is doing?
-  #cars.switch <- cars.switch + (sum(random.doors[2:3])) # an alternative approach
+  random.doors <- sample(doors, 3, replace = FALSE)
+  cars.stay <- cars.stay + random.doors[1]  #First choose 'door number 1'
+  cars.switch <- cars.switch + sort(random.doors[2:3])[2]  #Do you understand what this line of code is doing?
+  # cars.switch <- cars.switch + (sum(random.doors[2:3])) # an
+  # alternative approach
 }
 
-paste("Probability of a car from staying with 1st door", cars.stay/sims, sep=": ")
-paste("Probability of a car from switching to 2nd door", cars.switch/sims, sep=": ")
+paste("Probability of a car from staying with 1st door", cars.stay/sims, 
+  sep = ": ")
+```
+
+```
+## [1] "Probability of a car from staying with 1st door: 0.3373"
+```
+
+```r
+paste("Probability of a car from switching to 2nd door", cars.switch/sims, 
+  sep = ": ")
+```
+
+```
+## [1] "Probability of a car from switching to 2nd door: 0.6627"
 ```
 
 
@@ -339,15 +442,22 @@ paste("Probability of a car from switching to 2nd door", cars.switch/sims, sep="
 
 #### Here is one solution, as talked through in class:
 
-```{r}
+
+```r
 size <- 20
-sims <- 100000
+sims <- 1e+05
 score <- 0
 for (i in 1:sims) {
-  class <- sample(1:365, size, replace=TRUE)
+  class <- sample(1:365, size, replace = TRUE)
   unique <- length(unique(class))
-  if (length(unique(class)) < size) score <- score+1
+  if (length(unique(class)) < size) 
+    score <- score + 1
 }
 prob <- score/sims
-paste("The probability of at least one shared birthday in a class of 20 students is", round(prob,2))
+paste("The probability of at least one shared birthday in a class of 20 students is", 
+  round(prob, 2))
+```
+
+```
+## [1] "The probability of at least one shared birthday in a class of 20 students is 0.41"
 ```
