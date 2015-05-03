@@ -417,7 +417,7 @@ paste("Probability of a car from staying with 1st door", cars.stay/sims,
 ```
 
 ```
-## [1] "Probability of a car from staying with 1st door: 0.3373"
+## [1] "Probability of a car from staying with 1st door: 0.3368"
 ```
 
 ```r
@@ -426,7 +426,7 @@ paste("Probability of a car from switching to 2nd door", cars.switch/sims,
 ```
 
 ```
-## [1] "Probability of a car from switching to 2nd door: 0.6627"
+## [1] "Probability of a car from switching to 2nd door: 0.6632"
 ```
 
 
