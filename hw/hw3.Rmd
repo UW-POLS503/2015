@@ -1,5 +1,5 @@
 ---
-title: "POLS 503: Homework 3"
+title: "POLS 503: Problem Set 3"
 author: "Jeffrey B. Arnold, Christopher Adolph"
 date: "April 30, 2015"
 output:
@@ -16,13 +16,14 @@ $$
 \DeclareMathOperator{\quantile}{quantile}
 $$
 
-```{r results='hide', echo = FALSE, message = FALSE}
-knitr::opts_chunk$set(error = TRUE)
+```{r init,results='hide', echo = FALSE, message = FALSE}
+set.seed(135125)
 ```
 
+# Instructions and Introduction
 
-The purpose of this homework is to provide a guided, hands-on tour through the properties of the least squares estimator, especially under common violations of the Gauss Markov assumptions. 
-We will work through a series of programs which use simulated data --- i.e., data created with known properties --- to investigate how these violations affect the accuracy and precision of least squares estimates of slope parameters. 
+The purpose of this homework is to provide a guided, hands-on tour through the properties of the least squares estimator, especially under common violations of the Gauss Markov assumptions.
+We will work through a series of programs which use simulated data --- i.e., data created with known properties --- to investigate how these violations affect the accuracy and precision of least squares estimates of slope parameters.
 Using repeated study of simulated datasets to explore the properties of statistical models is called Monte Carlo experimentation.
 Although you will not have to write much R code, you will need to read through
 the provided programs carefully to understand what is happening.
@@ -34,10 +35,26 @@ Where proofs are available, they are generally preferable to Monte Carlo experim
 This is almost always the case for the properties of models applied to small samples of data.
 Here, we use Monte Carlo not out of necessity but for pedagogical purposes, as a tool to gain a more intuitive and hands-on understanding of least squares and its properties.
 
-# Setup 
+## 
+
+1. Create a new R project for this homework named `hw3` and load that project.
+2. Do your analyses in an R markdown document.
+3. Submit a zipped file of the directory with your R project through Canvas. This should contain all the materials for another person to run your R Markdown fil  This should contain:
+
+    - The R project (`.Rproj`) file
+	- The R Markdown document (`.Rmd`) of your analyses
+	- An HTML document (`.html`) compiled from your R Markdown document.
+	- Any data or other files neede to run the analyses in your R Markdown doceument.
+
+4. Your R Markdown file should follow the guidance from [here](http://pols503.github.io/pols_503_sp15/r_markdown_assignments.html) and your R code should follow the guidelines [here](http://pols503.github.io/pols_503_sp15/r_best_practices.html).
+5. Turn in a paper copy of the document compiled from the analyses at lab.
+6. You can work together on this but you should each turn in your own assignments and write up your work separately.
+   Include the names of your collaborators on your assignment.
+
+# Setup
 
 This assignment has some non-trivial computation.
-The following code sets the knitr options to cache the results of computations, so 
+The following code sets the knitr options to cache the results of computations, so
 that any computations that do not change are not rerun.
 See RStudio's help on [Authoring R Code Chunks](http://rmarkdown.rstudio.com/authoring_rcodechunks.html#caching) for more information about what this is doing.
 ```{r setup, echo = TRUE, eval = FALSE}
@@ -48,7 +65,7 @@ This will use the standard [Hadleyverse](http://blog.revolutionanalytics.com/201
 A few of the functions will use **assertthat**, which contains functions to test for errors in functions.
 Finally, it will use a function from a package written for this course, **pols503**.
 
-```{r message = FALSE}
+```{r load,message = FALSE}
 library("ggplot2")
 library("dplyr")
 library("broom")
@@ -57,10 +74,13 @@ library("tidyr")
 library("pols503")
 ```
 If you do not have **pols503** installed you need **devtools** installed, and then run
-```{r eval = FALSE}
+```{r r-pols503,eval = FALSE}
 devtools::install_github("POLS503/r-pols503")
 ```
 Additionally we will use some functions from **MASS** and **car**, but we will not load them since they contain some function names that conflict with those in packages that we are using.
+
+You will need to include the code for the functions defined in this problem set ---  `sdcor2cov`, `summarize_sims`, `sim_lin_norm`, etc. --- for your R Markdown file to run.
+However, to keep your output more concise, hide the code for these functions by using the code chunk option `echo = FALSE`.
 
 # Simulation Example
 
@@ -72,12 +92,12 @@ All of the simulations in this assignment will follow the same structure:
     1. Draw a sample from the population
     2. Run OLS on that sample
     3. Save statistics from the regression on that sample.
-   
+
 3. Compare the distributions of the sample statistics to see how well OLS recovers
     the parameters of the population.
-  
+
 In this section, we will work through an example in which the population satisfies
-all the Gauss-Markov assumptions and we run a correctly specified regression on the 
+all the Gauss-Markov assumptions and we run a correctly specified regression on the
 samples drawn from that population.
 In particular, for a fixed $x$, the population model is
 $$
@@ -86,7 +106,7 @@ Y_i &= \beta_0 + \sum_{j = 1}^k \beta_j x_{i,j} + \epsilon_i \\
 \epsilon_i & \sim N(0, \sigma^2)
 \end{aligned}
 $$
-And the OLS regression which will be run is 
+And the OLS regression which will be run is
 $$
 \begin{aligned}[t]
 y_i &= \hat\beta_0 + \sum_{j = 1}^k \hat\beta_j x_{i,j} + \hat\epsilon_i \\
@@ -95,7 +115,7 @@ y_i &= \hat\beta_0 + \sum_{j = 1}^k \hat\beta_j x_{i,j} + \hat\epsilon_i \\
 $$
 In this case, the regression run on the samples has the correct specification, but that will not necessarily be true for other examples.
 
-In this section, we will proceed in two steps. 
+In this section, we will proceed in two steps.
 
 1. Write code to generate a single sample and run OLS on it.
 2. Generalize that code by
@@ -108,20 +128,20 @@ In this section, we will proceed in two steps.
 ### Drawing $X$
 
 First, we need to generate some values of $X$ that we will use in the samples.
-Recall that the sampling distributions of OLS coefficients and the Gauss-Markov theorem are defined for a fixed $X$.[^randomx] 
+Recall that the sampling distributions of OLS coefficients and the Gauss-Markov theorem are defined for a fixed $X$.[^randomx]
 So, we will randomly generate data for the covariates, but use the same values of the covariates for all samples from $Y$.
 Although linear regression does not require covariates to be distributed multivariate normal, we will generate $X$ by drawing a sample of size $n$ from a multivariate normal distribution with mean $\mu_X$ and covariance matrix $\Sigma_X$.
 $$
 X_i \sim N(\mu_X, \Sigma_X) \text{ for $i = 1, \dots, n$.}
 $$
-Since covariance matrices are not particularly intuitive, so it may be easier to decompose the covariance into a correlation matrix and the standard deviations of the variables. 
+Since covariance matrices are not particularly intuitive, so it may be easier to decompose the covariance into a correlation matrix and the standard deviations of the variables.
 A covariance matrix, $\Sigma$ can be decomposed into a standard deviation $s$ and a correlation matrix $R$,
 $$
 \Sigma = S R S
 $$
 where $S$ is a diagonal matrix with the standard deviations $s$ on its diagonal.
 The following function will make that calculation simpler.
-```{r}
+```{r sdcor2cov}
 sdcor2cov <- function(s, r = diag(length(s))) {
   s <- diag(s, nrow = length(s), ncol = length(s))
   s %*% r %*% s
@@ -205,20 +225,20 @@ We want to repeat this many times in order to generate a sampling distribution o
 We will do this by (1) wrapping the code from the previous section in a for loop, so we can repeat the simulations many times, and (2) put it all in a function, so that we can easily change the inputs.
 
 Thus, we will define a function, named `sim_lin_norm`.
-The code for this function is in the chunk below. 
+The code for this function is in the chunk below.
 The function itself takes several arguments
 
-`m`
+`iter`
 
 :    The number of iterations to run / samples to draw.
 
 `n`
 
-:    The number of observations    
+:    The number of observations
 
 `mu_X`
 
-:    The means of the covariates in $X$. The number of covariates do not need to 
+:    The means of the covariates in $X$. The number of covariates do not need to
      be specified as it is inferred from the length of `mu_X`.
 
 `s_X`
@@ -238,24 +258,25 @@ The function itself takes several arguments
 :    The standard deviations of the regression errors, $\sigma$.
 
 
-This function returns a data frame with the results of all the simulations. 
+This function returns a data frame with the results of all the simulations.
 Each row is a coefficient (column `term`) for a simulation (column `.iter`)
 
-```{r}
-sim_lin_norm <- function(m, n, mu_X, s_X, R_X, beta, sigma) {
+```{r sim_lin_norm}
+sim_lin_norm <- function(iter, n, mu_X, s_X, R_X, beta, sigma) {
   # Error checking so that bugs are caught quicker :-)
   assert_that(length(s_X) == length(mu_X),
               ncol(R_X) == nrow(R_X),
               ncol(R_X) == length(mu_X),
               length(beta) == (length(mu_X) + 1))
   # Generate an X
-  X <- MASS::mvrnorm(n, mu_X, sdcor2cov(s_X, R_X), empirical = TRUE)
+  X <- MASS::mvrnorm(n, mu = mu_X, Sigma = sdcor2cov(s_X, R_X),
+                     empirical = TRUE)
   # Create a list to stor the results
   simulations <- list()
   # Create a progress bar because we're impatient
-  p <- progress_estimated(m, min_time = 2)
+  p <- progress_estimated(iter, min_time = 2)
   # Loop over the simulation runs
-  for (j in 1:m) {
+  for (j in 1:iter) {
     # Draw y
     mu <- cbind(1, X) %*% beta
     epsilon <- rnorm(n, mean = 0, sd = sigma)
@@ -278,10 +299,10 @@ sim_lin_norm <- function(m, n, mu_X, s_X, R_X, beta, sigma) {
 }
 
 ```
-Now we will draw 1,024 samples using the values that we used before and look at the results.
-```{r}
-m <- 1024
-sim0 <- sim_lin_norm(m, n, mu_X, s_X, R_X, beta, sigma)
+Now we will draw samples using the values that we used before and look at the results.
+```{r sim0}
+iter <- 4096
+sim0 <- sim_lin_norm(iter, n, mu_X, s_X, R_X, beta, sigma)
 head(sim0)
 ```
 With all the samples, we can summarize the results and compare them to the population parameters to evaluate how well OLS works.
@@ -296,7 +317,7 @@ Its arguments are
 
 :    The true values of the population parameters $\beta$.
 
-```{r sim_summary}
+```{r summarize_sim}
 summarize_sim <- function(.data, beta) {
   ret <- .data %>%
     group_by(term) %>%
@@ -304,13 +325,13 @@ summarize_sim <- function(.data, beta) {
               estimate_sd = sd(estimate),
               se_mean = sqrt(mean(std.error) ^ 2),
               se_robust_mean = sqrt(mean(std.error.robust) ^ 2),
-              n = length(estimate))
+              samples = length(estimate))
   ret[["beta_true"]] <- beta
   ret
 }
 ```
-Using the previous results, the summary is 
-```{r}
+Using the previous results, the summary is
+```{r sim0_summary}
 sim0_summary <- summarize_sim(sim0, beta)
 sim0_summary
 ```
@@ -319,7 +340,7 @@ In these simulations we will generally, but not exclusively, be concerned with t
 
 First, compare the average value of $\hat\beta$ to the population parameters $\beta$.
 This is what is nice about simulations, we know what the correct answer should be!
-```{r error=TRUE}
+```{r}
 select(sim0_summary, estimate_mean, beta_true)
 ```
 If an estimator is unbiased, then the mean of its sampling distribution should be equal to the true parameter value.
@@ -344,11 +365,13 @@ but some simulations may consider other questions.
 
 # Problems {#problems}
 
-The problems of this assignment will use various simulations similar to the one in the previous section 
+The problems of this assignment will use various simulations similar to the one in the previous section.
+For all simulations use `iter = 4096`. 
+If this is taking too long you can reduce the number of iterations.
 
 ## Linear Normal Model with Homoskedasticity
 
-In this problem, we will use `sim_lin_normal` to understand how OLS recovers parameters when the population meets the Gauss-Markov assumptions.
+In this problem, we will use `sim_lin_norm` to understand how OLS recovers parameters when the population meets the Gauss-Markov assumptions.
 $$
 \begin{aligned}[t]
 Y_i &= 0 + 1 \cdot x_{1,i} + 1 \cdot x_{2,i} + 1 \cdot x_{3,i} + \epsilon_i \\
@@ -358,7 +381,7 @@ Y_i &= 0 + 1 \cdot x_{1,i} + 1 \cdot x_{2,i} + 1 \cdot x_{3,i} + \epsilon_i \\
 $$
 The covariates, $X$, are independent, with means, $\mu_X = (0, 0, 0)$, and standard deviations, $s_X = (1, 1, 1)$. The sample size $n$ will vary with simulation.
 
-Run several simulations with `sim_lin_norm` varying the sample size to determine how sample size affects the following: 
+Run several simulations with `sim_lin_norm` varying the sample size to determine how sample size affects the following:
 
 - The bias of each $\hat{\beta}_j$?
 - The variance of $\hat{\beta}_j$?
@@ -370,7 +393,7 @@ Run several simulations with `sim_lin_norm` varying the sample size to determine
 
 In the previous problem, the covariates were assumed to be independent.
 Now, we will evaluate the properties of OLS estimates when covariates are correlated.
-As before, the population is 
+As before, the population is
 $$
 \begin{aligned}[t]
 Y_i &= 0 + 1 \cdot x_{1,i} + 1 \cdot x_{2,i} + 1 \cdot x_{3,i} + \epsilon_i \\
@@ -385,25 +408,26 @@ Use $n = 128$ for all simulations.
 
 Consider the following values of correlation between $x_1$ and $x_2$
 
+- $\cor(x_1, x_2) = 0$
 - $\cor(x_1, x_2) = 0.5$
 - $\cor(x_1, x_2) = 0.95$
 - $\cor(x_1, x_2) = -0.5$
 - $\cor(x_1, x_2) = -0.95$
 
-How does $\cor(x_1, x_2)$ affect the following? 
+How does $\cor(x_1, x_2)$ affect the following?
 
 - The bias of each $\hat{\beta}_j$?
 - The variance of $\hat{\beta}_j$?
 - The bias of the standard error of each $\hat{\beta}_j$?
 - The bias of the robust standard error of each $\hat{\beta}_j$?
 
-Remember to consider the effects on *all* the estimates: $\hat{\beta}_1$, $\hat{\beta}_2$, and $\hat{\beta}_3$.
+Remember to consider the effects of correlation on *all* the estimates: $\hat{\beta}_1$, $\hat{\beta}_2$, and $\hat{\beta}_3$.
 
 ## Collinearity
 
 Use the same settings in the previous question, but set $\cor(x_1, x_2) = 1$.
 What happens?
-Why? 
+Why?
 
 ## P-values, Type I and II errors
 
@@ -421,23 +445,23 @@ The covariates, $X$, are independent, with means, $\mu_X = (0, 0, 0)$, and stand
   What do they look like?
 - For each parameter, calculate the proportion of `p.value < 0.05` for each parameter.
   Suppose the null hypothesis $H_0: \beta_i = 0$ for all parameters.
-  What is the probability of a Type I or Type II error for each parameter. 
-- For each parameter, plot the distribution of its estimates *conditional* on it being significant at $p < 0.05$. 
-  How does the sampling distribution conditional on statistical significance relate to the unconditional sampling distribution? 
+  What is the probability of a Type I or Type II error for each parameter.
+- For each parameter, plot the distribution of its estimates *conditional* on it being significant at $p < 0.05$.
+  How does the sampling distribution conditional on statistical significance relate to the unconditional sampling distribution?
 - Repeat each of those analyses using a smaller sample size, $n = 32$, and a larger sample
 size $n = 1024$. What changes, if anything?
 
 ## Omitted Variable Bias
 
-The following function, `sim_lin_norm_omitted` samples from a linear, normal model with homoskedastic errors, but allows you to run a misspecified regression on the samples by omitting variables. 
-The arguments to this function are the same as `sim_lin_norm` except for 
+The following function, `sim_lin_norm_omitted` samples from a linear, normal model with homoskedastic errors, but allows you to run a misspecified regression on the samples by omitting variables.
+The arguments to this function are the same as `sim_lin_norm` except for
 
 `omit`
 
 :    A vector of integers of the columns to omit from X when estimating the sample regression.
 
-```{r}
-sim_lin_norm_omitted <- function(m, n, mu_X, s_X, R_X, beta, sigma,
+```{r sim_lin_norm_omitted}
+sim_lin_norm_omitted <- function(iter, n, mu_X, s_X, R_X, beta, sigma,
                                  omit = integer(0)) {
   assert_that(length(s_X) == length(mu_X),
               ncol(R_X) == nrow(R_X),
@@ -451,8 +475,8 @@ sim_lin_norm_omitted <- function(m, n, mu_X, s_X, R_X, beta, sigma,
   colnames(X) <- paste("X", 1:k, sep = "")
   # ------
   simulations <- list()
-  p <- progress_estimated(m, min_time = 2)
-  for (j in 1:m) {
+  p <- progress_estimated(iter, min_time = 2)
+  for (j in 1:iter) {
     mu <- cbind(1, X) %*% beta
     epsilon <- rnorm(n, mean = 0, sd = sigma)
     y <- mu + epsilon
@@ -479,12 +503,12 @@ $$
 \begin{aligned}[t]
 Y_i &= 0 + 1 \cdot x_{1,i} + 1 \cdot x_{2,i} + 1 \cdot x_{3,i} + \epsilon_i \\
 \epsilon_i &\sim N(0, \sigma^2) \\
-\sigma &= 1.7 
+\sigma &= 1.7
 \end{aligned}
 $$
-The covariates, $x$, have mean $\mu_X = (0, 0, 0)$ and standard deviation $s_X = (1, 1, 1)$ and correlation 
+The covariates, $x$, have mean $\mu_X = (0, 0, 0)$ and standard deviation $s_X = (1, 1, 1)$ and correlation
 $$
-R_X = 
+R_X =
 \begin{bmatrix}
 1 & 0 & \rho_{1,3} \\
 0 & 1 & 0 \\
@@ -497,19 +521,20 @@ In all simulations, the sample regression will only include $x_1$ and $x_2$:
 $$
 y_i = \hat\beta_0 + \hat\beta_1 x_{1,i} + \hat\beta_2 x_{2,i} + \hat\epsilon_i
 $$
+To omit the 3rd variable, set `omit = 3` in `sim_lin_norm_omitted`.
 
-Consider the following values of $\rho_{1,3}$: 0.1, 0.7, -0.7, 0.99.
-How does the correlation of variables affect:  
+Consider the following values of $\rho_{1,3}$: 0, 0.1, 0.7, -0.7, 0.99, -0.99.
+How does the correlation of variables affect:
 
 - The bias of each $\hat{\beta}_j$?
 - The variance of $\hat{\beta}_j$?
 - The bias of the standard error of each $\hat{\beta}_j$?
 - The bias of the robust standard error of each $\hat{\beta}_j$?
 
-## Heteroskedasticity 
+## Heteroskedasticity
 
 In this problem, we will explore how heteroskedasticity affects OLS estimates.
-The function `sim_lin_norm_hereosk` will simulate from that population, but estimate OLS regressions on each sample that do not model that heteroskedasticity.
+The function `sim_lin_norm_hereosked` will simulate from that population, but estimate OLS regressions on each sample that do not model that heteroskedasticity.
 It samples from a population model with heteroskedasticity:
 $$
 \begin{aligned}
@@ -527,7 +552,7 @@ The arguments for it are the same as `sim_lin_norm` except for
 :    A vector of coefficients for $\log \sigma^2 = \gamma_0 + \gamma_1 x_1 + \dots + \gamma_k x_k$. Like `beta` it should have length `k + 1`.
 
 ```{r}
-sim_lin_norm_heterosked <- function(m, n, mu_X, s_X, R_X, beta, sigma, gamma) {
+sim_lin_norm_heterosked <- function(iter, n, mu_X, s_X, R_X, beta, sigma, gamma) {
   assert_that(length(s_X) == length(mu_X),
               ncol(R_X) == nrow(R_X),
               ncol(R_X) == length(mu_X),
@@ -535,10 +560,10 @@ sim_lin_norm_heterosked <- function(m, n, mu_X, s_X, R_X, beta, sigma, gamma) {
               length(gamma) == (length(mu_X) + 1))
   X <- MASS::mvrnorm(n, mu_X, sdcor2cov(s_X, R_X), empirical = TRUE)
   simulations <- list()
-  p <- progress_estimated(m, min_time = 2)
-  for (j in 1:m) {
+  p <- progress_estimated(iter, min_time = 2)
+  for (j in 1:iter) {
     mu <- cbind(1, X) %*% beta
-    # ------------ 
+    # ------------
     # NEW: variance varies by each observation
     sigma <- sqrt(exp(cbind(1, X) %*% gamma))
     # ------------
@@ -567,7 +592,7 @@ Y_i &= 0 + 1 \cdot x_1 + 1 \cdot x_2 \epsilon_i \\
 \end{aligned}
 $$
 
-We will run several simulations with different values of $\gamma_1$ to vary to heteroskedasticity: 
+We will run several simulations with different values of $\gamma_1$ to vary to heteroskedasticity:
 
 - $\gamma_1 = 0$ no heteroskedasticity
 - $\gamma_1 = 0.2$ low
@@ -577,7 +602,7 @@ Before running the simulation draw a single sample of $y$ from a population with
 You should be able to extract the relevant code from `sim_lin_norm_heterosked`.
 Regress $y$ on $x_1$ and $x_2$ and plot the residuals of this regression against $x_1$.
 
-Run `sim_lin_norm_heterosked` for each of those values of $\gamma_1$. 
+Run `sim_lin_norm_heterosked` for each of those values of $\gamma_1$.
 How does heteroskedasticity affect
 
 - the bias of each $\hat{\beta}_j$?
@@ -608,7 +633,7 @@ $$
 where $\quantile(y, q)$ is the $q$th quantile of $y$.
 For example, if $q = 0.5$, all $y_i$ that are less than the median of $y$ (the bottom 50%) are dropped.
 
-The function `sim_lin_norm_trucated`, is similar to the `sim_lin_norm` function except for the argument
+The function `sim_lin_norm_truncated`, is similar to the `sim_lin_norm` function except for the argument
 
 `truncation`
 
@@ -616,12 +641,12 @@ The function `sim_lin_norm_trucated`, is similar to the `sim_lin_norm` function 
      The default value `truncation = 0.5` means all values of $y$ less than the median are dropped before running the regression.
 
 
-```{r}
-sim_lin_norm_truncated <- function(m, n, mu_X, s_X, R_X, beta, sigma, truncation = 0.5) {
+```{r sim_lin_norm_truncated}
+sim_lin_norm_truncated <- function(iter, n, mu_X, s_X, R_X, beta, sigma, truncation = 0.5) {
   X <- MASS::mvrnorm(n, mu_X, sdcor2cov(s_X, R_X), empirical = TRUE)
   simulations <- list()
-  p <- progress_estimated(m, min_time = 2)
-  for (j in 1:m) {
+  p <- progress_estimated(iter, min_time = 2)
+  for (j in 1:iter) {
     mu <- cbind(1, X) %*% beta
     epsilon <- rnorm(n, mean = 0, sd = sigma)
     y <- mu + epsilon
@@ -643,42 +668,43 @@ sim_lin_norm_truncated <- function(m, n, mu_X, s_X, R_X, beta, sigma, truncation
   }
   bind_rows(simulations)
 }
-``` 
+```
 
-For this problem, use only a single covariate, with $\mu_X = 0$,$s_X = 1$, and $R_X = 1$. 
+For this problem, use only a single covariate, with $\mu_X = 0$,$s_X = 1$, and $R_X = 1$.
 Let $\beta = (0, 1)$ and $\sigma = 1$.
 
-Before running simulations  with `sim_lin_normal_trunc`, 
-write code to simulate a function from 
+Before running simulations  with `sim_lin_normal_truncated`,
 
-Run several simulations with `sim_lin_normal_trunc` and vary the sample size.
-How does the sample size affect fhte following: 
+
+Run several simulations with `sim_lin_normal_truncated` and vary the sample size.
+How does the sample size affect fhte following:
 
 - The bias of each $\hat{\beta}_j$?
 - The variance of $\hat{\beta}_j$?
 - The bias of the standard error of each $\hat{\beta}_j$?
 
-In particular, does the effect of truncation on $\beta{\beta}$ decrease if we increase the sample size? 
+In particular, does the effect of truncation on $\beta{\beta}$ decrease if we increase the sample size?
 
+<!-- 
 ## Serial Correlation (Optional)
 
 **This problem you can do for fun.**
 I had written this, but I think the homework may be getting a little long.
-However, many of you are dealing with data in a panel format, this may be useful information. 
+However, many of you are dealing with data in a panel format, this may be useful information.
 You will find that serial correlation is similar to heteroskedasticity in its effects on the estimates of OLS.
 
 In this problem, we'll consider how serial correlation in errors and covariates affects OLS estimates.
 Serial correlation in the errors means that the errors are correlated over time.
 In this problem, the population we will use is
 $$
-Y_i = \beta_0 + \sum_{j = 1}^k \beta_j x_{j,i} + \epsilon_{i} + \rho \epsilon_{i - 1} 
+Y_i = \beta_0 + \sum_{j = 1}^k \beta_j x_{j,i} + \epsilon_{i} + \rho \epsilon_{i - 1}
 $$
 This is a moving average process of order 1, or MA(1).
 If $\rho \neq 0$, then the $y_i$'s will be serially correlated.
 
 Additionally, for each covariate, the present value will now depend on the random part of the previous value, such that,
 $$
-x_{k,i} = \mu_{x_k} + \rho_{x_k} \upsilon_{x_{k,i-1}} + \upsilon_{x_{k,i}} 
+x_{k,i} = \mu_{x_k} + \rho_{x_k} \upsilon_{x_{k,i-1}} + \upsilon_{x_{k,i}}
 $$
 This is a moving average of order 1, or MA(1). If $p_k \neq 0$ for some $k$, that $x_k$ is also serially correlated.
 
@@ -687,7 +713,7 @@ $$
 y_i = \hat\beta_0 + \hat\beta_1 x_{}
 $$
 
-The function `sim_lin_norm_ma`
+The function `sim_lin_norm_ma1` has the same arguments as `sim_lin_norm` except for
 
 `rho`
 
@@ -698,8 +724,8 @@ The function `sim_lin_norm_ma`
 :   A value between 0 and 1 determining the serial correlation of the covariates in $X$.
     This assumes that the serial correlation in all $X$ is the same.
 
-```{r}
-sim_lin_norm_ma1 <- function(m, n, mu_X, s_X, R_X, beta, sigma,
+```{rmsim_lin_norm_ma1}
+sim_lin_norm_ma1 <- function(iter, n, mu_X, s_X, R_X, beta, sigma,
                              rho = 0.5, rho_X = 0) {
   assert_that(length(s_X) == length(mu_X),
               ncol(R_X) == nrow(R_X),
@@ -711,8 +737,8 @@ sim_lin_norm_ma1 <- function(m, n, mu_X, s_X, R_X, beta, sigma,
   k <- length(mu_X)
   X <- mvrnorm_ma(n, mu_X, sdcor2cov(s_X, R_X), rho = rho_X, empirical = TRUE)
   simulations <- list()
-  p <- progress_estimated(m, min_time = 2)
-  for (j in 1:m) {
+  p <- progress_estimated(iter, min_time = 2)
+  for (j in 1:iter) {
     mu <- cbind(1, X) %*% beta
     # ---------
     # NEW: generate y with serially correlated errors
@@ -745,7 +771,7 @@ Y_i &= 0 + 1 \cdot x_1 + 1 \cdot x_2 + 1 \cdot x_3 + \epsilon_i + \rho \epsilon_
 \end{aligned}
 $$
 where $\rho$ will vary with simulations.
-The covariates $x$ are drawn from 
+The covariates $x$ are drawn from
 $$
 \begin{aligned}[t]
 x_{j,i} &= 0 + \upsilon_{j,i} + \rho_{X,j} \upsilon_{j,i} & \text{for $j = 1, 2, 3$} \\
@@ -763,13 +789,15 @@ Compare the bias and variance of $\hat{\beta}$ under the following scenarios.
 - $\rho = 0.9$, high serial correlation in the error of $y$.
 
 How does serial correlation in $y$ and $X$ influence OLS estimates?
-Consider bias and variance of the estimates of $\hat\beta$. 
+Consider bias and variance of the estimates of $\hat\beta$.
 Also consider the bias of the standard error of $\hat\beta$.
 Does using robust standard errors help?
 
+-->
+
 [^randomx]: Although the statistical theory of OLS works (thankfully) for random $X$,
-    as long as certain conditions are met. See Fox (2nd ed.), Ch 9.6. 
- 
+    as long as certain conditions are met. See Fox (2nd ed.), Ch 9.6.
+
 [^samplingdv]: See Ashworth, Scott, Joshua D. Clinton, Adam Meirowitz, and Kristopher W. Ramsay. 2008. ``Design, Inference, and the Strategic Logic of Suicide Terrorism.'' *American Political Science Review() 102(02): 269–73. <http://journals.cambridge.org/article_S0003055408080167>
 
 * * *
