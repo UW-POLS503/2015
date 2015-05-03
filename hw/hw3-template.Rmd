@@ -8,7 +8,7 @@ output:
 
 # Setup
 
-First, load packages needed for this assignment
+This homework depends on the following packages.
 ```{r load, message = FALSE}
 library("ggplot2")
 library("dplyr")
@@ -17,33 +17,18 @@ library("assertthat")
 library("tidyr")
 library("pols503")
 ```
-
-```{r sdcor2cov, echo = FALSE}
-sdcor2cov <- function(s, r = diag(length(s))) {
-  s <- diag(s, nrow = length(s), ncol = length(s))
-  s %*% r %*% s
-}
-```
-```{r summarize_sim, echo = FALSE}
-summarize_sim <- function(.data, beta) {
-  ret <- .data %>%
-    group_by(term) %>%
-    summarize(estimate_mean = mean(estimate),
-              estimate_sd = sd(estimate),
-              se_mean = sqrt(mean(std.error) ^ 2),
-              se_robust_mean = sqrt(mean(std.error.robust) ^ 2),
-              samples = length(estimate))
-  ret[["beta_true"]] <- beta
-  ret
-}
+This homework uses functions from the distributed file `hw3-functions.R`.
+```{r}
+source("hw3-functions.R")
 ```
 
 This code chunk sets default code chunk settings that will make your simulations quicker and reproducible: see the [R Markdown Reference Guide](http://www.rstudio.com/resources/cheatsheets/).
 In particular, it ensures that knitr will cache results so each time you compile,  you do not need to rerun simuations if things do not change. 
 ```{r}
-knitr::opts_chunk$set(cache = TRUE,
-					  autodep = TRUE,
-					  cache.extra = rand_seed)
+library("knitr")
+opts_chunk$set(cache = TRUE,
+					    autodep = TRUE,
+					    cache.extra = rand_seed)
 ```
 If code chunks do not evaluate, just delete that chunk or set `cache = FALSE` to force every.
 Finally, we would like to ensure that we get the same results each time it is run even though we are drawing random numbers.
@@ -54,45 +39,9 @@ set.seed(11346170)
 
 # Problems
 
-## Problem 1
+## Problem 1: Linear Normal Model with Homoskedasticity
 
-```{r sim_lin_norm,echo = FALSE}
-sim_lin_norm <- function(iter, n, mu_X, s_X, R_X, beta, sigma) {
-  # Error checking so that bugs are caught quicker :-)
-  assert_that(length(s_X) == length(mu_X),
-              ncol(R_X) == nrow(R_X),
-              ncol(R_X) == length(mu_X),
-              length(beta) == (length(mu_X) + 1))
-  # Generate an X
-  X <- MASS::mvrnorm(n, mu = mu_X, Sigma = sdcor2cov(s_X, R_X),
-                     empirical = TRUE)
-  # Create a list to stor the results
-  simulations <- list()
-  # Create a progress bar because we're impatient
-  p <- progress_estimated(iter, min_time = 2)
-  # Loop over the simulation runs
-  for (j in 1:iter) {
-    # Draw y
-    mu <- cbind(1, X) %*% beta
-    epsilon <- rnorm(n, mean = 0, sd = sigma)
-    y <- mu + epsilon
-    # Run a regression
-    mod <- lm(y ~ X)
-    # Save the coefficients in a data frame
-    mod_df <- tidy(mod) %>%
-      # Add a column indicating the simulation number
-      mutate(.iter = j)
-    # Add hetroskedasticity consistent se to the data
-    mod_df[["std.error.robust"]] <- sqrt(diag(car::hccm(mod)))
-    # Save these results as the next element in the storage list
-    simulations[[j]] <- mod_df
-    # Update the progress bar
-    p$tick()$print()
-  }
-  # Combine the list of data frames into a single data frame
-  bind_rows(simulations)
-}
-```
+My answer here ...
 
 ## Problem 2: Correlated Covariates
 
@@ -108,122 +57,12 @@ My answer here ...
 
 ## Problem 5: Omitted Variable Bias
 
-```{r sim_lin_norm_omitted,echo = FALSE}
-sim_lin_norm_omitted <- function(iter, n, mu_X, s_X, R_X, beta, sigma,
-                                 omit = integer(0)) {
-  assert_that(length(s_X) == length(mu_X),
-              ncol(R_X) == nrow(R_X),
-              ncol(R_X) == length(mu_X),
-              length(beta) == (length(mu_X) + 1))
-  # Generate an X
-  k <- length(mu_X)
-  X <- MASS::mvrnorm(n, mu_X, sdcor2cov(s_X, R_X), empirical = TRUE)
-  # ------
-  # NEW: ensure colnames of X are consistent despite omitting some in lm
-  colnames(X) <- paste("X", 1:k, sep = "")
-  # ------
-  simulations <- list()
-  p <- progress_estimated(iter, min_time = 2)
-  for (j in 1:iter) {
-    mu <- cbind(1, X) %*% beta
-    epsilon <- rnorm(n, mean = 0, sd = sigma)
-    y <- mu + epsilon
-    # ---------
-    # NEW: omit columns of X
-    # Look up paste and setdiff function to see what they does
-    Xomit <- as.data.frame(X)[ , setdiff(1:k, omit)]
-    # ~ . means use all variables from `data` on the RHS of the formula
-    mod <- lm(y ~ . , data = Xomit)
-    # ---------
-    mod_df <- tidy(mod) %>%
-      mutate(.iter = j)
-    mod_df[["std.error.robust"]] <- sqrt(diag(car::hccm(mod)))
-    simulations[[j]] <- mod_df
-    p$tick()$print()
-  }
-  # Combine the list of data frames into a single data frame
-  bind_rows(simulations)
-}
-```
+My answer here ...
 
 ## Problem 6: Heteroskedasticity
 
-```{r}
-sim_lin_norm_heterosked <- function(iter, n, mu_X, s_X, R_X, beta, sigma, gamma) {
-  assert_that(length(s_X) == length(mu_X),
-              ncol(R_X) == nrow(R_X),
-              ncol(R_X) == length(mu_X),
-              length(beta) == (length(mu_X) + 1),
-              length(gamma) == (length(mu_X) + 1))
-  X <- MASS::mvrnorm(n, mu_X, sdcor2cov(s_X, R_X), empirical = TRUE)
-  simulations <- list()
-  p <- progress_estimated(iter, min_time = 2)
-  for (j in 1:iter) {
-    mu <- cbind(1, X) %*% beta
-    # ------------
-    # NEW: variance varies by each observation
-    sigma <- sqrt(exp(cbind(1, X) %*% gamma))
-    # ------------
-    epsilon <- rnorm(n, mean = 0, sd = sigma)
-    y <- mu + epsilon
-    # Run a regression
-    mod <- lm(y ~ X)
-    # Save the coefficients in a data frame
-    # and Add a column indicating the simulation number
-    mod_df <- tidy(mod) %>%
-      mutate(.iter = j)
-    mod_df[["std.error.robust"]] <- sqrt(diag(car::hccm(mod)))
-    simulations[[j]] <- mod_df
-    p$tick()$print()
-  }
-  bind_rows(simulations)
-}
-```
-
-The code to sample
-```{r sample_heterosked}
-# R code here
-```
-
-The rest of my answer
+My answer here .. 
 
 ## Problem 7: Truncated Dependent Variable
 
-```{r sim_lin_norm_truncated, echo = FALSE}
-sim_lin_norm_truncated <- function(iter, n, mu_X, s_X, R_X, beta, sigma, truncation = 0.5) {
-  X <- MASS::mvrnorm(n, mu_X, sdcor2cov(s_X, R_X), empirical = TRUE)
-  simulations <- list()
-  p <- progress_estimated(iter, min_time = 2)
-  for (j in 1:iter) {
-    mu <- cbind(1, X) %*% beta
-    epsilon <- rnorm(n, mean = 0, sd = sigma)
-    y <- mu + epsilon
-    # -------
-    # NEW: drop cases in which y > mean(y)
-    is_obs <- (y < quantile(y, prob = truncation))
-    yobs <- y[is_obs, ]
-    Xobs <- X[is_obs, ]
-    # -------
-    # Run a regression
-    mod <- lm(yobs ~ Xobs)
-    # Save the coefficients in a data frame
-    # and Add a column indicating the simulation number
-    mod_df <- tidy(mod) %>%
-      mutate(.iter = j)
-    mod_df[["std.error.robust"]] <- sqrt(diag(car::hccm(mod)))
-    simulations[[j]] <- mod_df
-    p$tick()$print()
-  }
-  bind_rows(simulations)
-}
-```
-
-My code to sample truncated 
-```{r sample_truncated}
-```
-
-* * *
-
-Derived from of Christopher Adolph, "Problem Set 3", *POLS/CSSS 503*, University of Washington, Spring 2014. <http://faculty.washington.edu/cadolph/503/503hw3.pdf>. Used with permission.
-
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+My answer here ...

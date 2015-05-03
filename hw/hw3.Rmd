@@ -52,7 +52,8 @@ This is almost always the case for the properties of models applied to small sam
 Here, we use Monte Carlo not out of necessity but for pedagogical purposes, as a tool to gain a more intuitive and hands-on understanding of least squares and its properties.
 
 1. Create a new R project for this homework named `hw3` and load that project.
-2. Do your analyses in an R markdown document.
+2. Do your analyses in an R markdown document based off of `hw3-template.Rmd`
+2. Download `hw3-functions.R` and put this in your directory.
 3. Submit a zipped file of the directory with your R project through Canvas. This should contain all the materials for another person to run your R Markdown fil  This should contain:
 
     - The R project (`.Rproj`) file
