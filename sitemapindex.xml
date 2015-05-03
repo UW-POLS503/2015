@@ -41,6 +41,10 @@
   <lastmod>2015-04-27</lastmod>
  </sitemap>
  <sitemap>
+  <loc>http://pols503.github.io/pols_503_sp15/categories/problem-sets.xml</loc>
+  <lastmod>2015-05-03</lastmod>
+ </sitemap>
+ <sitemap>
   <loc>http://pols503.github.io/pols_503_sp15/categories/programming.xml</loc>
   <lastmod>2015-04-27</lastmod>
  </sitemap>
@@ -66,7 +70,7 @@
  </sitemap>
  <sitemap>
   <loc>http://pols503.github.io/pols_503_sp15/rss.xml</loc>
-  <lastmod>2015-04-27</lastmod>
+  <lastmod>2015-05-03</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://pols503.github.io/pols_503_sp15/sitemap.xml</loc>

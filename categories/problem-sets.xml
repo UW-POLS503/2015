@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>POLS/CS&amp;SS 503 (problem sets)</title><link>http://pols503.github.io/pols_503_sp15/</link><description></description><atom:link type="application/rss+xml" rel="self" href="http://pols503.github.io/pols_503_sp15/categories/problem-sets.xml"></atom:link><language>en</language><lastBuildDate>Sun, 03 May 2015 21:05:54 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Problem Set 3 Posted</title><link>http://pols503.github.io/pols_503_sp15/posts/problem-set-3-posted.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
+.. title: Problem Set 3 Posted
+.. slug: problem-set-3-posted
+.. date: 2015-05-03 14:03:56 UTC-07:00
+.. tags: problem sets
+.. category: 
+.. link: 
+.. description: 
+.. type: text
+.. author: Jeffrey Arnold
+--&gt;
+
+&lt;p&gt;&lt;a href="http://pols503.github.io/pols_503_sp15/hw/hw3.html"&gt;Problem Set 3&lt;/a&gt; is posted; it will be due at class on Tuesday, May 12. This problem sets involves simulation of models with R. Please look at it, and work through the setup/introduction, before class on Tuesday so I an answre questions.&lt;/p&gt;</description><category>problem sets</category><guid>http://pols503.github.io/pols_503_sp15/posts/problem-set-3-posted.html</guid><pubDate>Sun, 03 May 2015 21:03:56 GMT</pubDate></item></channel></rss>
