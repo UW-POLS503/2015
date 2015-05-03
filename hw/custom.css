@@ -1,3 +1,4 @@
+/* increment problems */
 #problems {
     counter-reset:h2
 }
@@ -10,15 +11,15 @@
 }
 
 /* Definition list */
-  dt {
-    float: left;
-    clear: left;
-    width: 100px;
-    text-align: left;
-    font-weight: normal;
-    font-family: "Courier New", Courier, monospace;
-  }
-  dd {
-    margin: 0 0 0 110px;
-    padding: 0 0 0.5em 0;
-  }
+dt {
+  float: left;
+  clear: left;
+  width: 100px;
+  text-align: left;
+  font-weight: normal;
+  font-family: "Courier New", Courier, monospace;
+}
+dd {
+  margin: 0 0 0 110px;
+  padding: 0 0 0.5em 0;
+}
