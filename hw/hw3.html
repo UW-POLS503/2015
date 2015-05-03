@@ -38,7 +38,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 </script>
 
 
-<link href="data:text/css,%23problems%20%7B%0A%20%20%20%20counter%2Dreset%3Ah2%0A%7D%0A%23problems%20h2%3Abefore%20%7B%0A%20%20%20%20counter%2Dincrement%3A%20h2%3B%0A%20%20%20%20content%3A%20%22Problem%20%22%20counter%28h2%29%20%22%3A%20%22%3B%0A%7D%0A%23problems%20h2%20%7B%0A%20%20font%2Dsize%3A%2020px%3B%0A%7D%0A%0A%2F%2A%20Definition%20list%20%2A%2F%0A%20%20dt%20%7B%0A%20%20%20%20float%3A%20left%3B%0A%20%20%20%20clear%3A%20left%3B%0A%20%20%20%20width%3A%20100px%3B%0A%20%20%20%20text%2Dalign%3A%20left%3B%0A%20%20%20%20font%2Dweight%3A%20normal%3B%0A%20%20%20%20font%2Dfamily%3A%20%22Courier%20New%22%2C%20Courier%2C%20monospace%3B%0A%20%20%7D%0A%20%20dd%20%7B%0A%20%20%20%20margin%3A%200%200%200%20110px%3B%0A%20%20%20%20padding%3A%200%200%200%2E5em%200%3B%0A%20%20%7D%0A" rel="stylesheet" type="text/css" />
+<link href="data:text/css,%2F%2A%20increment%20problems%20%2A%2F%0A%23problems%20%7B%0A%20%20%20%20counter%2Dreset%3Ah2%0A%7D%0A%23problems%20h2%3Abefore%20%7B%0A%20%20%20%20counter%2Dincrement%3A%20h2%3B%0A%20%20%20%20content%3A%20%22Problem%20%22%20counter%28h2%29%20%22%3A%20%22%3B%0A%7D%0A%23problems%20h2%20%7B%0A%20%20font%2Dsize%3A%2020px%3B%0A%7D%0A%0A%2F%2A%20Definition%20list%20%2A%2F%0Adt%20%7B%0A%20%20float%3A%20left%3B%0A%20%20clear%3A%20left%3B%0A%20%20width%3A%20100px%3B%0A%20%20text%2Dalign%3A%20left%3B%0A%20%20font%2Dweight%3A%20normal%3B%0A%20%20font%2Dfamily%3A%20%22Courier%20New%22%2C%20Courier%2C%20monospace%3B%0A%7D%0Add%20%7B%0A%20%20margin%3A%200%200%200%20110px%3B%0A%20%20padding%3A%200%200%200%2E5em%200%3B%0A%7D%0A" rel="stylesheet" type="text/css" />
 
 </head>
 
@@ -72,6 +72,8 @@ img {
 <p><span class="math">\[
 \DeclareMathOperator{\cor}{cor}
 \DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator{\se}{se}
 \DeclareMathOperator{\diag}{diag}
 \DeclareMathOperator{\quantile}{quantile}
 \]</span></p>
@@ -81,7 +83,8 @@ img {
 <p>Monte Carlo experiments always produce the same results as analytic proofs for the specific case considered. Each method has advantages and disadvantages: proofs are more general and elegant, but are not always possible. Monte Carlo experiments are much easier to construct and can always be carried out, but findings from these experiments only apply to the specific scenario under study. Where proofs are available, they are generally preferable to Monte Carlo experiments, but proofs of the properties of more complicated models are sometimes impossible or impractically difficult. This is almost always the case for the properties of models applied to small samples of data. Here, we use Monte Carlo not out of necessity but for pedagogical purposes, as a tool to gain a more intuitive and hands-on understanding of least squares and its properties.</p>
 <ol style="list-style-type: decimal">
 <li>Create a new R project for this homework named <code>hw3</code> and load that project.</li>
-<li>Do your analyses in an R markdown document.</li>
+<li>Do your analyses in an R markdown document based off of <code>hw3-template.Rmd</code></li>
+<li>Download <code>hw3-functions.R</code> and put this in your directory.</li>
 <li><p>Submit a zipped file of the directory with your R project through Canvas. This should contain all the materials for another person to run your R Markdown fil This should contain:</p>
 <ul>
 <li>The R project (<code>.Rproj</code>) file</li>
@@ -99,10 +102,11 @@ img {
 <p>This assignment has some non-trivial computation. The following code sets the knitr options to cache the results of computations, so that any computations that do not change are not rerun. See RStudio’s help on <a href="http://rmarkdown.rstudio.com/authoring_rcodechunks.html#caching">Authoring R Code Chunks</a> for more information about what this is doing.</p>
 <pre class="r"><code>library(&quot;knitr&quot;)
 set.seed(135125)
-opts_chunk$set(cache = TRUE, autodep = TRUE, cache.extra = rand_seed,
+opts_chunk$set(cache = FALSE, autodep = TRUE, cache.extra = rand_seed,
                error = TRUE)</code></pre>
 <p>This will use the standard <a href="http://blog.revolutionanalytics.com/2015/03/hadleyverse.html">Hadleyverse</a> packages that we’ve been using in this course (<strong>ggplot2</strong>, <strong>dplyr</strong>, <strong>tidyr</strong>, <strong>broom</strong>). A few of the functions will use <strong>assertthat</strong>, which contains functions to test for errors in functions. Finally, it will use a function from a package written for this course, <strong>pols503</strong>.</p>
-<pre class="r"><code>library(&quot;ggplot2&quot;)
+<pre class="r"><code>library(&quot;MASS&quot;)
+library(&quot;ggplot2&quot;)
 library(&quot;dplyr&quot;)
 library(&quot;broom&quot;)
 library(&quot;assertthat&quot;)
@@ -159,16 +163,16 @@ X_i \sim N(\mu_X, \Sigma_X) \text{ for $i = 1, \dots, n$.}
   s &lt;- diag(s, nrow = length(s), ncol = length(s))
   s %*% r %*% s
 }</code></pre>
-<p>In this example, we will use a sample of size <span class="math">\(n = 128\)</span>, with <span class="math">\(k = 3\)</span> variables drawn from a multivariate normal distribution with mean <span class="math">\(\mu_X = (0, 0, 0)\)</span>, standard deviations of <span class="math">\(s_X = (1, 1, 1)\)</span>, and independent variables, <span class="math">\[
+<p>In this example, we will use a sample of size <span class="math">\(n = 1024\)</span>, with <span class="math">\(k = 3\)</span> variables drawn from a multivariate normal distribution with mean <span class="math">\(\mu_X = (0, 0, 0)\)</span>, standard deviations of <span class="math">\(s_X = (1, 1, 1)\)</span>, and independent variables, <span class="math">\[
 R_X = \begin{bmatrix} 1 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 \end{bmatrix}
 \]</span> This is equivalent to sampling each variable independently from a standard normal distribution.</p>
-<pre class="r"><code>n &lt;- 128
+<pre class="r"><code>n &lt;- 1024
 mu_X &lt;- rep(0, 3)
 s_X &lt;- rep(1, 3)
 R_X &lt;- diag(3)
 Sigma_X &lt;- sdcor2cov(s_X, R_X)</code></pre>
 <p>We draw the sample using the <strong>MASS</strong> function <code>mvrnorm</code>,</p>
-<pre class="r"><code>X &lt;- MASS::mvrnorm(n, mu_X, Sigma_X, empirical = TRUE)</code></pre>
+<pre class="r"><code>X &lt;- mvrnorm(n, mu_X, Sigma_X, empirical = TRUE)</code></pre>
 <p>The option <code>empirical = TRUE</code> is used to make sure that although <span class="math">\(X\)</span> is randomly sampled, it is adjusted to so that the sample mean and covariance are equal to <span class="math">\(\mu_X\)</span> and <span class="math">\(\Sigma_X\)</span>,</p>
 <pre class="r"><code>round(cor(X), 1)</code></pre>
 <pre><code>##      [,1] [,2] [,3]
@@ -202,11 +206,16 @@ Sigma_X &lt;- sdcor2cov(s_X, R_X)</code></pre>
 <pre class="r"><code>mod_df[[&quot;std.error.robust&quot;]] &lt;- sqrt(diag(car::hccm(mod)))</code></pre>
 <p>The coefficients of the OLS regression on the parameter should be similar to, but not exactly, those of the population from which it was drawn.</p>
 <pre class="r"><code>mod_df</code></pre>
-<pre><code>##          term   estimate std.error statistic      p.value std.error.robust
-## 1 (Intercept) -0.1670195 0.1414748 -1.180560 2.400372e-01        0.1438654
-## 2          X1  0.9725800 0.1420307  6.847675 3.090945e-10        0.1511459
-## 3          X2  1.0991485 0.1420307  7.738810 3.025168e-12        0.1462977
-## 4          X3  0.7342187 0.1420307  5.169437 9.125261e-07        0.1450290</code></pre>
+<pre><code>##          term    estimate  std.error statistic      p.value
+## 1 (Intercept) -0.05817017 0.05442267 -1.068859 2.853860e-01
+## 2          X1  0.95556968 0.05444926 17.549727 1.860870e-60
+## 3          X2  1.01468135 0.05444926 18.635355 6.212109e-67
+## 4          X3  0.93241985 0.05444926 17.124564 5.628815e-58
+##   std.error.robust
+## 1       0.05453624
+## 2       0.06028794
+## 3       0.05588302
+## 4       0.05070929</code></pre>
 </div>
 </div>
 <div id="multiple-iterations" class="section level2">
@@ -247,7 +256,7 @@ Sigma_X &lt;- sdcor2cov(s_X, R_X)</code></pre>
   X &lt;- MASS::mvrnorm(n, mu = mu_X, Sigma = sdcor2cov(s_X, R_X),
                      empirical = TRUE)
   # Create a list to stor the results
-  simulations &lt;- list()
+  iterations &lt;- list()
   # Create a progress bar because we're impatient
   p &lt;- progress_estimated(iter, min_time = 2)
   # Loop over the simulation runs
@@ -265,12 +274,12 @@ Sigma_X &lt;- sdcor2cov(s_X, R_X)</code></pre>
     # Add hetroskedasticity consistent se to the data
     mod_df[[&quot;std.error.robust&quot;]] &lt;- sqrt(diag(car::hccm(mod)))
     # Save these results as the next element in the storage list
-    simulations[[j]] &lt;- mod_df
+    iterations[[j]] &lt;- mod_df
     # Update the progress bar
     p$tick()$print()
   }
   # Combine the list of data frames into a single data frame
-  bind_rows(simulations)
+  bind_rows(iterations)
 }</code></pre>
 <p>Now we will draw samples using the values that we used before and look at the results.</p>
 <pre class="r"><code>iter &lt;- 4096
@@ -278,13 +287,13 @@ sim0 &lt;- sim_lin_norm(iter, n, mu_X, s_X, R_X, beta, sigma)
 head(sim0)</code></pre>
 <pre><code>## Source: local data frame [6 x 7]
 ## 
-##          term    estimate std.error  statistic      p.value .iter
-## 1 (Intercept)  0.10063316 0.1512579  0.6653083 5.070889e-01     1
-## 2          X1  1.01858951 0.1518523  6.7077654 6.262992e-10     1
-## 3          X2  1.18704431 0.1518523  7.8170987 1.996208e-12     1
-## 4          X3  0.98511662 0.1518523  6.4873348 1.881047e-09     1
-## 5 (Intercept) -0.06722842 0.1600049 -0.4201646 6.750924e-01     2
-## 6          X1  0.95431756 0.1606337  5.9409565 2.665887e-08     2
+##          term   estimate  std.error statistic      p.value .iter
+## 1 (Intercept) 0.04392657 0.05384603  0.815781 4.148158e-01     1
+## 2          X1 0.97586455 0.05387234 18.114391 8.428671e-64     1
+## 3          X2 1.03725385 0.05387234 19.253924 1.043124e-70     1
+## 4          X3 1.04418402 0.05387234 19.382564 1.682942e-71     1
+## 5 (Intercept) 0.09207644 0.05238289  1.757758 7.908863e-02     2
+## 6          X1 1.07433336 0.05240849 20.499225 1.785011e-78     2
 ## Variables not shown: std.error.robust (dbl)</code></pre>
 <p>With all the samples, we can summarize the results and compare them to the population parameters to evaluate how well OLS works. The following function, <code>summarize_sim</code> takes a data frame generated by the simulation function and a vector of the original parameters, and generates a summary data frame with one row per coefficient. Its arguments are</p>
 <dl>
@@ -311,25 +320,44 @@ head(sim0)</code></pre>
 sim0_summary</code></pre>
 <pre><code>## Source: local data frame [4 x 7]
 ## 
-##          term estimate_mean estimate_sd   se_mean se_robust_mean samples
-## 1 (Intercept)  -0.003188688   0.1507546 0.1498737      0.1523029    4096
-## 2          X1   0.997162339   0.1503797 0.1504626      0.1535338    4096
-## 3          X2   0.998530243   0.1546126 0.1504626      0.1538075    4096
-## 4          X3   1.000031151   0.1520194 0.1504626      0.1536107    4096
+##          term estimate_mean estimate_sd    se_mean se_robust_mean samples
+## 1 (Intercept) -0.0007272491  0.05263744 0.05311051     0.05321465    4096
+## 2          X1  1.0001479740  0.05395631 0.05313646     0.05327105    4096
+## 3          X2  0.9997979005  0.05246436 0.05313646     0.05327076    4096
+## 4          X3  0.9987674529  0.05272698 0.05313646     0.05323488    4096
 ## Variables not shown: beta_true (dbl)</code></pre>
 <p>In these simulations we will generally, but not exclusively, be concerned with the bias and efficiency of the estimates.</p>
 <p>First, compare the average value of <span class="math">\(\hat\beta\)</span> to the population parameters <span class="math">\(\beta\)</span>. This is what is nice about simulations, we know what the correct answer should be!</p>
 <pre class="r"><code>select(sim0_summary, estimate_mean, beta_true)</code></pre>
-<pre><code>## Error in select(sim0_summary, estimate_mean, beta_true): unused arguments (estimate_mean, beta_true)</code></pre>
+<pre><code>## Source: local data frame [4 x 2]
+## 
+##   estimate_mean beta_true
+## 1 -0.0007272491         0
+## 2  1.0001479740         1
+## 3  0.9997979005         1
+## 4  0.9987674529         1</code></pre>
 <p>If an estimator is unbiased, then the mean of its sampling distribution should be equal to the true parameter value. Note that these may not be exactly the same due to the randomness from taking a sample; this is called Monte Carlo error.</p>
 <p>Second, we are interested in the standard deviation of the <span class="math">\(\hat\beta\)</span> estimates, We will often be interested in how the standard deviation of the estimator changes with inputs to the simulation.</p>
 <pre class="r"><code>select(sim0_summary, estimate_sd)</code></pre>
-<pre><code>## Error in select(sim0_summary, estimate_sd): unused argument (estimate_sd)</code></pre>
+<pre><code>## Source: local data frame [4 x 1]
+## 
+##   estimate_sd
+## 1  0.05263744
+## 2  0.05395631
+## 3  0.05246436
+## 4  0.05272698</code></pre>
 <p>Third, we will be interested in whether the standard error, which is sample estimate of the standard deviation of the sampling distribution, is a good estimate of the actual sampling distribution of <span class="math">\(\hat\beta\)</span>. The mean of the classical standard errors of the simulations are in column <code>se_mean</code>. The column <code>se_robust_mean</code> contains the means of the heteroskedasticity robust standard errors.</p>
 <pre class="r"><code>select(sim0_summary, estimate_sd, se_mean, se_robust_mean)</code></pre>
-<pre><code>## Error in select(sim0_summary, estimate_sd, se_mean, se_robust_mean): unused arguments (estimate_sd, se_mean, se_robust_mean)</code></pre>
+<pre><code>## Source: local data frame [4 x 3]
+## 
+##   estimate_sd    se_mean se_robust_mean
+## 1  0.05263744 0.05311051     0.05321465
+## 2  0.05395631 0.05313646     0.05327105
+## 3  0.05246436 0.05313646     0.05327076
+## 4  0.05272698 0.05313646     0.05323488</code></pre>
 <p>If <code>se_mean</code> (<code>se_robust_mean</code>) is not equal (or very close) to the <code>estimate_sd</code>, then the standard errors (robust standard errors) calculated from samples are biased estimates of the standard deviation of the sampling distribution of <span class="math">\(\hat{\beta}\)</span>.</p>
 <p>Those are the most common questions we will consider in the simulations, but some simulations may consider other questions.</p>
+<p><em>Hint:</em> For the problems which ask for multiple simulations you can automate the repitition using a recipe similar to the one used in the function. (1) Create a list to store the simulations. (2) Put the simulations in a for loop that runs it for each value of <span class="math">\(n\)</span> or whatever is changing in that problem. Save the results of <code>summarize_sim</code> to the list. Remember to add a column for the parameter that is changing between simulations. (3) Stack the dataframes in the list using <code>bind_rows</code>.</p>
 </div>
 </div>
 <div id="problems" class="section level1">
@@ -344,7 +372,7 @@ Y_i &amp;= 0 + 1 \cdot x_{1,i} + 1 \cdot x_{2,i} + 1 \cdot x_{3,i} + \epsilon_i 
 \sigma &amp;= 1.7
 \end{aligned}
 \]</span> The covariates, <span class="math">\(X\)</span>, are independent, with means, <span class="math">\(\mu_X = (0, 0, 0)\)</span>, and standard deviations, <span class="math">\(s_X = (1, 1, 1)\)</span>. The sample size <span class="math">\(n\)</span> will vary with simulation.</p>
-<p>Run several simulations with <code>sim_lin_norm</code> varying the sample size to determine how sample size affects the following:</p>
+<p>Run several simulations with <code>sim_lin_norm</code> varying the sample size to determine how sample size affects the following. Use <span class="math">\(n = \{8, 64, 512, 1024 \}\)</span>.</p>
 <ul>
 <li>The bias of each <span class="math">\(\hat{\beta}_j\)</span>?</li>
 <li>The variance of <span class="math">\(\hat{\beta}_j\)</span>?</li>
@@ -360,16 +388,8 @@ Y_i &amp;= 0 + 1 \cdot x_{1,i} + 1 \cdot x_{2,i} + 1 \cdot x_{3,i} + \epsilon_i 
 \epsilon_i &amp;\sim N(0, \sigma^2) \\
 \sigma &amp;= 1.7
 \end{aligned}
-\]</span> The covariates of <span class="math">\(x\)</span> all have <span class="math">\(\mu_{x_j} = 0\)</span>, and <span class="math">\(s_{x_k} = 0\)</span>. The covariates <span class="math">\(x_1\)</span> and <span class="math">\(x_2\)</span> may be correlated. The covariate <span class="math">\(x_3\)</span> is independent of the other covariates, <span class="math">\(\cor(x_1, x_3) = \cor(x_2, x_3) = 0\)</span>. Use <span class="math">\(n = 128\)</span> for all simulations.</p>
-<p>Consider the following values of correlation between <span class="math">\(x_1\)</span> and <span class="math">\(x_2\)</span></p>
-<ul>
-<li><span class="math">\(\cor(x_1, x_2) = 0\)</span></li>
-<li><span class="math">\(\cor(x_1, x_2) = 0.5\)</span></li>
-<li><span class="math">\(\cor(x_1, x_2) = 0.95\)</span></li>
-<li><span class="math">\(\cor(x_1, x_2) = -0.5\)</span></li>
-<li><span class="math">\(\cor(x_1, x_2) = -0.95\)</span></li>
-</ul>
-<p>How does <span class="math">\(\cor(x_1, x_2)\)</span> affect the following?</p>
+\]</span> In this problem keep <span class="math">\(\mu_X = (0, 0, 0)\)</span> and <span class="math">\(s_X = (1, 1, 1)\)</span>, but <span class="math">\(R_X\)</span> will differ between simulations to allow for different levels of correlation between <span class="math">\(x_1\)</span> and <span class="math">\(x_2\)</span>. The covariate <span class="math">\(x_3\)</span> is independent of the other covariates, <span class="math">\(\cor(x_1, x_3) = \cor(x_2, x_3) = 0\)</span>. Use <span class="math">\(n = 1024\)</span> for all simulations.</p>
+<p>Simulate using <code>sim_lin_normal</code> with the following levels of correlation between <span class="math">\(x_1\)</span> and <span class="math">\(x_2\)</span>: 0, 0.5, 0.95, -0.5, -0.95. Based on the results of those simulations, how does <span class="math">\(\cor(x_1, x_2)\)</span> affect the following?</p>
 <ul>
 <li>The bias of each <span class="math">\(\hat{\beta}_j\)</span>?</li>
 <li>The variance of <span class="math">\(\hat{\beta}_j\)</span>?</li>
@@ -384,15 +404,15 @@ Y_i &amp;= 0 + 1 \cdot x_{1,i} + 1 \cdot x_{2,i} + 1 \cdot x_{3,i} + \epsilon_i 
 </div>
 <div id="p-values-type-i-and-ii-errors" class="section level2">
 <h2>P-values, Type I and II errors</h2>
-<p>In this problem we will explore how <span class="math">\(p\)</span>-values and Type I and II errors vary between samples. In these simulations use the population, <span class="math">\[
+<p>In this problem we will explore how <span class="math">\(p\)</span>-values and Type I and II errors vary between samples. Use this population model for the simulations: <span class="math">\[
 \begin{aligned}[t]
 Y_i &amp;= 0 + 0 \cdot x_{1,i} + 0.1 \cdot x_{2,i} + 0.5 \cdot x_{3,i} + 1 \cdot x_{4,i} + \epsilon_i \\
 \epsilon_i &amp;\sim N(0, 1.9^2)
 \end{aligned}
-\]</span> The covariates, <span class="math">\(X\)</span>, are independent, with means, <span class="math">\(\mu_X = (0, 0, 0)\)</span>, and standard deviations, <span class="math">\(s_X = (1, 1, 1)\)</span>. Use <span class="math">\(n = 128\)</span>. <!-- \sigma^2 = 1.9 is R^2 of approx 0.25 --></p>
+\]</span> The covariates, <span class="math">\(X\)</span>, are independent, with means, <span class="math">\(\mu_X = (0, 0, 0)\)</span>, and standard deviations, <span class="math">\(s_X = (1, 1, 1)\)</span>. Use <span class="math">\(n = 1024\)</span>. <!-- \sigma^2 = 1.9 is R^2 of approx 0.25 --></p>
 <ul>
-<li>For each parameter, plot the density of its <span class="math">\(p\)</span>-values from simulations. What do they look like?</li>
-<li>For each parameter, calculate the proportion of <code>p.value &lt; 0.05</code> for each parameter. Suppose the null hypothesis <span class="math">\(H_0: \beta_i = 0\)</span> for all parameters. What is the probability of a Type I or Type II error for each parameter.</li>
+<li>For each parameter, plot the distribution of <span class="math">\(p\)</span>-values across iterations. Describe the densities.</li>
+<li>For each parameter, calculate the proportion of <span class="math">\(p\)</span>-values less than 0.05 for each parameter. Suppose a null hypothesis of <span class="math">\(H_0: \beta_i = 0\)</span> and an alternative hypothesis of <span class="math">\(H_a: \beta_i &gt; 0\)</span>. For which parameters is <span class="math">\(H_0\)</span> true, for which parameters is $H_a What is the probability of a Type I or Type II error for each parameter.</li>
 <li>For each parameter, plot the distribution of its estimates <em>conditional</em> on it being significant at <span class="math">\(p &lt; 0.05\)</span>. How does the sampling distribution conditional on statistical significance relate to the unconditional sampling distribution?</li>
 <li>Repeat each of those analyses using a smaller sample size, <span class="math">\(n = 32\)</span>, and a larger sample size <span class="math">\(n = 1024\)</span>. What changes, if anything?</li>
 </ul>
@@ -418,7 +438,7 @@ Y_i &amp;= 0 + 0 \cdot x_{1,i} + 0.1 \cdot x_{2,i} + 0.5 \cdot x_{3,i} + 1 \cdot
   # NEW: ensure colnames of X are consistent despite omitting some in lm
   colnames(X) &lt;- paste(&quot;X&quot;, 1:k, sep = &quot;&quot;)
   # ------
-  simulations &lt;- list()
+  iterations &lt;- list()
   p &lt;- progress_estimated(iter, min_time = 2)
   for (j in 1:iter) {
     mu &lt;- cbind(1, X) %*% beta
@@ -434,11 +454,11 @@ Y_i &amp;= 0 + 0 \cdot x_{1,i} + 0.1 \cdot x_{2,i} + 0.5 \cdot x_{3,i} + 1 \cdot
     mod_df &lt;- tidy(mod) %&gt;%
       mutate(.iter = j)
     mod_df[[&quot;std.error.robust&quot;]] &lt;- sqrt(diag(car::hccm(mod)))
-    simulations[[j]] &lt;- mod_df
+    iterations[[j]] &lt;- mod_df
     p$tick()$print()
   }
   # Combine the list of data frames into a single data frame
-  bind_rows(simulations)
+  bind_rows(iterations)
 }</code></pre>
 <p>The population is <span class="math">\[
 \begin{aligned}[t]
@@ -455,7 +475,7 @@ R_X =
 \end{bmatrix}
 \]</span> In all simulations, <span class="math">\((x_1, x_2)\)</span> and <span class="math">\((x_2, x_3)\)</span> are uncorrelated. The correlation between <span class="math">\(x_1\)</span> and <span class="math">\(x_3\)</span> will vary between simulations. In all simulations, the sample regression will only include <span class="math">\(x_1\)</span> and <span class="math">\(x_2\)</span>: <span class="math">\[
 y_i = \hat\beta_0 + \hat\beta_1 x_{1,i} + \hat\beta_2 x_{2,i} + \hat\epsilon_i
-\]</span> To omit the 3rd variable, set <code>omit = 3</code> in <code>sim_lin_norm_omitted</code>.</p>
+\]</span> To omit the 3rd variable, set <code>omit = 3</code> in <code>sim_lin_norm_omitted</code>. Use <span class="math">\(n = 1024\)</span> for all simulations.</p>
 <p>Consider the following values of <span class="math">\(\rho_{1,3}\)</span>: 0, 0.1, 0.7, -0.7, 0.99, -0.99. How does the correlation of variables affect:</p>
 <ul>
 <li>The bias of each <span class="math">\(\hat{\beta}_j\)</span>?</li>
@@ -486,7 +506,7 @@ Y_i &amp;= \beta_0 + \sum_{j = 1}^k x_{j,i} + \epsilon_i \\
               length(beta) == (length(mu_X) + 1),
               length(gamma) == (length(mu_X) + 1))
   X &lt;- MASS::mvrnorm(n, mu_X, sdcor2cov(s_X, R_X), empirical = TRUE)
-  simulations &lt;- list()
+  iterations &lt;- list()
   p &lt;- progress_estimated(iter, min_time = 2)
   for (j in 1:iter) {
     mu &lt;- cbind(1, X) %*% beta
@@ -503,23 +523,23 @@ Y_i &amp;= \beta_0 + \sum_{j = 1}^k x_{j,i} + \epsilon_i \\
     mod_df &lt;- tidy(mod) %&gt;%
       mutate(.iter = j)
     mod_df[[&quot;std.error.robust&quot;]] &lt;- sqrt(diag(car::hccm(mod)))
-    simulations[[j]] &lt;- mod_df
+    iterations[[j]] &lt;- mod_df
     p$tick()$print()
   }
-  bind_rows(simulations)
+  bind_rows(iterations)
 }</code></pre>
 <p>In these simulations, the population model is <span class="math">\[
 \begin{aligned}[t]
 Y_i &amp;= 0 + 1 \cdot x_1 + 1 \cdot x_2 \epsilon_i \\
 \epsilon_i &amp;\sim N(0, \sigma^2_i) \\
-\log \sigma_i^2 &amp;= 1.7 + \gamma_1 x_1 + 0 \cdot x_2
+\log \sigma_i^2 &amp;= 1.5 + \gamma_1 x_1 + 0 \cdot x_2
 \end{aligned}
 \]</span></p>
 <p>We will run several simulations with different values of <span class="math">\(\gamma_1\)</span> to vary to heteroskedasticity:</p>
 <ul>
-<li><span class="math">\(\gamma_1 = 0\)</span> no heteroskedasticity</li>
-<li><span class="math">\(\gamma_1 = 0.2\)</span> low</li>
-<li><span class="math">\(\gamma_1 = 0.7\)</span> high</li>
+<li><span class="math">\(\gamma_1 = 0\)</span>: no heteroskedasticity</li>
+<li><span class="math">\(\gamma_1 = 0.3\)</span>: low heteroskedasticity, <span class="math">\(\max(\sigma^2_i) / \min(\sigma^2_i) \approx 2.7\)</span>.</li>
+<li><span class="math">\(\gamma_1 = 0.7\)</span> high heteroskedasticity, <span class="math">\(\max(\sigma^2_i) / \min(\sigma^2_i) \approx 24\)</span>.</li>
 </ul>
 <p>Before running the simulation draw a single sample of <span class="math">\(y\)</span> from a population with each of those values of <span class="math">\(\gamma_1\)</span>. You should be able to extract the relevant code from <code>sim_lin_norm_heterosked</code>. Regress <span class="math">\(y\)</span> on <span class="math">\(x_1\)</span> and <span class="math">\(x_2\)</span> and plot the residuals of this regression against <span class="math">\(x_1\)</span>.</p>
 <p>Run <code>sim_lin_norm_heterosked</code> for each of those values of <span class="math">\(\gamma_1\)</span>. How does heteroskedasticity affect</p>
@@ -553,7 +573,7 @@ y_i = \beta_0 + \hat\beta_1 x_{1,i} + \dots + \hat\beta_k x_{k,i} + \hat\epsilon
 <pre class="r"><code>sim_lin_norm_truncated &lt;- function(iter, n, mu_X, s_X, R_X, beta, sigma,
                                    truncation = 0.5) {
   X &lt;- MASS::mvrnorm(n, mu_X, sdcor2cov(s_X, R_X), empirical = TRUE)
-  simulations &lt;- list()
+  iterations &lt;- list()
   p &lt;- progress_estimated(iter, min_time = 2)
   for (j in 1:iter) {
     mu &lt;- cbind(1, X) %*% beta
@@ -564,6 +584,10 @@ y_i = \beta_0 + \hat\beta_1 x_{1,i} + \dots + \hat\beta_k x_{k,i} + \hat\epsilon
     is_obs &lt;- (y &gt; quantile(y, prob = truncation))
     yobs &lt;- y[is_obs, ]
     Xobs &lt;- X[is_obs, ]
+    # give consistent colnames
+    colnames(Xobs) &lt;- paste(&quot;X&quot;, 1:k, sep = &quot;&quot;)
+    colnames(yobs) &lt;- &quot;y&quot;
+    # ------
     # -------
     # Run a regression
     mod &lt;- lm(yobs ~ Xobs)
@@ -572,20 +596,19 @@ y_i = \beta_0 + \hat\beta_1 x_{1,i} + \dots + \hat\beta_k x_{k,i} + \hat\epsilon
     mod_df &lt;- tidy(mod) %&gt;%
       mutate(.iter = j)
     mod_df[[&quot;std.error.robust&quot;]] &lt;- sqrt(diag(car::hccm(mod)))
-    simulations[[j]] &lt;- mod_df
+    iterations[[j]] &lt;- mod_df
     p$tick()$print()
   }
-  bind_rows(simulations)
+  bind_rows(iterations)
 }</code></pre>
-<p>For this problem, use only a single covariate, with <span class="math">\(\mu_X = 0\)</span>,<span class="math">\(s_X = 1\)</span>, and <span class="math">\(R_X = 1\)</span>. Let <span class="math">\(\beta = (0, 1)\)</span> and <span class="math">\(\sigma = 1\)</span>.</p>
-<p>Before running simulations with <code>sim_lin_normal_truncated</code>,</p>
-<p>Run several simulations with <code>sim_lin_normal_truncated</code> and vary the sample size. How does the sample size affect fhte following:</p>
+<p>For this problem, use only a single covariate, with <span class="math">\(\mu_X = 0\)</span>,<span class="math">\(s_X = 1\)</span>, and <span class="math">\(R_X = 1\)</span>. Let <span class="math">\(\beta = (0, 1)\)</span> and <span class="math">\(\sigma = 1\)</span>. Estimate the regression only on those <span class="math">\(y_i\)</span> greater than the median of <span class="math">\(y\)</span>.</p>
+<p>Before running simulations, draw a single sample of a linear normal model with homoskedastic errors. To do this, you should be able to adapt the code from <code>sim_lin_normal_truncated</code>. Create a scatter plot with the OLS line for all <span class="math">\(y\)</span>, and a another plot with only those <span class="math">\(y\)</span> less than the median of <span class="math">\(y\)</span>. How idoes the OLS line estimated on the truncated data differ from the one estimated on the untruncated data.</p>
+<p>Run several simulations with <code>sim_lin_normal_truncated</code> and vary the sample size. How does the sample size affect the following:</p>
 <ul>
 <li>The bias of each <span class="math">\(\hat{\beta}_j\)</span>?</li>
 <li>The variance of <span class="math">\(\hat{\beta}_j\)</span>?</li>
-<li>The bias of the standard error of each <span class="math">\(\hat{\beta}_j\)</span>?</li>
 </ul>
-<p>In particular, does the effect of truncation on <span class="math">\(\beta{\beta}\)</span> decrease if we increase the sample size?</p>
+<p>In particular, if we gather more data but <span class="math">\(y\)</span> is truncated, does it decrease the bias in <span class="math">\(\hat{\beta}\)</span>?</p>
 <hr />
 <p>Derived from of Christopher Adolph, “Problem Set 3”, <em>POLS/CSSS 503</em>, University of Washington, Spring 2014. <a href="http://faculty.washington.edu/cadolph/503/503hw3.pdf" class="uri">http://faculty.washington.edu/cadolph/503/503hw3.pdf</a>. Used with permission.</p>
 <p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,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" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>

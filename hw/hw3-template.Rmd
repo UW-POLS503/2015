@@ -1,6 +1,6 @@
 ---
 title: "POLS 503: Problem Set 3"
-author: Nomen Nescio
+author: Anonymous
 date: "April 30, 2015"
 output:
   html_document: default
@@ -38,6 +38,11 @@ set.seed(11346170)
 ```
 
 # Problems
+
+All simulations will use 1,024 iterations.
+```{r}
+iter <- 1024
+```
 
 ## Problem 1: Linear Normal Model with Homoskedasticity
 
