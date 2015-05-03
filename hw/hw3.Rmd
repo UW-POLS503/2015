@@ -16,8 +16,24 @@ $$
 \DeclareMathOperator{\quantile}{quantile}
 $$
 
-```{r init,results='hide', echo = FALSE, message = FALSE}
+
+```{r knitr_opts, echo = FALSE, message = FALSE, results = 'hide'}
+library("knitr")
 set.seed(135125)
+opts_chunk$set(cache = TRUE, autodep = TRUE, cache.extra = rand_seed,
+               error = TRUE)
+```
+```{r load,message = FALSE, echo = FALSE}
+library("MASS")
+library("ggplot2")
+library("dplyr")
+library("broom")
+library("assertthat")
+library("tidyr")
+library("pols503")
+```
+```{r external,cache = FALSE, echo=FALSE}
+read_chunk("hw3-functions.R")
 ```
 
 # Instructions and Introduction
@@ -35,16 +51,14 @@ Where proofs are available, they are generally preferable to Monte Carlo experim
 This is almost always the case for the properties of models applied to small samples of data.
 Here, we use Monte Carlo not out of necessity but for pedagogical purposes, as a tool to gain a more intuitive and hands-on understanding of least squares and its properties.
 
-## 
-
 1. Create a new R project for this homework named `hw3` and load that project.
 2. Do your analyses in an R markdown document.
 3. Submit a zipped file of the directory with your R project through Canvas. This should contain all the materials for another person to run your R Markdown fil  This should contain:
 
     - The R project (`.Rproj`) file
-	- The R Markdown document (`.Rmd`) of your analyses
-	- An HTML document (`.html`) compiled from your R Markdown document.
-	- Any data or other files neede to run the analyses in your R Markdown doceument.
+	  - The R Markdown document (`.Rmd`) of your analyses
+	  - An HTML document (`.html`) compiled from your R Markdown document.
+	  - Any data or other files neede to run the analyses in your R Markdown doceument.
 
 4. Your R Markdown file should follow the guidance from [here](http://pols503.github.io/pols_503_sp15/r_markdown_assignments.html) and your R code should follow the guidelines [here](http://pols503.github.io/pols_503_sp15/r_best_practices.html).
 5. Turn in a paper copy of the document compiled from the analyses at lab.
@@ -57,15 +71,15 @@ This assignment has some non-trivial computation.
 The following code sets the knitr options to cache the results of computations, so
 that any computations that do not change are not rerun.
 See RStudio's help on [Authoring R Code Chunks](http://rmarkdown.rstudio.com/authoring_rcodechunks.html#caching) for more information about what this is doing.
-```{r setup, echo = TRUE, eval = FALSE}
-knitr::opts_chunk$set(cache = TRUE)
+```{r echo = TRUE, eval = FALSE}
+<<knitr_opts>>
 ```
 
 This will use the standard [Hadleyverse](http://blog.revolutionanalytics.com/2015/03/hadleyverse.html) packages that we've been using in this course (**ggplot2**, **dplyr**, **tidyr**, **broom**).
 A few of the functions will use **assertthat**, which contains functions to test for errors in functions.
 Finally, it will use a function from a package written for this course, **pols503**.
 
-```{r load,message = FALSE}
+```{r eval=FALSE}
 library("ggplot2")
 library("dplyr")
 library("broom")
@@ -142,10 +156,6 @@ $$
 where $S$ is a diagonal matrix with the standard deviations $s$ on its diagonal.
 The following function will make that calculation simpler.
 ```{r sdcor2cov}
-sdcor2cov <- function(s, r = diag(length(s))) {
-  s <- diag(s, nrow = length(s), ncol = length(s))
-  s %*% r %*% s
-}
 ```
 
 In this example, we will use a sample of size $n = 128$, with $k = 3$ variables drawn from a multivariate normal distribution with mean $\mu_X = (0, 0, 0)$, standard deviations of $s_X = (1, 1, 1)$, and independent variables,
@@ -262,42 +272,6 @@ This function returns a data frame with the results of all the simulations.
 Each row is a coefficient (column `term`) for a simulation (column `.iter`)
 
 ```{r sim_lin_norm}
-sim_lin_norm <- function(iter, n, mu_X, s_X, R_X, beta, sigma) {
-  # Error checking so that bugs are caught quicker :-)
-  assert_that(length(s_X) == length(mu_X),
-              ncol(R_X) == nrow(R_X),
-              ncol(R_X) == length(mu_X),
-              length(beta) == (length(mu_X) + 1))
-  # Generate an X
-  X <- MASS::mvrnorm(n, mu = mu_X, Sigma = sdcor2cov(s_X, R_X),
-                     empirical = TRUE)
-  # Create a list to stor the results
-  simulations <- list()
-  # Create a progress bar because we're impatient
-  p <- progress_estimated(iter, min_time = 2)
-  # Loop over the simulation runs
-  for (j in 1:iter) {
-    # Draw y
-    mu <- cbind(1, X) %*% beta
-    epsilon <- rnorm(n, mean = 0, sd = sigma)
-    y <- mu + epsilon
-    # Run a regression
-    mod <- lm(y ~ X)
-    # Save the coefficients in a data frame
-    mod_df <- tidy(mod) %>%
-      # Add a column indicating the simulation number
-      mutate(.iter = j)
-    # Add hetroskedasticity consistent se to the data
-    mod_df[["std.error.robust"]] <- sqrt(diag(car::hccm(mod)))
-    # Save these results as the next element in the storage list
-    simulations[[j]] <- mod_df
-    # Update the progress bar
-    p$tick()$print()
-  }
-  # Combine the list of data frames into a single data frame
-  bind_rows(simulations)
-}
-
 ```
 Now we will draw samples using the values that we used before and look at the results.
 ```{r sim0}
@@ -318,17 +292,6 @@ Its arguments are
 :    The true values of the population parameters $\beta$.
 
 ```{r summarize_sim}
-summarize_sim <- function(.data, beta) {
-  ret <- .data %>%
-    group_by(term) %>%
-    summarize(estimate_mean = mean(estimate),
-              estimate_sd = sd(estimate),
-              se_mean = sqrt(mean(std.error) ^ 2),
-              se_robust_mean = sqrt(mean(std.error.robust) ^ 2),
-              samples = length(estimate))
-  ret[["beta_true"]] <- beta
-  ret
-}
 ```
 Using the previous results, the summary is
 ```{r sim0_summary}
@@ -461,41 +424,6 @@ The arguments to this function are the same as `sim_lin_norm` except for
 :    A vector of integers of the columns to omit from X when estimating the sample regression.
 
 ```{r sim_lin_norm_omitted}
-sim_lin_norm_omitted <- function(iter, n, mu_X, s_X, R_X, beta, sigma,
-                                 omit = integer(0)) {
-  assert_that(length(s_X) == length(mu_X),
-              ncol(R_X) == nrow(R_X),
-              ncol(R_X) == length(mu_X),
-              length(beta) == (length(mu_X) + 1))
-  # Generate an X
-  k <- length(mu_X)
-  X <- MASS::mvrnorm(n, mu_X, sdcor2cov(s_X, R_X), empirical = TRUE)
-  # ------
-  # NEW: ensure colnames of X are consistent despite omitting some in lm
-  colnames(X) <- paste("X", 1:k, sep = "")
-  # ------
-  simulations <- list()
-  p <- progress_estimated(iter, min_time = 2)
-  for (j in 1:iter) {
-    mu <- cbind(1, X) %*% beta
-    epsilon <- rnorm(n, mean = 0, sd = sigma)
-    y <- mu + epsilon
-    # ---------
-    # NEW: omit columns of X
-    # Look up paste and setdiff function to see what they does
-    Xomit <- as.data.frame(X)[ , setdiff(1:k, omit)]
-    # ~ . means use all variables from `data` on the RHS of the formula
-    mod <- lm(y ~ . , data = Xomit)
-    # ---------
-    mod_df <- tidy(mod) %>%
-      mutate(.iter = j)
-    mod_df[["std.error.robust"]] <- sqrt(diag(car::hccm(mod)))
-    simulations[[j]] <- mod_df
-    p$tick()$print()
-  }
-  # Combine the list of data frames into a single data frame
-  bind_rows(simulations)
-}
 ```
 
 The population is
@@ -551,36 +479,7 @@ The arguments for it are the same as `sim_lin_norm` except for
 
 :    A vector of coefficients for $\log \sigma^2 = \gamma_0 + \gamma_1 x_1 + \dots + \gamma_k x_k$. Like `beta` it should have length `k + 1`.
 
-```{r}
-sim_lin_norm_heterosked <- function(iter, n, mu_X, s_X, R_X, beta, sigma, gamma) {
-  assert_that(length(s_X) == length(mu_X),
-              ncol(R_X) == nrow(R_X),
-              ncol(R_X) == length(mu_X),
-              length(beta) == (length(mu_X) + 1),
-              length(gamma) == (length(mu_X) + 1))
-  X <- MASS::mvrnorm(n, mu_X, sdcor2cov(s_X, R_X), empirical = TRUE)
-  simulations <- list()
-  p <- progress_estimated(iter, min_time = 2)
-  for (j in 1:iter) {
-    mu <- cbind(1, X) %*% beta
-    # ------------
-    # NEW: variance varies by each observation
-    sigma <- sqrt(exp(cbind(1, X) %*% gamma))
-    # ------------
-    epsilon <- rnorm(n, mean = 0, sd = sigma)
-    y <- mu + epsilon
-    # Run a regression
-    mod <- lm(y ~ X)
-    # Save the coefficients in a data frame
-    # and Add a column indicating the simulation number
-    mod_df <- tidy(mod) %>%
-      mutate(.iter = j)
-    mod_df[["std.error.robust"]] <- sqrt(diag(car::hccm(mod)))
-    simulations[[j]] <- mod_df
-    p$tick()$print()
-  }
-  bind_rows(simulations)
-}
+```{r sim_lin_norm_heterosked}
 ```
 
 In these simulations, the population model is
@@ -642,32 +541,6 @@ The function `sim_lin_norm_truncated`, is similar to the `sim_lin_norm` function
 
 
 ```{r sim_lin_norm_truncated}
-sim_lin_norm_truncated <- function(iter, n, mu_X, s_X, R_X, beta, sigma, truncation = 0.5) {
-  X <- MASS::mvrnorm(n, mu_X, sdcor2cov(s_X, R_X), empirical = TRUE)
-  simulations <- list()
-  p <- progress_estimated(iter, min_time = 2)
-  for (j in 1:iter) {
-    mu <- cbind(1, X) %*% beta
-    epsilon <- rnorm(n, mean = 0, sd = sigma)
-    y <- mu + epsilon
-    # -------
-    # NEW: drop cases in which y > mean(y)
-    is_obs <- (y < quantile(y, prob = truncation))
-    yobs <- y[is_obs, ]
-    Xobs <- X[is_obs, ]
-    # -------
-    # Run a regression
-    mod <- lm(yobs ~ Xobs)
-    # Save the coefficients in a data frame
-    # and Add a column indicating the simulation number
-    mod_df <- tidy(mod) %>%
-      mutate(.iter = j)
-    mod_df[["std.error.robust"]] <- sqrt(diag(car::hccm(mod)))
-    simulations[[j]] <- mod_df
-    p$tick()$print()
-  }
-  bind_rows(simulations)
-}
 ```
 
 For this problem, use only a single covariate, with $\mu_X = 0$,$s_X = 1$, and $R_X = 1$.
@@ -685,115 +558,8 @@ How does the sample size affect fhte following:
 
 In particular, does the effect of truncation on $\beta{\beta}$ decrease if we increase the sample size?
 
-<!-- 
-## Serial Correlation (Optional)
 
-**This problem you can do for fun.**
-I had written this, but I think the homework may be getting a little long.
-However, many of you are dealing with data in a panel format, this may be useful information.
-You will find that serial correlation is similar to heteroskedasticity in its effects on the estimates of OLS.
 
-In this problem, we'll consider how serial correlation in errors and covariates affects OLS estimates.
-Serial correlation in the errors means that the errors are correlated over time.
-In this problem, the population we will use is
-$$
-Y_i = \beta_0 + \sum_{j = 1}^k \beta_j x_{j,i} + \epsilon_{i} + \rho \epsilon_{i - 1}
-$$
-This is a moving average process of order 1, or MA(1).
-If $\rho \neq 0$, then the $y_i$'s will be serially correlated.
-
-Additionally, for each covariate, the present value will now depend on the random part of the previous value, such that,
-$$
-x_{k,i} = \mu_{x_k} + \rho_{x_k} \upsilon_{x_{k,i-1}} + \upsilon_{x_{k,i}}
-$$
-This is a moving average of order 1, or MA(1). If $p_k \neq 0$ for some $k$, that $x_k$ is also serially correlated.
-
-However, the regression run on each sample will be an OLS regression that does not attempt to account for serial correlation,
-$$
-y_i = \hat\beta_0 + \hat\beta_1 x_{}
-$$
-
-The function `sim_lin_norm_ma1` has the same arguments as `sim_lin_norm` except for
-
-`rho`
-
-:   A value between 0 and 1 determining the serial correlation of the errors.
-
-`rho_X`
-
-:   A value between 0 and 1 determining the serial correlation of the covariates in $X$.
-    This assumes that the serial correlation in all $X$ is the same.
-
-```{rmsim_lin_norm_ma1}
-sim_lin_norm_ma1 <- function(iter, n, mu_X, s_X, R_X, beta, sigma,
-                             rho = 0.5, rho_X = 0) {
-  assert_that(length(s_X) == length(mu_X),
-              ncol(R_X) == nrow(R_X),
-              ncol(R_X) == length(mu_X),
-              length(beta) == (length(mu_X) + 1),
-              length(rho_X) == length(mu_X),
-              all(rho >= 0 & rho <= 1),
-              all(rho_X >= 0 & rho_X <= 1))
-  k <- length(mu_X)
-  X <- mvrnorm_ma(n, mu_X, sdcor2cov(s_X, R_X), rho = rho_X, empirical = TRUE)
-  simulations <- list()
-  p <- progress_estimated(iter, min_time = 2)
-  for (j in 1:iter) {
-    mu <- cbind(1, X) %*% beta
-    # ---------
-    # NEW: generate y with serially correlated errors
-    lag_epsilson <- rep(0, k)
-    for (i in 1:n) {
-      epsilon <- rnorm(1, mean = 0, sd = sigma)
-      y <- mu[i, ] + rho * lag_epsilon + epsilon
-      lag_epsilon <- epsilon
-    }
-    # ---------
-    mod <- lm(y ~ X)
-    mod_df <- tidy(mod) %>%
-      mutate(.iter = j)
-    mod_df[["std.error.robust"]] <- sqrt(diag(car::hccm(mod)))
-    simulations[[j]] <- mod_df
-    p$tick()$print()
-  }
-  # Combine the list of data frames into a single data frame
-  bind_rows(simulations)
-}
-```
-
-In these simulations, the population model is
-$$
-\begin{aligned}[t]
-Y_i &= 0 + 1 \cdot x_1 + 1 \cdot x_2 + 1 \cdot x_3 + \epsilon_i + \rho \epsilon_{i - 1} \\
-\epsilon_i &\sim N(0, \sigma^2) \\
-\sigma^2 &= 1.7 \\
-\epsilon_{0} &= 0
-\end{aligned}
-$$
-where $\rho$ will vary with simulations.
-The covariates $x$ are drawn from
-$$
-\begin{aligned}[t]
-x_{j,i} &= 0 + \upsilon_{j,i} + \rho_{X,j} \upsilon_{j,i} & \text{for $j = 1, 2, 3$} \\
-\upsilon &= N(0, I_3) \\
-\rho_{X} &= (0, 0.5, 0.9) \\
-\upsilon_0 &= 0
-\end{aligned}
-$$
-Thus $x_1$ has no serial correlation, $x_2$ has moderate serial correlation, and $x_3$ has high serial correlation.
-
-Compare the bias and variance of $\hat{\beta}$ under the following scenarios.
-
-- $\rho = 0$, no serial correlation in the errors of $y$.
-- $\rho = 0.5$, moderate serial correlation in the errors of $y$
-- $\rho = 0.9$, high serial correlation in the error of $y$.
-
-How does serial correlation in $y$ and $X$ influence OLS estimates?
-Consider bias and variance of the estimates of $\hat\beta$.
-Also consider the bias of the standard error of $\hat\beta$.
-Does using robust standard errors help?
-
--->
 
 [^randomx]: Although the statistical theory of OLS works (thankfully) for random $X$,
     as long as certain conditions are met. See Fox (2nd ed.), Ch 9.6.

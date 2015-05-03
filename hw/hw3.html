@@ -75,12 +75,32 @@ img {
 \DeclareMathOperator{\diag}{diag}
 \DeclareMathOperator{\quantile}{quantile}
 \]</span></p>
+<div id="instructions-and-introduction" class="section level1">
+<h1>Instructions and Introduction</h1>
 <p>The purpose of this homework is to provide a guided, hands-on tour through the properties of the least squares estimator, especially under common violations of the Gauss Markov assumptions. We will work through a series of programs which use simulated data — i.e., data created with known properties — to investigate how these violations affect the accuracy and precision of least squares estimates of slope parameters. Using repeated study of simulated datasets to explore the properties of statistical models is called Monte Carlo experimentation. Although you will not have to write much R code, you will need to read through the provided programs carefully to understand what is happening.</p>
 <p>Monte Carlo experiments always produce the same results as analytic proofs for the specific case considered. Each method has advantages and disadvantages: proofs are more general and elegant, but are not always possible. Monte Carlo experiments are much easier to construct and can always be carried out, but findings from these experiments only apply to the specific scenario under study. Where proofs are available, they are generally preferable to Monte Carlo experiments, but proofs of the properties of more complicated models are sometimes impossible or impractically difficult. This is almost always the case for the properties of models applied to small samples of data. Here, we use Monte Carlo not out of necessity but for pedagogical purposes, as a tool to gain a more intuitive and hands-on understanding of least squares and its properties.</p>
+<ol style="list-style-type: decimal">
+<li>Create a new R project for this homework named <code>hw3</code> and load that project.</li>
+<li>Do your analyses in an R markdown document.</li>
+<li><p>Submit a zipped file of the directory with your R project through Canvas. This should contain all the materials for another person to run your R Markdown fil This should contain:</p>
+<ul>
+<li>The R project (<code>.Rproj</code>) file</li>
+<li>The R Markdown document (<code>.Rmd</code>) of your analyses</li>
+<li>An HTML document (<code>.html</code>) compiled from your R Markdown document.</li>
+<li>Any data or other files neede to run the analyses in your R Markdown doceument.</li>
+</ul></li>
+<li>Your R Markdown file should follow the guidance from <a href="http://pols503.github.io/pols_503_sp15/r_markdown_assignments.html">here</a> and your R code should follow the guidelines <a href="http://pols503.github.io/pols_503_sp15/r_best_practices.html">here</a>.</li>
+<li>Turn in a paper copy of the document compiled from the analyses at lab.</li>
+<li><p>You can work together on this but you should each turn in your own assignments and write up your work separately. Include the names of your collaborators on your assignment.</p></li>
+</ol>
+</div>
 <div id="setup" class="section level1">
 <h1>Setup</h1>
 <p>This assignment has some non-trivial computation. The following code sets the knitr options to cache the results of computations, so that any computations that do not change are not rerun. See RStudio’s help on <a href="http://rmarkdown.rstudio.com/authoring_rcodechunks.html#caching">Authoring R Code Chunks</a> for more information about what this is doing.</p>
-<pre class="r"><code>knitr::opts_chunk$set(cache = TRUE)</code></pre>
+<pre class="r"><code>library(&quot;knitr&quot;)
+set.seed(135125)
+opts_chunk$set(cache = TRUE, autodep = TRUE, cache.extra = rand_seed,
+               error = TRUE)</code></pre>
 <p>This will use the standard <a href="http://blog.revolutionanalytics.com/2015/03/hadleyverse.html">Hadleyverse</a> packages that we’ve been using in this course (<strong>ggplot2</strong>, <strong>dplyr</strong>, <strong>tidyr</strong>, <strong>broom</strong>). A few of the functions will use <strong>assertthat</strong>, which contains functions to test for errors in functions. Finally, it will use a function from a package written for this course, <strong>pols503</strong>.</p>
 <pre class="r"><code>library(&quot;ggplot2&quot;)
 library(&quot;dplyr&quot;)
@@ -91,9 +111,7 @@ library(&quot;pols503&quot;)</code></pre>
 <p>If you do not have <strong>pols503</strong> installed you need <strong>devtools</strong> installed, and then run</p>
 <pre class="r"><code>devtools::install_github(&quot;POLS503/r-pols503&quot;)</code></pre>
 <p>Additionally we will use some functions from <strong>MASS</strong> and <strong>car</strong>, but we will not load them since they contain some function names that conflict with those in packages that we are using.</p>
-<ul>
-<li>You will need to include the code for many functions defined in this problem set. But to keep your output more concise, hide the code for these functions by using the code chunk option <code>echo = FALSE</code>.</li>
-</ul>
+<p>You will need to include the code for the functions defined in this problem set — <code>sdcor2cov</code>, <code>summarize_sims</code>, <code>sim_lin_norm</code>, etc. — for your R Markdown file to run. However, to keep your output more concise, hide the code for these functions by using the code chunk option <code>echo = FALSE</code>.</p>
 </div>
 <div id="simulation-example" class="section level1">
 <h1>Simulation Example</h1>
@@ -184,16 +202,11 @@ Sigma_X &lt;- sdcor2cov(s_X, R_X)</code></pre>
 <pre class="r"><code>mod_df[[&quot;std.error.robust&quot;]] &lt;- sqrt(diag(car::hccm(mod)))</code></pre>
 <p>The coefficients of the OLS regression on the parameter should be similar to, but not exactly, those of the population from which it was drawn.</p>
 <pre class="r"><code>mod_df</code></pre>
-<pre><code>##          term    estimate std.error  statistic      p.value
-## 1 (Intercept) -0.01663028 0.1288304 -0.1290867 8.974982e-01
-## 2          X1  0.80382914 0.1293366  6.2150178 7.150778e-09
-## 3          X2  1.13697605 0.1293366  8.7908313 1.031651e-14
-## 4          X3  0.91359485 0.1293366  7.0637005 1.026812e-10
-##   std.error.robust
-## 1        0.1308848
-## 2        0.1257943
-## 3        0.1121212
-## 4        0.1535734</code></pre>
+<pre><code>##          term   estimate std.error statistic      p.value std.error.robust
+## 1 (Intercept) -0.1670195 0.1414748 -1.180560 2.400372e-01        0.1438654
+## 2          X1  0.9725800 0.1420307  6.847675 3.090945e-10        0.1511459
+## 3          X2  1.0991485 0.1420307  7.738810 3.025168e-12        0.1462977
+## 4          X3  0.7342187 0.1420307  5.169437 9.125261e-07        0.1450290</code></pre>
 </div>
 </div>
 <div id="multiple-iterations" class="section level2">
@@ -265,13 +278,13 @@ sim0 &lt;- sim_lin_norm(iter, n, mu_X, s_X, R_X, beta, sigma)
 head(sim0)</code></pre>
 <pre><code>## Source: local data frame [6 x 7]
 ## 
-##          term   estimate std.error  statistic      p.value .iter
-## 1 (Intercept)  0.2025588 0.1544271  1.3116786 1.920520e-01     1
-## 2          X1  1.1294168 0.1550339  7.2849658 3.275883e-11     1
-## 3          X2  1.1900421 0.1550339  7.6760109 4.218464e-12     1
-## 4          X3  1.1579863 0.1550339  7.4692449 1.252689e-11     1
-## 5 (Intercept) -0.1093324 0.1547202 -0.7066459 4.811123e-01     2
-## 6          X1  0.7586509 0.1553282  4.8841801 3.135939e-06     2
+##          term    estimate std.error  statistic      p.value .iter
+## 1 (Intercept)  0.10063316 0.1512579  0.6653083 5.070889e-01     1
+## 2          X1  1.01858951 0.1518523  6.7077654 6.262992e-10     1
+## 3          X2  1.18704431 0.1518523  7.8170987 1.996208e-12     1
+## 4          X3  0.98511662 0.1518523  6.4873348 1.881047e-09     1
+## 5 (Intercept) -0.06722842 0.1600049 -0.4201646 6.750924e-01     2
+## 6          X1  0.95431756 0.1606337  5.9409565 2.665887e-08     2
 ## Variables not shown: std.error.robust (dbl)</code></pre>
 <p>With all the samples, we can summarize the results and compare them to the population parameters to evaluate how well OLS works. The following function, <code>summarize_sim</code> takes a data frame generated by the simulation function and a vector of the original parameters, and generates a summary data frame with one row per coefficient. Its arguments are</p>
 <dl>
@@ -299,40 +312,22 @@ sim0_summary</code></pre>
 <pre><code>## Source: local data frame [4 x 7]
 ## 
 ##          term estimate_mean estimate_sd   se_mean se_robust_mean samples
-## 1 (Intercept)  0.0004569712   0.1519371 0.1499269      0.1523567    4096
-## 2          X1  0.9972726522   0.1495610 0.1505160      0.1533926    4096
-## 3          X2  1.0006236697   0.1502134 0.1505160      0.1537968    4096
-## 4          X3  1.0005871133   0.1512415 0.1505160      0.1532644    4096
+## 1 (Intercept)  -0.003188688   0.1507546 0.1498737      0.1523029    4096
+## 2          X1   0.997162339   0.1503797 0.1504626      0.1535338    4096
+## 3          X2   0.998530243   0.1546126 0.1504626      0.1538075    4096
+## 4          X3   1.000031151   0.1520194 0.1504626      0.1536107    4096
 ## Variables not shown: beta_true (dbl)</code></pre>
 <p>In these simulations we will generally, but not exclusively, be concerned with the bias and efficiency of the estimates.</p>
 <p>First, compare the average value of <span class="math">\(\hat\beta\)</span> to the population parameters <span class="math">\(\beta\)</span>. This is what is nice about simulations, we know what the correct answer should be!</p>
 <pre class="r"><code>select(sim0_summary, estimate_mean, beta_true)</code></pre>
-<pre><code>## Source: local data frame [4 x 2]
-## 
-##   estimate_mean beta_true
-## 1  0.0004569712         0
-## 2  0.9972726522         1
-## 3  1.0006236697         1
-## 4  1.0005871133         1</code></pre>
+<pre><code>## Error in select(sim0_summary, estimate_mean, beta_true): unused arguments (estimate_mean, beta_true)</code></pre>
 <p>If an estimator is unbiased, then the mean of its sampling distribution should be equal to the true parameter value. Note that these may not be exactly the same due to the randomness from taking a sample; this is called Monte Carlo error.</p>
 <p>Second, we are interested in the standard deviation of the <span class="math">\(\hat\beta\)</span> estimates, We will often be interested in how the standard deviation of the estimator changes with inputs to the simulation.</p>
 <pre class="r"><code>select(sim0_summary, estimate_sd)</code></pre>
-<pre><code>## Source: local data frame [4 x 1]
-## 
-##   estimate_sd
-## 1   0.1519371
-## 2   0.1495610
-## 3   0.1502134
-## 4   0.1512415</code></pre>
+<pre><code>## Error in select(sim0_summary, estimate_sd): unused argument (estimate_sd)</code></pre>
 <p>Third, we will be interested in whether the standard error, which is sample estimate of the standard deviation of the sampling distribution, is a good estimate of the actual sampling distribution of <span class="math">\(\hat\beta\)</span>. The mean of the classical standard errors of the simulations are in column <code>se_mean</code>. The column <code>se_robust_mean</code> contains the means of the heteroskedasticity robust standard errors.</p>
 <pre class="r"><code>select(sim0_summary, estimate_sd, se_mean, se_robust_mean)</code></pre>
-<pre><code>## Source: local data frame [4 x 3]
-## 
-##   estimate_sd   se_mean se_robust_mean
-## 1   0.1519371 0.1499269      0.1523567
-## 2   0.1495610 0.1505160      0.1533926
-## 3   0.1502134 0.1505160      0.1537968
-## 4   0.1512415 0.1505160      0.1532644</code></pre>
+<pre><code>## Error in select(sim0_summary, estimate_sd, se_mean, se_robust_mean): unused arguments (estimate_sd, se_mean, se_robust_mean)</code></pre>
 <p>If <code>se_mean</code> (<code>se_robust_mean</code>) is not equal (or very close) to the <code>estimate_sd</code>, then the standard errors (robust standard errors) calculated from samples are biased estimates of the standard deviation of the sampling distribution of <span class="math">\(\hat{\beta}\)</span>.</p>
 <p>Those are the most common questions we will consider in the simulations, but some simulations may consider other questions.</p>
 </div>
@@ -460,8 +455,8 @@ R_X =
 \end{bmatrix}
 \]</span> In all simulations, <span class="math">\((x_1, x_2)\)</span> and <span class="math">\((x_2, x_3)\)</span> are uncorrelated. The correlation between <span class="math">\(x_1\)</span> and <span class="math">\(x_3\)</span> will vary between simulations. In all simulations, the sample regression will only include <span class="math">\(x_1\)</span> and <span class="math">\(x_2\)</span>: <span class="math">\[
 y_i = \hat\beta_0 + \hat\beta_1 x_{1,i} + \hat\beta_2 x_{2,i} + \hat\epsilon_i
-\]</span></p>
-<p>Consider the following values of <span class="math">\(\rho_{1,3}\)</span>: 0.1, 0.7, -0.7, 0.99. How does the correlation of variables affect:</p>
+\]</span> To omit the 3rd variable, set <code>omit = 3</code> in <code>sim_lin_norm_omitted</code>.</p>
+<p>Consider the following values of <span class="math">\(\rho_{1,3}\)</span>: 0, 0.1, 0.7, -0.7, 0.99, -0.99. How does the correlation of variables affect:</p>
 <ul>
 <li>The bias of each <span class="math">\(\hat{\beta}_j\)</span>?</li>
 <li>The variance of <span class="math">\(\hat{\beta}_j\)</span>?</li>
@@ -555,7 +550,8 @@ y_i = \beta_0 + \hat\beta_1 x_{1,i} + \dots + \hat\beta_k x_{k,i} + \hat\epsilon
 <dd><p>The quantile of truncation. All sampled <span class="math">\(y_i\)</span> with values less than that quantile are dropped before the regression is run. The default value <code>truncation = 0.5</code> means all values of <span class="math">\(y\)</span> less than the median are dropped before running the regression.</p>
 </dd>
 </dl>
-<pre class="r"><code>sim_lin_norm_truncated &lt;- function(iter, n, mu_X, s_X, R_X, beta, sigma, truncation = 0.5) {
+<pre class="r"><code>sim_lin_norm_truncated &lt;- function(iter, n, mu_X, s_X, R_X, beta, sigma,
+                                   truncation = 0.5) {
   X &lt;- MASS::mvrnorm(n, mu_X, sdcor2cov(s_X, R_X), empirical = TRUE)
   simulations &lt;- list()
   p &lt;- progress_estimated(iter, min_time = 2)
@@ -565,7 +561,7 @@ y_i = \beta_0 + \hat\beta_1 x_{1,i} + \dots + \hat\beta_k x_{k,i} + \hat\epsilon
     y &lt;- mu + epsilon
     # -------
     # NEW: drop cases in which y &gt; mean(y)
-    is_obs &lt;- (y &lt; quantile(y, prob = truncation))
+    is_obs &lt;- (y &gt; quantile(y, prob = truncation))
     yobs &lt;- y[is_obs, ]
     Xobs &lt;- X[is_obs, ]
     # -------
@@ -590,116 +586,6 @@ y_i = \beta_0 + \hat\beta_1 x_{1,i} + \dots + \hat\beta_k x_{k,i} + \hat\epsilon
 <li>The bias of the standard error of each <span class="math">\(\hat{\beta}_j\)</span>?</li>
 </ul>
 <p>In particular, does the effect of truncation on <span class="math">\(\beta{\beta}\)</span> decrease if we increase the sample size?</p>
-<!-- 
-## Serial Correlation (Optional)
-
-**This problem you can do for fun.**
-I had written this, but I think the homework may be getting a little long.
-However, many of you are dealing with data in a panel format, this may be useful information.
-You will find that serial correlation is similar to heteroskedasticity in its effects on the estimates of OLS.
-
-In this problem, we'll consider how serial correlation in errors and covariates affects OLS estimates.
-Serial correlation in the errors means that the errors are correlated over time.
-In this problem, the population we will use is
-$$
-Y_i = \beta_0 + \sum_{j = 1}^k \beta_j x_{j,i} + \epsilon_{i} + \rho \epsilon_{i - 1}
-$$
-This is a moving average process of order 1, or MA(1).
-If $\rho \neq 0$, then the $y_i$'s will be serially correlated.
-
-Additionally, for each covariate, the present value will now depend on the random part of the previous value, such that,
-$$
-x_{k,i} = \mu_{x_k} + \rho_{x_k} \upsilon_{x_{k,i-1}} + \upsilon_{x_{k,i}}
-$$
-This is a moving average of order 1, or MA(1). If $p_k \neq 0$ for some $k$, that $x_k$ is also serially correlated.
-
-However, the regression run on each sample will be an OLS regression that does not attempt to account for serial correlation,
-$$
-y_i = \hat\beta_0 + \hat\beta_1 x_{}
-$$
-
-The function `sim_lin_norm_ma1` has the same arguments as `sim_lin_norm` except for
-
-`rho`
-
-:   A value between 0 and 1 determining the serial correlation of the errors.
-
-`rho_X`
-
-:   A value between 0 and 1 determining the serial correlation of the covariates in $X$.
-    This assumes that the serial correlation in all $X$ is the same.
-
-
-```r
-sim_lin_norm_ma1 <- function(iter, n, mu_X, s_X, R_X, beta, sigma,
-                             rho = 0.5, rho_X = 0) {
-  assert_that(length(s_X) == length(mu_X),
-              ncol(R_X) == nrow(R_X),
-              ncol(R_X) == length(mu_X),
-              length(beta) == (length(mu_X) + 1),
-              length(rho_X) == length(mu_X),
-              all(rho >= 0 & rho <= 1),
-              all(rho_X >= 0 & rho_X <= 1))
-  k <- length(mu_X)
-  X <- mvrnorm_ma(n, mu_X, sdcor2cov(s_X, R_X), rho = rho_X, empirical = TRUE)
-  simulations <- list()
-  p <- progress_estimated(iter, min_time = 2)
-  for (j in 1:iter) {
-    mu <- cbind(1, X) %*% beta
-    # ---------
-    # NEW: generate y with serially correlated errors
-    lag_epsilson <- rep(0, k)
-    for (i in 1:n) {
-      epsilon <- rnorm(1, mean = 0, sd = sigma)
-      y <- mu[i, ] + rho * lag_epsilon + epsilon
-      lag_epsilon <- epsilon
-    }
-    # ---------
-    mod <- lm(y ~ X)
-    mod_df <- tidy(mod) %>%
-      mutate(.iter = j)
-    mod_df[["std.error.robust"]] <- sqrt(diag(car::hccm(mod)))
-    simulations[[j]] <- mod_df
-    p$tick()$print()
-  }
-  # Combine the list of data frames into a single data frame
-  bind_rows(simulations)
-}
-```
-
-In these simulations, the population model is
-$$
-\begin{aligned}[t]
-Y_i &= 0 + 1 \cdot x_1 + 1 \cdot x_2 + 1 \cdot x_3 + \epsilon_i + \rho \epsilon_{i - 1} \\
-\epsilon_i &\sim N(0, \sigma^2) \\
-\sigma^2 &= 1.7 \\
-\epsilon_{0} &= 0
-\end{aligned}
-$$
-where $\rho$ will vary with simulations.
-The covariates $x$ are drawn from
-$$
-\begin{aligned}[t]
-x_{j,i} &= 0 + \upsilon_{j,i} + \rho_{X,j} \upsilon_{j,i} & \text{for $j = 1, 2, 3$} \\
-\upsilon &= N(0, I_3) \\
-\rho_{X} &= (0, 0.5, 0.9) \\
-\upsilon_0 &= 0
-\end{aligned}
-$$
-Thus $x_1$ has no serial correlation, $x_2$ has moderate serial correlation, and $x_3$ has high serial correlation.
-
-Compare the bias and variance of $\hat{\beta}$ under the following scenarios.
-
-- $\rho = 0$, no serial correlation in the errors of $y$.
-- $\rho = 0.5$, moderate serial correlation in the errors of $y$
-- $\rho = 0.9$, high serial correlation in the error of $y$.
-
-How does serial correlation in $y$ and $X$ influence OLS estimates?
-Consider bias and variance of the estimates of $\hat\beta$.
-Also consider the bias of the standard error of $\hat\beta$.
-Does using robust standard errors help?
-
--->
 <hr />
 <p>Derived from of Christopher Adolph, “Problem Set 3”, <em>POLS/CSSS 503</em>, University of Washington, Spring 2014. <a href="http://faculty.washington.edu/cadolph/503/503hw3.pdf" class="uri">http://faculty.washington.edu/cadolph/503/503hw3.pdf</a>. Used with permission.</p>
 <p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,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" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
