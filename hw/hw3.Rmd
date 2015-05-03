@@ -22,7 +22,7 @@ $$
 ```{r knitr_opts, echo = FALSE, message = FALSE, results = 'hide'}
 library("knitr")
 set.seed(135125)
-opts_chunk$set(cache = FALSE, autodep = TRUE, cache.extra = rand_seed,
+opts_chunk$set(cache = TRUE, autodep = TRUE, cache.extra = rand_seed,
                error = TRUE)
 ```
 ```{r load,message = FALSE, echo = FALSE}
@@ -54,8 +54,8 @@ This is almost always the case for the properties of models applied to small sam
 Here, we use Monte Carlo not out of necessity but for pedagogical purposes, as a tool to gain a more intuitive and hands-on understanding of least squares and its properties.
 
 1. Create a new R project for this homework named `hw3` and load that project.
-2. Do your analyses in an R markdown document based off of `hw3-template.Rmd`
-2. Download `hw3-functions.R` and put this in your directory.
+2. Do your analyses in an R markdown document based off of [hw3-template.Rmd](hw3-template.Rmd)
+2. Download [hw3-functions.R](hw3-functions.R) and save in to your project directory.
 3. Submit a zipped file of the directory with your R project through Canvas. This should contain all the materials for another person to run your R Markdown fil  This should contain:
 
     - The R project (`.Rproj`) file

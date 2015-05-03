@@ -128,6 +128,7 @@ NAVIGATION_LINKS = {
             (
                 ("hw/hw1.html", "HW 1"),
                 ("hw/hw2.html", "HW 2"),
+                ("hw/hw3.html", "HW 3"),
             ),
             "Homeworks"
         ),

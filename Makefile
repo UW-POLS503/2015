@@ -29,7 +29,7 @@ labs: data
 hw: data
 	make -C hw
 	-mkdir $(WEBDIR)/files/hw
-	-cp $(HW_DIR)/hw*.html $(WEBDIR)/files/hw
+	-cp $(HW_DIR)/*.html $(HW_DIR)/*.Rmd $(HW_DIR)/*.R  $(WEBDIR)/files/hw
 
 web: data labs
 

@@ -83,8 +83,8 @@ img {
 <p>Monte Carlo experiments always produce the same results as analytic proofs for the specific case considered. Each method has advantages and disadvantages: proofs are more general and elegant, but are not always possible. Monte Carlo experiments are much easier to construct and can always be carried out, but findings from these experiments only apply to the specific scenario under study. Where proofs are available, they are generally preferable to Monte Carlo experiments, but proofs of the properties of more complicated models are sometimes impossible or impractically difficult. This is almost always the case for the properties of models applied to small samples of data. Here, we use Monte Carlo not out of necessity but for pedagogical purposes, as a tool to gain a more intuitive and hands-on understanding of least squares and its properties.</p>
 <ol style="list-style-type: decimal">
 <li>Create a new R project for this homework named <code>hw3</code> and load that project.</li>
-<li>Do your analyses in an R markdown document based off of <code>hw3-template.Rmd</code></li>
-<li>Download <code>hw3-functions.R</code> and put this in your directory.</li>
+<li>Do your analyses in an R markdown document based off of <a href="hw3-template.Rmd">hw3-template.Rmd</a></li>
+<li>Download <a href="hw3-functions.R">hw3-functions.R</a> and save in to your project directory.</li>
 <li><p>Submit a zipped file of the directory with your R project through Canvas. This should contain all the materials for another person to run your R Markdown fil This should contain:</p>
 <ul>
 <li>The R project (<code>.Rproj</code>) file</li>
@@ -102,7 +102,7 @@ img {
 <p>This assignment has some non-trivial computation. The following code sets the knitr options to cache the results of computations, so that any computations that do not change are not rerun. See RStudio’s help on <a href="http://rmarkdown.rstudio.com/authoring_rcodechunks.html#caching">Authoring R Code Chunks</a> for more information about what this is doing.</p>
 <pre class="r"><code>library(&quot;knitr&quot;)
 set.seed(135125)
-opts_chunk$set(cache = FALSE, autodep = TRUE, cache.extra = rand_seed,
+opts_chunk$set(cache = TRUE, autodep = TRUE, cache.extra = rand_seed,
                error = TRUE)</code></pre>
 <p>This will use the standard <a href="http://blog.revolutionanalytics.com/2015/03/hadleyverse.html">Hadleyverse</a> packages that we’ve been using in this course (<strong>ggplot2</strong>, <strong>dplyr</strong>, <strong>tidyr</strong>, <strong>broom</strong>). A few of the functions will use <strong>assertthat</strong>, which contains functions to test for errors in functions. Finally, it will use a function from a package written for this course, <strong>pols503</strong>.</p>
 <pre class="r"><code>library(&quot;MASS&quot;)
@@ -207,15 +207,15 @@ Sigma_X &lt;- sdcor2cov(s_X, R_X)</code></pre>
 <p>The coefficients of the OLS regression on the parameter should be similar to, but not exactly, those of the population from which it was drawn.</p>
 <pre class="r"><code>mod_df</code></pre>
 <pre><code>##          term    estimate  std.error statistic      p.value
-## 1 (Intercept) -0.05817017 0.05442267 -1.068859 2.853860e-01
-## 2          X1  0.95556968 0.05444926 17.549727 1.860870e-60
-## 3          X2  1.01468135 0.05444926 18.635355 6.212109e-67
-## 4          X3  0.93241985 0.05444926 17.124564 5.628815e-58
+## 1 (Intercept) -0.05887457 0.05442058 -1.081844 2.795776e-01
+## 2          X1  1.04360447 0.05444718 19.167284 3.552684e-70
+## 3          X2  1.01805099 0.05444718 18.697958 2.593468e-67
+## 4          X3  0.93326327 0.05444718 17.140710 4.537397e-58
 ##   std.error.robust
-## 1       0.05453624
-## 2       0.06028794
-## 3       0.05588302
-## 4       0.05070929</code></pre>
+## 1       0.05453429
+## 2       0.06045634
+## 3       0.05580820
+## 4       0.05065955</code></pre>
 </div>
 </div>
 <div id="multiple-iterations" class="section level2">
@@ -287,13 +287,13 @@ sim0 &lt;- sim_lin_norm(iter, n, mu_X, s_X, R_X, beta, sigma)
 head(sim0)</code></pre>
 <pre><code>## Source: local data frame [6 x 7]
 ## 
-##          term   estimate  std.error statistic      p.value .iter
-## 1 (Intercept) 0.04392657 0.05384603  0.815781 4.148158e-01     1
-## 2          X1 0.97586455 0.05387234 18.114391 8.428671e-64     1
-## 3          X2 1.03725385 0.05387234 19.253924 1.043124e-70     1
-## 4          X3 1.04418402 0.05387234 19.382564 1.682942e-71     1
-## 5 (Intercept) 0.09207644 0.05238289  1.757758 7.908863e-02     2
-## 6          X1 1.07433336 0.05240849 20.499225 1.785011e-78     2
+##          term   estimate  std.error  statistic      p.value .iter
+## 1 (Intercept) 0.03905270 0.05379430  0.7259636 4.680276e-01     1
+## 2          X1 0.97490202 0.05382059 18.1139234 8.482985e-64     1
+## 3          X2 1.03673080 0.05382059 19.2627176 9.209849e-71     1
+## 4          X3 0.95742489 0.05382059 17.7891941 7.216042e-62     1
+## 5 (Intercept) 0.09385974 0.05234848  1.7929792 7.327245e-02     2
+## 6          X1 1.07420233 0.05237406 20.5101972 1.521549e-78     2
 ## Variables not shown: std.error.robust (dbl)</code></pre>
 <p>With all the samples, we can summarize the results and compare them to the population parameters to evaluate how well OLS works. The following function, <code>summarize_sim</code> takes a data frame generated by the simulation function and a vector of the original parameters, and generates a summary data frame with one row per coefficient. Its arguments are</p>
 <dl>
@@ -321,40 +321,22 @@ sim0_summary</code></pre>
 <pre><code>## Source: local data frame [4 x 7]
 ## 
 ##          term estimate_mean estimate_sd    se_mean se_robust_mean samples
-## 1 (Intercept) -0.0007272491  0.05263744 0.05311051     0.05321465    4096
-## 2          X1  1.0001479740  0.05395631 0.05313646     0.05327105    4096
-## 3          X2  0.9997979005  0.05246436 0.05313646     0.05327076    4096
-## 4          X3  0.9987674529  0.05272698 0.05313646     0.05323488    4096
+## 1 (Intercept) -0.0007280815  0.05261952 0.05311053     0.05321467    4096
+## 2          X1  1.0001345323  0.05395326 0.05313648     0.05327122    4096
+## 3          X2  0.9997813840  0.05248179 0.05313648     0.05327070    4096
+## 4          X3  1.0013570527  0.05268618 0.05313648     0.05323316    4096
 ## Variables not shown: beta_true (dbl)</code></pre>
 <p>In these simulations we will generally, but not exclusively, be concerned with the bias and efficiency of the estimates.</p>
 <p>First, compare the average value of <span class="math">\(\hat\beta\)</span> to the population parameters <span class="math">\(\beta\)</span>. This is what is nice about simulations, we know what the correct answer should be!</p>
 <pre class="r"><code>select(sim0_summary, estimate_mean, beta_true)</code></pre>
-<pre><code>## Source: local data frame [4 x 2]
-## 
-##   estimate_mean beta_true
-## 1 -0.0007272491         0
-## 2  1.0001479740         1
-## 3  0.9997979005         1
-## 4  0.9987674529         1</code></pre>
+<pre><code>## Error in select(sim0_summary, estimate_mean, beta_true): unused arguments (estimate_mean, beta_true)</code></pre>
 <p>If an estimator is unbiased, then the mean of its sampling distribution should be equal to the true parameter value. Note that these may not be exactly the same due to the randomness from taking a sample; this is called Monte Carlo error.</p>
 <p>Second, we are interested in the standard deviation of the <span class="math">\(\hat\beta\)</span> estimates, We will often be interested in how the standard deviation of the estimator changes with inputs to the simulation.</p>
 <pre class="r"><code>select(sim0_summary, estimate_sd)</code></pre>
-<pre><code>## Source: local data frame [4 x 1]
-## 
-##   estimate_sd
-## 1  0.05263744
-## 2  0.05395631
-## 3  0.05246436
-## 4  0.05272698</code></pre>
+<pre><code>## Error in select(sim0_summary, estimate_sd): unused argument (estimate_sd)</code></pre>
 <p>Third, we will be interested in whether the standard error, which is sample estimate of the standard deviation of the sampling distribution, is a good estimate of the actual sampling distribution of <span class="math">\(\hat\beta\)</span>. The mean of the classical standard errors of the simulations are in column <code>se_mean</code>. The column <code>se_robust_mean</code> contains the means of the heteroskedasticity robust standard errors.</p>
 <pre class="r"><code>select(sim0_summary, estimate_sd, se_mean, se_robust_mean)</code></pre>
-<pre><code>## Source: local data frame [4 x 3]
-## 
-##   estimate_sd    se_mean se_robust_mean
-## 1  0.05263744 0.05311051     0.05321465
-## 2  0.05395631 0.05313646     0.05327105
-## 3  0.05246436 0.05313646     0.05327076
-## 4  0.05272698 0.05313646     0.05323488</code></pre>
+<pre><code>## Error in select(sim0_summary, estimate_sd, se_mean, se_robust_mean): unused arguments (estimate_sd, se_mean, se_robust_mean)</code></pre>
 <p>If <code>se_mean</code> (<code>se_robust_mean</code>) is not equal (or very close) to the <code>estimate_sd</code>, then the standard errors (robust standard errors) calculated from samples are biased estimates of the standard deviation of the sampling distribution of <span class="math">\(\hat{\beta}\)</span>.</p>
 <p>Those are the most common questions we will consider in the simulations, but some simulations may consider other questions.</p>
 <p><em>Hint:</em> For the problems which ask for multiple simulations you can automate the repitition using a recipe similar to the one used in the function. (1) Create a list to store the simulations. (2) Put the simulations in a for loop that runs it for each value of <span class="math">\(n\)</span> or whatever is changing in that problem. Save the results of <code>summarize_sim</code> to the list. Remember to add a column for the parameter that is changing between simulations. (3) Stack the dataframes in the list using <code>bind_rows</code>.</p>
@@ -422,7 +404,7 @@ Y_i &amp;= 0 + 0 \cdot x_{1,i} + 0.1 \cdot x_{2,i} + 0.5 \cdot x_{3,i} + 1 \cdot
 <p>The following function, <code>sim_lin_norm_omitted</code> samples from a linear, normal model with homoskedastic errors, but allows you to run a misspecified regression on the samples by omitting variables. The arguments to this function are the same as <code>sim_lin_norm</code> except for</p>
 <dl>
 <dt><code>omit</code></dt>
-<dd><p>A vector of integers of the columns to omit from X when estimating the sample regression.</p>
+<dd>A vector of integers of the columns to omit from X when estimating the sample regression.
 </dd>
 </dl>
 <pre class="r"><code>sim_lin_norm_omitted &lt;- function(iter, n, mu_X, s_X, R_X, beta, sigma,
@@ -496,7 +478,7 @@ Y_i &amp;= \beta_0 + \sum_{j = 1}^k x_{j,i} + \epsilon_i \\
 <p>The arguments for it are the same as <code>sim_lin_norm</code> except for</p>
 <dl>
 <dt><code>gamma</code></dt>
-<dd><p>A vector of coefficients for <span class="math">\(\log \sigma^2 = \gamma_0 + \gamma_1 x_1 + \dots + \gamma_k x_k\)</span>. Like <code>beta</code> it should have length <code>k + 1</code>.</p>
+<dd>A vector of coefficients for <span class="math">\(\log \sigma^2 = \gamma_0 + \gamma_1 x_1 + \dots + \gamma_k x_k\)</span>. Like <code>beta</code> it should have length <code>k + 1</code>.
 </dd>
 </dl>
 <pre class="r"><code>sim_lin_norm_heterosked &lt;- function(iter, n, mu_X, s_X, R_X, beta, sigma, gamma) {
@@ -567,7 +549,7 @@ y_i = \beta_0 + \hat\beta_1 x_{1,i} + \dots + \hat\beta_k x_{k,i} + \hat\epsilon
 <p>The function <code>sim_lin_norm_truncated</code>, is similar to the <code>sim_lin_norm</code> function except for the argument</p>
 <dl>
 <dt><code>truncation</code></dt>
-<dd><p>The quantile of truncation. All sampled <span class="math">\(y_i\)</span> with values less than that quantile are dropped before the regression is run. The default value <code>truncation = 0.5</code> means all values of <span class="math">\(y\)</span> less than the median are dropped before running the regression.</p>
+<dd>The quantile of truncation. All sampled <span class="math">\(y_i\)</span> with values less than that quantile are dropped before the regression is run. The default value <code>truncation = 0.5</code> means all values of <span class="math">\(y\)</span> less than the median are dropped before running the regression.
 </dd>
 </dl>
 <pre class="r"><code>sim_lin_norm_truncated &lt;- function(iter, n, mu_X, s_X, R_X, beta, sigma,
@@ -610,7 +592,7 @@ y_i = \beta_0 + \hat\beta_1 x_{1,i} + \dots + \hat\beta_k x_{k,i} + \hat\epsilon
 </ul>
 <p>In particular, if we gather more data but <span class="math">\(y\)</span> is truncated, does it decrease the bias in <span class="math">\(\hat{\beta}\)</span>?</p>
 <hr />
-<p>Derived from of Christopher Adolph, “Problem Set 3”, <em>POLS/CSSS 503</em>, University of Washington, Spring 2014. <a href="http://faculty.washington.edu/cadolph/503/503hw3.pdf" class="uri">http://faculty.washington.edu/cadolph/503/503hw3.pdf</a>. Used with permission.</p>
+<p>Derived from of Christopher Adolph, “Problem Set 3”, <em>POLS/CSSS 503</em>, University of Washington, Spring 2014. <a href="http://faculty.washington.edu/cadolph/503/503hw3.pdf">http://faculty.washington.edu/cadolph/503/503hw3.pdf</a>. Used with permission.</p>
 <p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,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" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
 </div>
 </div>
@@ -618,7 +600,7 @@ y_i = \beta_0 + \hat\beta_1 x_{1,i} + \dots + \hat\beta_k x_{k,i} + \hat\epsilon
 <hr />
 <ol>
 <li id="fn1"><p>Although the statistical theory of OLS works (thankfully) for random <span class="math">\(X\)</span>, as long as certain conditions are met. See Fox (2nd ed.), Ch 9.6.<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>See Ashworth, Scott, Joshua D. Clinton, Adam Meirowitz, and Kristopher W. Ramsay. 2008. ``Design, Inference, and the Strategic Logic of Suicide Terrorism.’’ *American Political Science Review() 102(02): 269–73. <a href="http://journals.cambridge.org/article_S0003055408080167" class="uri">http://journals.cambridge.org/article_S0003055408080167</a><a href="#fnref2">↩</a></p></li>
+<li id="fn2"><p>See Ashworth, Scott, Joshua D. Clinton, Adam Meirowitz, and Kristopher W. Ramsay. 2008. ``Design, Inference, and the Strategic Logic of Suicide Terrorism.’’ *American Political Science Review() 102(02): 269–73. <a href="http://journals.cambridge.org/article_S0003055408080167">http://journals.cambridge.org/article_S0003055408080167</a><a href="#fnref2">↩</a></p></li>
 </ol>
 </div>
 
