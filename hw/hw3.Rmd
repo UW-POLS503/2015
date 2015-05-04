@@ -76,7 +76,10 @@ See RStudio's help on [Authoring R Code Chunks](http://rmarkdown.rstudio.com/aut
 
 This will use the standard [Hadleyverse](http://blog.revolutionanalytics.com/2015/03/hadleyverse.html) packages that we've been using in this course (**ggplot2**, **dplyr**, **tidyr**, **broom**).
 A few of the functions will use **assertthat**, which contains functions to test for errors in functions.
-Additionally we will use some functions from **MASS** and **car**, but we will not load them since they contain some function names that conflict with those in packages that we are using.
+Additionally we will use the `hccm` function from **car**, but we will not load **car** since it contains some function names that conflict with those in packages that we are using.
+```{r eval = FALSE, echo = TRUE}
+<<load>>
+```
 
 # Simulation Example
 
