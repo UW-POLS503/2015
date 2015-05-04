@@ -1,0 +1,27 @@
+<!--
+.. title: Miscellaneous Useful Functions
+.. slug: miscellaneous-useful-functions
+.. date: 2015-05-03 14:38:02 UTC-07:00
+.. tags: data cleaning, draft
+.. category: 
+.. link: 
+.. description: 
+.. type: text
+.. author: Jeffrey Arnold
+-->
+
+I wrote a couple of functions that you may find useful in your data analysis
+
+- `to_dummies` convert 
+- `from_dummies` 
+
+You need to install the **pols503** package to
+```{r eval=FALSE}
+library("devtools")
+install_github("POLS503/r-pols503")
+```
+And load it
+```{r}
+library("pols503")
+```
+

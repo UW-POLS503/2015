@@ -17,8 +17,7 @@ $$
 ```{r knitr_opts, echo = FALSE, message = FALSE, results = 'hide'}
 library("knitr")
 set.seed(135125)
-opts_chunk$set(cache = TRUE, autodep = TRUE, cache.extra = rand_seed,
-               error = TRUE)
+opts_chunk$set(cache = TRUE, autodep = TRUE, cache.extra = rand_seed)
 ```
 ```{r load,message = FALSE, echo = FALSE}
 library("MASS")
@@ -27,10 +26,12 @@ library("dplyr")
 library("broom")
 library("assertthat")
 library("tidyr")
-library("pols503")
 ```
 ```{r external,cache = FALSE, echo=FALSE}
 read_chunk("hw3-functions.R")
+```
+```{r echo=FALSE}
+select <- dplyr::select
 ```
 
 # Instructions and Introduction
@@ -75,19 +76,7 @@ See RStudio's help on [Authoring R Code Chunks](http://rmarkdown.rstudio.com/aut
 
 This will use the standard [Hadleyverse](http://blog.revolutionanalytics.com/2015/03/hadleyverse.html) packages that we've been using in this course (**ggplot2**, **dplyr**, **tidyr**, **broom**).
 A few of the functions will use **assertthat**, which contains functions to test for errors in functions.
-Finally, it will use a function from a package written for this course, **pols503**.
-
-```{r eval=FALSE}
-<<load>>
-```
-If you do not have **pols503** installed you need **devtools** installed, and then run
-```{r r-pols503,eval = FALSE}
-devtools::install_github("POLS503/r-pols503")
-```
 Additionally we will use some functions from **MASS** and **car**, but we will not load them since they contain some function names that conflict with those in packages that we are using.
-
-You will need to include the code for the functions defined in this problem set ---  `sdcor2cov`, `summarize_sims`, `sim_lin_norm`, etc. --- for your R Markdown file to run.
-However, to keep your output more concise, hide the code for these functions by using the code chunk option `echo = FALSE`.
 
 # Simulation Example
 
