@@ -232,6 +232,8 @@ Given that this is my first time teaching this course, I expect many adjustments
 
 ### Tuesday, Apr 28
 
+[Problem Set 2](hw/hw2.html) Due
+
 - More on p-values and significance testing
 
     - Nuzzo, Regina. 2014. ``Scientific Method: Statistical Errors.'' *Nature* 506(7487): 150–52. <http://www.nature.com/doifinder/10.1038/506150a>
@@ -261,48 +263,70 @@ Given that this is my first time teaching this course, I expect many adjustments
 
 - Lab document: [.Rmd](labs/lab5.Rmd), [html](labs/lab5.html)
 
-## Week 6: Outliers, Robust Regression
-
+## Week 6: Measurement Error, Transformations
 
 ### Tuesday, May 5
 
-[Problem Set 2](hw/hw2.html) Due
+
+We covered substantive vs. statistical influence; transformations; and measurement error.
+You will need to cover collinearity, unusual and influential data, and robust regression on your own.
+
+- The perils of stargazing:
+    - Christopher Adolph, "Inference and Interpretation of Linear Regression", POLS 503, Spring 2014. <http://faculty.washington.edu/cadolph/503/topic4.pw.pdf#page=77>, pg. 77--.
+
+- Transformations of Variables
+
+    - Lecture deck: [.pdf](lectures/Lecture_Transformation_handout.pdf)
 
 - Measurement error
 
+    - Lecture deck: [.pdf](lectures/Lecture_Measurement_Error_handout.pdf)
     - Fox. Ch. 6.4
+	
+- Unusual and Influential Data and Robust Regression
+
+    - Christopher Adolph, "Outliers and Robust Regression Techniques", POLS 503, Spring 2014. <http://faculty.washington.edu/cadolph/503/topic6.pw.pdf>
+    - Fox, Ch 11, 19
+
 
 - Collinearity
 
     - Fox Ch 13 (13.1, skim the rest)
 
-- Model Fit and Selection
-
-    - Fox, Ch. 22
-
-- Bootstrapping
-
-    - Fox, Ch 21.
-	
-- Unusual and Influential Data
-
-    - Fox, Ch 11
-
-- Robust Regression
-
-    - Fox, Ch 19
-
-- Miscellaneous Thoughts on the state of quantitative analysis in political science
-
-    - Schrodt, Philip A. 2014. ``Seven Deadly Sins of Contemporary Quantitative Political Analysis.'' *Journal of Peace Research* 51(2): 287–300. <http://jpr.sagepub.com/content/51/2/287>
 
 ### Friday, May 8
 
 TBD
 
-## Week 7: Causal Inference I
+## Week 7: Interpretation, Model Selection
 
 ### Tuesday, May 12
+
+- Interpretation of regression
+
+    - King, Gary, Michael Tomz, and Jason Wittenberg. 2000. ``Making the Most of Statistical Analyses: Improving Interpretation and Presentation." *American Journal of Political Science* 44(2): 347–61. <http://www.jstor.org/stable/2669316>.
+
+- Bootstrapping
+
+    - Fox, Ch 21
+
+- Model Selection and Cross-Validation
+
+    - Fox, Ch 22
+
+- Miscellaneous Thoughts on the state of quantitative analysis in political science
+
+    - Schrodt, Philip A. 2014. ``Seven Deadly Sins of Contemporary Quantitative Political Analysis.'' *Journal of Peace Research* 51(2): 287–300. <http://jpr.sagepub.com/content/51/2/287>
+	- Achen, Christopher H. 2002. ``Toward a New Political Methodology: Microfoundations and ART.'' *Annual Review of Political Science* 5(1): 423–50. <http://dx.doi.org/10.1146/annurev.polisci.5.112801.080943>. Read the part on a "Rule of Three"; skim other parts.
+	- Achen, Christopher H. 2005. ``Let’s Put Garbage-Can Regressions and Garbage-Can Probits Where They Belong.'' *Conflict Management and Peace Science* 22(4): 327–39. <http://cmp.sagepub.com/content/22/4/327> *skim*
+
+### Friday, May 15
+
+TBD
+
+## Week 8: Causal Inference I
+
+### Tuesday, May 19
 
 [Problem Set 3](hw/hw3.html) Due
 
@@ -312,45 +336,34 @@ Potential outcomes framework, regression, matching
 - Gelman and Hill, Ch 9--10
 - Angrist, Joshua D., and Jorn-Steffen Pischke. 2010. ``The Credibility Revolution in Empirical Economics: How Better Research Design Is Taking the Con out of Econometrics.'' *Journal of Economic Perspectives* 24(2): 3–30. <http://www.aeaweb.org/articles.php?doi=10.1257/jep.24.2.3>
 
-### Friday, May 15
+### Friday, May 22
 
 TBD
 
-## Week 8: Causal Inference II
+## Week 9: Causal Inference II
 
-### Tuesday, May 19
+### Tuesday, May 26
 
 Instrumental Variables, Fixed Effects, Diff in Diff, Regression Discontinuity
 
 - Angrist and Pischke, Ch. 4, 5, 6
 
-### Friday, May 22
+### Friday, May 29
 
 TBD
 
-## Week 9: Time Series and Panel Data 
+## Week 10: Panel Data 
 
-### Tuesday, May 26
+### Tuesday, June 2
 
 - Beck, Nathaniel, and Jonathan N. Katz. 1995. ``What to Do (and Not to Do) with Time-Series Cross-Section Data.'' *The American Political Science Review* 89(3): 634–47. <http://www.jstor.org/stable/2082979>
 - Beck, Nathaniel, and Jonathan N. Katz. 2011. “Modeling Dynamics in Time-Series–Cross-Section Political Economy Data.” Annual Review of Political Science 14(1): 331–52. <http://dx.doi.org/10.1146/annurev-polisci-071510-103222>
 - Chris Adolph's Slides [Time Series: Stochastic Processes](http://faculty.washington.edu/cadolph/503/topic7.pw.pdf), [Models of Stationary and Non-Stationary Series](http://faculty.washington.edu/cadolph/503/topic8.pw.pdf), [Introduction to Panel Data Analysis](http://faculty.washington.edu/cadolph/503/topic9.pw.pdf).
 
-### Friday, May 29
-
-TBD
-
-## Week 10: TBD
-
-Because things don't go according to plan.
-
-### Tuesday, June 2
-
-- Fox, Ch. 22
-
 ### Friday, June 5
 
 TBD
+
 
 * * * 
 
