@@ -1,0 +1,241 @@
+% Copyright (C) 2015 Jeffrey B. Arnold
+% License CC BY-NC-SA 4.0 http://creativecommons.org/licenses/by-nc-sa/4.0/
+
+
+
+\input{\jobname-options}
+\ifdefined\ishandout%
+  \documentclass[handout]{beamer}
+\else
+  \documentclass[]{beamer}
+\fi
+
+% HEADER HERE
+\input{includes.tex}
+
+\usepackage{verbatim}
+
+\newcommand{\thetitle}{Transformations}
+\date{May 5, 2015}
+\title{\thetitle{}}
+\hypersetup{
+  pdftitle={\thetitle{}},
+  pdfkeywords={statistics}
+}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+\begin{frame}
+  \maketitle{}
+\end{frame}
+
+\begin{frame}
+\frametitle{Overview}
+\tableofcontents
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Residuals and Misspecification}
+  \framesubtitle{Example}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
+\includegraphics[width=\maxwidth]{lecture-specification_files/unnamed-chunk-1-1} 
+
+\end{knitrout}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Residuals and Misspecification}
+  \framesubtitle{Example}
+
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Residuals and Misspecification}
+  \framesubtitle{Example}
+
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Residuals and Misspecification}
+  \framesubtitle{Example}
+
+
+\end{frame}
+
+
+\section{Logarithms and Power Transformations}
+
+
+\begin{frame}
+  \frametitle{Interpreting Logarithms}
+
+  How would you interpret the following?
+
+  \begin{itemize}
+  \item $\text{GDP per cap}_{i} = \alpha + \beta \log \text{(school)}_{i}$
+  \item $\log \text{GDP per cap}_{i} = \alpha + \beta \text{(school)}_{i}$
+  \item $\log \text{GDP per cap}_{i} = \alpha + \beta \log \text{(school)}_{i}$
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Linearizing Functions}
+
+  Can you linearize these functions by taking the logarithms of both sides?
+
+  \begin{block}{Exponential}
+    \begin{equation*}
+      y_{i} = e^{\beta_{0} + \beta_{1} x_{1} + \beta_{2} x_{2} + \epsilon_{i}}
+    \end{equation*}
+    Yes
+    \begin{equation*}
+      \log y_{i} = \beta_{0} + \beta_{1} x_{1} + \beta_{2} x_{2} + \epsilon_{i}
+    \end{equation*}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  
+  \begin{block}{Gravity Equation}
+    \begin{equation*}
+      \text{trade}_{ij} = \frac{\alpha \text{GDP}_i^{\beta_1} \text{GDP}_j^{\beta_2}}{\delta d_{ij}^{\beta_{3}}}
+    \end{equation*}
+    Yes
+    \begin{equation*}
+      \log \text{trade}_{ij} = (\log \alpha + \log \delta) + \beta_{1} \log \text{GDP}_i +  \beta_{2} \text{GDP}_j - \beta_{3} d_{ij}
+    \end{equation*}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+    \begin{block}{\href{http://en.wikipedia.org/wiki/Cobb\%E2\%80\%93Douglas_production_function}{Cobb-Douglas} Production Function}
+      \begin{equation*}
+        y = \alpha x_{1}^{\beta} x_{2}^{\gamma}
+      \end{equation*}
+      Yes
+      \begin{equation*}
+        \log y = \log \alpha + \beta \log x_{1} + \delta \log x_{2}
+      \end{equation*}
+      
+    \end{block}
+\end{frame}
+
+\begin{frame}
+
+     \begin{block}{\href{http://en.wikipedia.org/wiki/Constant_elasticity_of_substitution}{CES} Production Function}
+       \begin{equation*}
+         y = \alpha (\delta x_{1}^\rho + (1 - \delta) x_{2}^\rho )^{\gamma / \rho}
+       \end{equation*}
+       No
+       \begin{equation*}
+         \log y = \log \alpha + (\gamma / \rho) \log(\textcolor{red}{\delta x_{1}^\rho + (1 - \delta) x_{2}^\rho})
+       \end{equation*}
+       Can't simplify $\log(\delta x_{1}^\rho + (1 - \delta) x_{2}^\rho)$.
+     \end{block}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Why can diff in logs be interpreted as a $\%\Delta$}
+
+  Note: $\log(1 + r) \approx r$ when $r$ small
+  
+  Then,
+  \begin{align*}
+    \log(x) - \log(x (1 + r)) &= \log(1 + r) \approx r \\
+    &= \% \Delta x / 100
+  \end{align*}
+  
+  This property only holds for the natural logarithm. Base $e$.
+
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Box-Cox Family of Transformations}
+
+
+  
+  
+Plot for $\lambda = 0.25, 0.5, 0, 2, 4, 8$  for $x = (0, 4]$
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Box-Cox Family of Transforms}
+
+  \begin{equation*}
+    \begin{cases}
+      f(x, \lambda) = \frac{x^{\lambda} - 1}{\lambda} & \text{if $\lambda \neq 0$}\\
+      f(x, \lambda) = \log{x} & \text{if $\lambda = 0$}
+    \end{cases}
+  \end{equation*}
+
+  \begin{itemize}
+  \item Requires $x > 0$. If negative, use $x + c$ for some value of $c$ to make make all $x$ postiive, or Yeo-Johnson.
+  \item Can solve for $\lambda$ to transform $x$ as close to wrt. Normal skew.
+  \item \textbf{car} function: \texttt{powerTransform}, \texttt{bcTransform}.
+  \item In regression: If know $\lambda$ can transform $y$ or $x$.
+  \end{itemize}
+
+\end{frame}
+
+\section{Linear Transformations of Regressions}
+
+\begin{frame}
+  \frametitle{Linear Transformations of Regression}
+  
+  \begin{block}{Scalar Multiplication}
+    \begin{equation*}
+      y = \alpha + \beta x_{i} + \epsilon
+    \end{equation*}
+    Multiplying $x_{i}$ by $a$ just changes the slope to $\beta a$
+    \begin{equation*}
+      y = \alpha + (\beta a) x_{i} + \epsilon
+    \end{equation*}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Linear Transformations of Regression}
+  
+  \begin{block}{Scalar Addition}
+    \begin{equation*}
+      y = \alpha + \beta x_{i} + \epsilon
+    \end{equation*}
+    Adding a constant $c$ to $x_{i}$
+    \begin{equation*}
+      y = \alpha + \beta (x_{i} + c) + \epsilon
+    \end{equation*}
+  \end{block}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Standardized Coefficients / Regressors}
+
+  \begin{equation*}
+    y = \alpha + \beta_{0} + \beta_1 \frac{x_i - \bar{x}}{\sd{(x)}} + \epsilon_i  
+  \end{equation*}
+
+  \begin{itemize}
+  \item Can be useful for default interpretation (controversial)
+  \item But about same as comparing $x + \sd(x)$ post-estimation. 
+  \item Bad for skewed variables, binary variables?
+  \item Transform regressors, not functions of regressors.
+  \item Gelman: Continuous: divide by $2 \sd(x)$; Binary: center at mean.
+  \item No need for them for default interpretation. With computational power, simulations better.
+  \item Very important to standardize $X$ in machine learning applications, or anywhere with complicated optimization problems.
+  \end{itemize}
+
+
+\end{frame}
+
+\end{document}

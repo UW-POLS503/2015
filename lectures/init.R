@@ -6,7 +6,7 @@ suppressPackageStartupMessages({
     library("knitr")
     library("readr")
     library("tidyr")
-    library("bloom")
+    library("broom")
 })
 
 opts_chunk$set(fig.height = 3, fig.width = 5,

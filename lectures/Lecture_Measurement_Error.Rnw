@@ -1,0 +1,214 @@
+% Copyright (C) 2015 Jeffrey B. Arnold
+% License CC BY-NC-SA 4.0 http://creativecommons.org/licenses/by-nc-sa/4.0/
+<<init,echo=FALSE,results='hide',warning=FALSE,message=FALSE>>=
+LECTURE_NUM <- "Heterosked"
+source("init.R")
+@
+<<header>>=
+suppressPackageStartupMessages({
+  library("mvtnorm")
+  library("MASS")
+  library("pols503")
+})
+@
+
+\input{\jobname-options}
+\ifdefined\ishandout%
+  \documentclass[handout]{beamer}
+\else
+  \documentclass[]{beamer}
+\fi
+
+% HEADER HERE
+
+\input{includes.tex}
+
+
+\newcommand{\thetitle}{Measurement Error}
+\date{May 5, 2015}
+\title{\thetitle{}}
+\hypersetup{
+  pdftitle={\thetitle{}},
+  pdfkeywords={statistics}
+}
+
+\begin{document}
+
+\begin{frame}
+  \maketitle{}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Measurement Error (One Variable)}
+
+  \begin{equation*}
+  \begin{aligned}[t]
+  Y &= \beta_0 + \beta_1 X_1 + \epsilon
+  \end{aligned}
+  \end{equation*}
+  but estimate
+  \begin{equation*}
+  \begin{aligned}[t]
+  Y &= \hat\beta_0 + \hat\beta_1 X_1^* + \epsilon \\
+  X_1^* &= X_1 + \delta
+  \end{aligned}
+  \end{equation*}
+
+  \begin{itemize}
+  \item $X_1^*$ is $X_1$ measured with error.
+  \item Assumptions
+  \begin{itemize}
+  \item $\E(\delta) = 0$
+  \item Meas error: $\cov(\delta, X_1) = 0$. What if measurement error increases with $X_1$?
+  \item Meas error uncorrelated with regression components: $\cov(\delta, \epsilon) = 0$, $\cov(\delta, X_1) = 0$
+  \item Meas error: $\cov(\delta, X_1) = 0$
+  \end{itemize}
+  \item Reliability: measure of measurment error
+    \begin{equation*}
+      r = \var(X_1) / \var{(X_1^*)} = \var{(X_1)} / (\var{(X_1^*)} + \var(\delta)
+    \end{equation*}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example of Measurement Error}
+
+  Population
+  \begin{align*}
+  Y_i &= X_{1,i} + X_{2,i} + \epsilon_i \\
+  X^*_i &= X_{1,i} + \delta_i
+  \end{align*}
+
+  Sample Estimate
+  \begin{align*}
+  y_i &= \hat\beta_0 + \hat \beta_1 x_{1,i}^* + \hat \beta_2 x_{2,i} + \hat\epsilon_i 
+  \end{align*}
+  
+  Look at cases in which $r = 0$, no measurement error in $X^{*}_{1}$, and $r = 0.5$, $\var{(\delta)} = \var{(X_1)}$.
+
+\end{frame}
+
+
+<<echo = FALSE, results = 'hide'>>=
+sample_lin_norm <- function(X, beta, sigma) {
+  mu <- cbind(1, X) %*% beta
+  epsilon <- rnorm(n, mean = 0, sd = sigma)
+  mu + epsilon
+}
+
+n <- 128
+k <- 2
+X <- mvrnorm(n, mu = rep(0, 2),
+             Sigma = matrix(c(1, 0.7, 0.7, 1), nrow = 2))
+beta <- c(0, rep(1, k))
+y <- sample_lin_norm(X, beta = beta,
+                     sigma = r2_to_sigma(cbind(1, X), beta, 0.7))
+
+dat <- data_frame(y = as.numeric(y), # y = x1
+                  x1 = as.numeric(X[ , 1]),
+                  x2 = as.numeric(X[ , 2]))
+
+r <- 0.5
+.dat <- dat %>%
+  within(., {z <- x1 + rnorm(length(x1), sd = sqrt((1 - r)/r))
+    z_x2_resid <- residuals(lm(z ~ x2))
+    x1_x2_resid <- residuals(lm(x1 ~ x2))
+    y_x2_resid <- residuals(lm(y ~ x2))
+    yhat_z_x2 <- fitted(lm(y_x2_resid ~ z_x2_resid))
+    yhat_x1_x2 <- fitted(lm(y_x2_resid ~ x1_x2_resid))
+
+    x2_x1_resid <- residuals(lm(x2 ~ x1))
+    y_x1_resid <- residuals(lm(y ~ x1))
+    yhat_x2_x1 <- fitted(lm(y_x1_resid ~ x2_x1_resid))
+    y_z_resid <- residuals(lm(y ~ z))
+    x2_z_resid <- residuals(lm(x2 ~ z))
+    yhat_x2_z <- fitted(lm(y_z_resid ~ x2_z_resid))
+  })
+
+
+
+@
+
+
+\begin{frame}
+\frametitle{Measurement Error, Effect on $\hat\beta_1$}
+<<>>=
+
+ggplot(data = .dat) +
+  geom_point(mapping = aes(x = x1_x2_resid, y = y_x2_resid), colour = "red") +
+  geom_line(mapping = aes(x = x1_x2_resid, y = yhat_x1_x2), colour = "red") +
+  geom_point(mapping = aes(x = z_x2_resid, y = y_x2_resid), colour = "blue") +
+  geom_line(mapping = aes(x = z_x2_resid, y = yhat_z_x2), colour = "blue") +
+  xlab(expression(x[1] * "|" * x[2])) +
+  ylab(expression(y * "|" * x[1])) +
+  theme_local()
+
+@
+Blue is no measurement error, $r = 1$; Red is measurement error, $r = 0.5$.
+\end{frame}
+
+\begin{frame}
+\frametitle{Measurement Error, Effect on $\hat\beta_2$}
+
+<<>>=
+ggplot(data = .dat) +
+  geom_point(mapping = aes(x = x2_x1_resid, y = y_x1_resid), colour = "red") +
+  geom_line(mapping = aes(x = x2_x1_resid, y = yhat_x2_x1), colour = "red") +
+  geom_point(mapping = aes(x = x2_z_resid, y = y_z_resid), colour = "blue") +
+  geom_line(mapping = aes(x = x2_z_resid, y = yhat_x2_z), colour = "blue") +
+  xlab(expression(x[2] * "|" * x[1])) +
+  ylab(expression(y * "|" * x[1])) +
+  theme_local()
+@
+Blue is no measurement error, $r = 1$; Red is measurement error, $r = 0.5$.
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{What does measurement error in $X$ do?}
+  \begin{itemize}
+  \item attenuates (biases towards 0) coefficient of covariates with measurement error
+  \item attenuation is \textbf{worse} as more covariates are included.
+    Those covariates explain $y$'s variance, but not the measurement error in $x$.
+  \item biases coefficients of other regressors towards their values in the regression
+    without that value (omitted variable bias light)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{What does measurement error in $Y$ do?}
+
+  Population
+  \begin{align*}
+  Y_i &= \beta_{0} + \beta_{1} \beta_{1,i} + \beta_{2} x_{2,i} + \epsilon_i \\
+  Y^*_i &= Y_{1,i} + \delta_i
+  \end{align*}
+  Then
+  \begin{align*}
+  Y^{*}_i &= \beta_{0} + \beta_{1} \beta_{1,i} + \beta_{2} x_{2,i} + (\epsilon_i + \delta_{i})
+  \end{align*}
+
+  \begin{itemize}
+  \item Error variance of $E(Y|X)$ is larger: $\var(\epsilon) + \var(\delta)$
+  \item Coefficients of $\hat\beta$ unbiased
+  \item Coefficients have larger standard errors: 
+    \begin{equation*}
+      \se(\beta) = \sqrt{\frac{\var(\epsilon) + \var(\delta)}{(X'X)^{-1}}} 
+    \end{equation*}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{What to do about measurement error?}
+  \begin{itemize}
+  \item Get better data or multiple measures
+  \item Multiple imputation. See R package \href{http://cran.r-project.org/web/packages/Amelia/index.html}{Amelia} and Blackwell, Matthew, James Honaker, and Gary King. 10030. ``A Unified Approach to Measurement Error and Missing Data: Overview.'' \textit{Sociological Methods and Research}.
+  \item Instrumental Variable (IV) models
+  \item Bayesian latent variable models or structural equation models
+  \end{itemize}
+\end{frame}
+
+\end{document}
