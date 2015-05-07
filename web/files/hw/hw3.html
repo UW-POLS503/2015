@@ -83,8 +83,8 @@ img {
 <p>Monte Carlo experiments always produce the same results as analytic proofs for the specific case considered. Each method has advantages and disadvantages: proofs are more general and elegant, but are not always possible. Monte Carlo experiments are much easier to construct and can always be carried out, but findings from these experiments only apply to the specific scenario under study. Where proofs are available, they are generally preferable to Monte Carlo experiments, but proofs of the properties of more complicated models are sometimes impossible or impractically difficult. This is almost always the case for the properties of models applied to small samples of data. Here, we use Monte Carlo not out of necessity but for pedagogical purposes, as a tool to gain a more intuitive and hands-on understanding of least squares and its properties.</p>
 <ol style="list-style-type: decimal">
 <li>Create a new R project for this homework named <code>hw3</code> and load that project.</li>
-<li>Do your analyses in an R markdown document based off of <a href="hw3-template.Rmd">hw3-template.Rmd</a></li>
-<li>Download <a href="hw3-functions.R">hw3-functions.R</a> and save in to your project directory.</li>
+<li>Do your analyses in an R markdown document based off of <a href="hw3-template.Rmd" class="uri">hw3-template.Rmd</a></li>
+<li>Download <a href="hw3-functions.R" class="uri">hw3-functions.R</a> and save in to your project directory.</li>
 <li><p>Submit a zipped file of the directory with your R project through Canvas. This should contain all the materials for another person to run your R Markdown fil This should contain:</p>
 <ul>
 <li>The R project (<code>.Rproj</code>) file</li>
@@ -416,7 +416,7 @@ Y_i &amp;= 0 + 0 \cdot x_{1,i} + 0.1 \cdot x_{2,i} + 0.5 \cdot x_{3,i} + 1 \cdot
 <p>The following function, <code>sim_lin_norm_omitted</code> samples from a linear, normal model with homoskedastic errors, but allows you to run a misspecified regression on the samples by omitting variables. The arguments to this function are the same as <code>sim_lin_norm</code> except for</p>
 <dl>
 <dt><code>omit</code></dt>
-<dd>A vector of integers of the columns to omit from X when estimating the sample regression.
+<dd><p>A vector of integers of the columns to omit from X when estimating the sample regression.</p>
 </dd>
 </dl>
 <pre class="r"><code>sim_lin_norm_omitted &lt;- function(iter, n, mu_X, s_X, R_X, beta, sigma,
@@ -490,7 +490,7 @@ Y_i &amp;= \beta_0 + \sum_{j = 1}^k x_{j,i} + \epsilon_i \\
 <p>The arguments for it are the same as <code>sim_lin_norm</code> except for</p>
 <dl>
 <dt><code>gamma</code></dt>
-<dd>A vector of coefficients for <span class="math">\(\log \sigma^2 = \gamma_0 + \gamma_1 x_1 + \dots + \gamma_k x_k\)</span>. Like <code>beta</code> it should have length <code>k + 1</code>.
+<dd><p>A vector of coefficients for <span class="math">\(\log \sigma^2 = \gamma_0 + \gamma_1 x_1 + \dots + \gamma_k x_k\)</span>. Like <code>beta</code> it should have length <code>k + 1</code>.</p>
 </dd>
 </dl>
 <pre class="r"><code>sim_lin_norm_heterosked &lt;- function(iter, n, mu_X, s_X, R_X, beta, sigma, gamma) {
@@ -561,7 +561,7 @@ y_i = \beta_0 + \hat\beta_1 x_{1,i} + \dots + \hat\beta_k x_{k,i} + \hat\epsilon
 <p>The function <code>sim_lin_norm_truncated</code>, is similar to the <code>sim_lin_norm</code> function except for the argument</p>
 <dl>
 <dt><code>truncation</code></dt>
-<dd>The quantile of truncation. All sampled <span class="math">\(y_i\)</span> with values less than that quantile are dropped before the regression is run. The default value <code>truncation = 0.5</code> means all values of <span class="math">\(y\)</span> less than the median are dropped before running the regression.
+<dd><p>The quantile of truncation. All sampled <span class="math">\(y_i\)</span> with values less than that quantile are dropped before the regression is run. The default value <code>truncation = 0.5</code> means all values of <span class="math">\(y\)</span> less than the median are dropped before running the regression.</p>
 </dd>
 </dl>
 <pre class="r"><code>sim_lin_norm_truncated &lt;- function(iter, n, mu_X, s_X, R_X, beta, sigma,
@@ -604,7 +604,7 @@ y_i = \beta_0 + \hat\beta_1 x_{1,i} + \dots + \hat\beta_k x_{k,i} + \hat\epsilon
 </ul>
 <p>In particular, if we gather more data but <span class="math">\(y\)</span> is truncated, does it decrease the bias in <span class="math">\(\hat{\beta}\)</span>?</p>
 <hr />
-<p>Derived from of Christopher Adolph, “Problem Set 3”, <em>POLS/CSSS 503</em>, University of Washington, Spring 2014. <a href="http://faculty.washington.edu/cadolph/503/503hw3.pdf">http://faculty.washington.edu/cadolph/503/503hw3.pdf</a>. Used with permission.</p>
+<p>Derived from of Christopher Adolph, “Problem Set 3”, <em>POLS/CSSS 503</em>, University of Washington, Spring 2014. <a href="http://faculty.washington.edu/cadolph/503/503hw3.pdf" class="uri">http://faculty.washington.edu/cadolph/503/503hw3.pdf</a>. Used with permission.</p>
 <p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,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" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
 </div>
 </div>
@@ -612,7 +612,7 @@ y_i = \beta_0 + \hat\beta_1 x_{1,i} + \dots + \hat\beta_k x_{k,i} + \hat\epsilon
 <hr />
 <ol>
 <li id="fn1"><p>Although the statistical theory of OLS works (thankfully) for random <span class="math">\(X\)</span>, as long as certain conditions are met. See Fox (2nd ed.), Ch 9.6.<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>See Ashworth, Scott, Joshua D. Clinton, Adam Meirowitz, and Kristopher W. Ramsay. 2008. ``Design, Inference, and the Strategic Logic of Suicide Terrorism.’’ *American Political Science Review() 102(02): 269–73. <a href="http://journals.cambridge.org/article_S0003055408080167">http://journals.cambridge.org/article_S0003055408080167</a><a href="#fnref2">↩</a></p></li>
+<li id="fn2"><p>See Ashworth, Scott, Joshua D. Clinton, Adam Meirowitz, and Kristopher W. Ramsay. 2008. ``Design, Inference, and the Strategic Logic of Suicide Terrorism.’’ *American Political Science Review() 102(02): 269–73. <a href="http://journals.cambridge.org/article_S0003055408080167" class="uri">http://journals.cambridge.org/article_S0003055408080167</a><a href="#fnref2">↩</a></p></li>
 </ol>
 </div>
 
