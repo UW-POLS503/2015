@@ -1,6 +1,15 @@
 % Copyright (C) 2015 Jeffrey B. Arnold
 % License CC BY-NC-SA 4.0 http://creativecommons.org/licenses/by-nc-sa/4.0/
 
+<<init,echo=FALSE,results='hide',warning=FALSE,message=FALSE>>=
+LECTURE_NUM <- "Transformation"
+source("init.R")
+@
+<<header>>=
+suppressPackageStartupMessages({
+  library("gapminder")
+})
+@
 
 
 \input{\jobname-options}
@@ -37,34 +46,63 @@
 
 \begin{frame}
   \frametitle{Residuals and Misspecification}
-  \framesubtitle{Example}
+  \framesubtitle{Life Expectancy (years) on GDP per capita (2007)}
 
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
-\includegraphics[width=\maxwidth]{lecture-specification_files/unnamed-chunk-1-1} 
-
-\end{knitrout}
-
-\end{frame}
-
-\begin{frame}
-  \frametitle{Residuals and Misspecification}
-  \framesubtitle{Example}
-
+<<>>=
+data("gapminder")
+gapminder2007 <- filter(gapminder, year == 2007)
+ggplot(gapminder2007, aes(y = lifeExp, x = gdpPercap)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  ylab("Life Expectancy (years)") +
+  xlab("GDP per capita") +
+  theme_local()
+@
 
 \end{frame}
 
 \begin{frame}
   \frametitle{Residuals and Misspecification}
-  \framesubtitle{Example}
+  \framesubtitle{Residuals of Life Expectancy (years) on GDP per capita (2007)}
 
+<<>>=
+ggplot(broom::augment(lm(lifeExp ~ gdpPercap, data = gapminder2007)), aes(y = .resid, x = gdpPercap)) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  ylab("residuals") +
+  xlab("GDP per capita") +
+  theme_local()
+@
 
 \end{frame}
 
 \begin{frame}
   \frametitle{Residuals and Misspecification}
-  \framesubtitle{Example}
+  \framesubtitle{Life Expectancy (years $^4$) on log GDP per capita (2007)}
 
+<<>>=
+ggplot(gapminder2007, aes(y = lifeExp^4, x = log(gdpPercap))) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  ylab("Life Expectancy (years ^ 4)") +
+  xlab("log(GDP per capita)") +
+  theme_local()
+@
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Residuals and Misspecification}
+  \framesubtitle{Residuals of Life Expectancy (years $^4$) on log GDP per capita (2007)}
+
+<<>>=
+ggplot(broom::augment(lm(I(lifeExp^4) ~ log(gdpPercap), data = gapminder2007)), aes(y = .resid, x = log.gdpPercap.)) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  ylab("residuals") +
+  xlab("log(GDP per capita)") +
+  theme_local()
+@
 
 \end{frame}
 
@@ -102,7 +140,7 @@
 \end{frame}
 
 \begin{frame}
-  
+
   \begin{block}{Gravity Equation}
     \begin{equation*}
       \text{trade}_{ij} = \frac{\alpha \text{GDP}_i^{\beta_1} \text{GDP}_j^{\beta_2}}{\delta d_{ij}^{\beta_{3}}}
@@ -123,7 +161,7 @@
       \begin{equation*}
         \log y = \log \alpha + \beta \log x_{1} + \delta \log x_{2}
       \end{equation*}
-      
+
     \end{block}
 \end{frame}
 
@@ -139,7 +177,7 @@
        \end{equation*}
        Can't simplify $\log(\delta x_{1}^\rho + (1 - \delta) x_{2}^\rho)$.
      \end{block}
-  
+
 \end{frame}
 
 
@@ -147,13 +185,13 @@
   \frametitle{Why can diff in logs be interpreted as a $\%\Delta$}
 
   Note: $\log(1 + r) \approx r$ when $r$ small
-  
+
   Then,
   \begin{align*}
     \log(x) - \log(x (1 + r)) &= \log(1 + r) \approx r \\
     &= \% \Delta x / 100
   \end{align*}
-  
+
   This property only holds for the natural logarithm. Base $e$.
 
 \end{frame}
@@ -162,8 +200,8 @@
   \frametitle{Box-Cox Family of Transformations}
 
 
-  
-  
+
+
 Plot for $\lambda = 0.25, 0.5, 0, 2, 4, 8$  for $x = (0, 4]$
 
 \end{frame}
@@ -191,7 +229,7 @@ Plot for $\lambda = 0.25, 0.5, 0, 2, 4, 8$  for $x = (0, 4]$
 
 \begin{frame}
   \frametitle{Linear Transformations of Regression}
-  
+
   \begin{block}{Scalar Multiplication}
     \begin{equation*}
       y = \alpha + \beta x_{i} + \epsilon
@@ -205,7 +243,7 @@ Plot for $\lambda = 0.25, 0.5, 0, 2, 4, 8$  for $x = (0, 4]$
 
 \begin{frame}
   \frametitle{Linear Transformations of Regression}
-  
+
   \begin{block}{Scalar Addition}
     \begin{equation*}
       y = \alpha + \beta x_{i} + \epsilon
@@ -222,12 +260,12 @@ Plot for $\lambda = 0.25, 0.5, 0, 2, 4, 8$  for $x = (0, 4]$
   \frametitle{Standardized Coefficients / Regressors}
 
   \begin{equation*}
-    y = \alpha + \beta_{0} + \beta_1 \frac{x_i - \bar{x}}{\sd{(x)}} + \epsilon_i  
+    y = \alpha + \beta_{0} + \beta_1 \frac{x_i - \bar{x}}{\sd{(x)}} + \epsilon_i
   \end{equation*}
 
   \begin{itemize}
   \item Can be useful for default interpretation (controversial)
-  \item But about same as comparing $x + \sd(x)$ post-estimation. 
+  \item But about same as comparing $x + \sd(x)$ post-estimation.
   \item Bad for skewed variables, binary variables?
   \item Transform regressors, not functions of regressors.
   \item Gelman: Continuous: divide by $2 \sd(x)$; Binary: center at mean.
