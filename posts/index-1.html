@@ -15,19 +15,19 @@ article: http://ogp.me/ns/article#
 
       <link rel="canonical" href="http://pols503.github.io/pols_503_sp15/posts/index-1.html">
 
-            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-76x76.png" sizes="76x76">
-            <link rel="icon" href="../favicon-96x96.png" sizes="96x96">
-            <link rel="icon" href="../favicon-128.png" sizes="128x128">
-            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-60x60.png" sizes="60x60">
-            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-152x152.png" sizes="152x152">
-            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-144x144.png" sizes="144x144">
-            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-72x72.png" sizes="72x72">
-            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-57x57.png" sizes="57x57">
             <link rel="icon" href="../favicon-32x32.png" sizes="32x32">
+            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-57x57.png" sizes="57x57">
+            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-72x72.png" sizes="72x72">
             <link rel="icon" href="../favicon-196x196.png" sizes="196x196">
+            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-120x120.png" sizes="120x120">
             <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-114x114.png" sizes="114x114">
             <link rel="icon" href="../favicon-16x16.png" sizes="16x16">
-            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-120x120.png" sizes="120x120">
+            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-144x144.png" sizes="144x144">
+            <link rel="icon" href="../favicon-128.png" sizes="128x128">
+            <link rel="icon" href="../favicon-96x96.png" sizes="96x96">
+            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-152x152.png" sizes="152x152">
+            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-60x60.png" sizes="60x60">
+            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-76x76.png" sizes="76x76">
 
 
         <link rel="prev" href="index.html" type="text/html">
@@ -142,6 +142,38 @@ article: http://ogp.me/ns/article#
         <div class="row">
             
 <div class="postindex">
+    <article class="h-entry post-text">
+    <header>
+        <h1 class="p-name entry-title"><a href="r-warning-messages-involving-lc_type.html" class="u-url">R warning messages involving LC_TYPE</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">Jeffrey B. Arnold</span></p>
+            <p class="dateline"><a href="r-warning-messages-involving-lc_type.html" rel="bookmark"><time class="published dt-published" datetime="2015-04-18T13:50:40-07:00" title="2015-04-18 13:50">2015-04-18 13:50</time></a></p>
+        </div>
+    </header>
+    <div class="e-content entry-content">
+    <!--
+.. title: R warning messages involving LC_TYPE
+.. slug: r-warning-messages-involving-lc_type
+.. date: 2015-04-18 13:50:40 UTC-07:00
+.. tags: R errors
+.. category: 
+.. link: 
+.. description: 
+.. type: text
+-->
+
+<p>If you are running R on a Mac and get the following warning message,</p>
+<pre class="sourceCode r"><code class="sourceCode r">During startup -<span class="st"> </span>Warning messages:
+<span class="dv">1</span>:<span class="st"> </span>Setting LC_CTYPE failed, using <span class="st">"C"</span>
+<span class="dv">2</span>:<span class="st"> </span>Setting LC_COLLATE failed, using <span class="st">"C"</span>
+<span class="dv">3</span>:<span class="st"> </span>Setting LC_TIME failed, using <span class="st">"C"</span>
+<span class="dv">4</span>:<span class="st"> </span>Setting LC_MESSAGES failed, using <span class="st">"C"</span>
+<span class="dv">5</span>:<span class="st"> </span>Setting LC_PAPER failed, using <span class="st">"C"</span></code></pre>
+<p>run this command in R,</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system</span>(<span class="st">"defaults write org.R-project.R force.LANG en_US.UTF-8"</span>)</code></pre>
+<p>See this StackOverflow <a href="http://stackoverflow.com/questions/9689104/installing-r-on-mac-warning-messages-setting-lc-ctype-failed-using-c">question</a> for more information.</p>
+    </div>
+    </article>
     <article class="h-entry post-text">
     <header>
         <h1 class="p-name entry-title"><a href="writing-a-paper-for-this-course.html" class="u-url">Writing a paper for this course</a></h1>

@@ -33,6 +33,10 @@
   <lastmod>2015-04-27</lastmod>
  </sitemap>
  <sitemap>
+  <loc>http://pols503.github.io/pols_503_sp15/categories/lecture.xml</loc>
+  <lastmod>2015-05-06</lastmod>
+ </sitemap>
+ <sitemap>
   <loc>http://pols503.github.io/pols_503_sp15/categories/nhst.xml</loc>
   <lastmod>2015-04-27</lastmod>
  </sitemap>
@@ -61,6 +65,10 @@
   <lastmod>2015-04-27</lastmod>
  </sitemap>
  <sitemap>
+  <loc>http://pols503.github.io/pols_503_sp15/categories/syllabus.xml</loc>
+  <lastmod>2015-05-06</lastmod>
+ </sitemap>
+ <sitemap>
   <loc>http://pols503.github.io/pols_503_sp15/categories/visualization.xml</loc>
   <lastmod>2015-04-27</lastmod>
  </sitemap>
@@ -70,7 +78,7 @@
  </sitemap>
  <sitemap>
   <loc>http://pols503.github.io/pols_503_sp15/rss.xml</loc>
-  <lastmod>2015-05-03</lastmod>
+  <lastmod>2015-05-06</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://pols503.github.io/pols_503_sp15/sitemap.xml</loc>
