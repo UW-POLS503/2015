@@ -302,6 +302,8 @@ TBD
 
 ### Tuesday, May 12
 
+[Problem Set 3](hw/hw3.html) Due
+
 - Interpretation of regression
 
     - King, Gary, Michael Tomz, and Jason Wittenberg. 2000. ``Making the Most of Statistical Analyses: Improving Interpretation and Presentation." *American Journal of Political Science* 44(2): 347–61. <http://www.jstor.org/stable/2669316>.
@@ -328,7 +330,6 @@ TBD
 
 ### Tuesday, May 19
 
-[Problem Set 3](hw/hw3.html) Due
 
 Potential outcomes framework, regression, matching
 
