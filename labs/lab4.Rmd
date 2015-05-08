@@ -1,10 +1,10 @@
 ---
-title: "POLS/CSSS 503"
+title: "Lab 4"
 author: "Sergio Garcia-Rios - Jeff Arnold"
 date: "Friday, April 24, 2015"
+---
 
-
-For this lab we will use the replication [data]( https://dataverse.harvard.edu/dataset.xhtml?persistentId=hdl:1902.1/17976) from [Michael Ross](http://www.sscnet.ucla.edu/polisci/faculty/ross/)'s _"The Oil Curse: How Petroleum Wealth Shapes the Development of Nations."_  
+For this lab we will use the replication [data]( https://dataverse.harvard.edu/dataset.xhtml?persistentId=hdl:1902.1/17976) from [Michael Ross](http://www.sscnet.ucla.edu/polisci/faculty/ross/)'s "The Oil Curse: How Petroleum Wealth Shapes the Development of Nations."
 
 We will be exploring the relationship between oil dependency and democracy.
 

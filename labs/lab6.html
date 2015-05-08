@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
-<meta name="author" content="Jeffrey Arnold" />
+<meta name="author" content="Carolina Johnson, Jeffrey Arnold" />
 
 
 <title>Lab 6 - More Regression Interpretation</title>
@@ -65,82 +65,106 @@ img {
 
 <div id="header">
 <h1 class="title">Lab 6 - More Regression Interpretation</h1>
-<h4 class="author"><em>Jeffrey Arnold</em></h4>
-<h4 class="date"><em>Friday May 9, 2015</em></h4>
+<h4 class="author"><em>Carolina Johnson, Jeffrey Arnold</em></h4>
+<h4 class="date"><em>Friday May 8, 2015</em></h4>
 </div>
 
 <div id="TOC">
 <ul>
-<li><a href="#regression">Regression</a></li>
-<li><a href="#logarithms-with-0">Logarithms with 0</a></li>
-<li><a href="#regression-post-estimation">Regression Post-estimation</a><ul>
+<li><a href="#more-on-interpretation">More on Interpretation</a></li>
 <li><a href="#residual-analysis">Residual Analysis</a></li>
-</ul></li>
-<li><a href="#writing-functions">Writing Functions</a></li>
+<li><a href="#writing-to-a-file">Writing to a file</a></li>
+<li><a href="#a-quick-introduction-to-functions">A quick introduction to functions</a></li>
+<li><a href="#regression-post-estimation">Regression Post-estimation</a></li>
 <li><a href="#sources">Sources</a></li>
 </ul>
 </div>
 
-<p>This lab will use some libraries you’ve seen before, and one you may not have. We’ll load them all now.</p>
+<p>As always, start the lab by loading the packages we will be using.</p>
 <pre class="r"><code>library(&quot;MASS&quot;)
 library(&quot;dplyr&quot;)
 library(&quot;ggplot2&quot;)
 library(&quot;broom&quot;)</code></pre>
-<pre class="r"><code>rossdata_raw &lt;- read.csv(&quot;http://pols503.github.io/pols_503_sp15/data/ross_2012.csv&quot;, 
-  stringsAsFactors = FALSE)</code></pre>
+<pre class="r"><code>rossdata_url &lt;- &quot;http://pols503.github.io/pols_503_sp15/data/ross_2012.csv&quot;
+rossdata_raw &lt;- read.csv(rossdata_url, stringsAsFactors = FALSE)</code></pre>
 <p>Clean up the code, as in <a href="http://pols503.github.io/pols_503_sp15/labs/lab5.html">Lab 5</a>.</p>
 <!-- Oil, minerals, income, islam, oecd, large_states, mideast, ssafrica, arabian peninsula, taxes, govt consumption, govt / gdp, military / GNP, military personnel, ethnic tensions men in industry, women in industry, men in services, women in services -->
 <pre class="r"><code>rossdata &lt;- rossdata_raw %&gt;% tbl_df() %&gt;% select(cty, year, polity, 
-  logoil_gdpcap2000_sup_Q_1, logGDPcap, oecd) %&gt;% rename(oil = logoil_gdpcap2000_sup_Q_1, 
-  log_gdp_cap = logGDPcap)</code></pre>
-<div id="regression" class="section level2">
-<h2>Regression</h2>
-<p>regime on GDP per cap, oil, oecd</p>
+  logoil_gdpcap2000_sup_Q_1, logGDPcap, oecd, latin, gulf, 
+  ssafrica, asia, commie, me_nafr, islam) %&gt;% rename(oil = logoil_gdpcap2000_sup_Q_1, 
+  log_gdp_cap = logGDPcap) %&gt;% na.omit()</code></pre>
+<div id="more-on-interpretation" class="section level2">
+<h2>More on Interpretation</h2>
+<p>Let’s run the standard model from Ross for the relationship between oil and GDP.</p>
+<pre class="r"><code>model1 &lt;- lm(polity ~ log_gdp_cap + oil + oecd, data = rossdata)
+summary(model1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = polity ~ log_gdp_cap + oil + oecd, data = rossdata)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -7.9354 -2.2510 -0.1076  2.4055  6.1209 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -0.26692    0.22778  -1.172    0.241    
+## log_gdp_cap  0.86570    0.03386  25.564   &lt;2e-16 ***
+## oil         -0.23266    0.01313 -17.724   &lt;2e-16 ***
+## oecd         2.15876    0.13248  16.294   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 2.758 on 5605 degrees of freedom
+## Multiple R-squared:  0.3349, Adjusted R-squared:  0.3345 
+## F-statistic: 940.7 on 3 and 5605 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
-<div id="logarithms-with-0" class="section level2">
-<h2>Logarithms with 0</h2>
-<pre class="r"><code># illustrating the dangers of add a small amount
-rossdata &lt;- rossdata %&gt;% mutate(oil_mod1 = rossdata$oil + 1e-04, 
-  oil_mod2 = rossdata$oil + 0.001, oil_mod3 = rossdata$oil + 
-    0.01)
-
-model &lt;- lm(polity ~ log_gdp_cap + log(oil_mod1) + oecd, data = rossdata)
-model2 &lt;- lm(polity ~ log_gdp_cap + log(oil_mod2) + oecd, data = rossdata)
-model3 &lt;- lm(polity ~ log_gdp_cap + log(oil_mod3) + oecd, data = rossdata)</code></pre>
+<div id="residual-analysis" class="section level2">
+<h2>Residual Analysis</h2>
 </div>
-<div id="regression-post-estimation" class="section level2">
-<h2>Regression Post-estimation</h2>
-<p>using <code>plot</code> after lmfit. The default R.</p>
-<p>Look at what is in <code>augment</code>.</p>
-<ul>
-<li>Plot residuals against y</li>
-<li>Plot residuals against each X</li>
-</ul>
-<p>See also: <strong>car</strong> functions</p>
-<ul>
-<li>Added Variable Plot: <code>avPLot</code></li>
-<li>Component Residual Plot: <code>crPlot</code>; CERES Plot for non-linearity</li>
-</ul>
-<div id="residual-analysis" class="section level3">
-<h3>Residual Analysis</h3>
+<div id="writing-to-a-file" class="section level2">
+<h2>Writing to a file</h2>
+<p>You can use the function <code>write.csv</code> to save data to a csv file.</p>
+<p>Try it!</p>
+<p>You can use the function <code>save</code> to a save R objects to a native R file format. Save these to files ending in <code>.RData</code>. You can then load the objects back into your workspace using <code>load()</code>. tor reproducibility and transparancy it is better to save your data in language agnostic file formats, such as csvs, rather than language specific formats like <code>.RData</code> (R) or <code>.dta</code> (Stata).</p>
 </div>
-</div>
-<div id="writing-functions" class="section level2">
-<h2>Writing Functions</h2>
+<div id="a-quick-introduction-to-functions" class="section level2">
+<h2>A quick introduction to functions</h2>
 <p>This is an example of a really stupid R function that adds two to each variable.</p>
 <pre class="r"><code>add2 &lt;- function(x) {
   x + 2
 }</code></pre>
 <p>Try it …</p>
-<p>This function creates a function that estimates</p>
-<p>Edit this function to create on that runs a regression on the rossoil dataset for a particular year.</p>
-<pre class="r"><code>function(yyyy) {
-  filter()
+<p>Functions are a way of encapsulating and reusing code. It takes a set of inputs (arguments), does some computation in its body, and then returns the result.</p>
+<p>A <em>slightly</em> more realistic function is one that calculates the difference between the min and maximum value of a vector, i.e. the range:</p>
+<pre class="r"><code>diff_min_max &lt;- function(x) {
+  max(x) - min(x)
 }</code></pre>
-<pre><code>## function(yyyy) {
-##   filter()
-## }</code></pre>
-<p>Something like this would work. You <em>need</em> to have the argument have a different name than the variable in data.</p>
+<p>IRL, you would you the <code>range</code> function, but this is for pedagogy.</p>
+<ol style="list-style-type: decimal">
+<li>Write a function that calculates the difference between the 97.5 and 2.5 percentiles.</li>
+<li>Now add a parameter that lets you set the values of the quantiles to use in the difference. This means that instead of 97.5 and 2.5, you can use any values.</li>
+</ol>
+<p>For more on writing functions see: <a href="http://www.ats.ucla.edu/stat/r/library/intro_function.htm" class="uri">http://www.ats.ucla.edu/stat/r/library/intro_function.htm</a></p>
+<!-- Next time, create a function to encapsulate a plot type -->
+</div>
+<div id="regression-post-estimation" class="section level2">
+<h2>Regression Post-estimation</h2>
+<p>Look at what is in <code>augment</code>.</p>
+<ul>
+<li>Plot residuals against y</li>
+<li>Plot residuals against each X</li>
+</ul>
+<p>Outlier plot</p>
+<ul>
+<li>Show how to create one, and maybe some information on what it means</li>
+<li>Outlier statistics</li>
+</ul>
+<p>See also: <strong>car</strong> functions</p>
+<ul>
+<li>Added Variable Plot: <code>avPLot</code></li>
+<li>Component Residual Plot: <code>crPlot</code>; <code>ceresPlot</code>.</li>
+</ul>
 </div>
 <div id="sources" class="section level2">
 <h2>Sources</h2>

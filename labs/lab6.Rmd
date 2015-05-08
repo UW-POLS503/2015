@@ -1,41 +1,189 @@
 ---
-title: "Lab 6 - More Regression Interpretation"
-author: "Jeffrey Arnold"
-date: "Friday May 9, 2015"
+title: Lab 6 - More Regression Interpretation
+author: Carolina Johnson, Jeffrey Arnold
+date: Friday May 8, 2015
 ---
-This lab will use some libraries you've seen before, and one you may not have. We'll load them all now.
 
 ```{r, results = 'hide', echo = FALSE}
 knitr::opts_chunk$set(tidy = TRUE,
                       tidy.opts = list(width.cutoff = 60, indent = 2))
 ```
 
+As always, start the lab by loading the packages we will be using.
+
 ```{r, message=FALSE, warning=FALSE}
-library("MASS")
-library("dplyr")
-library("ggplot2")
-library("broom")
+library(MASS)
+library(dplyr)
+library(ggplot2)
+library(broom)
 ```
 
 
+
+
+## More on Interpretation
+
+Once more we'll use data from Ross on oil, this time from the earlier 2001 paper.
 ```{r, results='hide'}
-rossdata_raw <- read.csv("http://pols503.github.io/pols_503_sp15/data/ross_2012.csv",
-                     stringsAsFactors = FALSE)
-```
-
-Clean up the code, as in [Lab 5](http://pols503.github.io/pols_503_sp15/labs/lab5.html).
-
-<!-- Oil, minerals, income, islam, oecd, large_states, mideast, ssafrica, arabian peninsula, taxes, govt consumption, govt / gdp, military / GNP, military personnel, ethnic tensions men in industry, women in industry, men in services, women in services -->
-```{r}
+rossdata_url <- "http://staff.washington.edu/csjohns/503/rossoildata.csv"
+rossdata_raw <- read.csv(rossdata_url, stringsAsFactors = FALSE)
 rossdata <- rossdata_raw %>%
-  tbl_df() %>%
-  select(cty, year, polity, logoil_gdpcap2000_sup_Q_1, logGDPcap, oecd) %>%
-  rename(oil = logoil_gdpcap2000_sup_Q_1,
-         log_gdp_cap = logGDPcap)
+  select(cty_name, year, regime1, oil, GDPcap, oecd) %>%
+  na.omit()
+
+```
+
+Let's run the standard model from Ross for the relationship between oil and GDP.
+```{r}
+model1 <- lm(regime1 ~ GDPcap + oil + oecd + year, data = rossdata)
+summary(model1)
+```
+
+Now predict the expected value of regime type vs. oil:
+```{r}
+pred1_df <- data.frame(oil = seq(0, 100, by = 10),
+                       GDPcap = mean(rossdata$GDPcap), 
+                       oecd = 0,
+                       year = median(rossdata$year))
+pred1 <- predict(model1, newdata = pred1_df, interval = "confidence")
+
+ggplot(bind_cols(pred1_df, as.data.frame(pred1)),
+       aes(x = oil, y = fit, ymin = lwr, ymax = upr)) + 
+  geom_ribbon(alpha = 0.2) +
+  geom_line()
+```
+
+This is easiest to plot with `augment` instead
+```{r}
+pred1_aug <- augment(model1, newdata = pred1_df)
+ggplot(pred1_aug, aes(x = oil, y = .fitted,
+                      ymin = .fitted + 2 * .se.fit,
+                      ymax = .fitted - 2 * .se.fit)) + 
+  geom_ribbon(alpha = 0.2) +
+  geom_line()
+```
+
+**Challenge:** Do this with both OECD and non-OECD countries. Before plotting, 
+how will these differ? 
+
+**Answer:**
+```{r}
+pred2_df <- expand.grid(oil = seq(0, 100, by = 10),
+                        GDPcap = mean(rossdata$GDPcap), 
+                        oecd = c(0, 1),
+                        year = median(rossdata$year))
+pred2 <- predict(model1, newdata = pred2_df, interval = "confidence")
+ggplot(bind_cols(pred2_df, as.data.frame(pred2)),
+       aes(x = oil, y = fit, ymin = lwr, ymax = upr,
+           colour = factor(oecd), fill = factor(oecd))) + 
+  geom_ribbon(alpha = 0.2, colour = NA) +
+  geom_line()
+```
+
+This is easiest to plot with `augment` instead
+```{r}
+pred1_aug <- augment(model1, newdata = pred2_df)
+ggplot(pred1_aug, aes(x = oil, y = .fitted,
+                      ymin = .fitted + 2 * .se.fit,
+                      ymax = .fitted - 2 * .se.fit,
+                      fill = factor(oecd), colour = factor(oecd))) + 
+  geom_ribbon(alpha = 0.2, colour = NA) +
+  geom_line()
+```
+
+**Challenge:** Does it make sense to plot oil from 0 to 100? Check the range of oil?
+
+Surprisingly, not that bad.
+```{r}
+ggplot(rossdata, aes(x = oil)) + geom_density() + geom_rug()
 ```
 
 
-## Writing Functions
+**Challenge:** Interact oil with oecd and plot. What will the lines look like?
+
+```{r}
+model2 <- lm(regime1 ~ GDPcap + oil * oecd + year, data = rossdata)
+summary(model2)
+```
+
+Now consider interact oil with `year`. How would you plot two continuous variables?
+
+```{r}
+model3 <- lm(regime1 ~ GDPcap + oecd + oil * year, data = rossdata)
+summary(model3)
+```
+
+In order to interpret the interaction term graphically, we need to pick one variable to treat as continuous --- the x-axis --- and another for which we will choose specific values. 
+Use `oil` as the x-axis, and some values of `year` at which to evaluate it.
+For `year` we could use the min, max, and median.
+```{r}
+
+```
+
+```{r}
+pred3_newdata <- expand.grid(oecd = 0,
+                             GDPcap = mean(rossdata$GDPcap),
+                             year = c(1966, 1981, 1997),
+                             oil = seq(0, 100, by = 10))
+pred3 <- augment(model3, newdata = pred3_newdata)
+```
+Now, let's plot it,
+```{r}
+ggplot(pred3, aes(x = oil, y = .fitted,
+                  ymin = .fitted - 2 * .se.fit,
+                  ymax = .fitted + 2 * .se.fit,
+                  colour = factor(year))) +
+  geom_line() +
+  scale_colour_discrete("year")
+```
+
+This could also be visualized with colour and contours
+```{r}
+pred3_newdata <- expand.grid(oecd = 0,
+                             GDPcap = mean(rossdata$GDPcap),
+                             year = unique(rossdata$year),
+                             oil = seq(0, 100, by = 1))
+pred3 <- augment(model3, newdata = pred3_newdata)
+ggplot(pred3, aes(x = oil, y = year,
+                  fill = .fitted,
+                  z = .fitted)) +
+  geom_tile() +
+  geom_contour(colour = "black") +
+  scale_colour_discrete("year")
+```
+
+**Challenge** Interact `GDPpc` with oil and visualize the interactions.
+
+## First Differences
+
+A common way of comparing a 
+
+# Robust standard errors
+
+```{r}
+
+```
+
+
+# Residuals
+
+Take the first model
+
+
+
+
+## Writing to a file
+
+You can use the function `write.csv` to save data to a csv file.
+
+Try it!
+
+You can use the function `save` to a save R objects to a native R file format.
+Save these to files ending in `.RData`. 
+You can then load the objects back into your workspace using `load()`.
+tor reproducibility and transparancy it is better to save your data in language agnostic file formats, such as csvs, rather than language specific formats like `.RData` (R) or `.dta` (Stata).
+
+## A quick introduction to functions
 
 This is an example of a really stupid R function that adds two to each variable.
 ```{r}
@@ -44,6 +192,10 @@ add2 <- function(x) {
 }
 ```
 Try it ...
+
+Functions are a way of encapsulating and reusing code. 
+It takes a set of inputs (arguments), does some computation in its body, and then 
+returns the result.
 
 A *slightly* more realistic function is one that calculates the difference between the min and maximum value of a vector, i.e. the range: 
 ```{r}
@@ -56,63 +208,9 @@ IRL, you would you the `range` function, but this is for pedagogy.
 1. Write a function that calculates the difference between the 97.5 and 2.5 percentiles.
 2. Now add a parameter that lets you set the values of the quantiles to use in the difference. This means that instead of 97.5 and 2.5, you can use any values.
 
-Edit this function to create on that runs a regression on the rossoil dataset for a particular year. 
-```{r}
-function(yyyy) {
-  # rossdata %>% filter(rossdata, ...) %>% ...
-}
-```
+For more on writing functions see: <http://www.ats.ucla.edu/stat/r/library/intro_function.htm>
 
 <!-- Next time, create a function to encapsulate a plot type -->
-
-Something like this would work.
-You *need* to have the argument have a different name than the variable in data. 
-
-
-## Regression 
-
-regime on GDP per cap, oil, oecd
-
-## Asside on Logarithms with 0 (this can go in ...? )
-
-```{r}
-# illustrating the dangers of add a small amount
-rossdata <- rossdata %>%
-  mutate(oil_mod1 = rossdata$oil + 1e-04,
-         oil_mod2 = rossdata$oil + 0.001,
-         oil_mod3 = rossdata$oil + 0.01)
-
-model <- lm(polity ~ log_gdp_cap + log(oil_mod1) + oecd, data = rossdata)
-model2 <- lm(polity ~ log_gdp_cap + log(oil_mod2) + oecd, data = rossdata)
-model3 <- lm(polity ~ log_gdp_cap + log(oil_mod3) + oecd, data = rossdata)
-```
-
-Try using `bcPower`
-
-Calculate heteroskedastic standard errors
-
-
-## Regression Post-estimation
-
-using `plot` after lmfit. The default R.
-
-Look at what is in `augment`. 
-
-- Plot residuals against y
-- Plot residuals against each X
-
-Outlier plot
-
-- Show how to create one, and maybe some information on what it means
-- Outlier statistics
-
-See also: **car** functions
-
-- Added Variable Plot: `avPLot`
-- Component Residual Plot: `crPlot`; `ceresPlot`.
-
-### Residual Analysis
-
 
 
 ## Sources
