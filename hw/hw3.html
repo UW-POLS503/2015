@@ -152,12 +152,8 @@ y_i &amp;= \hat\beta_0 + \sum_{j = 1}^k \hat\beta_j x_{i,j} + \hat\epsilon_i \\
 X_i \sim N(\mu_X, \Sigma_X) \text{ for $i = 1, \dots, n$.}
 \]</span> Since covariance matrices are not particularly intuitive, so it may be easier to decompose the covariance into a correlation matrix and the standard deviations of the variables. A covariance matrix, <span class="math">\(\Sigma\)</span> can be decomposed into a standard deviation <span class="math">\(s\)</span> and a correlation matrix <span class="math">\(R\)</span>, <span class="math">\[
 \Sigma = S R S
-\]</span> where <span class="math">\(S\)</span> is a diagonal matrix with the standard deviations <span class="math">\(s\)</span> on its diagonal. The following function will make that calculation simpler.</p>
-<pre class="r"><code>sdcor2cov &lt;- function(s, r = diag(length(s))) {
-  s &lt;- diag(s, nrow = length(s), ncol = length(s))
-  s %*% r %*% s
-}</code></pre>
-<p>In this example, we will use a sample of size <span class="math">\(n = 1024\)</span>, with <span class="math">\(k = 3\)</span> variables drawn from a multivariate normal distribution with mean <span class="math">\(\mu_X = (0, 0, 0)\)</span>, standard deviations of <span class="math">\(s_X = (1, 1, 1)\)</span>, and independent variables, <span class="math">\[
+\]</span> where <span class="math">\(S\)</span> is a diagonal matrix with the standard deviations <span class="math">\(s\)</span> on its diagonal. The following function will make that calculation simpler. The function <code>sdcor2cov</code> calculates the covariance matrix from a standard deviation and a correlation matrix.</p>
+<p>In this example, we will use a sample of size <span class="math">\(n = 1024\)</span>, with <span class="math">\(k = 3\)</span> variables drawn from a multivariate normal distribution with mean <span class="math">\(\mu_X = (0, 0, 0)\)</span>, standard deviations of <span class="math">\(s_X = (1, 1, 1)\)</span>, and independent variables. If variables are independent, then their correlation matrix is the identity matrix (a diagonal matrix with all 1’s on the diagonal): <span class="math">\[
 R_X = \begin{bmatrix} 1 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 \end{bmatrix}
 \]</span> This is equivalent to sampling each variable independently from a standard normal distribution.</p>
 <pre class="r"><code>n &lt;- 1024
@@ -200,16 +196,16 @@ Sigma_X &lt;- sdcor2cov(s_X, R_X)</code></pre>
 <pre class="r"><code>mod_df[[&quot;std.error.robust&quot;]] &lt;- sqrt(diag(car::hccm(mod)))</code></pre>
 <p>The coefficients of the OLS regression on the parameter should be similar to, but not exactly, those of the population from which it was drawn.</p>
 <pre class="r"><code>mod_df</code></pre>
-<pre><code>##          term    estimate  std.error statistic      p.value
-## 1 (Intercept) -0.05887457 0.05442058 -1.081844 2.795776e-01
-## 2          X1  1.04360447 0.05444718 19.167284 3.552684e-70
-## 3          X2  1.01805099 0.05444718 18.697958 2.593468e-67
-## 4          X3  0.93326327 0.05444718 17.140710 4.537397e-58
+<pre><code>##          term   estimate  std.error statistic      p.value
+## 1 (Intercept) -0.0495841 0.05343846 -0.927873 3.536929e-01
+## 2          X1  1.1016297 0.05346457 20.604856 3.831277e-79
+## 3          X2  1.0220860 0.05346457 19.117071 7.219399e-70
+## 4          X3  0.9868913 0.05346457 18.458790 7.241691e-66
 ##   std.error.robust
-## 1       0.05453429
-## 2       0.06045634
-## 3       0.05580820
-## 4       0.05065955</code></pre>
+## 1       0.05354310
+## 2       0.05261844
+## 3       0.05487048
+## 4       0.05324704</code></pre>
 </div>
 </div>
 <div id="multiple-iterations" class="section level2">
@@ -281,13 +277,13 @@ sim0 &lt;- sim_lin_norm(iter, n, mu_X, s_X, R_X, beta, sigma)
 head(sim0)</code></pre>
 <pre><code>## Source: local data frame [6 x 7]
 ## 
-##          term   estimate  std.error  statistic      p.value .iter
-## 1 (Intercept) 0.03905270 0.05379430  0.7259636 4.680276e-01     1
-## 2          X1 0.97490202 0.05382059 18.1139234 8.482985e-64     1
-## 3          X2 1.03673080 0.05382059 19.2627176 9.209849e-71     1
-## 4          X3 0.95742489 0.05382059 17.7891941 7.216042e-62     1
-## 5 (Intercept) 0.09385974 0.05234848  1.7929792 7.327245e-02     2
-## 6          X1 1.07420233 0.05237406 20.5101972 1.521549e-78     2
+##          term    estimate  std.error  statistic      p.value .iter
+## 1 (Intercept) -0.03661627 0.05411940 -0.6765831 4.988239e-01     1
+## 2          X1  0.97214217 0.05414584 17.9541420 7.591252e-63     1
+## 3          X2  0.93554645 0.05414584 17.2782690 7.200758e-59     1
+## 4          X3  1.00107522 0.05414584 18.4884960 4.794470e-66     1
+## 5 (Intercept)  0.05625542 0.05180997  1.0858030 2.778227e-01     2
+## 6          X1  0.93183940 0.05183529 17.9769316 5.556828e-63     2
 ## Variables not shown: std.error.robust (dbl)</code></pre>
 <p>With all the samples, we can summarize the results and compare them to the population parameters to evaluate how well OLS works. The following function, <code>summarize_sim</code> takes a data frame generated by the simulation function and a vector of the original parameters, and generates a summary data frame with one row per coefficient. Its arguments are</p>
 <dl>
@@ -315,10 +311,10 @@ sim0_summary</code></pre>
 <pre><code>## Source: local data frame [4 x 7]
 ## 
 ##          term estimate_mean estimate_sd    se_mean se_robust_mean samples
-## 1 (Intercept) -0.0007280815  0.05261952 0.05311053     0.05321467    4096
-## 2          X1  1.0001345323  0.05395326 0.05313648     0.05327122    4096
-## 3          X2  0.9997813840  0.05248179 0.05313648     0.05327070    4096
-## 4          X3  1.0013570527  0.05268618 0.05313648     0.05323316    4096
+## 1 (Intercept)  -0.001514176  0.05372675 0.05311030     0.05321444    4096
+## 2          X1   1.001626770  0.05356788 0.05313625     0.05330172    4096
+## 3          X2   1.000173059  0.05358907 0.05313625     0.05325379    4096
+## 4          X3   0.999343766  0.05279479 0.05313625     0.05322271    4096
 ## Variables not shown: beta_true (dbl)</code></pre>
 <p>In these simulations we will generally, but not exclusively, be concerned with the bias and efficiency of the estimates.</p>
 <p>First, compare the average value of <span class="math">\(\hat\beta\)</span> to the population parameters <span class="math">\(\beta\)</span>. This is what is nice about simulations, we know what the correct answer should be!</p>
@@ -326,29 +322,29 @@ sim0_summary</code></pre>
 <pre><code>## Source: local data frame [4 x 2]
 ## 
 ##   estimate_mean beta_true
-## 1 -0.0007280815         0
-## 2  1.0001345323         1
-## 3  0.9997813840         1
-## 4  1.0013570527         1</code></pre>
+## 1  -0.001514176         0
+## 2   1.001626770         1
+## 3   1.000173059         1
+## 4   0.999343766         1</code></pre>
 <p>If an estimator is unbiased, then the mean of its sampling distribution should be equal to the true parameter value. Note that these may not be exactly the same due to the randomness from taking a sample; this is called Monte Carlo error.</p>
 <p>Second, we are interested in the standard deviation of the <span class="math">\(\hat\beta\)</span> estimates, We will often be interested in how the standard deviation of the estimator changes with inputs to the simulation.</p>
 <pre class="r"><code>select(sim0_summary, estimate_sd)</code></pre>
 <pre><code>## Source: local data frame [4 x 1]
 ## 
 ##   estimate_sd
-## 1  0.05261952
-## 2  0.05395326
-## 3  0.05248179
-## 4  0.05268618</code></pre>
+## 1  0.05372675
+## 2  0.05356788
+## 3  0.05358907
+## 4  0.05279479</code></pre>
 <p>Third, we will be interested in whether the standard error, which is sample estimate of the standard deviation of the sampling distribution, is a good estimate of the actual sampling distribution of <span class="math">\(\hat\beta\)</span>. The mean of the classical standard errors of the simulations are in column <code>se_mean</code>. The column <code>se_robust_mean</code> contains the means of the heteroskedasticity robust standard errors.</p>
 <pre class="r"><code>select(sim0_summary, estimate_sd, se_mean, se_robust_mean)</code></pre>
 <pre><code>## Source: local data frame [4 x 3]
 ## 
 ##   estimate_sd    se_mean se_robust_mean
-## 1  0.05261952 0.05311053     0.05321467
-## 2  0.05395326 0.05313648     0.05327122
-## 3  0.05248179 0.05313648     0.05327070
-## 4  0.05268618 0.05313648     0.05323316</code></pre>
+## 1  0.05372675 0.05311030     0.05321444
+## 2  0.05356788 0.05313625     0.05330172
+## 3  0.05358907 0.05313625     0.05325379
+## 4  0.05279479 0.05313625     0.05322271</code></pre>
 <p>If <code>se_mean</code> (<code>se_robust_mean</code>) is not equal (or very close) to the <code>estimate_sd</code>, then the standard errors (robust standard errors) calculated from samples are biased estimates of the standard deviation of the sampling distribution of <span class="math">\(\hat{\beta}\)</span>.</p>
 <p>Those are the most common questions we will consider in the simulations, but some simulations may consider other questions.</p>
 <p><em>Hint:</em> For the problems which ask for multiple simulations you can automate the repitition using a recipe similar to the one used in the function. (1) Create a list to store the simulations. (2) Put the simulations in a for loop that runs it for each value of <span class="math">\(n\)</span> or whatever is changing in that problem. Save the results of <code>summarize_sim</code> to the list. Remember to add a column for the parameter that is changing between simulations. (3) Stack the dataframes in the list using <code>bind_rows</code>.</p>
@@ -365,7 +361,7 @@ Y_i &amp;= 0 + 1 \cdot x_{1,i} + 1 \cdot x_{2,i} + 1 \cdot x_{3,i} + \epsilon_i 
 \epsilon_i &amp;\sim N(0, \sigma^2) \\
 \sigma &amp;= 1.7
 \end{aligned}
-\]</span> The covariates, <span class="math">\(X\)</span>, are independent, with means, <span class="math">\(\mu_X = (0, 0, 0)\)</span>, and standard deviations, <span class="math">\(s_X = (1, 1, 1)\)</span>. The sample size <span class="math">\(n\)</span> will vary with simulation.</p>
+\]</span> The covariates, <span class="math">\(X\)</span>, are independent, with means, <span class="math">\(\mu_{X,j} = 0\)</span>, and standard deviations, <span class="math">\(s_{X,j} = 1\)</span> for all variables. The sample size <span class="math">\(n\)</span> will vary with simulation.</p>
 <p>Run several simulations with <code>sim_lin_norm</code> varying the sample size to determine how sample size affects the following. Use <span class="math">\(n = \{8, 64, 512, 1024 \}\)</span>.</p>
 <ul>
 <li>The bias of each <span class="math">\(\hat{\beta}_j\)</span>?</li>
@@ -460,14 +456,8 @@ Y_i &amp;= 0 + 1 \cdot x_{1,i} + 1 \cdot x_{2,i} + 1 \cdot x_{3,i} + \epsilon_i 
 \epsilon_i &amp;\sim N(0, \sigma^2) \\
 \sigma &amp;= 1.7
 \end{aligned}
-\]</span> The covariates, <span class="math">\(x\)</span>, have mean <span class="math">\(\mu_X = (0, 0, 0)\)</span> and standard deviation <span class="math">\(s_X = (1, 1, 1)\)</span> and correlation <span class="math">\[
-R_X =
-\begin{bmatrix}
-1 &amp; 0 &amp; \rho_{1,3} \\
-0 &amp; 1 &amp; 0 \\
-\rho_{1,3} &amp; 0 &amp; 1
-\end{bmatrix}
-\]</span> In all simulations, <span class="math">\((x_1, x_2)\)</span> and <span class="math">\((x_2, x_3)\)</span> are uncorrelated. The correlation between <span class="math">\(x_1\)</span> and <span class="math">\(x_3\)</span> will vary between simulations. In all simulations, the sample regression will only include <span class="math">\(x_1\)</span> and <span class="math">\(x_2\)</span>: <span class="math">\[
+\]</span> The covariates, <span class="math">\(x_j\)</span>, are independent, with means, <span class="math">\(\mu_{x,j} = 0\)</span>, and standard deviations, <span class="math">\(s_{x,j} = 1\)</span> for all variables.</p>
+<p>In all simulations, <span class="math">\((x_1, x_2)\)</span> and <span class="math">\((x_2, x_3)\)</span> are uncorrelated. The correlation between <span class="math">\(x_1\)</span> and <span class="math">\(x_3\)</span> will vary between simulations. In all simulations, the sample regression will only include <span class="math">\(x_1\)</span> and <span class="math">\(x_2\)</span>: <span class="math">\[
 y_i = \hat\beta_0 + \hat\beta_1 x_{1,i} + \hat\beta_2 x_{2,i} + \hat\epsilon_i
 \]</span> To omit the 3rd variable, set <code>omit = 3</code> in <code>sim_lin_norm_omitted</code>. Use <span class="math">\(n = 1024\)</span> for all simulations.</p>
 <p>Consider the following values of <span class="math">\(\rho_{1,3}\)</span>: 0, 0.1, 0.7, -0.7, 0.99, -0.99. How does the correlation of variables affect:</p>
