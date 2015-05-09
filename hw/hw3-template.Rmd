@@ -67,7 +67,3 @@ My answer here ...
 ## Problem 6: Heteroskedasticity
 
 My answer here .. 
-
-## Problem 7: Truncated Dependent Variable
-
-My answer here ...
