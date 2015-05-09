@@ -140,10 +140,13 @@ $$
 $$
 where $S$ is a diagonal matrix with the standard deviations $s$ on its diagonal.
 The following function will make that calculation simpler.
-```{r sdcor2cov}
+The function `sdcor2cov` calculates the covariance matrix from a standard deviation 
+and a correlation matrix.
+```{r sdcor2cov, echo=FALSE}
 ```
 
-In this example, we will use a sample of size $n = 1024$, with $k = 3$ variables drawn from a multivariate normal distribution with mean $\mu_X = (0, 0, 0)$, standard deviations of $s_X = (1, 1, 1)$, and independent variables,
+In this example, we will use a sample of size $n = 1024$, with $k = 3$ variables drawn from a multivariate normal distribution with mean $\mu_X = (0, 0, 0)$, standard deviations of $s_X = (1, 1, 1)$, and independent variables.
+If variables are independent, then their correlation matrix is the identity matrix (a diagonal matrix with all 1's on the diagonal):
 $$
 R_X = \begin{bmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix}
 $$
@@ -334,7 +337,8 @@ Y_i &= 0 + 1 \cdot x_{1,i} + 1 \cdot x_{2,i} + 1 \cdot x_{3,i} + \epsilon_i \\
 \sigma &= 1.7
 \end{aligned}
 $$
-The covariates, $X$, are independent, with means, $\mu_X = (0, 0, 0)$, and standard deviations, $s_X = (1, 1, 1)$. The sample size $n$ will vary with simulation.
+The covariates, $X$, are independent, with means, $\mu_{X,j} = 0$, and standard deviations, $s_{X,j} = 1$ for all variables.
+The sample size $n$ will vary with simulation.
 
 Run several simulations with `sim_lin_norm` varying the sample size to determine how sample size affects the following. Use $n = \{8, 64, 512, 1024 \}$.
 
@@ -420,15 +424,8 @@ Y_i &= 0 + 1 \cdot x_{1,i} + 1 \cdot x_{2,i} + 1 \cdot x_{3,i} + \epsilon_i \\
 \sigma &= 1.7
 \end{aligned}
 $$
-The covariates, $x$, have mean $\mu_X = (0, 0, 0)$ and standard deviation $s_X = (1, 1, 1)$ and correlation
-$$
-R_X =
-\begin{bmatrix}
-1 & 0 & \rho_{1,3} \\
-0 & 1 & 0 \\
-\rho_{1,3} & 0 & 1
-\end{bmatrix}
-$$
+The covariates, $x_j$, are independent, with means, $\mu_{x,j} = 0$, and standard deviations, $s_{x,j} = 1$ for all variables.
+
 In all simulations, $(x_1, x_2)$ and $(x_2, x_3)$ are uncorrelated.
 The correlation between $x_1$ and $x_3$ will vary between simulations.
 In all simulations, the sample regression will only include $x_1$ and $x_2$:

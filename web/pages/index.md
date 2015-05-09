@@ -296,7 +296,7 @@ You will need to cover collinearity, unusual and influential data, and robust re
 
 ### Friday, May 8
 
-TBD
+Lab notes: [.html](http://pols503.github.io/pols_503_sp15/labs/lab6.html), [.Rmd](http://pols503.github.io/pols_503_sp15/labs/lab6.Rmd)
 
 ## Week 7: Interpretation, Model Selection
 

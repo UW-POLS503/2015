@@ -4,6 +4,8 @@ author: "Jeffrey B. Arnold, Christopher Adolph"
 date: "April 30, 2015"
 ---
 
+*Revised:* May 8, 2015
+
 $$
 \DeclareMathOperator{\cor}{cor}
 \DeclareMathOperator{\cov}{cov}
@@ -65,14 +67,6 @@ Here, we use Monte Carlo not out of necessity but for pedagogical purposes, as a
    Include the names of your collaborators on your assignment.
 
 # Setup
-
-This assignment has some non-trivial computation.
-The following code sets the knitr options to cache the results of computations, so
-that any computations that do not change are not rerun.
-See RStudio's help on [Authoring R Code Chunks](http://rmarkdown.rstudio.com/authoring_rcodechunks.html#caching) for more information about what this is doing.
-```{r echo = TRUE, eval = FALSE}
-<<knitr_opts>>
-```
 
 This will use the standard [Hadleyverse](http://blog.revolutionanalytics.com/2015/03/hadleyverse.html) packages that we've been using in this course (**ggplot2**, **dplyr**, **tidyr**, **broom**).
 A few of the functions will use **assertthat**, which contains functions to test for errors in functions.
@@ -140,7 +134,7 @@ $$
 $$
 where $S$ is a diagonal matrix with the standard deviations $s$ on its diagonal.
 The following function will make that calculation simpler.
-The function `sdcor2cov` calculates the covariance matrix from a standard deviation 
+The function `sdcor2cov` calculates the covariance matrix from a standard deviation
 and a correlation matrix.
 ```{r sdcor2cov, echo=FALSE}
 ```
@@ -263,7 +257,7 @@ Each row is a coefficient (column `term`) for a simulation (column `.iter`)
 ```
 Now we will draw samples using the values that we used before and look at the results.
 ```{r sim0}
-iter <- 4096
+iter <- 1024
 sim0 <- sim_lin_norm(iter, n, mu_X, s_X, R_X, beta, sigma)
 head(sim0)
 ```
@@ -292,7 +286,8 @@ In these simulations we will generally, but not exclusively, be concerned with t
 First, compare the average value of $\hat\beta$ to the population parameters $\beta$.
 This is what is nice about simulations, we know what the correct answer should be!
 ```{r}
-select(sim0_summary, estimate_mean, beta_true)
+select(sim0_summary, estimate_mean, beta_true) %>%
+  mutate(bias = estimate_mean - beta_true)
 ```
 If an estimator is unbiased, then the mean of its sampling distribution should be equal to the true parameter value.
 Note that these may not be exactly the same due to the randomness from taking a sample; this is called Monte Carlo error.
@@ -307,25 +302,29 @@ Third, we will be interested in whether the standard error, which is sample esti
 The mean of the classical standard errors of the simulations are in column `se_mean`.
 The column `se_robust_mean` contains the means of the heteroskedasticity robust standard errors.
 ```{r}
-select(sim0_summary, estimate_sd, se_mean, se_robust_mean)
+select(sim0_summary, estimate_sd, se_mean) %>%
+  mutate(bias = se_mean - estimate_sd)
+select(sim0_summary, estimate_sd, se_robust_mean) %>%
+  mutate(bias = se_robust_mean - estimate_sd)
+```
 ```
 If `se_mean` (`se_robust_mean`) is not equal (or very close) to the `estimate_sd`, then the standard errors (robust standard errors) calculated from samples are biased estimates of the standard deviation of the sampling distribution of $\hat{\beta}$.
 
 Those are the most common questions we will consider in the simulations,
 but some simulations may consider other questions.
 
-*Hint:* For the problems which ask for multiple simulations you can automate the repitition using a recipe similar to the one used in the function.
-(1) Create a list to store the simulations.
-(2) Put the simulations in a for loop that runs it for each value of $n$ or whatever is changing in that problem.
-Save the results of `summarize_sim` to the list.
-Remember to add a column for the parameter that is changing between simulations.
-(3) Stack the dataframes in the list using `bind_rows`. 
+See the first problem for an example of how to put this all together.
 
 # Problems {#problems}
 
 The problems of this assignment will use various simulations similar to the one in the previous section.
-For all simulations use `iter = 4096`. 
+For all simulations use `iter = 1024`.
 If this is taking too long you can reduce the number of iterations.
+
+```{r}
+iter <- 1024
+```
+
 
 ## Linear Normal Model with Homoskedasticity
 
@@ -340,12 +339,70 @@ $$
 The covariates, $X$, are independent, with means, $\mu_{X,j} = 0$, and standard deviations, $s_{X,j} = 1$ for all variables.
 The sample size $n$ will vary with simulation.
 
-Run several simulations with `sim_lin_norm` varying the sample size to determine how sample size affects the following. Use $n = \{8, 64, 512, 1024 \}$.
+You would want to set these variables to use in a simulation
+```{r}
+mu_X <- c(0, 0, 0)
+s_X <- c(1, 1, 1)
+R_X <- diag(3)
+beta <- c(0, 1, 1, 1)
+sigma <- 1.7
+```
 
-- The bias of each $\hat{\beta}_j$?
-- The variance of $\hat{\beta}_j$?
-- The bias of the standard error of each $\hat{\beta}_j$?
-- The bias of the robust standard error of each $\hat{\beta}_j$?
+Run several simulations with `sim_lin_norm` varying the sample size to determine how sample size affects the following: $n = \{32, 64, 512, 1024 \}$.
+We will store these in a vector to use later:
+```{r}
+n_samples <- c(32, 64, 512, 1024)
+```
+
+As shown in the introduction, you can use `sim_lin_norm` to simulate for a single sample size as follows.
+E.g. for sample size 32, we could run
+```{r}
+n <- 32
+summarize_sim(sim_lin_norm(iter = iter, n = n,
+                           mu_X = mu_X, s_X = s_X, R_X = R_X,
+                           beta = beta, sigma = sigma),
+              beta = beta)
+```
+In order to run this for *all* the different sample sizes, we will put this in a list
+```{r tidy = FALSE}
+sims1 <- list()
+# Loop over the integers 1 to the number of different sample sizes.
+for (i in 1:length(n_samples)) {
+  # Run simulation
+  sim_results <- sim_lin_norm(iter, n_samples[i], mu_X, s_X, R_X, beta, sigma)
+  # Summarize simmulations
+  sim_summ <- summarize_sim(sim_results, beta)
+  # Add a new column to the data to indicate which sample size this simulation used
+  sim_summ[["n"]] <- n_samples[i]
+  # Save the data to the list in location i
+  sims1[[i]] <- sim_summ
+}
+sims1 <- bind_rows(sims1)
+```
+
+Then use these results to analyze the following.
+For all of these, focus on the coefficients of the
+
+- The bias of each $\hat{\beta}_j$?. How different is `estimate_mean` ($\hat\beta$)
+- The standard deviation of $\hat{\beta}_j$?. How does `estimate_sd` change as the sample size increases?
+- The bias of the standard error of each $\hat{\beta}_j$?. Compare the actual population standard deviations, `estimate_sd`, with the means of the standard errors, `se_mean`.
+- The bias of the robust standard error of each $\hat{\beta}_j$? Compare the actual population standard deviations of each parameter, `estimate_sd`, with the means of the robust standard errors, `se_robust_mean`.
+
+As an example, to find the bias of $\hat\beta$:
+
+```{r}
+sims1 %>%
+  mutate(bias = estimate_mean - beta_true) %>%
+  select(term, n, bias, estimate_mean, beta_true)
+```
+The code goes through the steps
+
+1. Create a new variable `bias` with the difference between the estimated coefficients and the true coefficients.
+2. Select the variables of interest
+3. Drop the Intercept term
+4. Sort by term and sample size to make it easier to understand
+
+Use similar analysis for the other questions.
 
 ## Correlated Variables
 
@@ -396,8 +453,8 @@ Use $n = 1024$.
 - For each parameter, plot the distribution of $p$-values across iterations.
   Describe the densities.
 - For each parameter, calculate the proportion of $p$-values less than 0.05 for each parameter.
-  Suppose a null hypothesis of $H_0: \beta_i = 0$ and an alternative hypothesis of $H_a: \beta_i > 0$.
-  For which parameters is $H_0$ true, for which parameters is $H_a
+  Suppose a null hypothesis of $H_0: \beta_i = 0$ and an alternative hypothesis of $H_a: \beta_i \neq 0$.
+  For which parameters is $H_0$ true, for which parameters is $H_a$ true?
   What is the probability of a Type I or Type II error for each parameter.
 - For each parameter, plot the distribution of its estimates *conditional* on it being significant at $p < 0.05$.
   How does the sampling distribution conditional on statistical significance relate to the unconditional sampling distribution?
@@ -405,16 +462,6 @@ Use $n = 1024$.
   What changes, if anything?
 
 ## Omitted Variable Bias
-
-The following function, `sim_lin_norm_omitted` samples from a linear, normal model with homoskedastic errors, but allows you to run a misspecified regression on the samples by omitting variables.
-The arguments to this function are the same as `sim_lin_norm` except for
-
-`omit`
-
-:    A vector of integers of the columns to omit from X when estimating the sample regression.
-
-```{r sim_lin_norm_omitted}
-```
 
 The population is
 $$
@@ -435,6 +482,34 @@ $$
 To omit the 3rd variable, set `omit = 3` in `sim_lin_norm_omitted`.
 Use $n = 1024$ for all simulations.
 
+You can perform this simulations of this scenario using the function, `sim_lin_norm_omitted`, which samples from a linear, normal model with homoskedastic errors, but allows you to run a misspecified regression on the samples by omitting variables.
+The arguments to this function are the same as `sim_lin_norm` except for
+
+`omit`
+
+:    A vector of integers of the columns to omit from X when estimating the sample regression.
+
+```{r sim_lin_norm_omitted, echo = FALSE}
+```
+
+To run a simulation for a single value of $\rho$:
+```{r, results='hide'}
+n <- 1024
+mu_X <- c(0, 0, 0)
+s_X <- c(1, 1, 1)
+rho <- 0
+R_X <- matrix(c(1, 0, rho,
+                0, 1, 0,
+                rho, 0, 1), byrow = TRUE, nrow = 3)
+beta <- c(0, 1, 1, 1)
+sigma <- 1.7
+sim_lin_norm_omitted(iter = iter, n = n, mu_X = mu_X,
+                     s_X = s_X, R_X = R_X, beta = beta,
+                     sigma = sigma, omit  = 3)
+```
+
+Warning: when using `summarize_sim` remember that the parameters of the population are not equal the parameters that are estimated.
+
 Consider the following values of $\rho_{1,3}$: 0, 0.1, 0.7, -0.7, 0.99, -0.99.
 How does the correlation of variables affect:
 
@@ -446,7 +521,7 @@ How does the correlation of variables affect:
 ## Heteroskedasticity
 
 In this problem, we will explore how heteroskedasticity affects OLS estimates.
-The function `sim_lin_norm_hereosked` will simulate from that population, but estimate OLS regressions on each sample that do not model that heteroskedasticity.
+
 It samples from a population model with heteroskedasticity:
 $$
 \begin{aligned}
@@ -457,16 +532,7 @@ Y_i &= \beta_0 + \sum_{j = 1}^k x_{j,i} + \epsilon_i \\
 $$
 Note that $\sigma^2$ varies with each observation, and is a function of $x$.
 
-The arguments for it are the same as `sim_lin_norm` except for
-
-`gamma`
-
-:    A vector of coefficients for $\log \sigma^2 = \gamma_0 + \gamma_1 x_1 + \dots + \gamma_k x_k$. Like `beta` it should have length `k + 1`.
-
-```{r sim_lin_norm_heterosked}
-```
-
-In these simulations, the population model is
+In these simulations, we will use a population model of
 $$
 \begin{aligned}[t]
 Y_i &= 0 + 1 \cdot x_1 + 1 \cdot x_2 \epsilon_i \\
@@ -475,18 +541,42 @@ Y_i &= 0 + 1 \cdot x_1 + 1 \cdot x_2 \epsilon_i \\
 \end{aligned}
 $$
 
-We will run several simulations with different values of $\gamma_1$ to vary to heteroskedasticity:
+The function `sim_lin_norm_hereosked` will run simulations using those specifications of the population ans ample.
+The arguments for it are the same as `sim_lin_norm` except that instead of the argument `sigma` for the standard deviation of the errors, it has the argument `gamma`:
+
+`gamma`
+
+:    A vector of coefficients for $\log \sigma^2 = \gamma_0 + \gamma_1 x_1 + \dots + \gamma_k x_k$. Like `beta` it should have length `k + 1`.
+
+```{r sim_lin_norm_heterosked, echo = FALSE}
+```
+
+To run `sim_lin_norm_heterosked` for a single value of $\gamma_1$:
+```{r}
+n <- 1024
+mu_X <- c(0, 0)
+s_X <- c(1, 1)
+R_X <- diag(2)
+beta <- c(0, 1, 1)
+```
+Create a vector when $\gamma_1 = 0$,
+```{r}
+gamma_1 <- 0
+gamma <- c(1.5, gamma_1, 0)
+```
+Given these values, run `sim_lin_norm_heterosked`:
+```{r results='hide'}
+sim_lin_norm_heterosked(iter = iter, n = n, mu_X = mu_X,
+                        s_X = s_X, R_X = R_X, beta = beta, gamma = gamma)
+```
+
+Run `sim_lin_norm_heterosked` for each of these values of $\gamma_1$, which will vary the level of heteroskedasticity:
 
 - $\gamma_1 = 0$: no heteroskedasticity
 - $\gamma_1 = 0.3$: low heteroskedasticity, $\max(\sigma^2_i) / \min(\sigma^2_i) \approx 2.7$.
 - $\gamma_1 = 0.7$ high heteroskedasticity, $\max(\sigma^2_i) / \min(\sigma^2_i) \approx 24$.
 
-Before running the simulation draw a single sample of $y$ from a population with each of those values of $\gamma_1$.
-You should be able to extract the relevant code from `sim_lin_norm_heterosked`.
-Regress $y$ on $x_1$ and $x_2$ and plot the residuals of this regression against $x_1$.
-
-Run `sim_lin_norm_heterosked` for each of those values of $\gamma_1$.
-How does heteroskedasticity affect
+How does the level of heteroskedasticity affect:
 
 - the bias of each $\hat{\beta}_j$?
 - the variance of $\hat{\beta}_j$?
@@ -495,7 +585,11 @@ How does heteroskedasticity affect
 
 Remember to consider how heteroskedasticity in $x_1$ affects the estimates of heteroskedasticity in $x_2$.
 
-## Truncated Dependent Variable
+
+
+## Truncated Dependent Variable (optional)
+
+**You do not need to do this **
 
 This problem considers what happens when there is a truncated dependent variable.
 This is also called sampling on the dependent variable, which is a research design problem not unknown to political science research.[^samplingdv]
@@ -523,15 +617,16 @@ The function `sim_lin_norm_truncated`, is similar to the `sim_lin_norm` function
 :    The quantile of truncation. All sampled $y_i$ with values less than that quantile are dropped before the regression is run.
      The default value `truncation = 0.5` means all values of $y$ less than the median are dropped before running the regression.
 
-
-```{r sim_lin_norm_truncated}
+```{r sim_lin_norm_truncated, echo = FALSE}
 ```
 
+<!--
 For this problem, use only a single covariate, with $\mu_X = 0$,$s_X = 1$, and $R_X = 1$.
 Let $\beta = (0, 1)$ and $\sigma = 1$.
 Estimate the regression only on those $y_i$ greater than the median of $y$.
+-->
 
-Before running simulations, draw a single sample of a linear normal model with homoskedastic errors. 
+Before running simulations, draw a single sample of a linear normal model with homoskedastic errors.
 To do this, you should be able to adapt the code from `sim_lin_normal_truncated`.
 Create a scatter plot with the OLS line for all $y$, and a another plot with only those $y$ less than the median of $y$.
 How idoes the OLS line estimated on the truncated data differ from the one estimated on the untruncated data.

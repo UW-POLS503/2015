@@ -2,3 +2,4 @@ html_document:
   theme: cosmo
   css: "custom.css"
   highlight: textmate
+  toc: true
