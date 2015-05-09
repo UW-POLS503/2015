@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>POLS/CS&amp;SS 503 (problem sets)</title><link>http://pols503.github.io/pols_503_sp15/</link><description></description><atom:link type="application/rss+xml" rel="self" href="http://pols503.github.io/pols_503_sp15/categories/problem-sets.xml"></atom:link><language>en</language><lastBuildDate>Sun, 03 May 2015 21:05:54 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Problem Set 3 Posted</title><link>http://pols503.github.io/pols_503_sp15/posts/problem-set-3-posted.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>POLS/CS&amp;SS 503 (problem sets)</title><link>http://pols503.github.io/pols_503_sp15/</link><description></description><atom:link href="http://pols503.github.io/pols_503_sp15/categories/problem-sets.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><lastBuildDate>Sat, 09 May 2015 02:06:56 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Problem Set 3 updated</title><link>http://pols503.github.io/pols_503_sp15/posts/problem-set-3-updated.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
+.. title: Problem Set 3 updated
+.. slug: problem-set-3-updated
+.. date: 2015-05-08 19:05:20 UTC-07:00
+.. tags: problem sets
+.. category: 
+.. link: 
+.. description: 
+.. type: text
+.. author: Jeffrey Arnold
+--&gt;
+
+&lt;p&gt;Write your post here.&lt;/p&gt;</description><category>problem sets</category><guid>http://pols503.github.io/pols_503_sp15/posts/problem-set-3-updated.html</guid><pubDate>Sat, 09 May 2015 02:05:20 GMT</pubDate></item><item><title>Problem Set 3 Posted</title><link>http://pols503.github.io/pols_503_sp15/posts/problem-set-3-posted.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
 .. title: Problem Set 3 Posted
 .. slug: problem-set-3-posted
 .. date: 2015-05-03 14:03:56 UTC-07:00

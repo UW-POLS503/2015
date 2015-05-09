@@ -123,6 +123,7 @@ sim_lin_norm_heterosked <- function(iter, n, mu_X, s_X, R_X, beta, gamma) {
   bind_rows(iterations)
 }
 
+
 ## ----sim_lin_norm_truncated----------------------------------------------
 sim_lin_norm_truncated <- function(iter, n, mu_X, s_X, R_X, beta, sigma,
                                    truncation = 0.5) {

@@ -15,19 +15,19 @@ article: http://ogp.me/ns/article#
 
       <link rel="canonical" href="http://pols503.github.io/pols_503_sp15/posts/index.html">
 
-            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-57x57.png" sizes="57x57">
-            <link rel="icon" href="../favicon-196x196.png" sizes="196x196">
-            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-120x120.png" sizes="120x120">
-            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-144x144.png" sizes="144x144">
             <link rel="icon" href="../favicon-128.png" sizes="128x128">
-            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-114x114.png" sizes="114x114">
-            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-76x76.png" sizes="76x76">
+            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-57x57.png" sizes="57x57">
             <link rel="icon" href="../favicon-32x32.png" sizes="32x32">
             <link rel="icon" href="../favicon-96x96.png" sizes="96x96">
+            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-76x76.png" sizes="76x76">
             <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-60x60.png" sizes="60x60">
-            <link rel="icon" href="../favicon-16x16.png" sizes="16x16">
+            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-120x120.png" sizes="120x120">
+            <link rel="icon" href="../favicon-196x196.png" sizes="196x196">
+            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-144x144.png" sizes="144x144">
+            <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-114x114.png" sizes="114x114">
             <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-152x152.png" sizes="152x152">
             <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-72x72.png" sizes="72x72">
+            <link rel="icon" href="../favicon-16x16.png" sizes="16x16">
 
 
         <link rel="next" href="index-1.html" type="text/html">
@@ -142,6 +142,30 @@ article: http://ogp.me/ns/article#
         <div class="row">
             
 <div class="postindex">
+    <article class="h-entry post-text">
+    <header>
+        <h1 class="p-name entry-title"><a href="problem-set-3-updated.html" class="u-url">Problem Set 3 updated</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">Jeffrey Arnold</span></p>
+            <p class="dateline"><a href="problem-set-3-updated.html" rel="bookmark"><time class="published dt-published" datetime="2015-05-08T19:05:20-07:00" title="2015-05-08 19:05">2015-05-08 19:05</time></a></p>
+        </div>
+    </header>
+    <div class="e-content entry-content">
+    <!--
+.. title: Problem Set 3 updated
+.. slug: problem-set-3-updated
+.. date: 2015-05-08 19:05:20 UTC-07:00
+.. tags: problem sets
+.. category: 
+.. link: 
+.. description: 
+.. type: text
+.. author: Jeffrey Arnold
+-->
+
+<p>Write your post here.</p>
+    </div>
+    </article>
     <article class="h-entry post-text">
     <header>
         <h1 class="p-name entry-title"><a href="week-7-and-syallbus-updates.html" class="u-url">Week 7 and Syallbus Updates</a></h1>
@@ -479,73 +503,6 @@ $(document).ready(function () {
 <li><p>Do format your assignment intelligently. Clearly indicate each problem with a header, as well as the parts of problems.</p></li>
 <li><p>Do not use <code>install.packages</code> in your analysis. If you are using unusual packages make a note of it.</p></li>
 </ol>
-</div>
-    </div>
-    </article>
-    <article class="h-entry post-text">
-    <header>
-        <h1 class="p-name entry-title"><a href="../package_loading_warnings_and_errors.html" class="u-url">R Packages Warnings and Messages when Loading</a></h1>
-        <div class="metadata">
-            <p class="byline author vcard"><span class="byline-name fn">Jeffrey B. Arnold</span></p>
-            <p class="dateline"><a href="../package_loading_warnings_and_errors.html" rel="bookmark"><time class="published dt-published" datetime="2015-04-20T13:18:00-07:00" title="2015-04-20 13:18">2015-04-20 13:18</time></a></p>
-        </div>
-    </header>
-    <div class="e-content entry-content">
-    <div>
-<!--
-.. title: R Packages Warnings and Messages when Loading
-.. slug: package_loading_warnings_and_errors
-.. tags: R, error messages
-.. date: 2015-04-20 13:18
--->
-
-<div id="warning-build-under-different-r-version" class="section level2">
-<h3>Warning: build under different R version</h3>
-<p>You may get a message like <code>Warning: package 'pkgname' was build under R version *.*.*</code>,</p>
-<pre class="r"><code>library(dplyr)</code></pre>
-<pre><code>## Warning: package 'dplyr' was built under R version 3.1.3</code></pre>
-<p>Usually this won’t be an issue, but it could cause problems with some packages.</p>
-<p>You can find your current version of R using</p>
-<pre class="r"><code>sessionInfo()</code></pre>
-<p>If your current version of R is less than the one in the error message, update R. If your current version of R is greater than the one in the error message, update the packages using,</p>
-<pre class="r"><code>update.packages(ask = FALSE, checkBuilt = TRUE)</code></pre>
-<p>The argument <code>ask = FALSE</code> prevents R from asking you yes or no for each package. The argument <code>checkBuilt = TRUE</code> is to rebuild the package for the newest version of R even if it is the most up to date version of the package.</p>
-</div>
-<div id="warning-the-following-objects-are-masked" class="section level2">
-<h3>Warning the following objects are masked</h3>
-<p>If you load the <strong>plyr</strong> and <strong>dplyr</strong> packages you will get several messages about objects being “masked”.</p>
-<pre class="r"><code>library("plyr")</code></pre>
-<pre><code>## -------------------------------------------------------------------------
-## You have loaded plyr after dplyr - this is likely to cause problems.
-## If you need functions from both plyr and dplyr, please load plyr first, then dplyr:
-## library(plyr); library(dplyr)
-## -------------------------------------------------------------------------
-## 
-## Attaching package: 'plyr'
-## 
-## The following objects are masked from 'package:dplyr':
-## 
-##     arrange, count, desc, failwith, id, mutate, rename, summarise,
-##     summarize</code></pre>
-<pre class="r"><code>library("dplyr")</code></pre>
-<p>This means that the new package has object (usually functions) with names that are the same as those of earlier loaded packages. In the above example, after loading <strong>dplyr</strong>, typing <code>filter</code> will use the function from the <strong>dplyr</strong> package and not the <strong>base</strong> (which is one of R’s built-in packages) package. If you need to use the <code>filter</code> function in base R, you can refer to it explicitly with <code>::</code>. For example, <code>base::filter</code> will always use the function from the <strong>base</strong> package; and <code>dplyr::filter</code> will always use the function from the <strong>dplyr</strong> package. Note that you can refer to functions in packages using <code>::</code> without first loading the package using <code>library()</code>. This can sometimes be useful if you want to use a function from a package, but don’t want to load the entire package.</p>
-</div>
-<div id="package-startup-messages" class="section level2">
-<h3>Package Startup Messages</h3>
-<p>Sometimes packages include messages that are printed on loading. Although this is fine for interactive use in the console, these messages are unsightly in documents and you should hide them from your knitr output either by setting <code>messages = FALSE</code> in the code chunk with the function <code>suppressPackageStartupMessages</code> (remember TAB completion is your friend). E.g.</p>
-<pre class="r"><code>suppressPackageStartupMessages({
-library("ggplot2")
-library("dplyr")
-})</code></pre>
-<!--  LocalWords:  'pkgname' dplyr 'dplyr' sessionInfo checkBuilt
- -->
-<!--  LocalWords:  plyr knitr suppressPackageStartupMessages eval
- -->
-<!--  LocalWords:  ggplot2
- -->
-
-
-</div>
 </div>
     </div>
     </article>
