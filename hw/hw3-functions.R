@@ -123,6 +123,32 @@ sim_lin_norm_heterosked <- function(iter, n, mu_X, s_X, R_X, beta, gamma) {
   bind_rows(iterations)
 }
 
+## ----sample_lin_norm_heterosked-----------
+sample_lin_norm_heterosked <- function(iter, n, mu_X, s_X, R_X, beta, gamma) {
+  assert_that(length(s_X) == length(mu_X),
+              ncol(R_X) == nrow(R_X),
+              ncol(R_X) == length(mu_X),
+              length(beta) == (length(mu_X) + 1),
+              length(gamma) == (length(mu_X) + 1))
+  X <- MASS::mvrnorm(n, mu_X, sdcor2cov(s_X, R_X), empirical = TRUE)
+  iterations <- list()
+  p <- progress_estimated(iter, min_time = 2)
+  for (j in 1:iter) {
+    mu <- cbind(1, X) %*% beta
+    # ------------
+    # NEW: variance varies by each observation
+    sigma <- sqrt(exp(cbind(1, X) %*% gamma))
+    # ------------
+    epsilon <- rnorm(n, mean = 0, sd = sigma)
+    y <- as.numeric(mu + epsilon)
+    iterations[[j]] <-
+      data_frame(y = y) %>%
+      bind_cols(as.data.frame(X)) %>%
+      mutate(.iter = j)
+    p$tick()$print()
+  }
+  bind_rows(iterations)
+}
 
 ## ----sim_lin_norm_truncated----------------------------------------------
 sim_lin_norm_truncated <- function(iter, n, mu_X, s_X, R_X, beta, sigma,
