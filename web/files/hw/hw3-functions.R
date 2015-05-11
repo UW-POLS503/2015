@@ -50,7 +50,7 @@ summarize_sim <- function(.data, beta) {
               estimate_sd = sd(estimate),
               se_mean = sqrt(mean(std.error) ^ 2),
               se_robust_mean = sqrt(mean(std.error.robust) ^ 2),
-              samples = length(estimate))
+              iter = length(estimate))
   ret[["beta_true"]] <- beta
   ret
 }
@@ -93,7 +93,7 @@ sim_lin_norm_omitted <- function(iter, n, mu_X, s_X, R_X, beta, sigma,
 }
 
 ## ----sim_lin_norm_heterosked-----------
-sim_lin_norm_heterosked <- function(iter, n, mu_X, s_X, R_X, beta, sigma, gamma) {
+sim_lin_norm_heterosked <- function(iter, n, mu_X, s_X, R_X, beta, gamma) {
   assert_that(length(s_X) == length(mu_X),
               ncol(R_X) == nrow(R_X),
               ncol(R_X) == length(mu_X),
@@ -122,6 +122,7 @@ sim_lin_norm_heterosked <- function(iter, n, mu_X, s_X, R_X, beta, sigma, gamma)
   }
   bind_rows(iterations)
 }
+
 
 ## ----sim_lin_norm_truncated----------------------------------------------
 sim_lin_norm_truncated <- function(iter, n, mu_X, s_X, R_X, beta, sigma,
@@ -155,40 +156,3 @@ sim_lin_norm_truncated <- function(iter, n, mu_X, s_X, R_X, beta, sigma,
   }
   bind_rows(iterations)
 }
-
-## ----msim_lin_norm_ma1---------------------------------------------------
-sim_lin_norm_ma1 <- function(iter, n, mu_X, s_X, R_X, beta, sigma,
-                             rho = 0.5, rho_X = 0) {
-  assert_that(length(s_X) == length(mu_X),
-              ncol(R_X) == nrow(R_X),
-              ncol(R_X) == length(mu_X),
-              length(beta) == (length(mu_X) + 1),
-              length(rho_X) == length(mu_X),
-              all(rho >= 0 & rho <= 1),
-              all(rho_X >= 0 & rho_X <= 1))
-  k <- length(mu_X)
-  X <- mvrnorm_ma(n, mu_X, sdcor2cov(s_X, R_X), rho = rho_X, empirical = TRUE)
-  iterations <- list()
-  p <- progress_estimated(iter, min_time = 2)
-  for (j in 1:iter) {
-    mu <- cbind(1, X) %*% beta
-    # ---------
-    # NEW: generate y with serially correlated errors
-    lag_epsilson <- rep(0, k)
-    for (i in 1:n) {
-      epsilon <- rnorm(1, mean = 0, sd = sigma)
-      y <- mu[i, ] + rho * lag_epsilon + epsilon
-      lag_epsilon <- epsilon
-    }
-    # ---------
-    mod <- lm(y ~ X)
-    mod_df <- tidy(mod) %>%
-      mutate(.iter = j)
-    mod_df[["std.error.robust"]] <- sqrt(diag(car::hccm(mod)))
-    iterations[[j]] <- mod_df
-    p$tick()$print()
-  }
-  # Combine the list of data frames into a single data frame
-  bind_rows(iterations)
-}
-
