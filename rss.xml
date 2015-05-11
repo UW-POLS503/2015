@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>POLS/CS&amp;SS 503</title><link>http://pols503.github.io/pols_503_sp15/</link><description>Site for POLS/CS&amp;SS 503: Advanced Quantitative Political Methodology (University of Washington; Spring 2015)</description><atom:link type="application/rss+xml" href="http://pols503.github.io/pols_503_sp15/rss.xml" rel="self"></atom:link><language>en</language><lastBuildDate>Sat, 09 May 2015 02:08:01 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Problem Set 3 updated</title><link>http://pols503.github.io/pols_503_sp15/posts/problem-set-3-updated.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>POLS/CS&amp;SS 503</title><link>http://pols503.github.io/pols_503_sp15/</link><description>Site for POLS/CS&amp;SS 503: Advanced Quantitative Political Methodology (University of Washington; Spring 2015)</description><atom:link rel="self" type="application/rss+xml" href="http://pols503.github.io/pols_503_sp15/rss.xml"></atom:link><language>en</language><lastBuildDate>Mon, 11 May 2015 02:44:49 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Update 2 to Problem Set 3</title><link>http://pols503.github.io/pols_503_sp15/posts/update-2-to-problem-set-3.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
+.. title: Update 2 to Problem Set 3
+.. slug: update-2-to-problem-set-3
+.. date: 2015-05-10 19:31:50 UTC-07:00
+.. tags: 
+.. category: 
+.. link: 
+.. description: 
+.. type: text
+.. author: Jeffrey Arnold
+--&gt;
+
+&lt;p&gt;A few notes on Problem Set 3:&lt;/p&gt;
+&lt;p&gt;On Problem 3 (Type I and II errors), it asks you to use &lt;span class="math"&gt;&lt;em&gt;n&lt;/em&gt; = 1024&lt;/span&gt;, but later says “using a smaller sample size, n = 32, and a larger sample size n = 1024.”. Use sample sizes of &lt;span class="math"&gt;&lt;em&gt;n&lt;/em&gt; = 32&lt;/span&gt;, &lt;span class="math"&gt;128&lt;/span&gt;, and &lt;span class="math"&gt;1024&lt;/span&gt;. The purpose point is the look at how p-values and errors change with respect to sample size, and I wanted to give you a few values at which to analyze it. But, the precise values of &lt;span class="math"&gt;&lt;em&gt;n&lt;/em&gt;&lt;/span&gt; are not important, as long as you use enough values of &lt;span class="math"&gt;&lt;em&gt;n&lt;/em&gt;&lt;/span&gt; to be able to see the pattern.&lt;/p&gt;
+&lt;p&gt;This does not change the problem, but I also added some plots to visualize how the values of &lt;span class="math"&gt;&lt;em&gt;γ&lt;/em&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;/span&gt; affect the heteroskedasticity in the regression.&lt;/p&gt;</description><guid>http://pols503.github.io/pols_503_sp15/posts/update-2-to-problem-set-3.html</guid><pubDate>Mon, 11 May 2015 02:31:50 GMT</pubDate></item><item><title>Problem Set 3 updated</title><link>http://pols503.github.io/pols_503_sp15/posts/problem-set-3-updated.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
 .. title: Problem Set 3 updated
 .. slug: problem-set-3-updated
 .. date: 2015-05-08 19:05:20 UTC-07:00
@@ -182,49 +196,4 @@ $(document).ready(function () {
   })();
 &lt;/script&gt;
 
-&lt;/div&gt;</description><category>admin</category><guid>http://pols503.github.io/pols_503_sp15/updated-syllabus.html</guid><pubDate>Fri, 24 Apr 2015 01:08:22 GMT</pubDate></item><item><title>Notes on R Markdown assignments</title><link>http://pols503.github.io/pols_503_sp15/r_markdown_assignments.html</link><dc:creator>Jeffrey B. Arnold</dc:creator><description>&lt;div&gt;&lt;!--
-.. title: Notes on R Markdown assignments
-.. date: 2015-04-21
---&gt;
-
-&lt;ol style="list-style-type: decimal"&gt;
-&lt;li&gt;Do include both code and output. In general, you should show all your code and the output of that code, including graphs, output and tables.&lt;/li&gt;
-&lt;li&gt;Do include words. Your homework should not be just code and output. You should explain in prose what you are doing, and more importantly why.&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Do &lt;strong&gt;not&lt;/strong&gt; include &lt;strong&gt;extraneous&lt;/strong&gt; output. In general, you should include the output of your code. However, do not print large objects. Most commonly, do not print out large data frames. If you would like to show example lines from a large data frame use &lt;code&gt;head&lt;/code&gt; to show only the first few lines, or &lt;code&gt;glimpse&lt;/code&gt;.&lt;/p&gt;
-&lt;pre class="r"&gt;&lt;code&gt;      library("gapminder")
-      library("dplyr")&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## 
-## Attaching package: 'dplyr'
-## 
-## The following object is masked from 'package:stats':
-## 
-##     filter
-## 
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class="r"&gt;&lt;code&gt;  # bad
-      # gapminder
-
-      # good
-      head(gapminder)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;##       country continent year lifeExp      pop gdpPercap
-## 1 Afghanistan      Asia 1952  28.801  8425333  779.4453
-## 2 Afghanistan      Asia 1957  30.332  9240934  820.8530
-## 3 Afghanistan      Asia 1962  31.997 10267083  853.1007
-## 4 Afghanistan      Asia 1967  34.020 11537966  836.1971
-## 5 Afghanistan      Asia 1972  36.088 13079460  739.9811
-## 6 Afghanistan      Asia 1977  38.438 14880372  786.1134&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class="r"&gt;&lt;code&gt;      glimpse(gapminder)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## Observations: 1704
-## Variables:
-## $ country   (fctr) Afghanistan, Afghanistan, Afghanistan, Afghanistan,...
-## $ continent (fctr) Asia, Asia, Asia, Asia, Asia, Asia, Asia, Asia, Asi...
-## $ year      (dbl) 1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992...
-## $ lifeExp   (dbl) 28.801, 30.332, 31.997, 34.020, 36.088, 38.438, 39.8...
-## $ pop       (dbl) 8425333, 9240934, 10267083, 11537966, 13079460, 1488...
-## $ gdpPercap (dbl) 779.4453, 820.8530, 853.1007, 836.1971, 739.9811, 78...&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Do not include warnings or messages unless the question asks for them. Examples of this include the message after using &lt;code&gt;geom_histogram&lt;/code&gt; without a &lt;code&gt;binwidth&lt;/code&gt; argument, or messages when loading certain packages. Either fix the code so that the warning or message no longer appears, or use &lt;code&gt;warning = FALSE&lt;/code&gt; or &lt;code&gt;message = FALSE&lt;/code&gt; in the code chunk to suppress that output.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Do format your assignment intelligently. Clearly indicate each problem with a header, as well as the parts of problems.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Do not use &lt;code&gt;install.packages&lt;/code&gt; in your analysis. If you are using unusual packages make a note of it.&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;&lt;/div&gt;</description><guid>http://pols503.github.io/pols_503_sp15/r_markdown_assignments.html</guid><pubDate>Tue, 21 Apr 2015 07:00:00 GMT</pubDate></item></channel></rss>
+&lt;/div&gt;</description><category>admin</category><guid>http://pols503.github.io/pols_503_sp15/updated-syllabus.html</guid><pubDate>Fri, 24 Apr 2015 01:08:22 GMT</pubDate></item></channel></rss>
