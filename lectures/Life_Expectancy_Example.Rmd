@@ -1,0 +1,8 @@
+---
+title: "Life Expectancy Example"
+author: "Jeffrey B. Arnold"
+date: "05/12/2015"
+output: html_document
+---
+
+

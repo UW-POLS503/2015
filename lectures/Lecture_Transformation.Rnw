@@ -182,6 +182,14 @@ ggplot(broom::augment(lm(I(lifeExp^4) ~ log(gdpPercap), data = gapminder2007)), 
 
 
 \begin{frame}
+\frametitle{Close to 0, $\log(1 + x) \approx x$}
+
+
+
+\end{frame}
+
+
+\begin{frame}
   \frametitle{Why can diff in logs be interpreted as a $\%\Delta$}
 
   Note: $\log(1 + r) \approx r$ when $r$ small
@@ -192,15 +200,23 @@ ggplot(broom::augment(lm(I(lifeExp^4) ~ log(gdpPercap), data = gapminder2007)), 
     &= \% \Delta x / 100
   \end{align*}
 
-  This property only holds for the natural logarithm. Base $e$.
+  This property only holds for the natural logarithm.
 
 \end{frame}
 
 \begin{frame}[fragile]
   \frametitle{Box-Cox Family of Transformations}
 
+<<bcPowerPlot>>=
+ggplot(expand.grid(x = seq(0.01, 3, by = 0.01),
+                   lambda = 3:-2) %>%
+         mutate(y = mapply(bcPower, x, lambda)),
+       aes(x = x, y = y, colour = factor(lambda))) +
+  geom_line() +
+  scale_y_continuous(limits = c(-5, 5)) +
+  theme_local()
 
-
+@
 
 Plot for $\lambda = 0.25, 0.5, 0, 2, 4, 8$  for $x = (0, 4]$
 
@@ -217,8 +233,7 @@ Plot for $\lambda = 0.25, 0.5, 0, 2, 4, 8$  for $x = (0, 4]$
   \end{equation*}
 
   \begin{itemize}
-  \item Requires $x > 0$. If negative, use $x + c$ for some value of $c$ to make make all $x$ postiive, or Yeo-Johnson.
-  \item Can solve for $\lambda$ to transform $x$ as close to wrt. Normal skew.
+  \item Can solve for $\lambda$ to transform $x$ to be symmetric.
   \item \textbf{car} function: \texttt{powerTransform}, \texttt{bcTransform}.
   \item In regression: If know $\lambda$ can transform $y$ or $x$.
   \end{itemize}
@@ -226,6 +241,13 @@ Plot for $\lambda = 0.25, 0.5, 0, 2, 4, 8$  for $x = (0, 4]$
 \end{frame}
 
 \section{Linear Transformations of Regressions}
+
+\begin{frame}
+\begin{itemize}
+\item Do not change the fit ($R^2$, SSE) of OLS
+\item Can be useful (sometimes) for interpretation
+\end{itemize}
+\end{frame}
 
 \begin{frame}
   \frametitle{Linear Transformations of Regression}
@@ -273,7 +295,35 @@ Plot for $\lambda = 0.25, 0.5, 0, 2, 4, 8$  for $x = (0, 4]$
   \item Very important to standardize $X$ in machine learning applications, or anywhere with complicated optimization problems.
   \end{itemize}
 
-
 \end{frame}
+
+\begin{frame}
+  \frametitle{}
+\end{frame}
+
+\section{Transforming Dependent Variable}
+
+
+\begin{frame}
+  \frametitle{Logit Transformation}
+  
+  \begin{itemize}
+  \item Suppose $Y \in (0, 1)$
+  \item The logit transformation $\tilde{y} = \log(y / (1 - y))$,
+    \begin{equation*}
+      \log 
+      \left(
+        \frac{y}{1 - y}
+      \right) = 
+      \beta_{0} + \beta_{1} x_{1} + \dots + \epsilon
+    \end{equation*}
+  \item What if original data included 0s or 1s
+  \item Not a ``logit model'', linear regression with logit transformed response variable
+  \end{itemize}
+    
+\end{frame}
+
+
+
 
 \end{document}

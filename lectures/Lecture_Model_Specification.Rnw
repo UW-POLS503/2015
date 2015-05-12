@@ -1,0 +1,377 @@
+% Copyright (C) 2015 Jeffrey B. Arnold
+% License CC BY-NC-SA 4.0 http://creativecommons.org/licenses/by-nc-sa/4.0/
+
+<<init,echo=FALSE,results='hide',warning=FALSE,message=FALSE>>=
+LECTURE_NUM <- "Transformation"
+source("init.R")
+@
+<<header>>=
+suppressPackageStartupMessages({
+  library("gapminder")
+  library("assertthat")
+  library("pols503")
+})
+@
+
+\input{\jobname-options}
+\ifdefined\ishandout%
+  \documentclass[handout]{beamer}
+\else
+  \documentclass[]{beamer}
+\fi
+
+% HEADER HERE
+\input{includes.tex}
+
+\usepackage{verbatim}
+
+\newcommand{\thetitle}{Transformations}
+\date{May 5, 2015}
+\title{\thetitle{}}
+\hypersetup{
+  pdftitle={\thetitle{}},
+  pdfkeywords={statistics}
+}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+\begin{frame}
+  \maketitle{}
+\end{frame}
+
+\begin{frame}
+\frametitle{Overview}
+\tableofcontents
+\end{frame}
+
+\begin{frame}
+  \frametitle{How To Choose Among Different Models?}
+
+  \begin{itemize}
+  \item Depends on your purpose
+  \item Some tools
+    \begin{itemize}
+    \item Internal model validation: residuals, outliers
+    \item Overall model Fit statistics: out of sample is preferred
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+\section{Measures of Fit}
+
+\begin{frame}
+  \frametitle{Measures of Model Fit}
+
+  Various measure of how the model fits the data, both \textit{in-sample} and \textit{out-of-sample}
+
+\end{frame}
+
+\subsection{$R^{2}$}
+
+\begin{frame}
+  \frametitle{The Coefficient of Determination, $R^{2}$}
+
+  \begin{equation*}
+    \begin{aligned}[t]
+      R^{2} &= \frac{\text{Explained sum of squares}}{\text{Total sum of squares}}
+      = 1 - \frac{\text{Residual sum of squares}}{\text{Total sum of squares}} \\
+      &= \frac{\sum (\hat{y} - \bar{y})^{2} }{\sum (\hat{y} - \bar{y})^{2}} \\
+      &= 1 - \frac{\sum \hat{\epsilon}^{2}}{\sum (\hat{y} - \bar{y})^{2}}
+    \end{aligned}
+  \end{equation*}
+
+  \begin{itemize}
+  \item Commonly used
+  \item Ranges between
+  \item Why can it never be less than 0?
+  \item What happens when you add a variable?
+  \item What is the case when $R^{2} = 1$
+  \item Bivariate case: $\cor(y, x)^{2}$
+  \item General case: $\cor(y, \hat{y})^{2}$
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{What $R^2$ does and doesn't say}
+
+  \begin{itemize}
+  \item Indirectly reports scatter around the regression line
+  \item Only \textit{in sample}
+  \item Maximizing $R^{2}$ perverse:
+    \begin{itemize}
+    \item Not usually interesting for explanation. $Y$ regressed on itself, vote choice on vote intention.
+    \item Not usually best for prediction
+    \end{itemize}
+  \item Not an estimate
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Variation in sample $R^2$}
+
+<<>>=
+sim_R2 <- function(iter, n, mu_X, s_X, R_X, beta, r_squared) {
+  # Error checking so that bugs are caught quicker :-)
+  assert_that(length(s_X) == length(mu_X),
+              ncol(R_X) == nrow(R_X),
+              ncol(R_X) == length(mu_X),
+              length(beta) == (length(mu_X) + 1))
+  # Generate an X
+  X <- MASS::mvrnorm(n, mu = mu_X, Sigma = sdcor2cov(s_X, R_X),
+                     empirical = TRUE)
+  sigma <- r2_to_sigma(cbind(1, X), beta, r_squared)
+  # Create a list to stor the results
+  iterations <- list()
+  # Loop over the simulation runs
+  for (j in 1:iter) {
+    # Draw y
+    mu <- cbind(1, X) %*% beta
+    epsilon <- rnorm(n, mean = 0, sd = sigma)
+    y <- mu + epsilon
+    # Run a regression
+    mod <- lm(y ~ X)
+    # Save the coefficients in a data frame
+    mod_df <- glance(mod)
+    iterations[[j]] <- mod_df
+  }
+  # Combine the list of data frames into a single data frame
+  bind_rows(iterations)
+}
+
+r2s <- data_frame(n = c(128, 1024), r2 = 0.5) %>%
+  group_by(n, r2) %>%
+  do(sim_R2(1024, .$n, 0, 1, matrix(1), c(0, 1), .$r2))
+
+ggplot(r2s, aes(x = r.squared, fill = factor(n))) +
+  geom_density(alpha = 0.2) +
+  theme_minimal()
+
+@
+
+Population $R^2 = 0.5$
+
+\end{frame}
+
+\begin{frame}
+\frametitle{$R^2$ is a function of variation in $X$}
+
+<<>>=
+sample_by_r2 <- function(n, mu_X, s_X, R_X, beta, r_squared) {
+  # Error checking so that bugs are caught quicker :-)
+  assert_that(length(s_X) == length(mu_X),
+              ncol(R_X) == nrow(R_X),
+              ncol(R_X) == length(mu_X),
+              length(beta) == (length(mu_X) + 1))
+  # Generate an X
+  X <- MASS::mvrnorm(n, mu = mu_X, Sigma = sdcor2cov(s_X, R_X),
+                     empirical = TRUE)
+  sigma <- r2_to_sigma(cbind(1, X), beta, r_squared)
+  mu <- cbind(1, X) %*% beta
+  epsilon <- rnorm(n, mean = 0, sd = sigma)
+  y <- mu + epsilon
+  # Loop over the simulation runs
+  .data <- as.data.frame(X)
+  .data$y <- as.numeric(y)
+  .data
+}
+
+smpl1 <- sample_by_r2(1024, 0, 1, matrix(1), c(0, 1), 0.7) %>%
+  mutate(within = V1 > -0.75 & V1 < 0.75)
+
+stat1 <- glance(lm(y ~ V1, data = smpl1))
+stat2 <- glance(lm(y ~ V1, data = filter(smpl1, within)))
+
+ggplot(smpl1, aes(x = V1, y = y, colour = within)) +
+  geom_point() + theme_minimal() +
+  guides(colour = FALSE) + xlab("x")
+
+@
+
+\begin{itemize}
+\item Complete sample: $R^2 = \Sexpr{round(stat1$r.squared, 3)}$, $\hat\sigma = \Sexpr{round(stat1$sigma, 3)}$
+\item Complete sample: $R^2 = \Sexpr{round(stat2$r.squared, 3)}$, $\hat\sigma = \Sexpr{round(stat2$sigma, 3)}$
+
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Adjusted $R^{2}$}
+  \framesubtitle{What's adjusted?}
+
+  \begin{equation*}
+    \begin{aligned}[t]
+      \tilde{R}^{2} &= 1 - \frac{S_{E}^{2}}{S^{2}_{Y}} \\
+      &= 1 - \frac{n - 1}{n - k - 1} \times \frac{RSS}{TSS}
+    \end{aligned}
+  \end{equation*}
+
+  \begin{itemize}
+  \item Unlike $R^{2}$, treat squared error terms as estimates of populatio, not sample statistics.
+  \item How does it change with respect to $n$? With respect to $s_j$?
+  \item No other deep justification
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Information Criteria}
+
+  \begin{align*}
+    AIC_j &= -2 \log_e L(\hat{\theta}_{j}) + 2 s_{j} \\
+    BIC_j &= -2 \log_e L(\hat{\theta}_{j}) + s_{j} \log_{e} n
+  \end{align*}
+
+  \begin{itemize}
+  \item Likelihood based methods with a penalty for complexity.
+  \item Likelihood: $L(\hat{\theta}_{j}) = n \log_{e} \hat{\sigma}_{\epsilon}^{(j)2}$
+  \item Lower is better
+  \item Smaller values = better fit
+  \item Deeper motivations for each -- information theory, Bayes factors, CV approximations.
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Out of Sample Methods}
+
+  \begin{itemize}
+  \item Compare models on how well they do on data that was not used to estimate their parameters.
+  \item In practice, serves as a good check against spurious findings
+  \item Even if our goal is explanation, not prediction, scientific models strive for generality
+  \item Usual caveat: best fitting may not be the only criteria for the model
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Out of Sample Goodness of Fit}
+
+  \begin{itemize}
+  \item Method
+    \begin{enumerate}
+    \item Split data into training $(X_{\text{training}}, y_{\text{training}})$, test data, $(X_{\text{test}}, y_{\text{test}})$.
+    \item Fit model to training data, $(X_{\text{training}}, y_{\text{training}})$, obtain $\hat{\beta}_{\mathtt{training}}$
+    \item Calcuate fitted $\hat{y}_{\text{test}}$ for the test sample $(X_{\text{test}}, y_{\text{test}})$.
+    \item Calculate predicted mean squared error of the \textbf{test} data
+      \begin{equation*}
+        \hat{\sigma}_{\text{test}} = \frac{1}{n_{\text{test}}} \sum_{i \in \text{test}} y_i - X_{i} \hat{\beta}_{\text{training}}
+      \end{equation*}
+    \end{enumerate}
+  \item Usually MSE of test data lower than MSE of training data. In-sample fit statistics are overly optimistic.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Cross-Validation}
+
+  Multipe in-sample
+
+  \begin{itemize}
+  \item Method
+    \begin{enumerate}
+    \item Split data into training $(X_{\text{training}}, y_{\text{training}})$, test data, $(X_{\text{test}}, y_{\text{test}})$.
+    \item Fit model to training data, $(X_{\text{training}}, y_{\text{training}})$, obtain $\hat{\beta}_{\mathtt{training}}$
+    \item Calcuate fitted $\hat{y}_{\text{test}}$ for the test sample $(X_{\text{test}}, y_{\text{test}})$.
+    \item Calculate predicted mean squared error of the \textbf{test} data
+      \begin{equation*}
+        \hat{\sigma}_{\text{test}} = \frac{1}{n_{\text{test}}} \sum_{i \in \text{test}} y_i - X_{i} \hat{\beta}_{\text{training}}
+      \end{equation*}
+    \end{enumerate}
+  \item Best model minimizes MSE
+  \item Usually MSE of test data lower than MSE of training data. In-sample fit statistics are overly optimistic.
+
+  \item Test data should be representative (you can also ``overfit'' the test data).
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Cross Validation}
+
+  Reuse data for multiple in-sample and out-of-sample tests.
+
+  \begin{itemize}
+  \item Method
+    \begin{enumerate}
+    \item Select all but $1/k$th of the data: $(y_{\text{training}}, X_{\text{training}})$
+    \item Repeat out of sample tests $k$ times
+    \end{enumerate}
+  \item Usual methods:
+    \begin{itemize}
+    \item Leave-one-out (LOO-CV):
+    \item 10-fold cross-validation
+    \end{itemize}
+  \item Best model minimizes MSE
+  \end{itemize}
+
+\end{frame}
+
+\section{General Advice}
+
+\begin{frame}
+  \frametitle{Fox on Model Selection}
+  \framesubtitle{Problems}
+
+  \begin{itemize}
+  \item Simultaneous inference
+  \item Fallacy of affirming the consequent
+  \item Impact of large samples on hypothesis tests
+  \item Exaggerated precision
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Fox on Model Selection}
+  \framesubtitle{Strategies}
+
+  \begin{itemize}
+  \item Alternative model-selection criteria (not stat sig)
+  \item Compensating for simulaneous inference
+  \item Avoiding model selection: maximally complex and flexible model.
+  \item Model averaging: select many models.
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Fox on Model Selection}
+  \framesubtitle{General Advice}
+
+  \begin{itemize}
+  \item It is problematic to use stat. hypoth. tests for model selection. Simultaneous inference,
+    biased results. Complicated models in large $n$, exaggerated prediction. (p. 6008)
+  \item Most methods maximize \textit{predication} not interpretation
+  \item When purpose is interpretation, simplify based on substantive considerations,
+    even if that includes removing small, but stat sig coefficients. (p. 622)
+  \item \textbf{validation}: using separate model choice and inference
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Gelman and Hill's Rules for Building a Regression Model for Prediction}
+
+  \begin{itemize}
+  \item Include all input variables expected to be important in predicting outcome (substantively)
+  \item Not always necessary to include these separately, e.g. indices
+  \item For inputs with large effects, consider including interactions
+  \item Whether to exclude a varaible from prediction based on significance
+    \begin{itemize}
+    \item Not stat sig, expected sign: keep. Will not help much, but will not hurt predictions.
+    \item Not stat sig, not expected sign: consider removing
+    \item Stat sig, not expected sign: \textbf{Think hard} Are there lurking variables?
+    \item Stat sig, expected sign: keep
+    \end{itemize}
+  \item Think hard before the model; but adjust to new information
+  \item Gelman and Hill use \textit{predictaion} differently than Fox.
+  \end{itemize}
+
+  Gelman and Hill, p. 69
+\end{frame}
+
+\end{document}
