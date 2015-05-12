@@ -54,12 +54,12 @@ Here, we use Monte Carlo not out of necessity but for pedagogical purposes, as a
 1. Create a new R project for this homework named `hw3` and load that project.
 2. Do your analyses in an R markdown document based off of [hw3-template.Rmd](hw3-template.Rmd)
 2. Download [hw3-functions.R](hw3-functions.R) and save in to your project directory.
-3. Submit a zipped file of the directory with your R project through Canvas. This should contain all the materials for another person to run your R Markdown fil  This should contain:
+3. Submit a zipped file of the directory with your R project through Canvas. This should contain all the materials for another person to run your R Markdown file  This should contain:
 
     - The R project (`.Rproj`) file
 	  - The R Markdown document (`.Rmd`) of your analyses
 	  - An HTML document (`.html`) compiled from your R Markdown document.
-	  - Any data or other files neede to run the analyses in your R Markdown doceument.
+	  - Any data or other files needed to run the analyses in your R Markdown document.
 
 4. Your R Markdown file should follow the guidance from [here](http://pols503.github.io/pols_503_sp15/r_markdown_assignments.html) and your R code should follow the guidelines [here](http://pols503.github.io/pols_503_sp15/r_best_practices.html).
 5. Turn in a paper copy of the document compiled from the analyses at lab.
@@ -84,22 +84,24 @@ All of the simulations in this assignment will follow the same structure:
 
     1. Draw a sample from the population
     2. Run OLS on that sample
-    3. Save statistics from the regression on that sample.
+    3. Save statistics, e.g. coefficients, standard errors, $p$-values, from the sample regression.
 
-3. Compare the distributions of the sample statistics to see how well OLS recovers
-    the parameters of the population.
+3. Evaluate the distributions of the sample statistics, or summaries thereof, to determine how well OLS recovers the parameters of the population.
 
-In this section, we will work through an example in which the population satisfies
-all the Gauss-Markov assumptions and we run a correctly specified regression on the
-samples drawn from that population.
-In particular, for a fixed $x$, the population model is
+In this section, we will work through the code necessary to run a simulation.
+However, in the problems, functions written for this problem set will do most of the simulation computation. 
+This section is to help you to understand what those functions are doing, and to provide a mapping from the math to the code.
+
+We will use an example in which the population satisfies all the Gauss-Markov assumptions and we run a correctly specified regression on the samples drawn from that population.
+
+In this example, the population model is
 $$
 \begin{aligned}[t]
 Y_i &= \beta_0 + \sum_{j = 1}^k \beta_j x_{i,j} + \epsilon_i \\
 \epsilon_i & \sim N(0, \sigma^2)
 \end{aligned}
 $$
-And the OLS regression which will be run is
+For a sample $y$ from that population, the OLS regression which will be run is
 $$
 \begin{aligned}[t]
 y_i &= \hat\beta_0 + \sum_{j = 1}^k \hat\beta_j x_{i,j} + \hat\epsilon_i \\
@@ -128,23 +130,32 @@ $$
 X_i \sim N(\mu_X, \Sigma_X) \text{ for $i = 1, \dots, n$.}
 $$
 Since covariance matrices are not particularly intuitive, so it may be easier to decompose the covariance into a correlation matrix and the standard deviations of the variables.
-A covariance matrix, $\Sigma$ can be decomposed into a standard deviation $s$ and a correlation matrix $R$,
+A $k \times k$ covariance matrix, $\Sigma$ can be decomposed into a vector of $k$ standard deviations, $s$, and a $k \times k$ correlation matrix, $R$:
 $$
-\Sigma = S R S
+\begin{aligned}[t]
+\Sigma &= S R S &
+&& S
+& = \diag(s)
+= 
+\begin{bmatrix}
+s_1 & 0 & \dots & 0 \\
+0 & s_2 & \dots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \dots & s_k
+\end{bmatrix}
+\end{aligned}
 $$
-where $S$ is a diagonal matrix with the standard deviations $s$ on its diagonal.
-The following function will make that calculation simpler.
-The function `sdcor2cov` calculates the covariance matrix from a standard deviation
+The function `sdcor2cov` in `hw3-functions.R` calculates the covariance matrix from a standard deviation
 and a correlation matrix.
 ```{r sdcor2cov, echo=FALSE}
 ```
 
-In this example, we will use a sample of size $n = 1024$, with $k = 3$ variables drawn from a multivariate normal distribution with mean $\mu_X = (0, 0, 0)$, standard deviations of $s_X = (1, 1, 1)$, and independent variables.
+In this example, we will use a sample of size $n = 1024$, with $k = 3$ independent variables drawn from a multivariate normal distribution with mean $\mu_X = (0, 0, 0)$, standard deviations of $s_X = (1, 1, 1)$.
 If variables are independent, then their correlation matrix is the identity matrix (a diagonal matrix with all 1's on the diagonal):
 $$
 R_X = \begin{bmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix}
 $$
-This is equivalent to sampling each variable independently from a standard normal distribution.
+Since the variables are independent, this is equivalent to separately sampling each variable from a standard normal distribution.
 ```{r}
 n <- 1024
 mu_X <- rep(0, 3)
@@ -201,7 +212,7 @@ This will be especially useful when storing the results from many simulations.
 mod_df <- tidy(mod)
 ```
 The function `tidy` does not include a heteroskedasticity consistent standard error, and we would like to compare that to the classical standard error in some simulations.
-We will use the function `hccm` from the **car** package to calculate the heterorskedasticity robust standard error.
+We will use the function `hccm` from the **car** package to calculate the heteroskedasticity robust standard error.
 ```{r}
 mod_df[["std.error.robust"]] <- sqrt(diag(car::hccm(mod)))
 ```
@@ -380,16 +391,14 @@ for (i in 1:length(n_samples)) {
 sims1 <- bind_rows(sims1)
 ```
 
-Then use these results to analyze the following.
-For all of these, focus on the coefficients of the
+Then use these results to analyze the following:
 
-- The bias of each $\hat{\beta}_j$?. How different is `estimate_mean` ($\hat\beta$)
+- The bias of each $\hat{\beta}_j$. How different is `estimate_mean` ($\hat\beta$) from `beta_true` ($\beta$)?
 - The standard deviation of $\hat{\beta}_j$?. How does `estimate_sd` change as the sample size increases?
-- The bias of the standard error of each $\hat{\beta}_j$?. Compare the actual population standard deviations, `estimate_sd`, with the means of the standard errors, `se_mean`.
+- The bias of the standard error of each $\hat{\beta}_j$. Compare the actual population standard deviations, `estimate_sd`, with the means of the standard errors, `se_mean`.
 - The bias of the robust standard error of each $\hat{\beta}_j$? Compare the actual population standard deviations of each parameter, `estimate_sd`, with the means of the robust standard errors, `se_robust_mean`.
 
 As an example, to find the bias of $\hat\beta$:
-
 ```{r}
 sims1 %>%
   mutate(bias = estimate_mean - beta_true) %>%
@@ -399,8 +408,7 @@ The code goes through the steps
 
 1. Create a new variable `bias` with the difference between the estimated coefficients and the true coefficients.
 2. Select the variables of interest
-3. Drop the Intercept term
-4. Sort by term and sample size to make it easier to understand
+3. Sort by term and sample size to make it easier to understand
 
 Use similar analysis for the other questions.
 
@@ -416,11 +424,21 @@ Y_i &= 0 + 1 \cdot x_{1,i} + 1 \cdot x_{2,i} + 1 \cdot x_{3,i} + \epsilon_i \\
 \sigma &= 1.7
 \end{aligned}
 $$
-In this problem keep $\mu_X = (0, 0, 0)$ and $s_X = (1, 1, 1)$, but $R_X$ will differ between simulations to allow for different levels of correlation between   $x_1$ and $x_2$.
+In this problem keep $\mu_X = (0, 0, 0)$ and $s_X = (1, 1, 1)$, but $R_X$ will differ between simulations to allow for different levels of correlation between $x_1$ and $x_2$.
 The covariate $x_3$ is independent of the other covariates, $\cor(x_1, x_3) = \cor(x_2, x_3) = 0$.
+Thus, the correlation matrix for $X$ in these simulations is the following, where $\rho_{1,2}$ will vary:
+$$
+R_X =
+\begin{bmatrix}
+1 & \rho_{1,2} & 0 \\
+\rho_{1,2} & 1 & 0 \\
+0 & 0 & 1 
+\end{bmatrix}
+$$
+
 Use $n = 1024$ for all simulations.
 
-Simulate using `sim_lin_normal` with the following levels of correlation between $x_1$ and $x_2$: 0, 0.5, 0.95, -0.5, -0.95.
+Simulate using `sim_lin_normal` with the following levels of correlation between $x_1$ and $x_2$ ($\rho_{1,2}$): 0, 0.5, 0.95, -0.5, -0.95.
 Based on the results of those simulations, how does $\cor(x_1, x_2)$ affect the following?
 
 - The bias of each $\hat{\beta}_j$?
@@ -471,15 +489,23 @@ Y_i &= 0 + 1 \cdot x_{1,i} + 1 \cdot x_{2,i} + 1 \cdot x_{3,i} + \epsilon_i \\
 \sigma &= 1.7
 \end{aligned}
 $$
-The covariates, $x_j$, are independent, with means, $\mu_{x,j} = 0$, and standard deviations, $s_{x,j} = 1$ for all variables.
 
 In all simulations, $(x_1, x_2)$ and $(x_2, x_3)$ are uncorrelated.
 The correlation between $x_1$ and $x_3$ will vary between simulations.
+In other words, the correlation matrix for the $x$ variables is
+$$
+R =
+\begin{bmatrix}
+1 & 0 & \rho_{1,3} \\
+0 & 1 & 0 \\
+\rho_{1,3} & 0 & 1 
+\end{bmatrix}
+$$
+
 In all simulations, the sample regression will only include $x_1$ and $x_2$:
 $$
 y_i = \hat\beta_0 + \hat\beta_1 x_{1,i} + \hat\beta_2 x_{2,i} + \hat\epsilon_i
 $$
-To omit the 3rd variable, set `omit = 3` in `sim_lin_norm_omitted`.
 Use $n = 1024$ for all simulations.
 
 You can perform this simulations of this scenario using the function, `sim_lin_norm_omitted`, which samples from a linear, normal model with homoskedastic errors, but allows you to run a misspecified regression on the samples by omitting variables.
@@ -487,12 +513,12 @@ The arguments to this function are the same as `sim_lin_norm` except for
 
 `omit`
 
-:    A vector of integers of the columns to omit from X when estimating the sample regression.
+:    A vector of integers of the columns to omit from X when estimating the sample regression. Set `omit = 3` to omit the 3rd covariate.
 
 ```{r sim_lin_norm_omitted, echo = FALSE}
 ```
 
-To run a simulation for a single value of $\rho$:
+To run a simulation for a single value of $\rho_{1,3}$:
 ```{r, results='hide'}
 n <- 1024
 mu_X <- c(0, 0, 0)
@@ -510,7 +536,7 @@ sim_lin_norm_omitted(iter = iter, n = n, mu_X = mu_X,
 
 Warning: when using `summarize_sim` remember that the parameters of the population are not equal the parameters that are estimated.
 
-Consider the following values of $\rho_{1,3}$: 0, 0.1, 0.7, -0.7, 0.99, -0.99.
+Consider the following values of the correlation between $x_1$ and $x_3$ ($\rho_{1,3}$): 0, 0.1, 0.7, -0.7, 0.99, -0.99.
 How does the correlation of variables affect:
 
 - The bias of each $\hat{\beta}_j$?
@@ -581,8 +607,8 @@ Create a vector when $\gamma_1 = 0$,
 gamma1_values <- c(0, 0.2, 0.7)
 ```
 
-To give a better sense of what heteroskedasticity at various values of $\gamma_1$ correspond to, the following plot displays a scatterplot and a regression line for different values of $\gamma_1$:
-```{r}
+To give a better sense of what heteroskedasticity at various values of $\gamma_1$ correspond to, the following plot displays a scatter plot and a regression line for different values of $\gamma_1$:
+```{r echo = FALSE}
 hsk_samples <- data.frame(gamma1 = gamma1_values) %>%
   group_by(gamma1) %>%
   do({
@@ -596,7 +622,8 @@ ggplot(hsk_samples, aes(x = V1, y = y)) +
   geom_point() +
   geom_smooth(method = "lm") +
   facet_wrap(~ gamma1, ncol = 2) +
-  ylab("X")
+  ylab("X") + 
+  theme_minimal()
 ```
 
 For given values, you can run `sim_lin_norm_heterosked`:
@@ -619,7 +646,7 @@ Remember to consider how heteroskedasticity in $x_1$ affects the estimates of he
 
 ## Truncated Dependent Variable (optional)
 
-**You do not need to do this **
+**You do not need to do this**
 
 This problem considers what happens when there is a truncated dependent variable.
 This is also called sampling on the dependent variable, which is a research design problem not unknown to political science research.[^samplingdv]
@@ -659,7 +686,7 @@ Estimate the regression only on those $y_i$ greater than the median of $y$.
 Before running simulations, draw a single sample of a linear normal model with homoskedastic errors.
 To do this, you should be able to adapt the code from `sim_lin_normal_truncated`.
 Create a scatter plot with the OLS line for all $y$, and a another plot with only those $y$ less than the median of $y$.
-How idoes the OLS line estimated on the truncated data differ from the one estimated on the untruncated data.
+How does the OLS line estimated on the truncated data differ from the one estimated on the full data.
 
 Run several simulations with `sim_lin_normal_truncated` and vary the sample size.
 How does the sample size affect the following:
