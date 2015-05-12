@@ -1,0 +1,330 @@
+---
+title: "POLS 503: Homework 3"
+author: "Jeffrey B. Arnold, Christopher Adolph"
+date: "April 27, 2015"
+output:
+  html_document:
+    toc: true
+---
+
+The purpose of this homework is to provide a guided, hands-on tour through the properties
+of the least squares estimator, especially under common violations of the GaussMarkov
+assumptions. 
+We will work through a series of programs which use simulated data –- i.e., data created with known properties –- to investigate how these violations affect the accuracy and precision of least squares estimates of slope parameters. 
+Using repeated study of simulated datasets to explore the properties of statistical models is
+called Monte Carlo experimentation.
+Although you will not have to write much R code, you will need to read through
+the provided programs carefully to understand what is happening.
+
+For this assignment, I ask that you start with this code and edit it as needed.
+Do not 
+
+```{r setup, echo = TRUE}
+# This assignment will have some non-trivial computation.
+# This will set the options so that any computations that do not change are not
+# rerun.
+# See http://rmarkdown.rstudio.com/authoring_rcodechunks.html#caching
+knitr::opts_chunk$set(cache = TRUE)
+```
+
+
+This will use the standard [Hadleyverse](http://blog.revolutionanalytics.com/2015/03/hadleyverse.html) packages that we've been using in this course (**ggplot2**, **dplyr**, **tidyr**, **broom**).
+Additionally we will use **MASS**, an R package associated with the intro stats and R book *Modern Applied Statistics with S*, which has a function to sample from the multivariate normal distribution.
+```{r}
+library("dplyr")
+library("broom")
+library("tidyr")
+library("ggplot2")
+library("MASS")
+```
+
+
+## Multivariate Normal and Covariance Matrices
+
+Whereas a normal distribution for one variable is parameterized with a mean and 
+standard deviation (or variance), 
+the multivariate normal distribution for $k$ vectors is parameterized by length
+$k$ vector of means, and a $k \times k$ covariance matrix.
+The covariance matrix determines both the spread and correlation of the variables.
+The diagonal of the covariance matrix is the variance of each variable.
+The off diagonal entries of the covariance matrix are the covariances between the variables.
+
+One trick we will use in this homework to make covariance matrices a little more intuitive,
+is to calculate covariance matrices using standard deviations and a correlation matrix. A covariance matrix $\Sigma$ can be decomposed into a vector of standard deviations, $s$, and a correlation matrix, $R$:
+$$
+\Sigma = diag(s) R diag(s)
+$$
+where $diag(s)$ is the diagonal matrix with $s$ on its diagonal.
+This is more intuitive than the raw covariance matrix, and allows us to focus on the 
+correlation between variables.
+```{r}
+sdcor2cov <- function(s, R) {
+  sdiag <- diag(s, nrow = length(s), ncol = length(s))
+  sdiag %*% R %*% sdiag
+}
+```
+For example,
+```{r}
+sdiag <- diag(1:3)
+sdiag
+R <- matrix(c(1, 0.25, 0.25, 0.25, 1, 0.25, 0.25, 0.25, 1), nrow = 3)
+R
+sRs <- sdiag %*% R %*% sdiag
+sRs
+```
+Now let's check that this has the original correlation using the function `cov2cor`,
+```{r}
+cov2cor(sRs)
+```
+and the standard deviations are the square root of the diagonal,
+```{r}
+sqrt(diag(sRs))
+```
+
+## Simulating from the Linear Normal Model.
+
+1. Draw as sample of $n$ observations from $y \sim N(X \beta, \sigma)$
+2. Calculate the linear regression coefficients for that sample.
+3. Do that many times.
+
+First, let's focus on drawing a single sample and calculating the linear regression line for that.
+Then, we'll worry about repeating it.
+
+Let's simulate from the population,
+$$
+Y = 0 + 1 \cdot X_1 + 2 \cdot X_2 + \epsilon
+$$
+i.e. $\beta_0 = 0$, $\beta_1 = 1$, and $\beta_2 = 2$.
+```{r}
+b <- c(0, 1, 2)
+```
+Suppose that the 
+
+```{r}
+# Number of observations in each dataset
+n <- 100
+
+# True standard deviation of the regression errors
+sigma <- sqrt(2)
+
+# True means of the covariates
+X_mu <- rep(0, 3)
+
+# Standard deviations of the covariates
+X_sd <- rep(1, 3)
+
+# correlation of the covariates
+X_cor <- diag(3)
+# Create a covariance matrix
+X_Sigma <- sdcor2cov(s_x, cor_x)
+
+# Draw a random X matrix.
+X <- mvrnorm(n = n, mu = X_mu, Sigma = X_Sigma, empirical = TRUE)
+```
+
+Confirm that the columns of X have correlation `X_Sigma` and means `X_mu`:
+```{r}
+cor(X)
+```
+And check that all columns have means `X_mu`
+```{r}
+apply(X, 2, mean)
+```
+This calculates the mean for each function.
+This function works generally; to "apply" a different
+function, just change mean to the desired function; to apply that
+function over rows instead of columns, change 2 to 1.
+
+Calculate $E(y | X) = X \beta$
+```{r}
+mu <- beta %*% X
+```
+Draw the errors for the $n$ observations, each from $\epsilon \sim N(0, \sigma)$
+```{r}
+epsilon <- rnorm(n, mean = 0, sd = sigma)
+```
+Calculate the sample $y = X \beta + \epsilon$,
+```{r}
+y <- mu + epsilon
+```
+Given this sample, calculate the OLS line,
+```{r}
+mod <- lm(y ~ X)
+summary(mod)
+```
+The OLS line should be similar, but not exactly the population line.
+
+For a simulation study, we need to repeat this many times.
+We will use the code above, but
+
+- wrap it in a `for` loop so we can draw many simulations
+- put it all in a function, so we can easily do simulations with different values 
+  of $n$, $\beta$, or $X$.
+
+The following code defines such a function, which we'll name `sim_linear_normal`.
+```{r}
+sim_linear_normal <- function(sims, b, X, sigma) {
+  # The number of observations in the sample comes from X
+  n <- nrow(X)
+  # Create a list to stor the results
+  simulations <- list()
+  # Create a progress bar because progress bars are fun
+  p <- progress_estimated(sims, min_time = 2)
+  # Loop over the simulation runs
+  for (j in 1:sims) {
+    # The conditional expectation of y given X
+    # i.e. y-hat, the fitted values, regression line
+    # cbind adds the column of 1s
+    mu <- cbind(1, X) %*% b
+    
+    # Simulate y from the conditional expection + error
+    # y = mu + e
+    # mu = X * b
+    # e ~ N(0, sigma)
+    y <- mu + rnorm(n, mean = 0, sd = sigma)
+    
+    # Run a regression of the simulated y on the simulated X
+    # Note that neither y nor X is in a data frame
+    # also X is a matrix
+    # R is cool with that
+    mod <- lm(y ~ X)
+    
+    # Create a data.frame with the coef, se, t-stats, and using the broom function tidy
+    mod_df <- tidy(mod) %>%
+      # Add a column indicating the simulation number
+      mutate(.sim = j)
+      
+    # Save these results as the next element in the storage list
+    simulations[[j]] <- mod_df
+    
+    # Update the progress bar
+    p$tick()$print()
+  }
+  # Combine the list of data frames into a single data frame
+  bind_rows(simulations)
+}
+
+```
+
+
+```{r}
+sims1 <- sim_linear_normal(1000, b, X, sigma)
+head(sims1)
+```
+
+
+## Post-processing
+
+The output is a data frame with a row for each iteration, coefficient value.
+
+```{r sim_summary}
+sim_summary <- simulations %>%
+  group_by(term) %>%
+  summarize(estimate_mean = mean(estimate),
+            estimate_sd = sd(estimate),
+            se_mean = sqrt(mean(std.error) ^ 2)) %>%
+  mutate(t_stat_mean = mean_estimate / mean_std_error)
+
+make_term_names <- function(n) {
+  c("(Intercept)", paste0("X", 1:(length(b) - 1)))
+}
+
+true_parameters <- 
+  data.frame(estimate = b,
+             term = make_term_names(length(b)))
+
+```
+
+
+```{r}
+ggplot() +
+  geom_violin(data = simulations, mapping = aes(x = term, y = estimate)) + 
+  geom_point(data = true_parameters, 
+             mapping = aes(x = term, y = estimate), colour = "red")
+
+ggplot() +
+  geom_density(data = simulations, mapping = aes(x = estimate)) +
+  geom_vline(data = true_parameters,
+             mapping = aes(xintercept = estimate), colour = "red") +
+  facet_wrap( ~ term)
+
+
+ggplot() +
+  geom_boxplot(data = simulations, mapping = aes(x = term, y = estimate)) + 
+  geom_point(data = true_parameters, 
+             mapping = aes(x = term, y = estimate), colour = "red")
+
+```
+
+```{r}
+find_sigma <- function(x, b, signal = 1, sample = FALSE) {
+  n <- nrow(x)
+  k <- ncol(x)
+  yhat <- x %*% b
+  ybar <- mean(yhat)
+  TSS <- sum((yhat - ybar) ^ 2)
+  SSE <- TSS / signal 
+  if (sample) {
+    SSE / (n - k - 1)
+  } else {
+    SSE / n
+  }
+}
+```
+
+## Omitted Variable Bias
+
+
+## Censoring on the dependent variable
+
+## Heteroskedasticity
+
+```{r}
+# good thing there's autocomplete
+sim_heteroskedasticity <- function(sims, obs, b, X, sigma) {
+  # Create a list to stor the results
+  simulations <- list()
+  # Create a progress bar because progress bars are fun
+  p <- progress_estimated(sims, min_time = 2)
+  # Loop over the simulation runs
+  for (j in 1:sims) {
+    # The conditional expectation of y given X
+    # i.e. y-hat, the fitted values, regression line
+    mu <- b %*% X
+    
+    # Simulate y from the conditional expection + error
+    # y = mu + e
+    # mu = X * b
+    # e ~ N(0, sigma)
+    y <- mu + rnorm(n, mean = 0, sd = sigma)
+    
+    # Run a regression of the simulated y on the simulated X
+    # Note that neither y nor X is in a data frame
+    # also X is a matrix
+    # R is cool with that
+    mod <- lm(y ~ X)
+    
+    # Create a data.frame with the coef, se, t-stats, and using the broom function tidy
+    mod_df <- tidy(mod) %>%
+      # Add a column indicating the simulation number
+      mutate(.sim = j)
+      
+    # Save these results as the next element in the storage list
+    simulations[[j]] <- mod_df
+    
+    # Update the progress bar
+    p$tick()$print()
+  }
+  # Combine the list of data frames into a single data frame
+  simulations <- bind_rows(simulations)
+}
+
+```
+
+
+* * * 
+
+Ideas and problems derived from of Christopher Adolph, "Problem Set 3", *POLS/CSSS 503*, University of Washington, Spring 2014. <http://faculty.washington.edu/cadolph/503/503hw3.pdf>. Used with permission. Code here is original.
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+

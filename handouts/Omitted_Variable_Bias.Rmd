@@ -1,0 +1,23 @@
+---
+title: "Omitted Variable Bias"
+author: "Jeffrey B. Arnold"
+date: "04/28/2015"
+output:
+  rmarkdown::tufte_handout:
+    highlight: tango
+    keep_tex: true 
+---
+
+## Ommitted variable bias
+
+For omitted variable bias to hold, there needs to be a correct specification in the population.
+
+Suppose that the $true$ specification is
+$$
+Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \epsilon
+$$
+
+
+
+
+ 

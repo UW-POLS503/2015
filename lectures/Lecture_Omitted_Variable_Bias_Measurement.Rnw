@@ -1,0 +1,27 @@
+% Copyright (C) 2015 Jeffrey B. Arnold
+% License CC BY-NC-SA 4.0 http://creativecommons.org/licenses/by-nc-sa/4.0/
+\input{\jobname-options}
+\ifdefined\ishandout
+  \documentclass[12pt,handout]{beamer}
+\else
+  \documentclass[12pt]{beamer}
+\fi
+% HEADER HERE
+\input{includes.tex}
+
+\newcommand{\thetitle}{Introduction}
+\date{April 28, 2015}
+\title{\thetitle{}}
+\hypersetup{
+  pdftitle={\thetitle{}},
+  pdfkeywords={statistics}
+}
+\begin{document}
+
+\begin{frame}
+  \maketitle{}
+\end{frame}
+
+
+
+\end{document}
