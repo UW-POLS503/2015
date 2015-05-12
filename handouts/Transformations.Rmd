@@ -1,0 +1,19 @@
+---
+title: "POLS 503: Transformations"
+author: "Jeffrey Arnold"
+date: "April 28, 2015"
+output: 
+  rmarkdown::tufte_handout:
+    keep_tex: true
+    highlight: tango
+---
+
+# Residuals and Misspecification
+
+How can residuals be useful in 
+
+Let's look at the gapminder data 
+
+
+
+

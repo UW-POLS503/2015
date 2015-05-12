@@ -1,0 +1,69 @@
+---
+title: "POLS 503: Problem Set 3"
+author: Anonymous
+date: "April 30, 2015"
+output:
+  html_document: default
+---
+
+# Setup
+
+This homework depends on the following packages.
+```{r load, message = FALSE}
+library("ggplot2")
+library("dplyr")
+library("broom")
+library("assertthat")
+library("tidyr")
+library("pols503")
+```
+This homework uses functions from the distributed file `hw3-functions.R`.
+```{r}
+source("hw3-functions.R")
+```
+
+This code chunk sets default code chunk settings that will make your simulations quicker and reproducible: see the [R Markdown Reference Guide](http://www.rstudio.com/resources/cheatsheets/).
+In particular, it ensures that knitr will cache results so each time you compile,  you do not need to rerun simuations if things do not change. 
+```{r}
+library("knitr")
+opts_chunk$set(cache = TRUE,
+					    autodep = TRUE,
+					    cache.extra = rand_seed)
+```
+If code chunks do not evaluate, just delete that chunk or set `cache = FALSE` to force every.
+Finally, we would like to ensure that we get the same results each time it is run even though we are drawing random numbers.
+The way to do this is to set a seed for the random number generator.
+```{r seed}
+set.seed(11346170)
+```
+
+# Problems
+
+All simulations will use 1,024 iterations.
+```{r}
+iter <- 1024
+```
+
+## Problem 1: Linear Normal Model with Homoskedasticity
+
+My answer here ...
+
+## Problem 2: Correlated Covariates
+
+My answer here ...
+
+## Problem 3: Collinearity
+
+My answer here ...
+
+## Problem 4: P-Values, Type I and II Errors
+
+My answer here ...
+
+## Problem 5: Omitted Variable Bias
+
+My answer here ...
+
+## Problem 6: Heteroskedasticity
+
+My answer here .. 

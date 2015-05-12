@@ -23,3 +23,6 @@ __pycache__
 /lectures/*.pdf
 /lectures/Lecture_*.tex
 /lectures/figure/
+/handouts/OVB_Measurement_Error.pdf
+/handouts/OVB_Measurement_Error.tex
+/hw/hw3-template.html

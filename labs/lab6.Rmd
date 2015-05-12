@@ -1,0 +1,375 @@
+---
+title: Lab 6 - More Regression Interpretation
+author: Carolina Johnson, Jeffrey B. Arnold
+date: Friday May 8, 2015
+---
+
+```{r, results = 'hide', echo = FALSE}
+knitr::opts_chunk$set(tidy = TRUE,
+                      tidy.opts = list(width.cutoff = 60, indent = 2))
+```
+
+As always, start the lab by loading the packages we will be using.
+```{r, message=FALSE, warning=FALSE}
+library("car")
+library("lmtest")
+library("MASS")
+library("dplyr")
+library("ggplot2")
+library("broom")
+```
+
+
+
+
+## More on Interpretation
+
+Once more we'll use data from Ross on oil, this time from the earlier 2001 paper.
+```{r, results='hide'}
+rossdata_url <- "http://staff.washington.edu/csjohns/503/rossoildata.csv"
+rossdata_raw <- read.csv(rossdata_url, stringsAsFactors = FALSE)
+rossdata <- rossdata_raw %>%
+  select(cty_name, year, regime1, oil, GDPcap, oecd) %>%
+  na.omit()
+
+```
+
+Let's run the standard model from Ross for the relationship between oil and GDP.
+```{r}
+model1 <- lm(regime1 ~ GDPcap + oil + oecd + year, data = rossdata)
+summary(model1)
+```
+
+Now predict the expected value of regime type vs. oil:
+```{r}
+pred1_df <- data.frame(oil = seq(0, 100, by = 10),
+                       GDPcap = mean(rossdata$GDPcap), 
+                       oecd = 0,
+                       year = median(rossdata$year))
+pred1 <- predict(model1, newdata = pred1_df, interval = "confidence")
+
+ggplot(bind_cols(pred1_df, as.data.frame(pred1)),
+       aes(x = oil, y = fit, ymin = lwr, ymax = upr)) + 
+  geom_ribbon(alpha = 0.2) +
+  geom_line()
+```
+
+This is easiest to plot with `augment` instead
+```{r}
+pred1_aug <- augment(model1, newdata = pred1_df)
+ggplot(pred1_aug, aes(x = oil, y = .fitted,
+                      ymin = .fitted + 2 * .se.fit,
+                      ymax = .fitted - 2 * .se.fit)) + 
+  geom_ribbon(alpha = 0.2) +
+  geom_line()
+```
+
+**Challenge:** Do this with both OECD and non-OECD countries. Before plotting, 
+how will these differ? 
+
+**Answer:**
+```{r}
+pred2_df <- expand.grid(oil = seq(0, 100, by = 10),
+                        GDPcap = mean(rossdata$GDPcap), 
+                        oecd = c(0, 1),
+                        year = median(rossdata$year))
+pred2 <- predict(model1, newdata = pred2_df, interval = "confidence")
+ggplot(bind_cols(pred2_df, as.data.frame(pred2)),
+       aes(x = oil, y = fit, ymin = lwr, ymax = upr,
+           colour = factor(oecd), fill = factor(oecd))) + 
+  geom_ribbon(alpha = 0.2, colour = NA) +
+  geom_line()
+```
+
+This is easiest to plot with `augment` instead
+```{r}
+pred1_aug <- augment(model1, newdata = pred2_df)
+ggplot(pred1_aug, aes(x = oil, y = .fitted,
+                      ymin = .fitted + 2 * .se.fit,
+                      ymax = .fitted - 2 * .se.fit,
+                      fill = factor(oecd), colour = factor(oecd))) + 
+  geom_ribbon(alpha = 0.2, colour = NA) +
+  geom_line()
+```
+
+**Challenge:** Does it make sense to plot `oil` from 0 to 100? Check the range of `oil`.
+
+**Answer:** Surprisingly, not that bad.
+```{r}
+ggplot(rossdata, aes(x = oil)) + geom_density() + geom_rug()
+```
+
+
+**Challenge:** Interact `oil` with `oecd` and plot. What will the lines look like?
+
+```{r}
+model2 <- lm(regime1 ~ GDPcap + oil * oecd + year, data = rossdata)
+summary(model2)
+```
+
+Now consider interact `oil` with `year`. How would you plot two continuous variables?
+
+```{r}
+model3 <- lm(regime1 ~ GDPcap + oecd + oil * year, data = rossdata)
+summary(model3)
+```
+
+In order to interpret the interaction term graphically, we need to pick one variable to treat as continuous --- the x-axis --- and another for which we will choose specific values. 
+Use `oil` as the x-axis, and some values of `year` at which to evaluate it.
+For `year` we could use the min, max, and median.
+```{r}
+
+```
+
+```{r}
+pred3_newdata <- expand.grid(oecd = 0,
+                             GDPcap = mean(rossdata$GDPcap),
+                             year = c(1966, 1981, 1997),
+                             oil = seq(0, 100, by = 10))
+pred3 <- augment(model3, newdata = pred3_newdata)
+```
+Now, let's plot it,
+```{r}
+ggplot(pred3, aes(x = oil, y = .fitted,
+                  ymin = .fitted - 2 * .se.fit,
+                  ymax = .fitted + 2 * .se.fit,
+                  colour = factor(year))) +
+  geom_line() +
+  scale_colour_discrete("year")
+```
+
+This could also be visualized with colour and contours
+```{r}
+pred3_newdata <- expand.grid(oecd = 0,
+                             GDPcap = mean(rossdata$GDPcap),
+                             year = unique(rossdata$year),
+                             oil = seq(0, 100, by = 1))
+pred3 <- augment(model3, newdata = pred3_newdata)
+ggplot(pred3, aes(x = oil, y = year,
+                  fill = .fitted,
+                  z = .fitted)) +
+  geom_tile() +
+  geom_contour(colour = "black") +
+  scale_colour_discrete("year")
+```
+
+**Challenge** Interact `GDPpc` with oil and visualize the interactions.
+
+## First Differences
+
+A common way of comparing the effect of a variable is to compare the results on $\hat{y}$
+for a variable at its mean and at its mean plus one standard deviation, holding
+all other variables at their means (if continuous), and their 
+```{r}
+year_seq <- seq(min(rossdata$year), max(rossdata$year), by = 1)
+oil_lo <- mean(rossdata$GDPcap)
+oil_hi <- mean(rossdata$GDPcap) + sd(rossdata$GDPcap)
+pred3_oil_lo <-
+  predict(model3,
+          newdata = data.frame(year = year_seq,
+                               GDPcap = mean(rossdata$GDPcap), 
+                               oil = oil_lo,
+                               oecd = 0),
+          interval = "confidence")
+
+pred3_oil_hi <-
+  predict(model3,
+          newdata = data.frame(year = year_seq,
+                               GDPcap = mean(rossdata$GDPcap), 
+                               oil = oil_hi,
+                               oecd = 0),
+          interval = "confidence")
+```
+
+The first difference is calculated.
+Note that there are no standard error associated with these differences.
+```{r}
+pred3_diff <- data.frame(year = year_seq,
+                         diff = pred3_oil_hi[ , "fit"] - pred3_oil_lo[ , "fit"])
+head(pred3_diff)
+```
+We could plot these differences over time.
+```{r}
+ggplot(pred3_diff, aes(x = year, y = diff)) +
+  geom_point() +
+  geom_hline(yintercept = 0, colour = "red") +
+  scale_y_continuous("Change in democracy")
+```
+
+# Transformations
+
+What if we suspect the effect of oil is non-linear?
+
+```{r}
+model4 <- lm(regime1 ~ GDPcap + oil + I(oil^2) + oecd, data = rossdata)
+summary(model4)
+```
+
+```{r}
+model4 <- lm(regime1 ~ GDPcap + oil + I(oil ^ 2) + oecd, data = rossdata)
+summary(model4)
+
+pred4 <- predict(model4,
+                 newdata = data.frame(oil = seq(from = 0.01, to = 100, by = 10),
+                                      GDPcap = mean(rossdata$GDPcap),
+                                      oecd = 0),
+                 interval = "confidence")
+
+```
+
+
+**Challenge:** Transform GDP per capita by log.
+
+**Challenge:** Transform oil by log. What happens?  How would you solve it?
+
+Log of 0 is undefined. This is often handled by adding and arbitrary small value to 0's.
+In this case we'll add 0.001. 
+There are better ways to deal with this, but for now...
+
+```{r}
+model5 <- lm(regime1 ~ GDPcap + log(oil_mod) + oecd,
+             data = mutate(rossdata, oil_mod = log(oil + 0.001)))
+summary(model5)
+
+pred5 <- predict(model5,
+                 newdata = data.frame(oil_mod = seq(from = 0.01, to = 100, by = 10),
+                                      GDPcap = mean(rossdata$GDPcap),
+                                      oecd = 0),
+                 interval = "confidence")
+
+```
+
+
+# Robust standard errors
+
+We can calculate heteroskedasticity consistent (robust, White) standard errors using the **car** function `hccm`:
+
+The robust standard errors for the coefficients of `model1` are:
+```{r}
+sqrt(diag(hccm(model1)))
+```
+
+Are they different than the classical standard errors of those in `model1`?
+
+To use the robust standard errors in a significance test supply the robust variance-covariance matrix to the `coeftest` function from the **lmtest** package:
+```{r}
+coeftest(model1, hccm(model1))
+```
+
+
+# Post-estimation Diagnostics
+
+Recall the default model,
+```{r}
+model1
+```
+
+We can use the functions `residuals` and `predict` to extract residuals and fitted values from an `lm` object:
+```{r eval=FALSE}
+residuals(model1)
+fitted(model1)
+```
+However, the function `augment` easily returns these as `.fit` and `.resid`.
+```{r}
+model1_aug <- augment(model1)
+```
+
+We can plot the fitted values vs. the outcome variable to look for nonlinearity,
+```{r}
+ggplot(model1_aug, aes(x = regime1, y = .fitted)) + 
+  geom_point() +
+  geom_smooth() +
+  ylab("E(Democracy | X)") +
+  xlab("Democracy")
+```
+or the residuals vs. the fitted values to look for heteroskedasticity
+```{r}
+ggplot(model1_aug, aes(x = .fitted, y = .resid)) + 
+  geom_point() +
+  geom_hline(yintercept = 0, colour = "red") + 
+  ylab("Residual") +
+  xlab("E(Democracy | X)")
+```
+
+**Challenge:** What accounts for the unusual patterns? *hint:* What values can Democracy take?
+
+It is obvious in this case, but plotting the sqrt of the absolute value of the errors can make it more clear
+```{r}
+ggplot(model1_aug, aes(x = .fitted, y = sqrt(abs(.std.resid)))) + 
+  geom_point() +
+  geom_hline(yintercept = 0, colour = "red") + 
+  geom_smooth(se = FALSE) +
+  ylab("Residual") +
+  xlab("E(Democracy | X)")
+```
+
+
+**Challenge:** Plot residuals against each independent variable, and the fitted values. 
+Is there evidence of heteroskedasticity or nonlinearity?
+
+What about the normality of errors? 
+
+```{r}
+ggplot(model1_aug, aes(sample = .std.resid)) + 
+  stat_qq() + 
+  geom_abline(slope = 1)
+```
+
+For more advanced residual plots see **car** functions:
+
+- `avPlots`: added variable plot
+- `ceresPlots`, `crPlots`: Component + residual (partial residual) plots
+- `residualPlots`
+
+Also try using `plot` on an `lm` object:
+```{r eval=FALSE}
+plot(model1)
+```
+
+
+# Writing to a file
+
+You can use the function `write.csv` to save data to a csv file.
+
+Try it!
+
+You can use the function `save` to a save R objects to a native R file format.
+Save these to files ending in `.RData`. 
+You can then load the objects back into your workspace using `load()`.
+tor reproducibility and transparancy it is better to save your data in language agnostic file formats, such as csvs, rather than language specific formats like `.RData` (R) or `.dta` (Stata).
+
+# A quick introduction to functions
+
+This is an example of a really stupid R function that adds two to each variable.
+```{r}
+add2 <- function(x) {
+  x + 2
+}
+```
+Try it ...
+
+Functions are a way of encapsulating and reusing code. 
+It takes a set of inputs (arguments), does some computation in its body, and then 
+returns the result.
+
+A *slightly* more realistic function is one that calculates the difference between the min and maximum value of a vector, i.e. the range: 
+```{r}
+diff_min_max <- function(x) {
+  max(x) - min(x)
+}
+```
+IRL, you would you the `range` function, but this is for pedagogy.
+
+1. Write a function that calculates the difference between the 97.5 and 2.5 percentiles.
+2. Now add a parameter that lets you set the values of the quantiles to use in the difference. This means that instead of 97.5 and 2.5, you can use any values.
+
+For more on writing functions see: <http://www.ats.ucla.edu/stat/r/library/intro_function.htm>
+
+<!-- Next time, create a function to encapsulate a plot type -->
+
+
+# Sources
+
+- Oil data from : Ross 2001.
+- <http://staff.washington.edu/csjohns/503/lab5.r>
+- <http://staff.washington.edu/csjohns/503/lab6.r>

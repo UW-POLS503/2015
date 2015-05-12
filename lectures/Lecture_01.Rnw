@@ -48,7 +48,7 @@
   \frametitle{What are we covering in this course?}
   
   \begin{center}
-    \includegraphics{images/Data_Science_VD.png}    
+    \includegraphics{Data_Science_VD.png}    
   \end{center}
 
 \end{frame}
@@ -104,7 +104,7 @@
 
 % \begin{frame}
 %   \frametitle{Causal Inference}
-%   \includegraphics{images/correlation.png}
+%   \includegraphics{correlation.png}
 % \end{frame}
 
 % \begin{frame}
@@ -130,7 +130,7 @@
 
 \begin{frame}
   \begin{center}
-    \includegraphics{images/Rlogo.pdf}    
+    \includegraphics{Rlogo.pdf}    
   \end{center}
 \end{frame}
 
@@ -188,7 +188,7 @@
   \frametitle{Space Shuttle Challenger Exploded in 1986}
   
   \begin{center}
-    \includegraphics{images/Challenger_explosion.jpg}
+    \includegraphics{Challenger_explosion.jpg}
   \end{center}
   
 \end{frame}
@@ -197,7 +197,7 @@
   \frametitle{What Pattern Do You See? }
 
   \begin{center}
-    \includegraphics{images/challenger2.png}
+    \includegraphics{challenger2.png}
   \end{center}
 
 \end{frame}
@@ -206,7 +206,7 @@
 
 \begin{frame}
   \begin{center}
-    \includegraphics{images/Under_Construction.jpeg}    
+    \includegraphics{Under_Construction.jpeg}    
   \end{center}
 \end{frame}
 

@@ -126,10 +126,11 @@ NAVIGATION_LINKS = {
         ("/index.html", "Syllabus"),
         (
             (
-                ("hw/hw1.html", "HW 1"),
-                ("hw/hw2.html", "HW 2"),
+                ("hw/hw1.html", "PS 1"),
+                ("hw/hw2.html", "PS 2"),
+                ("hw/hw3.html", "PS 3"),
             ),
-            "Homeworks"
+            "Problem Sets"
         ),
         ("/posts", "Posts"),
         ("/data.html", "Data"),
@@ -234,7 +235,8 @@ PAGES = (
 # The format is a dictionary of {source: relative destination}.
 # Default is:
 FILES_FOLDERS = {'files': '',
-                 '../data': 'data'}
+                 '../data': 'data',
+                 '../images': 'images'}
 # Which means copy 'files' into 'output'
 
 # One or more folders containing listings to be processed and stored into
@@ -733,7 +735,7 @@ COMMENT_SYSTEM_ID = ""
 # Generally, you want FUTURE_IS_NOW and DEPLOY_FUTURE to be the same value.
 # DEPLOY_FUTURE = False
 # If False, draft posts will not be deployed
-# DEPLOY_DRAFTS = True
+DEPLOY_DRAFTS = False
 
 # Allows scheduling of posts using the rule specified here (new_post -s)
 # Specify an iCal Recurrence Rule: http://www.kanzaki.com/docs/ical/rrule.html

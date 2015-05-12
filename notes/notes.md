@@ -66,3 +66,48 @@ Focus on a set of specific functions. Generally focus on the Hadleyverse.
     * stargazer: both html and latex
 	* comparison http://stackoverflow.com/questions/5465314/tools-for-making-latex-tables-in-r
     * http://conjugateprior.org/2013/10/call-them-what-you-will/, http://conjugateprior.org/2013/03/r-to-latex-packages-coverage/
+
+# Example Datasets
+
+- Regression
+
+    - Duncan Occupational Prestige  (car)
+        - Regression Example: http://faculty.washington.edu/cadolph/503/topic4.pw.pdf
+    - SLID: Survey of Labor and Income Dynamics in Canada (car)
+	- Tufte 1976 Congressional (King, Tomz, Wittenberg)
+	- Ansolabehere, Stephen, and David M. Konisky. , "The introduction of voter registration and its effect on turnout." used in Using Graphs Instead of Tables in Political Science.
+	- Weight as function of age, height. Gelman and Hill example.
+	- Mortality rates and various environmental factors from 60 US cities. Gelman and Hill example.
+	- Belgian phone calls (MASS, Adolph http://faculty.washington.edu/cadolph/503/topic6.pw.pdf). Used for Robust regression.
+
+    - Challenger Explosion
+
+        - http://faculty.washington.edu/cadolph/503/topic1.pw.pdf. Plotting data.
+	- Annual US GDP growth under different parties
+	
+	    - http://faculty.washington.edu/cadolph/503/topic1.pw.pdf#page=56 Simple comparison of means.
+
+    - Cross-national data on fertility (children born per adult female) and the percentage of women practicing contraception from Robey.
+	
+        - http://faculty.washington.edu/cadolph/503/topic1.pw.pdf#page=69 Simple linear regression.
+
+	- Iverson and Sosice. Redistribution in Rich Economies. (Outliers/Roubst regression)
+	    - http://faculty.washington.edu/cadolph/503/topic6.pw.pdf Outlier
+		- http://faculty.washington.edu/cadolph/503/topic2.pw.pdf#page=8 Basic linear regression example. Redistribuion on log effective number of parties, majoritarian, and proportional. Only 14 points.
+		
+	- Life Expectancy Data in 1985 (Barro and Lee)
+	
+        - http://faculty.washington.edu/cadolph/503/topic5.pw.pdf. Specification.
+	
+    - Duncan Occupational Prestige  (car)
+	
+        - Regression Example: http://faculty.washington.edu/cadolph/503/topic4.pw.pdf
+
+    - Ross 2001 Oil Data. Labs
+	- NES. Labs for Logit
+
+- Logit
+    - Nyblade and Krauss (2006), "Logit analysis of electoral incentives and LDP post allocation" used in Using Graps Instead of Tables
+
+
+
