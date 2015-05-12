@@ -54,12 +54,12 @@ Here, we use Monte Carlo not out of necessity but for pedagogical purposes, as a
 1. Create a new R project for this homework named `hw3` and load that project.
 2. Do your analyses in an R markdown document based off of [hw3-template.Rmd](hw3-template.Rmd)
 2. Download [hw3-functions.R](hw3-functions.R) and save in to your project directory.
-3. Submit a zipped file of the directory with your R project through Canvas. This should contain all the materials for another person to run your R Markdown fil  This should contain:
+3. Submit a zipped file of the directory with your R project through Canvas. This should contain all the materials for another person to run your R Markdown file  This should contain:
 
     - The R project (`.Rproj`) file
 	  - The R Markdown document (`.Rmd`) of your analyses
 	  - An HTML document (`.html`) compiled from your R Markdown document.
-	  - Any data or other files neede to run the analyses in your R Markdown doceument.
+	  - Any data or other files needed to run the analyses in your R Markdown document.
 
 4. Your R Markdown file should follow the guidance from [here](http://pols503.github.io/pols_503_sp15/r_markdown_assignments.html) and your R code should follow the guidelines [here](http://pols503.github.io/pols_503_sp15/r_best_practices.html).
 5. Turn in a paper copy of the document compiled from the analyses at lab.
@@ -212,7 +212,7 @@ This will be especially useful when storing the results from many simulations.
 mod_df <- tidy(mod)
 ```
 The function `tidy` does not include a heteroskedasticity consistent standard error, and we would like to compare that to the classical standard error in some simulations.
-We will use the function `hccm` from the **car** package to calculate the heterorskedasticity robust standard error.
+We will use the function `hccm` from the **car** package to calculate the heteroskedasticity robust standard error.
 ```{r}
 mod_df[["std.error.robust"]] <- sqrt(diag(car::hccm(mod)))
 ```
@@ -607,7 +607,7 @@ Create a vector when $\gamma_1 = 0$,
 gamma1_values <- c(0, 0.2, 0.7)
 ```
 
-To give a better sense of what heteroskedasticity at various values of $\gamma_1$ correspond to, the following plot displays a scatterplot and a regression line for different values of $\gamma_1$:
+To give a better sense of what heteroskedasticity at various values of $\gamma_1$ correspond to, the following plot displays a scatter plot and a regression line for different values of $\gamma_1$:
 ```{r echo = FALSE}
 hsk_samples <- data.frame(gamma1 = gamma1_values) %>%
   group_by(gamma1) %>%
@@ -686,7 +686,7 @@ Estimate the regression only on those $y_i$ greater than the median of $y$.
 Before running simulations, draw a single sample of a linear normal model with homoskedastic errors.
 To do this, you should be able to adapt the code from `sim_lin_normal_truncated`.
 Create a scatter plot with the OLS line for all $y$, and a another plot with only those $y$ less than the median of $y$.
-How idoes the OLS line estimated on the truncated data differ from the one estimated on the untruncated data.
+How does the OLS line estimated on the truncated data differ from the one estimated on the full data.
 
 Run several simulations with `sim_lin_normal_truncated` and vary the sample size.
 How does the sample size affect the following:
