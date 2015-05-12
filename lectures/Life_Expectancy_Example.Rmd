@@ -5,4 +5,176 @@ date: "05/12/2015"
 output: html_document
 ---
 
+This example will use data from the Barro and Lee dataset to analyze 
+life expectancy. 
+This is a pedagogical example, and does not represent a sophisticated epidemiological model.
+Data are 138 countries in 1985.
+
+```{r barro_csv}
+barro_raw <- read.csv("http://pols503.github.io/pols_503_sp15/data/barro.csv")
+```
+
+Subset of barro data with only the variables we need, and dropping missing observations.
+```{r barro}
+barro <- barro_raw %>%
+  select(lifeexp, school, gdpcap85,
+         civlib5, wartime) %>%
+  na.omit
+
+glimpse(barro)
+```
+
+gdpcap85
+
+:   Per capita GDP in 1985, thousands of international dollars
+
+school
+
+:   Average years of education
+
+civlib5
+
+:   low = 1 to high = 7 scale of civil liberties
+
+wartime
+
+:   Percent of recent history spent at war
+
+
+Regression of Life Expectancy on `gdpcap85`, `school`, `civlib5`, and `wartime`.
+
+```{r mod1}
+mod1 <- lm(lifeexp ~ gdpcap85 + school + civlib5 + wartime,
+           data = barro)
+```
+
+```{r mod1}
+mod2 <- lm(lifeexp ~ log(gdpcap85) + log(school) + civlib5 + wartime,
+           data = barro)
+```
+
+## Comparing the two models
+
+```{r mod1_glance}
+glance(mod1)
+```
+
+```{r}
+glance(mod2)
+```
+
+```{r}
+library(boot)
+
+mod1_glm <- glm(lifeexp ~ gdpcap85 + school + civlib5 + wartime, data = barro, na.action="na.omit")
+
+# Note the use of glm rather than lm
+cv_err_K10 <- cv.glm(barro, mod1_glm, K=10)
+
+# This runs the cross-validation
+cv_err_K10$delta
+
+```
+And the logged model
+```{r}
+mod2_glm <- glm(lifeexp ~ log(gdpcap85) + log(school) + civlib5 + wartime, data = barro, na.action = "na.omit")
+
+cv_err_K10 <- cv.glm(barro, mod2_glm, K=10)
+
+# This runs the cross-validation
+cv_err_K10$delta
+```
+
+Leave-one-out cross-validation
+```{r}
+cv.glm(barro, mod1_glm)$delta
+cv.glm(barro, mod2_glm)$delta
+
+```
+
+```{r}
+augment(lm(lifeexp ~ log(gdpcap85) + log(school) + civlib5 + wartime,
+        data = barro))
+```
+
+
+## Predictive Comparisons by Simulation and Bootstrap
+
+### Simulating Coefficients from Asymptotic Normal
+
+We want to compare data 
+
+Use the method of King, Tomz, et al.
+
+Draw simulation
+$$
+\tilde\beta \sim N(\hat\beta, V(\hat\beta))
+$$
+This relies on the CLT result that $\hat\beta$ approx multivariate normal as $n \to \infty$.
+```{r}
+n <- 1024
+simbetas <- MASS::mvrnorm(n, coef(mod1), vcov(mod2))
+```
+
+For `log(gdp)` compare it at its mean versus 1 standard deviation
+```{r}
+barro_low <- summarize(na.omit(barro),
+                      gdpcap85 = exp(mean(log(gdpcap85))),
+                      school = exp(mean(log(school))),
+                      civlib5 = mean(civlib5),
+                      wartime = mean(wartime))
+barro_high <- summarize(na.omit(barro),
+                       gdpcap85 = exp(mean(log(gdpcap85)) + sd(log(gdpcap85))),
+                       school = exp(mean(log(school))),
+                       civlib5 = mean(civlib5),
+                       wartime = mean(wartime))
+```
+
+
+
+Simulate and calculate a standard error around the difference
+```{r}
+xlow <- model.matrix(~ log(gdpcap85) + log(school)
+                      + civlib5 + wartime, data = barro_low)
+xhigh <- model.matrix(~ log(gdpcap85) + log(school)
+                      + civlib5 + wartime, data = barro_high)
+diffs <- rep(NA, nrow(simbetas))
+for (i in 1:nrow(simbetas)) {
+  betas <- simbetas[i, ]
+  diffs[i] <- xhigh %*% betas - xlow %*% betas
+}
+
+```
+
+This could be done much easier with **Zelig** or **simcf**.
+
+## Bootstrapping
+
+The function `Boot` from **car** can be used to bootstrap coefficients.
+```{r}
+Boot(mod2)
+```
+
+The **boot** package has more powerful and general functions.
+
+Bootstrapping can be done manually with `dplyr` functions:
+```{r}
+simulations <- list()
+for (i in 1:1024) {
+  # Randomly resample data
+  .data <- sample_frac(barro, replace = TRUE)
+  # Run a new regression
+  mod <- lm(lifeexp ~ log(gdpcap85) + log(school) + civlib5 + wartime, data = .data)
+  # Predict
+  lower <- predict(mod, newdata = barro_low)
+  higher <- predict(mod, newdata = barro_high)
+  simulations[[i]] <-
+    data.frame(diff = higher - lower)
+}
+sims <- bind_rows(simulations)
+
+quantile(sims$diff, c(0.025, 0.975))
+```
+
+This could also be done using the `bootstrap` function in **broom**.
 

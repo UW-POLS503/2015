@@ -217,6 +217,28 @@ ggplot(smpl1, aes(x = V1, y = y, colour = within)) +
 
 \end{frame}
 
+
+\subsection{Standard Error of the Regression}
+
+\begin{frame}
+  \frametitle{Standard Error of the Regression}
+  
+  \begin{equation*}
+    \hat{\sigma} = S_{E} = \sqrt{\frac{\sum E^{i}^{2}}{n - k - }}
+  \end{equation*}
+  
+  \begin{itemize}
+    
+  \item $S_E$ is at least as useful to report as $R^{2}$
+  \item $S_{E}$ is the average error $E_{i}$
+  \item On the same scale as $y$. Substantive significance can be clearer.
+  \item Smaller $S_{E}$ is better
+  \end{itemize}
+  
+\end{frame}
+
+\subsection{Information Criteria}
+
 \begin{frame}
   \frametitle{Information Criteria}
 
@@ -234,6 +256,8 @@ ggplot(smpl1, aes(x = V1, y = y, colour = within)) +
   \end{itemize}
 
 \end{frame}
+
+\subsection{Out-of-Sample and Cross-Validation Method}
 
 \begin{frame}
   \frametitle{Out of Sample Methods}
