@@ -19,6 +19,7 @@ Questions
 - Is there any point of AIC/BIC anymore instead of using CV
 - Why x-fold cross-validation? What percentage of observations should be held-out for cross-validation.
 - Will reviewers understand cross-validation? If not, how to justify its use, even if better.
+- Does CV assume that the test dataset is representative of the training? I discussed issue with spatial, temporal, and stratified data.
 
 Comments
 
