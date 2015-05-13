@@ -25,8 +25,8 @@ suppressPackageStartupMessages({
 
 \usepackage{verbatim}
 
-\newcommand{\thetitle}{Transformations}
-\date{May 5, 2015}
+\newcommand{\thetitle}{Model Specification and Fit}
+\date{May 12, 2015}
 \title{\thetitle{}}
 \hypersetup{
   pdftitle={\thetitle{}},
@@ -212,11 +212,10 @@ ggplot(smpl1, aes(x = V1, y = y, colour = within)) +
   \begin{itemize}
   \item Unlike $R^{2}$, treat squared error terms as estimates of populatio, not sample statistics.
   \item How does it change with respect to $n$? With respect to $s_j$?
-  \item No other deep justification
+  \item But it is an ad hoc adjustment
   \end{itemize}
 
 \end{frame}
-
 
 \subsection{Standard Error of the Regression}
 
@@ -224,7 +223,7 @@ ggplot(smpl1, aes(x = V1, y = y, colour = within)) +
   \frametitle{Standard Error of the Regression}
   
   \begin{equation*}
-    \hat{\sigma} = S_{E} = \sqrt{\frac{\sum E^{i}^{2}}{n - k - }}
+    \hat{\sigma} = S_{E} = \sqrt{\frac{\sum E_{i}^{2}}{n - k - 1}}
   \end{equation*}
   
   \begin{itemize}
@@ -240,19 +239,45 @@ ggplot(smpl1, aes(x = V1, y = y, colour = within)) +
 \subsection{Information Criteria}
 
 \begin{frame}
+  \frametitle{Likelihood}
+  
+  \begin{itemize}
+  \item Likelihood is the probability of observing the data given a statistical model.
+  \item For a normal linear model, the likelihood is
+    \begin{equation*}
+      p(y) = \prod_{i} N(y_{i}| X_{i} \beta, \sigma_{\epsilon}^{2}) = \prod_{i} \frac{1}{\sigma_{\epsilon}} \exp
+      \left(
+        - \frac{(y_{i} - x'_{i} \beta)^{2}}{2 \sigma^{2}_{\epsilon}}
+      \right)
+      =  \prod_{i}
+      \frac{1}{\sigma_{\epsilon} \sqrt{2 \pi}}
+      \left(
+        - \frac{\epsilon_{i}^{2}}{2 \sigma^{2}_{\epsilon}}
+      \right)
+    \end{equation*}
+  \item For computational stability (the product of probabilities is a small number), the log likelihood is usually used
+    \begin{equation*}
+      \log p(y) \propto \sum_{i} \epsilon_{i}^{2}
+    \end{equation*}
+  \item The 
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
   \frametitle{Information Criteria}
 
-  \begin{align*}
-    AIC_j &= -2 \log_e L(\hat{\theta}_{j}) + 2 s_{j} \\
-    BIC_j &= -2 \log_e L(\hat{\theta}_{j}) + s_{j} \log_{e} n
-  \end{align*}
-
   \begin{itemize}
-  \item Likelihood based methods with a penalty for complexity.
-  \item Likelihood: $L(\hat{\theta}_{j}) = n \log_{e} \hat{\sigma}_{\epsilon}^{(j)2}$
+  \item Information criteria are the Log Likelihod + a penalty for complexity
+  \item The two Most common are AIC and BIC:
+    \begin{align*}
+      AIC_j &= -2 \log L(\hat{\theta}) + 2 k \\
+      BIC_j &= -2 \log L(\hat{\theta}) + k \log n
+    \end{align*}
+  \end{itemize}
+  \begin{itemize}
   \item Lower is better
   \item Smaller values = better fit
-  \item Deeper motivations for each -- information theory, Bayes factors, CV approximations.
   \end{itemize}
 
 \end{frame}
@@ -326,15 +351,15 @@ ggplot(smpl1, aes(x = V1, y = y, colour = within)) +
     \end{enumerate}
   \item Usual methods:
     \begin{itemize}
-    \item Leave-one-out (LOO-CV):
-    \item 10-fold cross-validation
+    \item Leave-one-out (LOO-CV).
+    \item 5-- or 10--fold cross-validation
     \end{itemize}
   \item Best model minimizes MSE
   \end{itemize}
 
 \end{frame}
 
-\section{General Advice}
+\section{General Advice on Model Selection}
 
 \begin{frame}
   \frametitle{Fox on Model Selection}
