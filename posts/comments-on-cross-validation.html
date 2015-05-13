@@ -6,13 +6,13 @@ article: http://ogp.me/ns/article#
     <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Reminder for Problem Set 3 | POLS/CS&amp;SS 503</title>
+    <title>Comments on Cross Validation | POLS/CS&amp;SS 503</title>
 
                 <link href="../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
 
                 <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.xml">
 
-      <link rel="canonical" href="http://pols503.github.io/pols_503_sp15/posts/reminder-for-problem-set-3.html">
+      <link rel="canonical" href="http://pols503.github.io/pols_503_sp15/posts/comments-on-cross-validation.html">
 
             <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-76x76.png" sizes="76x76">
             <link rel="icon" href="../favicon-96x96.png" sizes="96x96">
@@ -39,16 +39,15 @@ article: http://ogp.me/ns/article#
 
     
     <meta name="author" content="Jeffrey Arnold">
-        <link rel="prev" href="update-2-to-problem-set-3.html" title="Update 2 to Problem Set 3" type="text/html">
+        <meta name="robots" content="noindex">
         <meta property="og:site_name" content="POLS/CS&amp;SS 503">
-    <meta property="og:title" content="Reminder for Problem Set 3">
-    <meta property="og:url" content="http://pols503.github.io/pols_503_sp15/posts/reminder-for-problem-set-3.html">
-    <meta property="og:description" content="Before you turn it in, some reminders regarding Problem Set 3:
-
-You need to answer the problems with natural language — i.e. what humans use — in addition to code. Explain what your answer is and how ">
+    <meta property="og:title" content="Comments on Cross Validation">
+    <meta property="og:url" content="http://pols503.github.io/pols_503_sp15/posts/comments-on-cross-validation.html">
+    <meta property="og:description" content="To answer a few questions brought up in class regarding cross-validation and prediction. General recommendations for hold-out training data
+For the number folds in cross-validation, the recommended va">
     <meta property="og:type" content="article">
-    <meta property="article:published_time" content="2015-05-11T18:34:11-07:00">
-           <meta property="article:tag" content="problem sets">
+    <meta property="article:published_time" content="2015-05-13T00:00:22-07:00">
+           <meta property="article:tag" content="cross validation">
 
     
     
@@ -140,7 +139,7 @@ You need to answer the problems with natural language — i.e. what humans use 
 
             <ul class="nav navbar-nav navbar-right">
     <li>
-    <a href="reminder-for-problem-set-3.md" id="sourcelink">Source</a>
+    <a href="comments-on-cross-validation.md" id="sourcelink">Source</a>
     </li>
                 
             </ul>
@@ -159,12 +158,12 @@ You need to answer the problems with natural language — i.e. what humans use 
             
 <article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article">
         <header>
-            <h1 class="p-name entry-title" itemprop="headline name"><a href="#" class="u-url">Reminder for Problem Set 3</a></h1>
+            <h1 class="p-name entry-title" itemprop="headline name"><a href="#" class="u-url">Comments on Cross Validation</a></h1>
 
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn">Jeffrey Arnold</span></p>
-            <p class="dateline"><a href="#" rel="bookmark"><time class="published dt-published" datetime="2015-05-11T18:34:11-07:00" itemprop="datePublished" title="2015-05-11 18:34">2015-05-11 18:34</time></a></p>
-                    <p class="sourceline"><a href="reminder-for-problem-set-3.md" id="sourcelink">Source</a></p>
+            <p class="dateline"><a href="#" rel="bookmark"><time class="published dt-published" datetime="2015-05-13T00:00:22-07:00" itemprop="datePublished" title="2015-05-13 00:00">2015-05-13 00:00</time></a></p>
+                    <p class="sourceline"><a href="comments-on-cross-validation.md" id="sourcelink">Source</a></p>
 
         </div>
         
@@ -172,10 +171,10 @@ You need to answer the problems with natural language — i.e. what humans use 
 
     <div class="e-content entry-content" itemprop="articleBody text">
     <!--
-.. title: Reminder for Problem Set 3
-.. slug: reminder-for-problem-set-3
-.. date: 2015-05-11 18:34:11 UTC-07:00
-.. tags: problem sets
+.. title: Comments on Cross Validation
+.. slug: comments-on-cross-validation
+.. date: 2015-05-13 00:00:22 UTC-07:00
+.. tags: cross validation, draft
 .. category: 
 .. link: 
 .. description: 
@@ -183,25 +182,36 @@ You need to answer the problems with natural language — i.e. what humans use 
 .. author: Jeffrey Arnold
 -->
 
-<p>Before you turn it in, some reminders regarding Problem Set 3:</p>
-<ol style="list-style-type: decimal">
-<li>You need to answer the problems with natural language — i.e. what humans use — in addition to code. Explain what your answer is and how the code you ran supports your conclusion.</li>
-<li>Format your problem set so it is clear and easy to read. Clearly separate the problems, and parts of problems. If you follow the template, this should not be much of an issue.</li>
-<li>Show code, but do not show any more than is necessary. Remove extraneous messages, and print no more output than is necessary to support your claims. Anything else only creates confusion confusion.</li>
+<p>To answer a few questions brought up in class regarding cross-validation and prediction. General recommendations for hold-out training data</p>
+<p>For the number folds in cross-validation, the recommended values are 5- or 10-fold cross validation. At these values, the generalization error has a good combination of <a href="http://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff">bias and variance</a>.<a href="comments-on-cross-validation.html#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> For model validation with a single hold-out sample the convention appears to be to use 70-80% of the data for training, and 20-30% for testing. However, it is more efficient to use cross-validation methods if possible.</p>
+<p>For examples of cross-validation or prediction in political science research. You can point to them, and their arguments, to justify the use of cross-validation in your own work.</p>
+<ul>
+<li>Hill, Daniel W. Jr., and Zachary M. Jones. 2014. “An Empirical Evaluation of Explanations for State Repression.” <em>American Political Science Review</em> 108(03): 661–87. <a href="http://journals.cambridge.org/article_S0003055414000306">http://journals.cambridge.org/article_S0003055414000306</a>
+</li>
+<li>Ward, Michael D., Brian D. Greenhill, and Kristin M. Bakke. 2010. “The Perils of Policy by P-Value: Predicting Civil Conflicts.” <em>Journal of Peace Research</em> 47(4): 363–75. <a href="http://jpr.sagepub.com/content/47/4/363">http://jpr.sagepub.com/content/47/4/363</a>
+</li>
+<li>Ward, Michael D., and Peter D. Hoff. 2007. “Persistent Patterns of International Commerce.” Journal of Peace Research 44(2): 157–75. <a href="http://jpr.sagepub.com.offcampus.lib.washington.edu/content/44/2/157">http://jpr.sagepub.com.offcampus.lib.washington.edu/content/44/2/157</a>
+</li>
+<li>Hoff, Peter D., and Michael D. Ward. 2004. “Modeling Dependencies in International Relations Networks.” <em>Political Analysis</em> 12(2): 160–75. <a href="http://pan.oxfordjournals.org.offcampus.lib.washington.edu/content/12/2/160">http://pan.oxfordjournals.org.offcampus.lib.washington.edu/content/12/2/160</a>
+</li>
+<li>Fariss, Christopher J., and Zachary M. Jones. “Enhancing Validity in Observational Settings When Replication Is Not Possible.” <a href="http://zmjones.com/static/papers/replication.pdf">http://zmjones.com/static/papers/replication.pdf</a>
+</li>
+<li>Beck, Nathaniel, Gary King, and Langche Zeng. 2000. “Improving Quantitative Studies of International Conflict: A Conjecture.” <em>The American Political Science Review</em> 94(1): 21–35.</li>
+</ul>
+<div class="footnotes">
+<hr>
+<ol>
+<li id="fn1"><p>See <a href="http://statweb.stanford.edu/~tibs/ElemStatLearn/printings/ESLII_print10.pdf#page=261">Hastie, Tibshirani, and Friedman</a>, <em>Elements of Statistical Learning</em>, p. 242.<a href="comments-on-cross-validation.html#fnref1">↩</a></p></li>
 </ol>
+</div>
     </div>
     <aside class="postpromonav">
     <nav>
             <ul itemprop="keywords" class="tags">
-           <li><a class="tag p-category" href="../categories/problem-sets.html" rel="tag">problem sets</a></li>
+           <li><a class="tag p-category" href="../categories/cross-validation.html" rel="tag">cross validation</a></li>
         </ul>
 
-            <ul class="pager">
-            <li class="previous">
-                <a href="update-2-to-problem-set-3.html" rel="prev" title="Update 2 to Problem Set 3">Previous post</a>
-            </li>
-        </ul>
-
+    
     </nav>
     </aside>
     
