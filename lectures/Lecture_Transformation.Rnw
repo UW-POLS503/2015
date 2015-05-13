@@ -7,6 +7,7 @@ source("init.R")
 @
 <<header>>=
 suppressPackageStartupMessages({
+  library("car")
   library("gapminder")
 })
 @

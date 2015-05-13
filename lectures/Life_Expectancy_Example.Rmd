@@ -5,6 +5,14 @@ date: "05/12/2015"
 output: html_document
 ---
 
+```{r message=FALSE}
+library("car")
+library("dplyr")
+library("broom")
+library("boot")
+```
+
+
 This example will use data from the Barro and Lee dataset to analyze 
 life expectancy. 
 This is a pedagogical example, and does not represent a sophisticated epidemiological model.
@@ -19,7 +27,7 @@ Subset of barro data with only the variables we need, and dropping missing obser
 barro <- barro_raw %>%
   select(lifeexp, school, gdpcap85,
          civlib5, wartime) %>%
-  na.omit
+  na.omit()
 
 glimpse(barro)
 ```
@@ -48,7 +56,7 @@ mod1 <- lm(lifeexp ~ gdpcap85 + school + civlib5 + wartime,
            data = barro)
 ```
 
-```{r mod1}
+```{r}
 mod2 <- lm(lifeexp ~ log(gdpcap85) + log(school) + civlib5 + wartime,
            data = barro)
 ```
@@ -64,8 +72,6 @@ glance(mod2)
 ```
 
 ```{r}
-library(boot)
-
 mod1_glm <- glm(lifeexp ~ gdpcap85 + school + civlib5 + wartime, data = barro, na.action="na.omit")
 
 # Note the use of glm rather than lm
@@ -89,12 +95,6 @@ Leave-one-out cross-validation
 ```{r}
 cv.glm(barro, mod1_glm)$delta
 cv.glm(barro, mod2_glm)$delta
-
-```
-
-```{r}
-augment(lm(lifeexp ~ log(gdpcap85) + log(school) + civlib5 + wartime,
-        data = barro))
 ```
 
 
@@ -113,16 +113,17 @@ $$
 This relies on the CLT result that $\hat\beta$ approx multivariate normal as $n \to \infty$.
 ```{r}
 n <- 1024
-simbetas <- MASS::mvrnorm(n, coef(mod1), vcov(mod2))
+simbetas <- MASS::mvrnorm(n, coef(mod2), vcov(mod2))
 ```
 
-For `log(gdp)` compare it at its mean versus 1 standard deviation
+For `log(gdpcap85)` compare it at its mean versus 1 standard deviation
 ```{r}
 barro_low <- summarize(na.omit(barro),
                       gdpcap85 = exp(mean(log(gdpcap85))),
                       school = exp(mean(log(school))),
                       civlib5 = mean(civlib5),
                       wartime = mean(wartime))
+
 barro_high <- summarize(na.omit(barro),
                        gdpcap85 = exp(mean(log(gdpcap85)) + sd(log(gdpcap85))),
                        school = exp(mean(log(school))),
