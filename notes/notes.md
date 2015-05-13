@@ -110,4 +110,3 @@ Focus on a set of specific functions. Generally focus on the Hadleyverse.
     - Nyblade and Krauss (2006), "Logit analysis of electoral incentives and LDP post allocation" used in Using Graps Instead of Tables
 
 
-
