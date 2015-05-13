@@ -304,6 +304,9 @@ Lab notes: [.html](http://pols503.github.io/pols_503_sp15/labs/lab6.html), [.Rmd
 
 [Problem Set 3](hw/hw3.html) Due
 
+
+- [Deck on Model Specification and Fit](lectures/Lecture_Model
+- Life Expectancy Example: [.Rmd](docs/
 - Interpretation of regression
 
     - King, Gary, Michael Tomz, and Jason Wittenberg. 2000. ``Making the Most of Statistical Analyses: Improving Interpretation and Presentation." *American Journal of Political Science* 44(2): 347–61. <http://www.jstor.org/stable/2669316>.
