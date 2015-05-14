@@ -49,46 +49,92 @@ wartime
 :   Percent of recent history spent at war
 
 
-Regression of Life Expectancy on `gdpcap85`, `school`, `civlib5`, and `wartime`.
 
+We will compare two models of life expectancy.
+
+Model 1 regresses life expectancy on `gdpcap85`, `school`, `civlib5`, and `wartime`.
 ```{r mod1}
 mod1 <- lm(lifeexp ~ gdpcap85 + school + civlib5 + wartime,
            data = barro)
+mod1
 ```
-
+Model 2 regresses life expectancy on the logarithm of `gdpcap85`, the logarithm of `school`, `civlib5`, and `wartime`.
 ```{r}
 mod2 <- lm(lifeexp ~ log(gdpcap85) + log(school) + civlib5 + wartime,
            data = barro)
+mod2
 ```
 
-## Comparing the two models
+## Comparing Models
 
+We can compare the models from the previous section using $R^2$, adjusted-$R^2$, the standard error of the regression $\hat\sigma^2_{\epsilon}$, AIC, and BIC. 
+
+The summary of the lm object shows the R squared values and the standard deviation of the regression ("Residual standard error"):
+```{r}
+mod1_summary <- summary(mod1)
+mod1_summary
+```
+These can be extracted from the object returned by `summary`.
+Explore the object to find the elements corresponding to those values:
+```{r results = 'hide'}
+str(mod1_summary)
+```
+The functions `AIC` and `BIC` do what you would expect them to do,
+```{r}
+AIC(mod1)
+BIC(mod1)
+```
+The `glance` function from the **broom** package returns all of these within a model frame:
 ```{r mod1_glance}
 glance(mod1)
 ```
 
+Now let's calculate these values for Model 2:
 ```{r}
 glance(mod2)
 ```
 
+By any of those measures, Model 2 is the better fitting model.
+
+## Cross Validation
+
+The **boot** package contains functions to do cross validation. 
+
+Here is an example of cross-validation using the previous models.
+Although `glm` is used instead of `lm`, it produces the same results as `lm`.
+This is needed for the `cv.glm` function to work:
 ```{r}
-mod1_glm <- glm(lifeexp ~ gdpcap85 + school + civlib5 + wartime, data = barro, na.action="na.omit")
-
-# Note the use of glm rather than lm
-cv_err_K10 <- cv.glm(barro, mod1_glm, K=10)
-
-# This runs the cross-validation
-cv_err_K10$delta
-
+mod1_glm <- glm(lifeexp ~ gdpcap85 + school + civlib5 + wartime, data = barro)
 ```
-And the logged model
+This runs 10-fold cross validation
 ```{r}
-mod2_glm <- glm(lifeexp ~ log(gdpcap85) + log(school) + civlib5 + wartime, data = barro, na.action = "na.omit")
+cv_err_K10 <- cv.glm(barro, mod1_glm, K=10)
+```
 
-cv_err_K10 <- cv.glm(barro, mod2_glm, K=10)
-
-# This runs the cross-validation
+The object returned by `cv.glm` includes the original function call, the value of `K`, the predication error `delta`, and the random number seed.
+For now, all we care about is the prediction error.
+By default, `cv.glm` returns the mean squared error. There are two elements that it returns: the first is the average of the mean squared errors from the folds; the second corrects for bias occuring from using k-folds rather than leave-one-out cross-validation.
+```{r}
 cv_err_K10$delta
+```
+5-fold cross-validation
+```{r}
+cv_err_K5 <- cv.glm(barro, mod1_glm, K=5)
+cv_err_K5$delta
+```
+And leave-one-out cross-validation (no `K` argument is given):
+```{r}
+mod_cv_loo <- cv.glm(barro, mod1_glm)
+mod_cv_loo$delta
+```
+
+We can calculate the same for Model 2:
+```{r}
+mod2_glm <- glm(lifeexp ~ log(gdpcap85) + log(school) + civlib5 + wartime, data = barro)
+
+cv.glm(barro, mod2_glm, K=10)$delta
+cv.glm(barro, mod2_glm, K=5)$delta
+cv.glm(barro, mod2_glm)$delta
 ```
 
 Leave-one-out cross-validation
@@ -102,15 +148,12 @@ cv.glm(barro, mod2_glm)$delta
 
 ### Simulating Coefficients from Asymptotic Normal
 
-We want to compare data 
-
-Use the method of King, Tomz, et al.
-
-Draw simulation
+The first step is to draw values of $\beta$ from a multvariate normal distribution centered at $\hat\beta$ with covariance matrix $vcov(\hat\beta)$:
 $$
 \tilde\beta \sim N(\hat\beta, V(\hat\beta))
 $$
 This relies on the CLT result that $\hat\beta$ approx multivariate normal as $n \to \infty$.
+We will randomly sample simulations of $\beta$ from that distribution:
 ```{r}
 n <- 1024
 simbetas <- MASS::mvrnorm(n, coef(mod2), vcov(mod2))
@@ -131,8 +174,6 @@ barro_high <- summarize(na.omit(barro),
                        wartime = mean(wartime))
 ```
 
-
-
 Simulate and calculate a standard error around the difference
 ```{r}
 xlow <- model.matrix(~ log(gdpcap85) + log(school)
@@ -147,7 +188,10 @@ for (i in 1:nrow(simbetas)) {
 
 ```
 
-This could be done much easier with **Zelig** or **simcf**.
+Two packages implement this method of simulatin for comparison:
+
+- [Zelig](http://zeligproject.org/)
+- [simcf](https://github.com/chrisadolph/tile-simcf): Chris Adolph's package written while teaching this course.
 
 ## Bootstrapping
 
@@ -174,8 +218,11 @@ for (i in 1:1024) {
 }
 sims <- bind_rows(simulations)
 
+```
+From these simulations, one way to calculate a 95% cofidence interval is just the 2.5--97.5 percentiles:
+```{r}
 quantile(sims$diff, c(0.025, 0.975))
 ```
 
-This could also be done using the `bootstrap` function in **broom**.
+This code could have been streamlined using the `bootstrap` function in the **broom** package.
 
