@@ -363,7 +363,7 @@ IRL, you would you the `range` function, but this is for pedagogy.
 1. Write a function that calculates the difference between the 97.5 and 2.5 percentiles.
 2. Now add a parameter that lets you set the values of the quantiles to use in the difference. This means that instead of 97.5 and 2.5, you can use any values.
 
-For more on writing functions see: <http://www.ats.ucla.edu/stat/r/library/intro_function.htm>
+For meore on writing functions see: <http://www.ats.ucla.edu/stat/r/library/intro_function.htm>
 
 <!-- Next time, create a function to encapsulate a plot type -->
 
