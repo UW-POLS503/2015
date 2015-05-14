@@ -110,7 +110,7 @@ suppressPackageStartupMessages({
 
 
 \begin{frame}
-\frametitle{Variation in sample $R^2$}
+\frametitle{$R^2$ varies between samples}
 
 <<>>=
 sim_R2 <- function(iter, n, mu_X, s_X, R_X, beta, r_squared) {
@@ -147,11 +147,12 @@ r2s <- data_frame(n = c(128, 1024), r2 = 0.5) %>%
 
 ggplot(r2s, aes(x = r.squared, fill = factor(n))) +
   geom_density(alpha = 0.2) +
+  scale_fill_discrete("sample size") +
   theme_minimal()
 
 @
 
-Population $R^2 = 0.5$
+$R^{2}$ of samples drawn from a linear model with a population $R^2 = 0.5$.
 
 \end{frame}
 
@@ -191,8 +192,8 @@ ggplot(smpl1, aes(x = V1, y = y, colour = within)) +
 @
 
 \begin{itemize}
-\item Complete sample: $R^2 = \Sexpr{round(stat1$r.squared, 3)}$, $\hat\sigma = \Sexpr{round(stat1$sigma, 3)}$
-\item Complete sample: $R^2 = \Sexpr{round(stat2$r.squared, 3)}$, $\hat\sigma = \Sexpr{round(stat2$sigma, 3)}$
+\item Complete sample (red + blue): $R^2 = \Sexpr{round(stat1$r.squared, 2)}$, $\hat\sigma = \Sexpr{round(stat1$sigma, 2)}$
+\item Restricted sample (blue only): $R^2 = \Sexpr{round(stat2$r.squared, 2)}$, $\hat\sigma = \Sexpr{round(stat2$sigma, 2)}$
 
 \end{itemize}
 
@@ -210,8 +211,9 @@ ggplot(smpl1, aes(x = V1, y = y, colour = within)) +
   \end{equation*}
 
   \begin{itemize}
+  \item Where $n$ is number of obs, $k$ is number of variables.
   \item Unlike $R^{2}$, treat squared error terms as estimates of populatio, not sample statistics.
-  \item How does it change with respect to $n$? With respect to $s_j$?
+  \item How adjusted $R^{2}$ change with respect to $n$? With respect to $k$?
   \item But it is an ad hoc adjustment
   \end{itemize}
 
@@ -222,16 +224,15 @@ ggplot(smpl1, aes(x = V1, y = y, colour = within)) +
 \begin{frame}
   \frametitle{Standard Error of the Regression}
   
+  The standard error of the regression is the estimate of the population $\sigma$:
   \begin{equation*}
-    \hat{\sigma} = S_{E} = \sqrt{\frac{\sum E_{i}^{2}}{n - k - 1}}
+    \hat{\sigma}_{\epsilon} = S_{E} = \sqrt{\frac{\sum E_{i}^{2}}{n - k - 1}} = \sqrt{\frac{\sum_{i} (y_{i} - \hat{y}_{i})^{2}}{n - k - 1}}
   \end{equation*}
   
   \begin{itemize}
-    
   \item $S_E$ is at least as useful to report as $R^{2}$
-  \item $S_{E}$ is the average error $E_{i}$
-  \item On the same scale as $y$. Substantive significance can be clearer.
-  \item Smaller $S_{E}$ is better
+  \item $S_{E}$: on average, how much does the fitted value miss the actual value.
+  \item On the same scale as $y$. Easier for interpretation and substantive importance.
   \end{itemize}
   
 \end{frame}
@@ -239,27 +240,33 @@ ggplot(smpl1, aes(x = V1, y = y, colour = within)) +
 \subsection{Information Criteria}
 
 \begin{frame}
-  \frametitle{Likelihood}
+  \frametitle{Likelihood Function}
   
   \begin{itemize}
   \item Likelihood is the probability of observing the data given a statistical model.
-  \item For a normal linear model, the likelihood is
+  \item The \textbf{likelihood} of a linear model with normal errors:
+    \begin{align*}
+      L(\hat{\beta}, \hat{\sigma}_{\epsilon}) = p(y | \hat\beta, \hat\sigma) 
+      &= \prod_{i} N(y_{i}| X_{i} \hat{\beta}, \hat{\sigma}_{\epsilon}^{2}) \\
+      &=  
+        \left(
+        \frac{1}{\hat{\sigma}_{\epsilon} \sqrt{2 \pi}}
+        \right)^{n}
+        \prod_{i} \exp \left(
+        - \frac{(y_{i} - x'_{i} \hat{\beta})^{2}}{2 \hat{\sigma}^{2}_{\epsilon}}
+        \right) \\
+      &=  
+        \left(
+        \frac{1}{\hat{\sigma}_{\epsilon} \sqrt{2 \pi}}
+        \right)^{n}
+        \prod_{i} \exp \left(
+        - \frac{\hat{\epsilon}_{i}^{2}}{2 \hat{\sigma}^{2}_{\epsilon}}
+        \right)
+    \end{align*}
+  \item For computational stability (the product of probabilities is a small number), the \textbf{log likelihood} is usually used
     \begin{equation*}
-      p(y) = \prod_{i} N(y_{i}| X_{i} \beta, \sigma_{\epsilon}^{2}) = \prod_{i} \frac{1}{\sigma_{\epsilon}} \exp
-      \left(
-        - \frac{(y_{i} - x'_{i} \beta)^{2}}{2 \sigma^{2}_{\epsilon}}
-      \right)
-      =  \prod_{i}
-      \frac{1}{\sigma_{\epsilon} \sqrt{2 \pi}}
-      \left(
-        - \frac{\epsilon_{i}^{2}}{2 \sigma^{2}_{\epsilon}}
-      \right)
+      \log L(\hat{\beta}, \hat{\sigma}_{\epsilon}) = - n \log \hat{\sigma}_{\epsilon} - \frac{1}{2} \log 2 \pi - \frac{1}{2 \hat{\sigma}^{2}_{\epsilon}} \sum_{i} \hat{\epsilon}_{i}^{2}
     \end{equation*}
-  \item For computational stability (the product of probabilities is a small number), the log likelihood is usually used
-    \begin{equation*}
-      \log p(y) \propto \sum_{i} \epsilon_{i}^{2}
-    \end{equation*}
-  \item The 
   \end{itemize}
   
 \end{frame}
@@ -268,16 +275,18 @@ ggplot(smpl1, aes(x = V1, y = y, colour = within)) +
   \frametitle{Information Criteria}
 
   \begin{itemize}
-  \item Information criteria are the Log Likelihod + a penalty for complexity
+  \item Information criteria include log Likelihod + a penalty for complexity
   \item The two Most common are AIC and BIC:
     \begin{align*}
-      AIC_j &= -2 \log L(\hat{\theta}) + 2 k \\
-      BIC_j &= -2 \log L(\hat{\theta}) + k \log n
+      AIC &= -2 \log L(\hat{\beta}, \hat{\sigma}_{\epsilon}) + 2 k \\
+      BIC &= -2 \log L(\hat{\beta}, \hat{\sigma}_{\epsilon}) + k \log n
     \end{align*}
   \end{itemize}
   \begin{itemize}
   \item Lower is better
   \item Smaller values = better fit
+  \item See Fox for justifications
+  \item AIC = approx leave one out cross-validation; BIC = a specific k-fold cross-validation
   \end{itemize}
 
 \end{frame}
@@ -307,33 +316,12 @@ ggplot(smpl1, aes(x = V1, y = y, colour = within)) +
     \item Calcuate fitted $\hat{y}_{\text{test}}$ for the test sample $(X_{\text{test}}, y_{\text{test}})$.
     \item Calculate predicted mean squared error of the \textbf{test} data
       \begin{equation*}
-        \hat{\sigma}_{\text{test}} = \frac{1}{n_{\text{test}}} \sum_{i \in \text{test}} y_i - X_{i} \hat{\beta}_{\text{training}}
+        RMSE_{\text{prediction}} = \hat{\sigma}_{\text{test}} = \sqrt{\frac{1}{n_{\text{test}}} \sum_{i \in \text{test}} \hat{\epsilon}_{i}^{2}}
       \end{equation*}
     \end{enumerate}
   \item Usually MSE of test data lower than MSE of training data. In-sample fit statistics are overly optimistic.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Cross-Validation}
-
-  Multipe in-sample
-
-  \begin{itemize}
-  \item Method
-    \begin{enumerate}
-    \item Split data into training $(X_{\text{training}}, y_{\text{training}})$, test data, $(X_{\text{test}}, y_{\text{test}})$.
-    \item Fit model to training data, $(X_{\text{training}}, y_{\text{training}})$, obtain $\hat{\beta}_{\mathtt{training}}$
-    \item Calcuate fitted $\hat{y}_{\text{test}}$ for the test sample $(X_{\text{test}}, y_{\text{test}})$.
-    \item Calculate predicted mean squared error of the \textbf{test} data
-      \begin{equation*}
-        \hat{\sigma}_{\text{test}} = \frac{1}{n_{\text{test}}} \sum_{i \in \text{test}} y_i - X_{i} \hat{\beta}_{\text{training}}
-      \end{equation*}
-    \end{enumerate}
-  \item Best model minimizes MSE
-  \item Usually MSE of test data lower than MSE of training data. In-sample fit statistics are overly optimistic.
-
-  \item Test data should be representative (you can also ``overfit'' the test data).
+  \item Good rule of thumb: 70--75\% training, 30--25\% test
+  \item Can use other prediction statistics to evaulate models
   \end{itemize}
 \end{frame}
 
@@ -341,20 +329,18 @@ ggplot(smpl1, aes(x = V1, y = y, colour = within)) +
 \begin{frame}
   \frametitle{Cross Validation}
 
-  Reuse data for multiple in-sample and out-of-sample tests.
-
+  Reuse data for multiple in-sample and out-of-sample tests. More efficient use of data. 
   \begin{itemize}
-  \item Method
+  \item $k$-fold cross validation
     \begin{enumerate}
     \item Select all but $1/k$th of the data: $(y_{\text{training}}, X_{\text{training}})$
     \item Repeat out of sample tests $k$ times
     \end{enumerate}
-  \item Usual methods:
-    \begin{itemize}
-    \item Leave-one-out (LOO-CV).
-    \item 5-- or 10--fold cross-validation
-    \end{itemize}
-  \item Best model minimizes MSE
+  \item Leave-one-out (LOO-CV): $k = n$.
+  \item 5-- or 10--fold cross-validation; generally the best in terms of bias / variance tradeoff.
+  \item The best model minimizes prediction RMSE
+  \item \textbf{Important:} the test and trainining data should be from same ``population''.
+    Randomly sampled in cross-section. Need to be careful in panel, blocked, or time-series.
   \end{itemize}
 
 \end{frame}
@@ -421,6 +407,18 @@ ggplot(smpl1, aes(x = V1, y = y, colour = within)) +
   \end{itemize}
 
   Gelman and Hill, p. 69
+\end{frame}
+
+\section{References}
+
+\begin{frame}
+  \frametitle{References}
+  
+  \begin{itemize}
+  \item John Fox, \textit{Applied Regression Analysis and Generalized Linear Models}, Ch. 22, ``Model Selection, Averaging, and Validation''.
+  \item Christopher Adolph (Spring 2014) ``Linear Regression: Specification and Fitting'' [Lecture slides]. \url|http://faculty.washington.edu/cadolph/503/topic5.pw.pdf|.
+  \end{itemize}
+  
 \end{frame}
 
 \end{document}
