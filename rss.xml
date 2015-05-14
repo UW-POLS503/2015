@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>POLS/CS&amp;SS 503</title><link>http://pols503.github.io/pols_503_sp15/</link><description>Site for POLS/CS&amp;SS 503: Advanced Quantitative Political Methodology (University of Washington; Spring 2015)</description><atom:link type="application/rss+xml" href="http://pols503.github.io/pols_503_sp15/rss.xml" rel="self"></atom:link><language>en</language><lastBuildDate>Thu, 14 May 2015 04:51:16 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Some Other Advice on Model Choice and Specification</title><link>http://pols503.github.io/pols_503_sp15/posts/some-other-advice-on-model-choice-and-specification.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>POLS/CS&amp;SS 503</title><link>http://pols503.github.io/pols_503_sp15/</link><description>Site for POLS/CS&amp;SS 503: Advanced Quantitative Political Methodology (University of Washington; Spring 2015)</description><atom:link type="application/rss+xml" href="http://pols503.github.io/pols_503_sp15/rss.xml" rel="self"></atom:link><language>en</language><lastBuildDate>Thu, 14 May 2015 22:00:30 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Solutions to HW 3 Posted</title><link>http://pols503.github.io/pols_503_sp15/posts/solutions-to-hw-3-posted.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
+.. title: Solutions to HW 3 Posted
+.. slug: solutions-to-hw-3-posted
+.. date: 2015-05-14 14:57:33 UTC-07:00
+.. tags: 
+.. category: 
+.. link: 
+.. description: 
+.. type: text
+.. author: Jeffrey Arnold
+--&gt;
+
+&lt;p&gt;Solutions to homework 3 are posted to canvas: &lt;a href="https://canvas.uw.edu/files/31667235/"&gt;.html&lt;/a&gt;, &lt;a href="https://canvas.uw.edu/courses/964019/files/31667237"&gt;.Rmd&lt;/a&gt;.&lt;/p&gt;</description><guid>http://pols503.github.io/pols_503_sp15/posts/solutions-to-hw-3-posted.html</guid><pubDate>Thu, 14 May 2015 21:57:33 GMT</pubDate></item><item><title>Some Other Advice on Model Choice and Specification</title><link>http://pols503.github.io/pols_503_sp15/posts/some-other-advice-on-model-choice-and-specification.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
 .. title: Some Other Advice on Model Choice and Specification
 .. slug: some-other-advice-on-model-choice-and-specification
 .. date: 2015-05-13 15:22:22 UTC-07:00
@@ -149,17 +161,4 @@
 --&gt;
 
 &lt;p&gt;If you are using country year data, here are a few R packages that you may find useful: - &lt;a href="http://cran.r-project.org/web/packages/psData/index.html"&gt;psData&lt;/a&gt; A package to download regularly maintained political science data setsand make commonly usedbut infrequently updated variables based on thisdata. - &lt;a href="http://cran.r-project.org/web/packages/countrycode/index.html"&gt;countrycode&lt;/a&gt; convert country names and codes. - &lt;a href="http://cran.r-project.org/web/packages/Quandl/index.html"&gt;Quandl&lt;/a&gt; Financial, economic, and social datasets from various countries - &lt;a href="http://cran.r-project.org/web/packages/WDI/index.html"&gt;WDI&lt;/a&gt; Interface for the World Developement Indicators&lt;/p&gt;
-&lt;p&gt;In general, you can find some good government data related R resources among the &lt;a href="http://ropengov.github.io/projects/"&gt;rOpenGov&lt;/a&gt; projects. The &lt;a href="http://cran.r-project.org/web/views/WebTechnologies.html"&gt;Web Technologies&lt;/a&gt; CRAN task view links to many R packages that help getting data.&lt;/p&gt;</description><category>CPE</category><category>data</category><category>IPE</category><category>IR</category><guid>http://pols503.github.io/pols_503_sp15/posts/r-resources-for-country-year-data.html</guid><pubDate>Mon, 27 Apr 2015 01:41:22 GMT</pubDate></item><item><title>Good Visualization of OLS</title><link>http://pols503.github.io/pols_503_sp15/posts/good-visualization-of-ols.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
-.. title: Good Visualization of OLS
-.. slug: good-visualization-of-ols
-.. date: 2015-04-25 22:09:54 UTC-07:00
-.. tags: visualization, ols
-.. category: 
-.. link: 
-.. description: 
-.. type: text
-.. author: Jeffrey Arnold
---&gt;
-
-&lt;p&gt;&lt;a href="http://setosa.io/ev/"&gt;Explained Visually&lt;/a&gt; has very nice visual explanation of OLS: http://setosa.io/ev/ordinary-least-squares-regression/. Also, check out the other visualizations from that site.&lt;/p&gt;
-&lt;p&gt;Hat tip: Tyler Reny.&lt;/p&gt;</description><category>ols</category><category>visualization</category><guid>http://pols503.github.io/pols_503_sp15/posts/good-visualization-of-ols.html</guid><pubDate>Sun, 26 Apr 2015 05:09:54 GMT</pubDate></item></channel></rss>
+&lt;p&gt;In general, you can find some good government data related R resources among the &lt;a href="http://ropengov.github.io/projects/"&gt;rOpenGov&lt;/a&gt; projects. The &lt;a href="http://cran.r-project.org/web/views/WebTechnologies.html"&gt;Web Technologies&lt;/a&gt; CRAN task view links to many R packages that help getting data.&lt;/p&gt;</description><category>CPE</category><category>data</category><category>IPE</category><category>IR</category><guid>http://pols503.github.io/pols_503_sp15/posts/r-resources-for-country-year-data.html</guid><pubDate>Mon, 27 Apr 2015 01:41:22 GMT</pubDate></item></channel></rss>
