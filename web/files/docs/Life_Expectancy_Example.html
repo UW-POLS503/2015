@@ -102,39 +102,107 @@ glimpse(barro)</code></pre>
 <dd><p>Percent of recent history spent at war</p>
 </dd>
 </dl>
-<p>Regression of Life Expectancy on <code>gdpcap85</code>, <code>school</code>, <code>civlib5</code>, and <code>wartime</code>.</p>
+<p>We will compare two models of life expectancy.</p>
+<p>Model 1 regresses life expectancy on <code>gdpcap85</code>, <code>school</code>, <code>civlib5</code>, and <code>wartime</code>.</p>
 <pre class="r"><code>mod1 &lt;- lm(lifeexp ~ gdpcap85 + school + civlib5 + wartime,
-           data = barro)</code></pre>
+           data = barro)
+mod1</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = lifeexp ~ gdpcap85 + school + civlib5 + wartime, 
+##     data = barro)
+## 
+## Coefficients:
+## (Intercept)     gdpcap85       school      civlib5      wartime  
+##  52.9671697    0.0003216    2.3866392   -0.7522863    1.0936902</code></pre>
+<p>Model 2 regresses life expectancy on the logarithm of <code>gdpcap85</code>, the logarithm of <code>school</code>, <code>civlib5</code>, and <code>wartime</code>.</p>
 <pre class="r"><code>mod2 &lt;- lm(lifeexp ~ log(gdpcap85) + log(school) + civlib5 + wartime,
-           data = barro)</code></pre>
-<div id="comparing-the-two-models" class="section level2">
-<h2>Comparing the two models</h2>
+           data = barro)
+mod2</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = lifeexp ~ log(gdpcap85) + log(school) + civlib5 + 
+##     wartime, data = barro)
+## 
+## Coefficients:
+##   (Intercept)  log(gdpcap85)    log(school)        civlib5        wartime  
+##       13.1893         5.3730         6.0431        -0.1843        -0.2174</code></pre>
+<div id="comparing-models" class="section level2">
+<h2>Comparing Models</h2>
+<p>We can compare the models from the previous section using <span class="math">\(R^2\)</span>, adjusted-<span class="math">\(R^2\)</span>, the standard error of the regression <span class="math">\(\hat\sigma^2_{\epsilon}\)</span>, AIC, and BIC.</p>
+<p>The summary of the lm object shows the R squared values and the standard deviation of the regression (“Residual standard error”):</p>
+<pre class="r"><code>mod1_summary &lt;- summary(mod1)
+mod1_summary</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = lifeexp ~ gdpcap85 + school + civlib5 + wartime, 
+##     data = barro)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -13.2871  -3.0705  -0.0368   4.6629  12.1285 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 52.9671697  3.0379356  17.435  &lt; 2e-16 ***
+## gdpcap85     0.0003216  0.0002551   1.260    0.211    
+## school       2.3866392  0.4102266   5.818 9.01e-08 ***
+## civlib5     -0.7522863  0.4861266  -1.548    0.125    
+## wartime      1.0936902  5.5354286   0.198    0.844    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 5.43 on 90 degrees of freedom
+## Multiple R-squared:  0.7509, Adjusted R-squared:  0.7399 
+## F-statistic: 67.84 on 4 and 90 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>These can be extracted from the object returned by <code>summary</code>. Explore the object to find the elements corresponding to those values:</p>
+<pre class="r"><code>str(mod1_summary)</code></pre>
+<p>The functions <code>AIC</code> and <code>BIC</code> do what you would expect them to do,</p>
+<pre class="r"><code>AIC(mod1)</code></pre>
+<pre><code>## [1] 597.9328</code></pre>
+<pre class="r"><code>BIC(mod1)</code></pre>
+<pre><code>## [1] 613.256</code></pre>
+<p>The <code>glance</code> function from the <strong>broom</strong> package returns all of these within a model frame:</p>
 <pre class="r"><code>glance(mod1)</code></pre>
 <pre><code>##   r.squared adj.r.squared    sigma statistic      p.value df    logLik
 ## 1  0.750932     0.7398623 5.430069  67.83678 2.375664e-26  5 -292.9664
 ##        AIC     BIC deviance df.residual
 ## 1 597.9328 613.256 2653.708          90</code></pre>
+<p>Now let’s calculate these values for Model 2:</p>
 <pre class="r"><code>glance(mod2)</code></pre>
 <pre><code>##   r.squared adj.r.squared    sigma statistic      p.value df    logLik
 ## 1 0.8888772     0.8839384 3.627003  179.9787 4.719766e-42  5 -254.6296
 ##        AIC      BIC deviance df.residual
 ## 1 521.2592 536.5825 1183.964          90</code></pre>
-<pre class="r"><code>mod1_glm &lt;- glm(lifeexp ~ gdpcap85 + school + civlib5 + wartime, data = barro, na.action=&quot;na.omit&quot;)
+<p>By any of those measures, Model 2 is the better fitting model.</p>
+</div>
+<div id="cross-validation" class="section level2">
+<h2>Cross Validation</h2>
+<p>The <strong>boot</strong> package contains functions to do cross validation.</p>
+<p>Here is an example of cross-validation using the previous models. Although <code>glm</code> is used instead of <code>lm</code>, it produces the same results as <code>lm</code>. This is needed for the <code>cv.glm</code> function to work:</p>
+<pre class="r"><code>mod1_glm &lt;- glm(lifeexp ~ gdpcap85 + school + civlib5 + wartime, data = barro)</code></pre>
+<p>This runs 10-fold cross validation</p>
+<pre class="r"><code>cv_err_K10 &lt;- cv.glm(barro, mod1_glm, K=10)</code></pre>
+<p>The object returned by <code>cv.glm</code> includes the original function call, the value of <code>K</code>, the predication error <code>delta</code>, and the random number seed. For now, all we care about is the prediction error. By default, <code>cv.glm</code> returns the mean squared error. There are two elements that it returns: the first is the average of the mean squared errors from the folds; the second corrects for bias occuring from using k-folds rather than leave-one-out cross-validation.</p>
+<pre class="r"><code>cv_err_K10$delta</code></pre>
+<pre><code>## [1] 32.03363 31.80909</code></pre>
+<p>5-fold cross-validation</p>
+<pre class="r"><code>cv_err_K5 &lt;- cv.glm(barro, mod1_glm, K=5)
+cv_err_K5$delta</code></pre>
+<pre><code>## [1] 31.69259 31.26248</code></pre>
+<p>And leave-one-out cross-validation (no <code>K</code> argument is given):</p>
+<pre class="r"><code>mod_cv_loo &lt;- cv.glm(barro, mod1_glm)
+mod_cv_loo$delta</code></pre>
+<pre><code>## [1] 31.46432 31.44491</code></pre>
+<p>We can calculate the same for Model 2:</p>
+<pre class="r"><code>mod2_glm &lt;- glm(lifeexp ~ log(gdpcap85) + log(school) + civlib5 + wartime, data = barro)
 
-# Note the use of glm rather than lm
-cv_err_K10 &lt;- cv.glm(barro, mod1_glm, K=10)
-
-# This runs the cross-validation
-cv_err_K10$delta</code></pre>
-<pre><code>## [1] 30.48784 30.34963</code></pre>
-<p>And the logged model</p>
-<pre class="r"><code>mod2_glm &lt;- glm(lifeexp ~ log(gdpcap85) + log(school) + civlib5 + wartime, data = barro, na.action = &quot;na.omit&quot;)
-
-cv_err_K10 &lt;- cv.glm(barro, mod2_glm, K=10)
-
-# This runs the cross-validation
-cv_err_K10$delta</code></pre>
-<pre><code>## [1] 13.86301 13.78566</code></pre>
+cv.glm(barro, mod2_glm, K=10)$delta</code></pre>
+<pre><code>## [1] 13.39608 13.34628</code></pre>
+<pre class="r"><code>cv.glm(barro, mod2_glm, K=5)$delta</code></pre>
+<pre><code>## [1] 13.98228 13.80763</code></pre>
+<pre class="r"><code>cv.glm(barro, mod2_glm)$delta</code></pre>
+<pre><code>## [1] 13.69680 13.69006</code></pre>
 <p>Leave-one-out cross-validation</p>
 <pre class="r"><code>cv.glm(barro, mod1_glm)$delta</code></pre>
 <pre><code>## [1] 31.46432 31.44491</code></pre>
@@ -145,19 +213,18 @@ cv_err_K10$delta</code></pre>
 <h2>Predictive Comparisons by Simulation and Bootstrap</h2>
 <div id="simulating-coefficients-from-asymptotic-normal" class="section level3">
 <h3>Simulating Coefficients from Asymptotic Normal</h3>
-<p>We want to compare data</p>
-<p>Use the method of King, Tomz, et al.</p>
-<p>Draw simulation <span class="math">\[
+<p>The first step is to draw values of <span class="math">\(\beta\)</span> from a multvariate normal distribution centered at <span class="math">\(\hat\beta\)</span> with covariance matrix <span class="math">\(vcov(\hat\beta)\)</span>: <span class="math">\[
 \tilde\beta \sim N(\hat\beta, V(\hat\beta))
-\]</span> This relies on the CLT result that <span class="math">\(\hat\beta\)</span> approx multivariate normal as <span class="math">\(n \to \infty\)</span>.</p>
+\]</span> This relies on the CLT result that <span class="math">\(\hat\beta\)</span> approx multivariate normal as <span class="math">\(n \to \infty\)</span>. We will randomly sample simulations of <span class="math">\(\beta\)</span> from that distribution:</p>
 <pre class="r"><code>n &lt;- 1024
-simbetas &lt;- MASS::mvrnorm(n, coef(mod1), vcov(mod2))</code></pre>
-<p>For <code>log(gdp)</code> compare it at its mean versus 1 standard deviation</p>
+simbetas &lt;- MASS::mvrnorm(n, coef(mod2), vcov(mod2))</code></pre>
+<p>For <code>log(gdpcap85)</code> compare it at its mean versus 1 standard deviation</p>
 <pre class="r"><code>barro_low &lt;- summarize(na.omit(barro),
                       gdpcap85 = exp(mean(log(gdpcap85))),
                       school = exp(mean(log(school))),
                       civlib5 = mean(civlib5),
                       wartime = mean(wartime))
+
 barro_high &lt;- summarize(na.omit(barro),
                        gdpcap85 = exp(mean(log(gdpcap85)) + sd(log(gdpcap85))),
                        school = exp(mean(log(school))),
@@ -173,7 +240,11 @@ for (i in 1:nrow(simbetas)) {
   betas &lt;- simbetas[i, ]
   diffs[i] &lt;- xhigh %*% betas - xlow %*% betas
 }</code></pre>
-<p>This could be done much easier with <strong>Zelig</strong> or <strong>simcf</strong>.</p>
+<p>Two packages implement this method of simulatin for comparison:</p>
+<ul>
+<li><a href="http://zeligproject.org/">Zelig</a></li>
+<li><a href="https://github.com/chrisadolph/tile-simcf">simcf</a>: Chris Adolph’s package written while teaching this course.</li>
+</ul>
 </div>
 </div>
 <div id="bootstrapping" class="section level2">
@@ -191,11 +262,11 @@ for (i in 1:nrow(simbetas)) {
 ## 
 ## Bootstrap Statistics :
 ##       original       bias    std. error
-## t1* 13.1893476  0.061488534   5.2079876
-## t2*  5.3730192 -0.013815140   0.6400195
-## t3*  6.0430645  0.025243208   0.8155121
-## t4* -0.1842516  0.005180717   0.2843079
-## t5* -0.2173762  0.456286309   3.5691025</code></pre>
+## t1* 13.1893476 -0.140057423   5.3108215
+## t2*  5.3730192  0.008078397   0.6580943
+## t3*  6.0430645  0.022748205   0.8057758
+## t4* -0.1842516  0.010777743   0.2763417
+## t5* -0.2173762  0.489016335   3.6382183</code></pre>
 <p>The <strong>boot</strong> package has more powerful and general functions.</p>
 <p>Bootstrapping can be done manually with <code>dplyr</code> functions:</p>
 <pre class="r"><code>simulations &lt;- list()
@@ -210,12 +281,12 @@ for (i in 1:1024) {
   simulations[[i]] &lt;-
     data.frame(diff = higher - lower)
 }
-sims &lt;- bind_rows(simulations)
-
-quantile(sims$diff, c(0.025, 0.975))</code></pre>
+sims &lt;- bind_rows(simulations)</code></pre>
+<p>From these simulations, one way to calculate a 95% cofidence interval is just the 2.5–97.5 percentiles:</p>
+<pre class="r"><code>quantile(sims$diff, c(0.025, 0.975))</code></pre>
 <pre><code>##     2.5%    97.5% 
-## 4.396959 7.093202</code></pre>
-<p>This could also be done using the <code>bootstrap</code> function in <strong>broom</strong>.</p>
+## 4.340154 7.061882</code></pre>
+<p>This code could have been streamlined using the <code>bootstrap</code> function in the <strong>broom</strong> package.</p>
 </div>
 
 
