@@ -185,29 +185,31 @@ mod1_summary</code></pre>
 <pre class="r"><code>cv_err_K10 &lt;- cv.glm(barro, mod1_glm, K=10)</code></pre>
 <p>The object returned by <code>cv.glm</code> includes the original function call, the value of <code>K</code>, the predication error <code>delta</code>, and the random number seed. For now, all we care about is the prediction error. By default, <code>cv.glm</code> returns the mean squared error. There are two elements that it returns: the first is the average of the mean squared errors from the folds; the second corrects for bias occuring from using k-folds rather than leave-one-out cross-validation.</p>
 <pre class="r"><code>cv_err_K10$delta</code></pre>
-<pre><code>## [1] 32.03363 31.80909</code></pre>
+<pre><code>## [1] 31.50753 31.31174</code></pre>
 <p>5-fold cross-validation</p>
 <pre class="r"><code>cv_err_K5 &lt;- cv.glm(barro, mod1_glm, K=5)
 cv_err_K5$delta</code></pre>
-<pre><code>## [1] 31.69259 31.26248</code></pre>
+<pre><code>## [1] 30.68531 30.37128</code></pre>
 <p>And leave-one-out cross-validation (no <code>K</code> argument is given):</p>
 <pre class="r"><code>mod_cv_loo &lt;- cv.glm(barro, mod1_glm)
 mod_cv_loo$delta</code></pre>
 <pre><code>## [1] 31.46432 31.44491</code></pre>
+<p>The interpretation in these cases is that the average prediction RMSE is over 30 years. This is not good. Not good at all.</p>
 <p>We can calculate the same for Model 2:</p>
 <pre class="r"><code>mod2_glm &lt;- glm(lifeexp ~ log(gdpcap85) + log(school) + civlib5 + wartime, data = barro)
 
 cv.glm(barro, mod2_glm, K=10)$delta</code></pre>
-<pre><code>## [1] 13.39608 13.34628</code></pre>
+<pre><code>## [1] 13.49913 13.44212</code></pre>
 <pre class="r"><code>cv.glm(barro, mod2_glm, K=5)$delta</code></pre>
-<pre><code>## [1] 13.98228 13.80763</code></pre>
+<pre><code>## [1] 13.89080 13.72502</code></pre>
 <pre class="r"><code>cv.glm(barro, mod2_glm)$delta</code></pre>
 <pre><code>## [1] 13.69680 13.69006</code></pre>
-<p>Leave-one-out cross-validation</p>
-<pre class="r"><code>cv.glm(barro, mod1_glm)$delta</code></pre>
-<pre><code>## [1] 31.46432 31.44491</code></pre>
-<pre class="r"><code>cv.glm(barro, mod2_glm)$delta</code></pre>
-<pre><code>## [1] 13.69680 13.69006</code></pre>
+<p>In these cases the prediction RMSE is around 14 years. This is okay. Maybe not as good as we would like, but a lot better than missing by 30 years.</p>
+<p>We could also try adding a squared term to war to see whether that improves the model. We’ll use a 10-fold cross-validation for it.</p>
+<pre class="r"><code>mod3 &lt;- glm(lifeexp ~ log(gdpcap85) + log(school) + civlib5 + wartime + I(wartime ^ 2), data = barro)
+cv.glm(barro, mod3, K = 10)$delta</code></pre>
+<pre><code>## [1] 12.59070 12.52253</code></pre>
+<p>It shows a small improvement in the prediction RMSE. Adding squared <code>wartime</code> seems to improve the model, but it is not nearly as important as getting the functional form of <code>gdpcap85</code> and <code>school</code> correct.</p>
 </div>
 <div id="predictive-comparisons-by-simulation-and-bootstrap" class="section level2">
 <h2>Predictive Comparisons by Simulation and Bootstrap</h2>
@@ -261,12 +263,12 @@ for (i in 1:nrow(simbetas)) {
 ## 
 ## 
 ## Bootstrap Statistics :
-##       original       bias    std. error
-## t1* 13.1893476 -0.140057423   5.3108215
-## t2*  5.3730192  0.008078397   0.6580943
-## t3*  6.0430645  0.022748205   0.8057758
-## t4* -0.1842516  0.010777743   0.2763417
-## t5* -0.2173762  0.489016335   3.6382183</code></pre>
+##       original        bias    std. error
+## t1* 13.1893476 -5.806878e-02   5.4902883
+## t2*  5.3730192  4.712968e-03   0.6705320
+## t3*  6.0430645  1.270322e-02   0.8177946
+## t4* -0.1842516  3.011728e-05   0.2824878
+## t5* -0.2173762  5.102515e-01   3.4657527</code></pre>
 <p>The <strong>boot</strong> package has more powerful and general functions.</p>
 <p>Bootstrapping can be done manually with <code>dplyr</code> functions:</p>
 <pre class="r"><code>simulations &lt;- list()
@@ -285,8 +287,10 @@ sims &lt;- bind_rows(simulations)</code></pre>
 <p>From these simulations, one way to calculate a 95% cofidence interval is just the 2.5–97.5 percentiles:</p>
 <pre class="r"><code>quantile(sims$diff, c(0.025, 0.975))</code></pre>
 <pre><code>##     2.5%    97.5% 
-## 4.340154 7.061882</code></pre>
+## 4.271793 7.087771</code></pre>
 <p>This code could have been streamlined using the <code>bootstrap</code> function in the <strong>broom</strong> package.</p>
+<hr />
+<p>Example adapted from Christopher Adolph (Spring 2014) “Linear Regression: Specification and Fitting” [Lecture slides]. <a href="http://faculty.washington.edu/cadolph/503/topic5.pw.pdf" class="uri">http://faculty.washington.edu/cadolph/503/topic5.pw.pdf</a>.</p>
 </div>
 
 
