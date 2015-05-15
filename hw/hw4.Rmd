@@ -1,0 +1,92 @@
+---
+title: "POLS 503: Problem Set 4"
+author: "Jeffrey B. Arnold, Christopher Adolph"
+date: "April 30, 2015"
+---
+
+*Revised:* May 8, 2015
+
+$$
+\DeclareMathOperator{\cor}{cor}
+\DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator{\se}{se}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\quantile}{quantile}
+$$
+
+
+```{r load,message = FALSE, echo = FALSE}
+library("ggplot2")
+library("dplyr")
+library("broom")
+library("tidyr")
+```
+
+TODO: go the typical route of data analysis. 
+
+1. Analyze functional form of each variable with residuals
+2. Compare models with out of sample testing.
+
+# Instructions and Introduction
+
+1. Create a new R project for this homework named `hw3` and load that project.
+2. Do your analyses in an R markdown document based off of [hw3-template.Rmd](hw3-template.Rmd)
+2. Download [hw3-functions.R](hw3-functions.R) and save in to your project directory.
+3. Submit a zipped file of the directory with your R project through Canvas. This should contain all the materials for another person to run your R Markdown file  This should contain:
+
+    - The R project (`.Rproj`) file
+	  - The R Markdown document (`.Rmd`) of your analyses
+	  - An HTML document (`.html`) compiled from your R Markdown document.
+	  - Any data or other files needed to run the analyses in your R Markdown document.
+
+4. Your R Markdown file should follow the guidance from [here](http://pols503.github.io/pols_503_sp15/r_markdown_assignments.html) and your R code should follow the guidelines [here](http://pols503.github.io/pols_503_sp15/r_best_practices.html).
+5. Turn in a paper copy of the document compiled from the analyses at lab.
+6. You can work together on this but you should each turn in your own assignments and write up your work separately.
+   Include the names of your collaborators on your assignment.
+
+# Problems {#problems}
+
+## Showing Confidence
+
+We revisit the sprinters data we considered in Problem Set 2.
+a. Add confidence intervals to the plots you made for Problem Set 2, problem
+1d. using the predict() command to generate the confidence intervals around
+the expected finish times.
+b. erun the analysis and recreate the plot, adding confidence intervals, for the
+model:
+log(Finishi) = β0 + β1Yeari + β2Womeni + β3Yeari × Womeni + εi
+Be sure to explain in words how this specification differs from the one used in
+part a.
+c. erun the analysis and recreate the plot, adding confidence intervals, for the
+model:
+Finishi = β0 + β1Yeari + β2Womeni + β3Yeari × Womeni
++β4Year2
+i + β5Year2
+i × Womeni + εi
+Be sure to explain in words how this specification differs from the ones used in
+part a. and b.
+d. Compare the visual fit of these models to the data within the observed period.
+Which do you find plausible fits?
+e. Do these models have different predictions for the Olympics of 2156? (Hint:
+extending your plots to go up to 2156 is an easy way to see this.) Why or why
+not?
+f. Now create a new variable, the ratio of men’s time to women’s time in each
+year. Logit-transform this variable and regress it on year. Plot the results, with
+confidence intervals, on the scale of the ratio men’s time to women’s time (i.e.,
+transform it back from logit). Does this approach make any assumptions about
+men’s times or women’s times that might be problematic?
+
+## Model Selection: Oil & Democracy
+
+For this problem, we will use a cleaned-up version of the dataset employed by Michael
+oss in ``Does Oil Hinder Democracy?'' World Politics, 2001. In that paper, we estimated a time series cross-section model of Polity scores regressed on oil exports and a battery of controls.
+In this problem, we will focus on a single cross-section (saving the time series cross-section analysis for a later optional homework), and instead focus on model fitting and robustness to outliers.
+
+A description of the included variables follows:
+
+* * *
+
+Derived from of Christopher Adolph, "Problem Set 4", *POLS/CSSS 503*, University of Washington, Spring 2014. <http://faculty.washington.edu/cadolph/503/503hw4.pdf>. Used with permission.
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
