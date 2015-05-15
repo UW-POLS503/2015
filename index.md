@@ -327,7 +327,7 @@ Lab notes: [.html](http://pols503.github.io/pols_503_sp15/labs/lab6.html), [.Rmd
 
 ### Friday, May 15
 
-TBD
+Lab notes: [.html](labs/lab7.html), [.Rmd](labs/lab7.Rmd)
 
 ## Week 8: Causal Inference I
 

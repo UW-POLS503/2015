@@ -128,6 +128,9 @@ mod_cv_loo <- cv.glm(barro, mod1_glm)
 mod_cv_loo$delta
 ```
 
+The interpretation in these cases is that the average prediction RMSE is over 30 years. 
+This is not good. Not good at all.
+
 We can calculate the same for Model 2:
 ```{r}
 mod2_glm <- glm(lifeexp ~ log(gdpcap85) + log(school) + civlib5 + wartime, data = barro)
@@ -136,12 +139,19 @@ cv.glm(barro, mod2_glm, K=10)$delta
 cv.glm(barro, mod2_glm, K=5)$delta
 cv.glm(barro, mod2_glm)$delta
 ```
+In these cases the prediction RMSE is around 14 years. 
+This is okay.
+Maybe not as good as we would like, but a lot better than missing by 30 years.
 
-Leave-one-out cross-validation
+We could also try adding a squared term to war to see whether that improves the model.
+We'll use a 10-fold cross-validation for it.
 ```{r}
-cv.glm(barro, mod1_glm)$delta
-cv.glm(barro, mod2_glm)$delta
+mod3 <- glm(lifeexp ~ log(gdpcap85) + log(school) + civlib5 + wartime + I(wartime ^ 2), data = barro)
+cv.glm(barro, mod3, K = 10)$delta
 ```
+
+It shows a small improvement in the prediction RMSE. 
+Adding squared `wartime` seems to improve the model, but it is not nearly as important as getting the functional form of `gdpcap85` and `school` correct.
 
 
 ## Predictive Comparisons by Simulation and Bootstrap
@@ -226,3 +236,6 @@ quantile(sims$diff, c(0.025, 0.975))
 
 This code could have been streamlined using the `bootstrap` function in the **broom** package.
 
+* * * 
+
+Example adapted from Christopher Adolph (Spring 2014) "Linear Regression: Specification and Fitting" [Lecture slides]. <http://faculty.washington.edu/cadolph/503/topic5.pw.pdf>.

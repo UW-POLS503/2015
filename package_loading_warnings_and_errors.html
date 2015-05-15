@@ -14,19 +14,19 @@ article: http://ogp.me/ns/article#
 
       <link rel="canonical" href="http://pols503.github.io/pols_503_sp15/package_loading_warnings_and_errors.html">
 
-            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-72x72.png" sizes="72x72">
-            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-57x57.png" sizes="57x57">
-            <link rel="icon" href="favicon-16x16.png" sizes="16x16">
-            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-120x120.png" sizes="120x120">
-            <link rel="icon" href="favicon-32x32.png" sizes="32x32">
-            <link rel="icon" href="favicon-96x96.png" sizes="96x96">
-            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-114x114.png" sizes="114x114">
-            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-60x60.png" sizes="60x60">
-            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-152x152.png" sizes="152x152">
-            <link rel="icon" href="favicon-196x196.png" sizes="196x196">
-            <link rel="icon" href="favicon-128.png" sizes="128x128">
             <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-76x76.png" sizes="76x76">
+            <link rel="icon" href="favicon-32x32.png" sizes="32x32">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-60x60.png" sizes="60x60">
+            <link rel="icon" href="favicon-196x196.png" sizes="196x196">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-120x120.png" sizes="120x120">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-57x57.png" sizes="57x57">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-114x114.png" sizes="114x114">
             <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-144x144.png" sizes="144x144">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-72x72.png" sizes="72x72">
+            <link rel="icon" href="favicon-16x16.png" sizes="16x16">
+            <link rel="icon" href="favicon-128.png" sizes="128x128">
+            <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-152x152.png" sizes="152x152">
+            <link rel="icon" href="favicon-96x96.png" sizes="96x96">
 
 
 
@@ -44,10 +44,24 @@ article: http://ogp.me/ns/article#
         <meta property="og:site_name" content="POLS/CS&amp;SS 503">
     <meta property="og:title" content="R Packages Warnings and Messages when Loading">
     <meta property="og:url" content="http://pols503.github.io/pols_503_sp15/package_loading_warnings_and_errors.html">
-    <meta property="og:description" content="Warning: build under different R version
-You may get a message like Warning: package 'pkgname' was build under R version *.*.*,
-library(dplyr)
-## Warning: package 'dplyr' was built under R version 3.1">
+    <meta property="og:description" content=".main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img { 
+  max-width:100%; 
+  height: auto; 
+}
+
+
+
+
+">
     <meta property="og:type" content="article">
     <meta property="article:published_time" content="2015-04-20T13:18:00-07:00">
            <meta property="article:tag" content="error messages">
@@ -168,6 +182,26 @@ library(dplyr)
     </header>
     <div class="e-content entry-content" itemprop="articleBody text">
     <div>
+<style type="text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img { 
+  max-width:100%; 
+  height: auto; 
+}
+</style>
+<div class="container-fluid main-container">
+
+
+
+
 <!--
 .. title: R Packages Warnings and Messages when Loading
 .. slug: package_loading_warnings_and_errors
@@ -190,20 +224,23 @@ library(dplyr)
 <div id="warning-the-following-objects-are-masked" class="section level2">
 <h3>Warning the following objects are masked</h3>
 <p>If you load the <strong>plyr</strong> and <strong>dplyr</strong> packages you will get several messages about objects being “masked”.</p>
-<pre class="r"><code>library("plyr")</code></pre>
-<pre><code>## -------------------------------------------------------------------------
-## You have loaded plyr after dplyr - this is likely to cause problems.
-## If you need functions from both plyr and dplyr, please load plyr first, then dplyr:
-## library(plyr); library(dplyr)
-## -------------------------------------------------------------------------
+<pre class="r"><code>library("plyr")
+library("dplyr")</code></pre>
+<pre><code>## 
+## Attaching package: 'dplyr'
 ## 
-## Attaching package: 'plyr'
-## 
-## The following objects are masked from 'package:dplyr':
+## The following objects are masked from 'package:plyr':
 ## 
 ##     arrange, count, desc, failwith, id, mutate, rename, summarise,
-##     summarize</code></pre>
-<pre class="r"><code>library("dplyr")</code></pre>
+##     summarize
+## 
+## The following object is masked from 'package:stats':
+## 
+##     filter
+## 
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union</code></pre>
 <p>This means that the new package has object (usually functions) with names that are the same as those of earlier loaded packages. In the above example, after loading <strong>dplyr</strong>, typing <code>filter</code> will use the function from the <strong>dplyr</strong> package and not the <strong>base</strong> (which is one of R’s built-in packages) package. If you need to use the <code>filter</code> function in base R, you can refer to it explicitly with <code>::</code>. For example, <code>base::filter</code> will always use the function from the <strong>base</strong> package; and <code>dplyr::filter</code> will always use the function from the <strong>dplyr</strong> package. Note that you can refer to functions in packages using <code>::</code> without first loading the package using <code>library()</code>. This can sometimes be useful if you want to use a function from a package, but don’t want to load the entire package.</p>
 </div>
 <div id="package-startup-messages" class="section level2">
@@ -222,6 +259,29 @@ library("dplyr")
 
 
 </div>
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
 </div>
     </div>
     
