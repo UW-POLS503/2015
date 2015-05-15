@@ -1,0 +1,642 @@
+---
+title: Lab 6 - More Regression Interpretation
+author: Carolina Johnson, Jeffrey B. Arnold
+date: Friday May 8, 2015
+---
+
+```{r, results = 'hide', echo = FALSE}
+knitr::opts_chunk$set(tidy = TRUE,
+                      tidy.opts = list(width.cutoff = 60, indent = 2))
+```
+
+As always, start the lab by loading the packages we will be using.
+```{r, message=FALSE, warning=FALSE}
+library("car")
+library("lmtest")
+library("MASS")
+library("dplyr")
+library("ggplot2")
+library("broom")
+```
+
+
+
+
+## More on Interpretation
+
+Once more we'll use data from Ross on oil, this time from the earlier 2001 paper.
+```{r, results='hide'}
+rossdata_url <- "http://staff.washington.edu/csjohns/503/rossoildata.csv"
+rossdata_raw <- read.csv(rossdata_url, stringsAsFactors = FALSE)
+rossdata <- rossdata_raw %>%
+  select(cty_name, year, regime1, oil, GDPcap, oecd) %>%
+  na.omit()
+
+```
+
+Let's run the standard model from Ross for the relationship between oil and GDP.
+```{r}
+model1 <- lm(regime1 ~ GDPcap + oil + oecd + year, data = rossdata)
+summary(model1)
+```
+
+Now predict the expected value of regime type vs. oil:
+```{r}
+pred1_df <- data.frame(oil = seq(0, 100, by = 10),
+                       GDPcap = mean(rossdata$GDPcap), 
+                       oecd = 0,
+                       year = median(rossdata$year))
+pred1 <- predict(model1, newdata = pred1_df, interval = "confidence")
+
+ggplot(bind_cols(pred1_df, as.data.frame(pred1)),
+       aes(x = oil, y = fit, ymin = lwr, ymax = upr)) + 
+  geom_ribbon(alpha = 0.2) +
+  geom_line()
+```
+
+This is easiest to plot with `augment` instead
+```{r}
+pred1_aug <- augment(model1, newdata = pred1_df)
+ggplot(pred1_aug, aes(x = oil, y = .fitted,
+                      ymin = .fitted + 2 * .se.fit,
+                      ymax = .fitted - 2 * .se.fit)) + 
+  geom_ribbon(alpha = 0.2) +
+  geom_line()
+```
+
+**Challenge:** Do this with both OECD and non-OECD countries. Before plotting, 
+how will these differ? 
+
+**Answer:**
+```{r}
+pred2_df <- expand.grid(oil = seq(0, 100, by = 10),
+                        GDPcap = mean(rossdata$GDPcap), 
+                        oecd = c(0, 1),
+                        year = median(rossdata$year))
+pred2 <- predict(model1, newdata = pred2_df, interval = "confidence")
+ggplot(bind_cols(pred2_df, as.data.frame(pred2)),
+       aes(x = oil, y = fit, ymin = lwr, ymax = upr,
+           colour = factor(oecd), fill = factor(oecd))) + 
+  geom_ribbon(alpha = 0.2, colour = NA) +
+  geom_line()
+```
+
+Let's plot with `augment` instead
+```{r}
+pred1_aug <- augment(model1, newdata = pred2_df)
+ggplot(pred1_aug, aes(x = oil, y = .fitted,
+                      ymin = .fitted + 2 * .se.fit,
+                      ymax = .fitted - 2 * .se.fit,
+                      fill = factor(oecd), colour = factor(oecd))) + 
+  geom_ribbon(alpha = 0.2, colour = NA) +
+  geom_line()
+```
+
+**Challenge:** Does it make sense to plot `oil` from 0 to 100? Check the range of `oil`.
+
+**Answer:** Surprisingly, not that bad.
+```{r}
+ggplot(rossdata, aes(x = oil)) + geom_density() + geom_rug()
+```
+
+
+**Challenge:** Interact `oil` with `oecd` and plot. What will the lines look like?
+
+```{r}
+model2 <- lm(regime1 ~ GDPcap + oil * oecd + year, data = rossdata)
+summary(model2)
+```
+
+Now consider interact `oil` with `year`. How would you plot two continuous variables?
+
+```{r}
+model3 <- lm(regime1 ~ GDPcap + oecd + oil * year, data = rossdata)
+summary(model3)
+```
+
+In order to interpret the interaction term graphically, we need to pick one variable to treat as continuous --- the x-axis --- and another for which we will choose specific values. 
+Use `oil` as the x-axis, and some values of `year` at which to evaluate it.
+For `year` we could use the min, max, and median.
+```{r}
+
+```
+
+```{r}
+pred3_newdata <- expand.grid(oecd = 0,
+                             GDPcap = mean(rossdata$GDPcap),
+                             year = c(1966, 1981, 1997),
+                             oil = seq(0, 100, by = 10))
+pred3 <- augment(model3, newdata = pred3_newdata)
+```
+Now, let's plot it,
+```{r}
+ggplot(pred3, aes(x = oil, y = .fitted,
+                  ymin = .fitted - 2 * .se.fit,
+                  ymax = .fitted + 2 * .se.fit,)) +
+  geom_line(aes(colour = factor(year))) + geom_ribbon(aes(fill = factor(year)), alpha = 1/3) +
+  scale_colour_discrete("year") +
+  scale_fill_discrete("year") +
+  labs(x = "Percent oil", y = "Expected level of democracy", title = "Changing relationship of oil and democracy")
+```
+
+**Challenge** Interact `GDPpc` with oil and visualize the interactions.
+
+## First Differences
+
+A common way of comparing the effect of a variable is to compare the results on $\hat{y}$
+for a variable at its mean and at its mean plus one standard deviation, holding
+all other variables at their means (if continuous), and their 
+```{r}
+year_seq <- seq(min(rossdata$year), max(rossdata$year), by = 1)
+oil_lo <- mean(rossdata$GDPcap)
+oil_hi <- mean(rossdata$GDPcap) + sd(rossdata$GDPcap)
+pred3_oil_lo <-
+  predict(model3,
+          newdata = data.frame(year = year_seq,
+                               GDPcap = mean(rossdata$GDPcap), 
+                               oil = oil_lo,
+                               oecd = 0),
+          interval = "confidence")
+
+pred3_oil_hi <-
+  predict(model3,
+          newdata = data.frame(year = year_seq,
+                               GDPcap = mean(rossdata$GDPcap), 
+                               oil = oil_hi,
+                               oecd = 0),
+          interval = "confidence")
+```
+
+The first difference is calculated.
+Note that there are no standard error associated with these differences.
+```{r}
+pred3_diff <- data.frame(year = year_seq,
+                         diff = pred3_oil_hi[ , "fit"] - pred3_oil_lo[ , "fit"])
+head(pred3_diff)
+```
+We could plot these differences over time.
+```{r}
+ggplot(pred3_diff, aes(x = year, y = diff)) +
+  geom_point() +
+  geom_hline(yintercept = 0, colour = "red") +
+  labs(x = "Year", y = "Change in democracy", title = "Change in democracy from high to low oil, over time")
+```
+
+**Challenge:**  
+
+* What does this plot tell us about the relationship between oil and democracy over time? 
+* What does this provide that the previous plot does not? 
+* How would you you calculate confidence intervals around these estimates?
+
+# Transformations
+
+What if we suspect the effect of oil is non-linear?
+
+Specifying a model:
+```{r}
+model4 <- lm(regime1 ~ GDPcap + oil + I(oil^2) + oecd, data = rossdata)
+summary(model4)
+
+oil_hyp <- seq(from = 0.01, to = 100, by = 10)
+pred4 <- predict(model4,
+                 newdata = data.frame(oil = oil_hyp,
+                                      GDPcap = mean(rossdata$GDPcap),
+                                      oecd = 0),
+                 interval = "confidence") %>%
+  as.data.frame()
+pred4$oil <- oil_hyp
+```
+
+Plotting the resulting expectations:
+```{r}
+ggplot(pred4, aes(x = oil)) +
+  geom_line(aes(y = fit)) + 
+  geom_ribbon(aes(ymax = upr, ymin = lwr), alpha = 1/3) +
+  labs(x = "Percent oil", y = "Expected level of democracy", title = "Relationship of oil and democracy, with quadratic transformation of oil")
+```
+
+
+**Challenge:** Transform GDP per capita by log.
+
+**Answer:**
+Specifying a model:
+```{r}
+model_logGDP <- lm(regime1 ~ log(GDPcap) + oil + oecd, data = rossdata)
+summary(model_logGDP)
+
+gdp_hyp <- seq(from = min(rossdata$GDPcap), to = max(rossdata$GDPcap), length.out = 50)
+pred4 <- predict(model_logGDP,
+                 newdata = data.frame(oil = median(oil_hyp), #why am I using median here?
+                                      GDPcap = gdp_hyp,
+                                      oecd = 0),
+                 interval = "confidence") %>%
+  as.data.frame()
+pred4$gdp <- gdp_hyp
+```
+
+Plotting the resulting expectations:
+```{r}
+ggplot(pred4, aes(x = gdp)) +
+  geom_line(aes(y = fit)) + 
+  geom_ribbon(aes(ymax = upr, ymin = lwr), alpha = 1/3) +
+  labs(x = "GDP per capita", y = "Expected level of democracy", title = "Relationship of log(GDP per capita) and democracy")
+```
+
+
+**Challenge:** Transform oil by log. What happens?  How would you solve it?
+
+Log of 0 is undefined. This is often handled by adding and arbitrary small value to 0's.
+In this case we'll add 0.001. 
+There are better ways to deal with this, but for now...
+
+```{r}
+model_logoil <- lm(regime1 ~ GDPcap + log(oil_mod) + oecd,
+             data = mutate(rossdata, oil_mod = log(oil + 0.001)))
+summary(model_logoil)
+
+pred_logoil <- as.data.frame(predict(model_logoil,
+                 newdata = data.frame(oil_mod = seq(from = 0.01, to = 100, by = 1),
+                                      GDPcap = mean(rossdata$GDPcap),
+                                      oecd = 0),
+                 interval = "confidence"))
+pred_logoil$oil <- seq(from = 0.01, to = 100, by = 1)
+
+ggplot(pred_logoil, aes(x = oil)) +
+  geom_line(aes(y = fit)) + 
+  geom_ribbon(aes(ymax = upr, ymin = lwr), alpha = 1/3) +
+  labs(x = "Oil production", y = "Expected level of democracy", title = "Relationship of log(oil) and democracy")
+
+
+```
+
+
+# Post-estimation Diagnostics
+
+Recall the default model,
+```{r}
+model1
+```
+
+We can use the functions `residuals` and `predict` to extract residuals and fitted values from an `lm` object:
+```{r eval=FALSE}
+residuals(model1)
+fitted(model1)
+```
+However, the function `augment` easily returns these as `.fit` and `.resid`.
+```{r}
+model1_aug <- augment(model1)
+```
+
+#trying out old code:
+
+```{r results = 'hide'}
+# Understanding residuals
+model1$residuals
+which.max(model1$residuals)
+#why 4299? new data has only 79 rows?!
+rownames(rossdata)
+rossdata["4283",]
+
+#examine the residuals
+par(mfrow=c(2,2))
+plot(model1$fitted,model1$residuals) #what is this plot showing?
+plot(rossdata$GDPcap,model1$residuals) #what is this plot showing?
+plot(rossdata$oil,model1$residuals)
+plot(rossdata$oecd,model1$residuals)
+
+#model with logged GDP per capita
+blim<-lm(regime1~log(GDPcap)+oil+oecd, data=rossdata)
+summary(blim)
+
+plot(blim$fitted,blim$residuals)
+plot(log(rossdata$GDPcap),blim$residuals)
+```
+
+We can plot the fitted values vs. the outcome variable to look for nonlinearity,
+```{r}
+ggplot(model1_aug, aes(x = regime1, y = .fitted)) + 
+  geom_point() +
+  geom_smooth() +
+  ylab("E(Democracy | X)") +
+  xlab("Democracy")
+```
+or the residuals vs. the fitted values to look for heteroskedasticity
+```{r}
+ggplot(model1_aug, aes(x = .fitted, y = .resid)) + 
+  geom_point() +
+  geom_hline(yintercept = 0, colour = "red") + 
+  ylab("Residual") +
+  xlab("E(Democracy | X)")
+```
+
+**Challenge:** What accounts for the unusual patterns? *hint:* What values can Democracy take?
+
+It is obvious in this case, but plotting the sqrt of the absolute value of the errors can make it more clear
+```{r}
+ggplot(model1_aug, aes(x = .fitted, y = sqrt(abs(.std.resid)))) + 
+  geom_point() +
+  geom_hline(yintercept = 0, colour = "red") + 
+  geom_smooth(se = FALSE) +
+  ylab("Residual") +
+  xlab("E(Democracy | X)")
+```
+
+
+**Challenge:** Plot residuals against each independent variable, and the fitted values. 
+Is there evidence of heteroskedasticity or nonlinearity?
+
+What about the normality of errors? 
+
+```{r}
+ggplot(model1_aug, aes(sample = .std.resid)) + 
+  stat_qq() + 
+  geom_abline(slope = 1)
+```
+
+For more advanced residual plots see **car** functions:
+
+- `avPlots`: added variable plot
+- `ceresPlots`, `crPlots`: Component + residual (partial residual) plots
+- `residualPlots`
+
+Also try using `plot` on an `lm` object:
+```{r eval=FALSE}
+
+plot(model1)
+```
+
+
+## Robust standard errors
+
+We can calculate heteroskedasticity consistent (robust, White) standard errors using the **car** function `hccm`:
+
+The robust standard errors for the coefficients of `model1` are:
+```{r}
+sqrt(diag(hccm(model1)))
+```
+
+Are they different than the classical standard errors of those in `model1`?
+
+To use the robust standard errors in a significance test supply the robust variance-covariance matrix to the `coeftest` function from the **lmtest** package:
+```{r}
+coeftest(model1, hccm(model1))
+```
+
+# Using simulation to compute expected values and confidence intervals:
+ (The answer to confidence intervals on first differences)
+We're going to load the dataset on occupational prestige used by Fox in Chapter 5.
+Note: you can view the codebook here: http://socserv.socsci.mcmaster.ca/jfox/Books/Applied-Regression-2E/datasets/Prestige.pdf
+
+```{r}
+jobs<-read.table("http://socserv.socsci.mcmaster.ca/jfox/Books/Applied-Regression-2E/datasets/Prestige.txt")
+summary(jobs)
+
+foxmodel<-lm(prestige~education+income+women, data=jobs)
+summary(foxmodel)
+```
+
+Now let's extract the coefficients vector and the variance-covariance matrix:
+
+```{r}
+pe<-coef(foxmodel)
+vc<-vcov(foxmodel)
+
+pe #look at them
+vc
+```
+
+Suppose we want to calculate the predicted value of prestige for a job that requires 10 years of education, pays #$10,000 (in 1971 dollars), and is 50% female.
+
+The long-winded way of doing it is:
+```{r}
+predictedvalue<-pe[1] + 10*pe[2] + 10000*pe[3] + 50*pe[4]
+
+predictedvalue
+```
+
+Remember: This is just a way of manually doing what `predict()` does. A faster way of doing it uses matrix multiplication:
+```{r}
+predictedvalue<-c(1, 10, 10000, 50) %*% pe
+predictedvalue
+```
+
+Let's now try to model the uncertainty around this estimate.  We can do this by taking random draws from the #distribution of possible beta values that our model has estimated.
+
+```{r}
+library(MASS)
+simbetas<-mvrnorm(1000, pe, vc) # this gives us 1000 estimates of the coefficient estimates
+head(simbetas) # look at it
+```
+
+Examine the uncertainty around each coefficient:
+```{r}
+plot(density(simbetas[,2]), col="blue", lwd=2, xlim=c(-1,6))
+lines(density(simbetas[,3]), col="red", lwd=2)
+lines(density(simbetas[,4]), col="green", lwd=2)
+```
+
+Examine coefficient for income more closely
+```{r}
+plot(density(simbetas[,3]), col="red")
+```
+
+Now let's calculate the predicted values of prestige for each of the 1000 possible coefficient estimates.  We can do this most efficiently using matrix algebra:
+```{r}
+xhyp<-c(1,10,10000,50) # define our scenario: vector of hypothetical x values
+predictions<- simbetas %*% xhyp
+head(predictions) # look at it
+```
+
+Now let's look at the distribution of predicted values:
+```{r}
+hist(predictions)
+plot(density(predictions), main="Predicted Prestige", lwd=3, col="blue", bty="n", xlab="Prestige", ylab="Relative Frequency")
+```
+
+We can calculate the mean of this distribution, and the lower and upper 95% confidence intervals like this:
+```{r}
+EV<-mean(predictions)
+lowerCI<-quantile(predictions, probs=0.025)
+upperCI<-quantile(predictions, probs=0.975)
+```
+
+Compare the `EV` to the `predictedvalue` above:
+```{r}
+EV
+predictedvalue # you'll see that it's roughly the same, but not exactly.  Why not?
+```
+
+You can also compare these estimates to those obtained using the function predict().
+```{r}
+predict.lm(foxmodel, newdata=list(education=10, income=10000, women=50), interval="confidence")
+EV
+lowerCI
+upperCI
+
+```
+
+Let's add lines to the graph indicating the 95% CIs:
+```{r}
+plot(density(predictions), main="Predicted Prestige", lwd=3, col="blue", bty="n", xlab="Prestige", ylab="Relative Frequency")
+abline(v=EV, col="red")
+abline(v=c(lowerCI,upperCI), lty=2)
+```
+
+Now let's estimate the distribution of prestige values for a job that is the same in every respect but pays $12,000 #instead of $10,000:
+```{r}
+xhyp2<-c(1,10,12000,50) # define our scenario vector
+predictions2<-simbetas %*% xhyp2 # multiply by the simulated coefficients
+plot(density(predictions), main="Predicted Prestige", lwd=3, col="blue", bty="n", xlab="Prestige", ylab="Relative Frequency", xlim=c(40,60))
+lines(density(predictions2), lwd=3, col="red")
+legend(53, 0.20, c("$10k","$12k"), lwd=3, col=c("blue","red"), cex=.8, bty="n")
+```
+
+**Question:** Why are we using density plots instead of a histogram?
+**Question:** Why does the $12k distribution have greater variation than the $10k one?  
+Hint: look at the mean of the income variable.
+
+## Plotting Expected Values
+
+Suppose we want to examine the effect of changes in income on prestige over a continuous range of values - i.e., not just the $10k and $12k scenarios we looked at above.
+```{r}
+income_range<-seq(from=min(jobs$income), to=max(jobs$income), length.out=10)
+```
+(Note we're using "length.out" instead of "by")
+
+Then, create placeholders for the results:
+```{r}
+EVs<-rep(NA,10)
+lowerCIs<-rep(NA,10)
+upperCIs<-rep(NA,10)
+```
+
+Then get the coefficients and vcmatrix from the model:
+```{r}
+pe<-coef(foxmodel)
+vc<-vcov(foxmodel)
+```
+
+Take 1000 draws from the multivariate normal distribution:
+```{r}
+simbetas<-mvrnorm(1000, pe, vc)
+```
+
+Set up a loop that goes through all 10 values in the income.range vector:
+```{r}
+for (i in 1:10){
+  
+  # define the covariate values for the current scenario
+  xhyp <-c(1, 10, income_range[i], 50) # make sure you understand where these numbers come from
+  
+  # calculate the 1000 predictions:
+  yhyp <- simbetas %*% xhyp
+  
+  # Now slot the mean, lowerCI and upperCI values into the appropriate positions in the results vectors:
+  EVs[i]<-mean(yhyp)
+  lowerCIs[i]<-sort(yhyp)[25]
+  upperCIs[i]<-sort(yhyp)[975]
+  
+} # close i loop
+
+```
+
+So, now that we've got the results, we can look at them in a table:
+```{r}
+cbind(income_range, EVs, lowerCIs, upperCIs)
+```
+
+But of course it's much better to plot them:
+```{r}
+plot(income_range, EVs, type="n", bty="n", xlab="Income", ylab="Prestige", main="50% Women; 10 years of education", ylim=c(30, 80), las=1)
+lines(income_range, EVs, lwd=2)
+lines(income_range, lowerCIs, lty=2)
+lines(income_range, upperCIs, lty=2)
+```
+
+#Convert to ggplot with ribbon
+
+## 4b. Illustrating interaction terms with a first differences plot -- including confidence intervals!
+
+```{r}
+foxmodel2<-lm(prestige~education+income*women, data=jobs)
+summary(foxmodel2)
+```
+What do these results mean? Let's use first differences
+
+Get the coefficients and vcmatrix from the model:
+```{r}
+pe2<-coef(foxmodel2)
+vc2<-vcov(foxmodel2)
+```
+
+Take 1000 draws from the multivariate normal distribution:
+```{r}
+simbetas2<-mvrnorm(1000, pe2, vc2)
+```
+
+Set up range of women employed in that occupation, and define the high and low values of income:
+```{r}
+women_range<-seq(from=0, to=100, by=10)
+income_hi<-mean(jobs$income)+sd(jobs$income)
+income_lo<-mean(jobs$income)-sd(jobs$income)
+```
+
+Create placeholders for the results:
+```{r}
+firstdiff_mean<-rep(NA, length(women_range)) 
+firstdiff_lowerCI<-rep(NA, length(women_range)) 
+firstdiff_upperCI<-rep(NA, length(women_range)) 
+```
+
+Set up a loop that goes through all 11 values in the women_range vector:
+```{r}
+for (i in 1:length(women_range)){
+  
+  # define the covariate values for the current scenario
+  x.income_hi<-c(1, 10, income_hi, women_range[i], income_hi*women_range[i]) 
+  #make sure you understand where these numbers are coming from
+  x.income_lo<-c(1, 10, income_lo, women_range[i], income_lo*women_range[i])
+  
+  firstdifferences<-(simbetas2 %*% x.income_hi) - (simbetas2 %*% x.income_lo)
+  firstdiff_mean[i]<-mean(firstdifferences)
+  firstdiff_lowerCI[i]<-quantile(firstdifferences,probs=.025)
+  firstdiff_upperCI[i]<-quantile(firstdifferences,probs=.975) #why these numbers instead of .5 and .95?
+  
+} # close i loop
+```
+
+Examine the results in a table:
+```{r}
+cbind(women_range, firstdiff_mean, firstdiff_lowerCI, firstdiff_upperCI)
+```
+
+But of course it's much better to plot them:
+```{r}
+plot(women_range, firstdiff_mean, type="n", bty="n", xlab="Percentage of Individuals in \n an Occupation who are Women", ylab="Expected Increase in Prestige", main="Changing Effect of Income on Occupational Prestige\nDepending on Women Employed in that Occupation, \n change from 1 s.d to 1 s.d. above mean income", ylim=c(0, 60), las=1)
+lines(women_range, firstdiff_mean, lwd=2)
+lines(women_range, firstdiff_lowerCI, lty=2)
+lines(women_range, firstdiff_upperCI, lty=2)
+```
+
+#convert to ggplot
+
+*Note: Chris has a package called simcf that does this and integrates well with his package tile for plotting - more detail on this later*
+
+**Challenge* 
+
+Return to the first model we ran on the occupational prestige data.
+```{r}
+foxmodel<-lm(prestige~education+income+women, data=jobs)
+summary(foxmodel)
+```
+
+For each independent variable in the model, calculate the expected change in prestige that results from a change in that independent variable from one SD below its mean to one SD above its mean, along with 95 percent confidence intervals around this quantity. 
+
+
+
+
+# Sources
+
+- Oil data from : Ross 2001.
+- <http://staff.washington.edu/csjohns/503/lab5.r>
+- <http://staff.washington.edu/csjohns/503/lab6.r>
