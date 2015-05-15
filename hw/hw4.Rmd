@@ -87,7 +87,7 @@ f. Now create a new variable, the ratio of men’s time to women’s time in eac
 
 ## Model Selection: Oil & Democracy
 
-For this problem, we will use a cleaned-up version of the dataset of Michael Ross, ``Does Oil Hinder Democracy?'' *World Politics*, 2001.
+For this problem, we will use a cleaned-up version of the dataset of Michael Ross, "Does Oil Hinder Democracy?" *World Politics*, 2001.
 That paper estimated a time series cross-section model of Polity scores regressed on oil exports and a battery of controls.
 In this problem, we will focus on a single cross-section, and instead focus on model fitting.
 
@@ -136,7 +136,7 @@ b. Using the residuals from the regression in part a., create the following diag
     1. Plot the residuals against the fitted values
     2. Plot the residuals against each covariate
     3. Plot the studentized residuals against the standardized hat values.
-    4. Calculate the heteroskedastic standard errors
+    4. Calculate the heteroskedastic consistent standard errors and compare to the classical standard erros. Use the **car** function `hccm`.
     
     What do these diagnostics tell you about the presence of heteroskedasticity, specification error, and outliers?
     
@@ -147,7 +147,7 @@ c. Rerun the regression using either log or logit transformations on any covaria
 f. How much substantive difference does finding the best model make?
     Be specific and concrete; i.e., show what each model does.
     I’m asking for a more detailed answer than you usually see in articles.
-    How much substantive doubt is there in the result if we are not sure which of the models you fit is the ``right'' one?
+    How much substantive doubt is there in the result if we are not sure which of the models you fit is the  "right" one?
 g. Which model of those you have estimated do you trust most, and why?
     What other problems in the specification or estimation method remain unaddressed by our efforts?
     
@@ -157,7 +157,7 @@ g. Which model of those you have estimated do you trust most, and why?
 
 If you try to log or logit transform a covariate $x$ with observed
 zeros, you will discover a problem: you can't log a zero!
-A common (but wrong) ``solution'' is to add a small amount to the zeros
+A common (but wrong) "solution" is to add a small amount to the zeros
 (e.g., 0.1 or 0.001, etc.).
 It turns out that you can introduce substantial large bias in your $\hat \beta$s by choosing different tiny amounts to add to your 0s: logging small numbers spreads those numbers out over a huge range.
 Adding 0.001 before logging a variable is not very different from subtracting 10,000 from an unlogged variable!
@@ -166,7 +166,7 @@ So don't ever do this, even as a first try.
 ## A Solution: the logBound and logitBound Transformations
 
 A better solution that avoids arbitrary assumptions and bias is to
-``dummy out'' the zeros before logging. 
+"dummy out" the zeros before logging. 
 This procedure treats the zero cases as \emph{sui
 generis}:  they are uniquely different from the rest of our cases,
 and we estimate the way in which they are different through a
