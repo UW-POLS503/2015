@@ -1,10 +1,8 @@
 ---
 title: "POLS 503: Problem Set 4"
-author: "Jeffrey B. Arnold, Christopher Adolph"
-date: "April 30, 2015"
+author: "Christopher Adolph, Jeffrey B. Arnold"
+date: "May 15, 2015"
 ---
-
-*Revised:* May 8, 2015
 
 $$
 \DeclareMathOperator{\cor}{cor}
@@ -27,8 +25,7 @@ library("tidyr")
 
 # Instructions and Introduction
 
-1. Create a new R project for this homework named `hw3` and load that project.
-2. Do your analyses in an R markdown document based off of [hw3-template.Rmd](hw3-template.Rmd)
+1. Create a new R project for this homework named `hw4` and load that project.
 2. Download [hw4-functions.R](hw4-functions.R) and save in to your project directory.
 3. Submit a zipped file of the directory with your R project through Canvas.
     This should contain all the materials for another person to run your R Markdown file  This should contain:
@@ -136,7 +133,7 @@ b. Using the residuals from the regression in part a., create the following diag
     1. Plot the residuals against the fitted values
     2. Plot the residuals against each covariate
     3. Plot the studentized residuals against the standardized hat values.
-    4. Calculate the heteroskedastic consistent standard errors and compare to the classical standard erros. Use the **car** function `hccm`.
+    4. Calculate the heteroskedastic consistent standard errors and compare to the classical standard errors. Use the **car** function `hccm`.
     
     What do these diagnostics tell you about the presence of heteroskedasticity, specification error, and outliers?
     
@@ -167,8 +164,7 @@ So don't ever do this, even as a first try.
 
 A better solution that avoids arbitrary assumptions and bias is to
 "dummy out" the zeros before logging. 
-This procedure treats the zero cases as \emph{sui
-generis}:  they are uniquely different from the rest of our cases,
+This procedure treats the zero cases as *sui generis*:  they are uniquely different from the rest of our cases,
 and we estimate the way in which they are different through a
 separate parameter.  We end up with two variables on the right-hand
 side: an indicator of whether $x_i=0$, and the log (or logit) of
