@@ -18,8 +18,10 @@ dt {
   text-align: left;
   font-weight: normal;
   font-family: "Courier New", Courier, monospace;
+  margin 0;
+  padding 0;
 }
 dd {
   margin: 0 0 0 110px;
-  padding: 0 0 0.5em 0;
+  padding: 0 0 0 0;
 }

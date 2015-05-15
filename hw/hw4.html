@@ -38,7 +38,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 </script>
 
 
-<link href="data:text/css,%2F%2A%20increment%20problems%20%2A%2F%0A%23problems%20%7B%0A%20%20%20%20counter%2Dreset%3Ah2%0A%7D%0A%23problems%20h2%3Abefore%20%7B%0A%20%20%20%20counter%2Dincrement%3A%20h2%3B%0A%20%20%20%20content%3A%20%22Problem%20%22%20counter%28h2%29%20%22%3A%20%22%3B%0A%7D%0A%23problems%20h2%20%7B%0A%20%20font%2Dsize%3A%2020px%3B%0A%7D%0A%0A%2F%2A%20Definition%20list%20%2A%2F%0Adt%20%7B%0A%20%20float%3A%20left%3B%0A%20%20clear%3A%20left%3B%0A%20%20width%3A%20100px%3B%0A%20%20text%2Dalign%3A%20left%3B%0A%20%20font%2Dweight%3A%20normal%3B%0A%20%20font%2Dfamily%3A%20%22Courier%20New%22%2C%20Courier%2C%20monospace%3B%0A%7D%0Add%20%7B%0A%20%20margin%3A%200%200%200%20110px%3B%0A%20%20padding%3A%200%200%200%2E5em%200%3B%0A%7D%0A" rel="stylesheet" type="text/css" />
+<link href="data:text/css,%2F%2A%20increment%20problems%20%2A%2F%0A%23problems%20%7B%0A%20%20%20%20counter%2Dreset%3Ah2%0A%7D%0A%23problems%20h2%3Abefore%20%7B%0A%20%20%20%20counter%2Dincrement%3A%20h2%3B%0A%20%20%20%20content%3A%20%22Problem%20%22%20counter%28h2%29%20%22%3A%20%22%3B%0A%7D%0A%23problems%20h2%20%7B%0A%20%20font%2Dsize%3A%2020px%3B%0A%7D%0A%0A%2F%2A%20Definition%20list%20%2A%2F%0Adt%20%7B%0A%20%20float%3A%20left%3B%0A%20%20clear%3A%20left%3B%0A%20%20width%3A%20100px%3B%0A%20%20text%2Dalign%3A%20left%3B%0A%20%20font%2Dweight%3A%20normal%3B%0A%20%20font%2Dfamily%3A%20%22Courier%20New%22%2C%20Courier%2C%20monospace%3B%0A%20%20margin%200%3B%0A%20%20padding%200%3B%0A%7D%0Add%20%7B%0A%20%20margin%3A%200%200%200%20110px%3B%0A%20%20padding%3A%200%200%200%200%3B%0A%7D%0A" rel="stylesheet" type="text/css" />
 
 </head>
 
@@ -71,7 +71,10 @@ img {
 <div id="TOC">
 <ul>
 <li><a href="#instructions-and-introduction">Instructions and Introduction</a></li>
-<li><a href="#problems">Problems</a></li>
+<li><a href="#problems">Problems</a><ul>
+<li><a href="#showing-confidence">Showing Confidence</a></li>
+<li><a href="#model-selection-oil-democracy">Model Selection: Oil &amp; Democracy</a></li>
+</ul></li>
 </ul>
 </div>
 
@@ -84,6 +87,11 @@ img {
 \DeclareMathOperator{\diag}{diag}
 \DeclareMathOperator{\quantile}{quantile}
 \]</span></p>
+<p>TODO: go the typical route of data analysis.</p>
+<ol style="list-style-type: decimal">
+<li>Analyze functional form of each variable with residuals</li>
+<li>Compare models with out of sample testing.</li>
+</ol>
 <div id="instructions-and-introduction" class="section level1">
 <h1>Instructions and Introduction</h1>
 <ol style="list-style-type: decimal">
@@ -104,9 +112,81 @@ img {
 </div>
 <div id="problems" class="section level1">
 <h1>Problems</h1>
+<div id="showing-confidence" class="section level2">
+<h2>Showing Confidence</h2>
+<p>We revisit the sprinters data we considered in Problem Set 2</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Add confidence intervals to the plots you made for Problem Set 2, problem 1d. using the predict() command to generate the confidence intervals around the expected finish times.</p></li>
+<li><p>Rerun the analysis and recreate the plot, adding confidence intervals, for the model: <span class="math">\[
+\log(\mathtt{Finish}_o) = \beta_9 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i × \mathtt{women}_i + \epsilon_i
+\]</span> Be sure to explain in words how this specification differs from the one used in part a.</p></li>
+<li>Rerun the analysis and recreate the plot, adding confidence intervals, for the model: <span class="math">\[
+   \log(\mathtt{Finish}_o) = \beta_9 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i × \mathtt{women}_i + \epsilon_i
+   \]</span> Be sure to explain in words how this specification differs from the ones used in part a. and b.</li>
+<li>Compare the visual fit of these models to the data within the observed period. Which do you find plausible fits?</li>
+<li>Do these models have different predictions for the Olympics of 2156? (Hint: extending your plots to go up to 2156 is an easy way to see this.) Why or why not?</li>
+<li><p>Now create a new variable, the ratio of men’s time to women’s time in each year. Logit-transform this variable and regress it on year. Plot the results, with confidence intervals, on the scale of the ratio men’s time to women’s time (i.e., transform it back from logit). Does this approach make any assumptions about men’s times or women’s times that might be problematic?</p></li>
+</ol>
+</div>
+<div id="model-selection-oil-democracy" class="section level2">
+<h2>Model Selection: Oil &amp; Democracy</h2>
+<p>For this problem, we will use a cleaned-up version of the dataset employed by Michael Ross in ``Does Oil Hinder Democracy?’’ World Politics, 2001. In that paper, we estimated a time series cross-section model of Polity scores regressed on oil exports and a battery of controls. In this problem, we will focus on a single cross-section (saving the time series cross-section analysis for a later optional homework), and instead focus on model fitting and robustness to outliers.</p>
+<p>A description of the included variables follows:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="left"><code>regime1</code></td>
+<td align="left">1–10 scale increasing in democracy; computed from Polity components</td>
+</tr>
+<tr class="even">
+<td align="left"><code>oilL5</code></td>
+<td align="left">Fuel exports as a proportion of GDP, lagged 5 years</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>metalL5</code></td>
+<td align="left">Ore and mineral exports as a proportion of GDP, lagged 5 years</td>
+</tr>
+<tr class="even">
+<td align="left"><code>GDPpcL5</code></td>
+<td align="left">per capita GDP in PPP dollars, lagged 5 years</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>islam</code></td>
+<td align="left">Muslims as a proportion of population, 1970 data</td>
+</tr>
+<tr class="even">
+<td align="left"><code>oecd</code></td>
+<td align="left">Dummy for rich industrialized countries</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>cty_name</code></td>
+<td align="left">The name of the country observed</td>
+</tr>
+<tr class="even">
+<td align="left"><code>id</code></td>
+<td align="left">A three character abbreviation of the country name</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>id1</code></td>
+<td align="left">A numeric country code</td>
+</tr>
+<tr class="even">
+<td align="left"><code>year</code></td>
+<td align="left">The year of the observation (for this slice, it is always 1995)</td>
+</tr>
+</tbody>
+</table>
+<ol style="list-style-type: lower-alpha">
+<li>Load the dataset ross95.csv, which contains a partially cleaned cross-section of replication data for the year 1995. Estimate a linear regression of <code>regime1</code> on <code>oilL5</code>, `<code>metalL5</code>, <code>GDPpcL5</code>, <code>islam</code>, and <code>oecd</code>. Record the standard error of the regression, and calculate the expected change in <code>regime1</code> given a change in <code>oilL5</code> from the 50th percentile to the 95th percentile of the fully observed data, all else equal.</li>
+<li>Using the residuals from the regression in part a., create the following diagnostic plots: (i) plot the residuals against the fitted values, (ii) plot the residuals against each covariate, (iii) plot the studentized residuals against the standardized hatvalues. What do these diagnostics tell you about the presence of heteroskedasticity, specification error, and outliers?</li>
+<li>Rerun the regression using either log or logit transformations on any covariates you see fit. You will likely run several specifications. In each run, record the standard error of the regression, and the expected change in regime1 given a change in oilL5 from the 50th percentile to the 95th percentile of the fully observed data. See the appendix for some tips and warnings about transforming these data, though.</li>
+<li>How much substantive difference does finding the best model make? (Be specific and concrete; i.e., show what each model does. I’m asking for a more detailed answer than you usually see in articles.) How much substantive doubt is there in the result if we are not sure which of the models you fit is the ``right’’ one?</li>
+<li>Which model of those you have estimated do you trust most, and why? What other problems in the specification or estimation method remain unaddressed by our efforts?</li>
+</ol>
 <hr />
-<p>Derived from of Christopher Adolph, “Problem Set 3”, <em>POLS/CSSS 503</em>, University of Washington, Spring 2014. <a href="http://faculty.washington.edu/cadolph/503/503hw3.pdf" class="uri">http://faculty.washington.edu/cadolph/503/503hw3.pdf</a>. Used with permission.</p>
+<p>Derived from of Christopher Adolph, “Problem Set 4”, <em>POLS/CSSS 503</em>, University of Washington, Spring 2014. <a href="http://faculty.washington.edu/cadolph/503/503hw4.pdf" class="uri">http://faculty.washington.edu/cadolph/503/503hw4.pdf</a>. Used with permission.</p>
 <p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,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" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
+</div>
 </div>
 
 
