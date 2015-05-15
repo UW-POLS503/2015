@@ -88,7 +88,7 @@ In that paper, we estimated a time series cross-section model of Polity scores r
 In this problem, we will focus on a single cross-section (saving the time series cross-section analysis for a later optional homework), and instead focus on model fitting and robustness to outliers.
 Load this data using the following code
 ```{r}
-ross95 <- read.csv("https://pols503.github.io/pols_503_sp15/data/rossoildata.csv") %>%
+ross95 <- read.csv("http://pols503.github.io/pols_503_sp15/data/rossoildata.csv") %>%
    filter(year == 1995) %>%
    select(regime1, oilL5, metalL5, GDPpcL5, islam, oecd, cty_name, id, id1) %>%
    na.omit()
