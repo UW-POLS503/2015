@@ -102,7 +102,7 @@ img {
 <ol style="list-style-type: decimal">
 <li>Create a new R project for this homework named <code>hw3</code> and load that project.</li>
 <li>Do your analyses in an R markdown document based off of <a href="hw3-template.Rmd">hw3-template.Rmd</a></li>
-<li>Download <a href="hw3-functions.R">hw3-functions.R</a> and save in to your project directory.</li>
+<li>Download <a href="hw4-functions.R">hw4-functions.R</a> and save in to your project directory.</li>
 <li><p>Submit a zipped file of the directory with your R project through Canvas. This should contain all the materials for another person to run your R Markdown file This should contain:</p>
 <ul>
 <li>The R project (<code>.Rproj</code>) file.</li>
@@ -120,6 +120,7 @@ img {
 <div id="showing-confidence" class="section level2">
 <h2>Showing Confidence</h2>
 <p>We will revisit the sprinters data we considered in Problem Set 2.</p>
+<pre class="r"><code>sprinters &lt;- read.csv(&quot;&quot;)</code></pre>
 <ol style="list-style-type: lower-alpha">
 <li><p>Add confidence intervals to the plots you made for Problem Set 2, problem 1d. using the <code>predict()</code> command to generate the confidence intervals around the expected finish times.</p></li>
 <li><p>Rerun the analysis and recreate the plot, adding confidence intervals, for the model: <span class="math">\[
@@ -135,9 +136,16 @@ img {
 </div>
 <div id="model-selection-oil-democracy" class="section level2">
 <h2>Model Selection: Oil &amp; Democracy</h2>
-<p>For this problem, we will use a cleaned-up version of the dataset employed by Michael Ross in ``Does Oil Hinder Democracy?’’ World Politics, 2001. In that paper, we estimated a time series cross-section model of Polity scores regressed on oil exports and a battery of controls. In this problem, we will focus on a single cross-section (saving the time series cross-section analysis for a later optional homework), and instead focus on model fitting and robustness to outliers.</p>
+<p>For this problem, we will use a cleaned-up version of the dataset employed by Michael Ross in ``Does Oil Hinder Democracy?’’ World Politics, 2001. In that paper, we estimated a time series cross-section model of Polity scores regressed on oil exports and a battery of controls. In this problem, we will focus on a single cross-section (saving the time series cross-section analysis for a later optional homework), and instead focus on model fitting and robustness to outliers. Load this data using the following code</p>
+<pre class="r"><code>rossoil &lt;- read.csv(&quot;&quot;)</code></pre>
 <p>A description of the included variables follows:</p>
 <table>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Description</th>
+</tr>
+</thead>
 <tbody>
 <tr class="odd">
 <td align="left"><code>regime1</code></td>
@@ -225,9 +233,9 @@ y_i = \beta_0 + \beta_1 I(x_i&gt;0) + \beta_2 I(x_i \ge 1) + \beta_3 \logit'(x_i
 0 &amp;\mathrm{if} \quad x \ge 1
 \end{cases}
 \]</span> Note that we will only need all three pieces of Equation 4 if the covariate to be logit transformed contains <strong>both</strong> 0s and 1s; should either extreme be missing, we need only add one dummy variable to the specification.</p>
-<p>The <code>logBound()</code> and <code>logitBound()</code> functions can be loaded by running the following code</p>
-<pre class="r"><code>source(&quot;https://pols503.github.io/pols_503_sp15/hw/hw4-functions.html&quot;)</code></pre>
-<p>After loading the library, the above regression is as simple as:</p>
+<p>The <code>logBound()</code> and <code>logitBound()</code> functions are included in <code>hw4-functions.R</code>. You can load these functions with the following code (provided you downloaded <code>hw4-functions.R</code> and put it in your package directory):</p>
+<pre class="r"><code>source(&quot;hw4-functions.R&quot;)</code></pre>
+<p>After loading these functions, the above regression is as simple as:</p>
 <pre class="r"><code>res &lt;- lm(y ~ logBound(x), data)</code></pre>
 <p>You can compare goodness of fit as usual. Moreover, you can use this technique on the right-hand side of any regression-like model, not just least squares regression.</p>
 </div>

@@ -634,10 +634,9 @@ summary(foxmodel)
 For each independent variable in the model, calculate the expected change in prestige that results from a change in that independent variable from one SD below its mean to one SD above its mean, along with 95 percent confidence intervals around this quantity. 
 
 
-
-
 # Sources
 
 - Oil data from : Ross 2001.
 - <http://staff.washington.edu/csjohns/503/lab5.r>
 - <http://staff.washington.edu/csjohns/503/lab6.r>
+- <http://staff.washington.edu/csjohns/503/lab7.r>

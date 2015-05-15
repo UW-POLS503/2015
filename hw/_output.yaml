@@ -3,3 +3,6 @@ html_document:
   css: "custom.css"
   highlight: textmate
   toc: true
+  pandoc_args: [
+    "--smart"
+  ]

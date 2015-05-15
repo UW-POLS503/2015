@@ -33,7 +33,7 @@ TODO: go the typical route of data analysis.
 
 1. Create a new R project for this homework named `hw3` and load that project.
 2. Do your analyses in an R markdown document based off of [hw3-template.Rmd](hw3-template.Rmd)
-2. Download [hw3-functions.R](hw3-functions.R) and save in to your project directory.
+2. Download [hw4-functions.R](hw4-functions.R) and save in to your project directory.
 3. Submit a zipped file of the directory with your R project through Canvas.
     This should contain all the materials for another person to run your R Markdown file  This should contain:
 
@@ -52,6 +52,9 @@ TODO: go the typical route of data analysis.
 ## Showing Confidence
 
 We will revisit the sprinters data we considered in Problem Set 2.
+```{r}
+sprinters <- read.csv("http://pols503.github.io/pols_503_sp15/data/sprinters.csv")
+```
 
 a. Add confidence intervals to the plots you made for Problem Set 2, problem 1d. using the  `predict()` command to generate the confidence intervals around the expected finish times.
 
@@ -83,21 +86,32 @@ f. Now create a new variable, the ratio of men’s time to women’s time in eac
 For this problem, we will use a cleaned-up version of the dataset employed by Michael Ross in ``Does Oil Hinder Democracy?'' World Politics, 2001.
 In that paper, we estimated a time series cross-section model of Polity scores regressed on oil exports and a battery of controls.
 In this problem, we will focus on a single cross-section (saving the time series cross-section analysis for a later optional homework), and instead focus on model fitting and robustness to outliers.
+Load this data using the following code
+```{r}
+ross95 <- read.csv("http://pols503.github.io/pols_503_sp15/data/rossoildata.csv") %>%
+   mutate(oilL5 = lag(oil, 5),
+          metalL5 = lag(metal, 5),
+          GDPpcL5 = lag(GDPpc, 5)) %>%
+   filter(year == 1995) %>%
+   select(regime1, oilL5, metalL5, GDPpcL5, islam, oecd, cty_name, id, id1) %>%
+   na.omit()
+```
 
 A description of the included variables follows:
 
-------------- -------------------------------------------------------------------------------------
-`regime1`     1–10 scale increasing in democracy; computed from Polity components
-`oilL5`       Fuel exports as a proportion of GDP, lagged 5 years
-`metalL5`     Ore and mineral exports as a proportion of GDP, lagged 5 years
-`GDPpcL5`     per capita GDP in PPP dollars, lagged 5 years
-`islam`       Muslims as a proportion of population, 1970 data
-`oecd`        Dummy for rich industrialized countries
-`cty_name`    The name of the country observed
-`id`          A three character abbreviation of the country name
-`id1`         A numeric country code
-`year`        The year of the observation (for this slice, it is always 1995)
-------------- -------------------------------------------------------------------------------------
+| Variable | Description |
+|:--|:--|
+| `regime1` |    1–10 scale increasing in democracy; computed from Polity components |
+| `oilL5` |      Fuel exports as a proportion of GDP, lagged 5 years |
+| `metalL5` |    Ore and mineral exports as a proportion of GDP, lagged 5 years |
+| `GDPpcL5` |    per capita GDP in PPP dollars, lagged 5 years |
+| `islam` |      Muslims as a proportion of population, 1970 data |
+| `oecd` |       Dummy for rich industrialized countries |
+| `cty_name` |   The name of the country observed |
+| `id` |         A three character abbreviation of the country name |
+| `id1` |        A numeric country code |
+
+
 
 a. Load the dataset `ross95.csv`, which contains a partially cleaned cross-section of replication data for the year 1995.
     Estimate a linear regression of `regime1` on `oilL5`, ``metalL5`, `GDPpcL5`, `islam`, and `oecd`.
@@ -186,11 +200,12 @@ $$
 $$
 Note that we will only need all three pieces of Equation 4 if the covariate to be logit transformed contains **both** 0s and 1s; should either extreme be missing, we need only add one dummy variable to the specification.
 
-The `logBound()` and `logitBound()` functions can be loaded by running the following code
-```{r eval=FALSE}
-source("https://pols503.github.io/pols_503_sp15/hw/hw4-functions.html")
+The `logBound()` and `logitBound()` functions are included in `hw4-functions.R`.
+You can load these functions with the following code (provided you downloaded `hw4-functions.R` and put it in your package directory):
+```{r}
+source("hw4-functions.R")
 ```
-After loading the library, the above regression is as simple as:
+After loading these functions, the above regression is as simple as:
 ```{r eval=FALSE}
 res <- lm(y ~ logBound(x), data)
 ```
