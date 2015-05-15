@@ -87,8 +87,11 @@ For this problem, we will use a cleaned-up version of the dataset employed by Mi
 In that paper, we estimated a time series cross-section model of Polity scores regressed on oil exports and a battery of controls.
 In this problem, we will focus on a single cross-section (saving the time series cross-section analysis for a later optional homework), and instead focus on model fitting and robustness to outliers.
 Load this data using the following code
-```{r eval=FALSE}
-rossoil <- read.csv("")
+```{r}
+ross95 <- read.csv("https://pols503.github.io/pols_503_sp15/data/rossoildata.csv") %>%
+   filter(year == 1995) %>%
+   select(regime1, oilL5, metalL5, GDPpcL5, islam, oecd, cty_name, id, id1) %>%
+   na.omit()
 ```
 
 A description of the included variables follows:
@@ -104,7 +107,7 @@ A description of the included variables follows:
 | `cty_name` |   The name of the country observed |
 | `id` |         A three character abbreviation of the country name |
 | `id1` |        A numeric country code |
-| `year` |       The year of the observation (for this slice, it is always 1995) |
+
 
 
 a. Load the dataset `ross95.csv`, which contains a partially cleaned cross-section of replication data for the year 1995.
