@@ -1,5 +1,5 @@
 ---
-title: Lab 6 - More Regression Interpretation
+title: Lab 7 - More Regression Interpretation
 author: Carolina Johnson, Jeffrey B. Arnold
 date: Friday May 8, 2015
 ---
