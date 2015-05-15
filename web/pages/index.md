@@ -267,7 +267,6 @@ Given that this is my first time teaching this course, I expect many adjustments
 
 ### Tuesday, May 5
 
-
 We covered substantive vs. statistical influence; transformations; and measurement error.
 You will need to cover collinearity, unusual and influential data, and robust regression on your own.
 
@@ -319,12 +318,6 @@ Lab notes: [.html](http://pols503.github.io/pols_503_sp15/labs/lab6.html), [.Rmd
 
     - Fox, Ch 22
 
-- Miscellaneous Thoughts on the state of quantitative analysis in political science
-
-    - Schrodt, Philip A. 2014. ``Seven Deadly Sins of Contemporary Quantitative Political Analysis.'' *Journal of Peace Research* 51(2): 287–300. <http://jpr.sagepub.com/content/51/2/287>
-	- Achen, Christopher H. 2002. ``Toward a New Political Methodology: Microfoundations and ART.'' *Annual Review of Political Science* 5(1): 423–50. <http://dx.doi.org/10.1146/annurev.polisci.5.112801.080943>. Read the part on a "Rule of Three"; skim other parts.
-	- Achen, Christopher H. 2005. ``Let’s Put Garbage-Can Regressions and Garbage-Can Probits Where They Belong.'' *Conflict Management and Peace Science* 22(4): 327–39. <http://cmp.sagepub.com/content/22/4/327> *skim*
-
 ### Friday, May 15
 
 Lab notes: [.html](labs/lab7.html), [.Rmd](labs/lab7.Rmd)
@@ -333,12 +326,18 @@ Lab notes: [.html](labs/lab7.html), [.Rmd](labs/lab7.Rmd)
 
 ### Tuesday, May 19
 
+- Limited Dependent Variables
 
-Potential outcomes framework, regression, matching
+- Missing Data
 
-- Angrist and Pischke, Ch 1--3
-- Gelman and Hill, Ch 9--10
-- Angrist, Joshua D., and Jorn-Steffen Pischke. 2010. ``The Credibility Revolution in Empirical Economics: How Better Research Design Is Taking the Con out of Econometrics.'' *Journal of Economic Perspectives* 24(2): 3–30. <http://www.aeaweb.org/articles.php?doi=10.1257/jep.24.2.3>
+    - King, Gary, James Honaker, Anne Joseph, and Kenneth Scheve. 2001. "Analyzing Incomplete Political Science Data: An Alternative Algorithm for Multiple Imputation." American Political Science Review 95: 49–69. Copy at http://j.mp/1zTTZUT
+
+- Miscellaneous Thoughts on the state of quantitative analysis in political science
+
+    - Schrodt, Philip A. 2014. ``Seven Deadly Sins of Contemporary Quantitative Political Analysis.'' *Journal of Peace Research* 51(2): 287–300. <http://jpr.sagepub.com/content/51/2/287>
+	- Achen, Christopher H. 2002. ``Toward a New Political Methodology: Microfoundations and ART.'' *Annual Review of Political Science* 5(1): 423–50. <http://dx.doi.org/10.1146/annurev.polisci.5.112801.080943>. Read the part on a "Rule of Three"; skim other parts.
+	- Achen, Christopher H. 2005. ``Let’s Put Garbage-Can Regressions and Garbage-Can Probits Where They Belong.'' *Conflict Management and Peace Science* 22(4): 327–39. <http://cmp.sagepub.com/content/22/4/327> *skim*
+
 
 ### Friday, May 22
 
@@ -348,9 +347,14 @@ TBD
 
 ### Tuesday, May 26
 
-Instrumental Variables, Fixed Effects, Diff in Diff, Regression Discontinuity
+**Problem Set 4 Due**
 
-- Angrist and Pischke, Ch. 4, 5, 6
+Potential outcomes framework, regression, matching
+
+- Angrist and Pischke, Ch 1--3
+- Gelman and Hill, Ch 9--10
+- Angrist, Joshua D., and Jorn-Steffen Pischke. 2010. ``The Credibility Revolution in Empirical Economics: How Better Research Design Is Taking the Con out of Econometrics.'' *Journal of Economic Perspectives* 24(2): 3–30. <http://www.aeaweb.org/articles.php?doi=10.1257/jep.24.2.3>
+
 
 ### Friday, May 29
 
@@ -360,9 +364,10 @@ TBD
 
 ### Tuesday, June 2
 
-- Beck, Nathaniel, and Jonathan N. Katz. 1995. ``What to Do (and Not to Do) with Time-Series Cross-Section Data.'' *The American Political Science Review* 89(3): 634–47. <http://www.jstor.org/stable/2082979>
-- Beck, Nathaniel, and Jonathan N. Katz. 2011. “Modeling Dynamics in Time-Series–Cross-Section Political Economy Data.” Annual Review of Political Science 14(1): 331–52. <http://dx.doi.org/10.1146/annurev-polisci-071510-103222>
-- Chris Adolph's Slides [Time Series: Stochastic Processes](http://faculty.washington.edu/cadolph/503/topic7.pw.pdf), [Models of Stationary and Non-Stationary Series](http://faculty.washington.edu/cadolph/503/topic8.pw.pdf), [Introduction to Panel Data Analysis](http://faculty.washington.edu/cadolph/503/topic9.pw.pdf).
+
+Instrumental Variables, Fixed Effects, Diff in Diff, Regression Discontinuity
+
+- Angrist and Pischke, Ch. 4, 5, 6
 
 ### Friday, June 5
 

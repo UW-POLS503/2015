@@ -8,9 +8,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
-<meta name="author" content="Jeffrey B. Arnold, Christopher Adolph" />
+<meta name="author" content="Christopher Adolph, Jeffrey B. Arnold" />
 
-<meta name="date" content="2015-04-30" />
+<meta name="date" content="2015-05-15" />
 
 <title>POLS 503: Problem Set 4</title>
 
@@ -64,8 +64,8 @@ img {
 
 <div id="header">
 <h1 class="title">POLS 503: Problem Set 4</h1>
-<h4 class="author"><em>Jeffrey B. Arnold, Christopher Adolph</em></h4>
-<h4 class="date"><em>April 30, 2015</em></h4>
+<h4 class="author"><em>Christopher Adolph, Jeffrey B. Arnold</em></h4>
+<h4 class="date"><em>May 15, 2015</em></h4>
 </div>
 
 <div id="TOC">
@@ -82,7 +82,6 @@ img {
 </ul>
 </div>
 
-<p><em>Revised:</em> May 8, 2015</p>
 <p><span class="math">\[
 \DeclareMathOperator{\cor}{cor}
 \DeclareMathOperator{\cov}{cov}
@@ -95,8 +94,7 @@ img {
 <div id="instructions-and-introduction" class="section level1">
 <h1>Instructions and Introduction</h1>
 <ol style="list-style-type: decimal">
-<li>Create a new R project for this homework named <code>hw3</code> and load that project.</li>
-<li>Do your analyses in an R markdown document based off of <a href="hw3-template.Rmd" class="uri">hw3-template.Rmd</a></li>
+<li>Create a new R project for this homework named <code>hw4</code> and load that project.</li>
 <li>Download <a href="hw4-functions.R" class="uri">hw4-functions.R</a> and save in to your project directory.</li>
 <li><p>Submit a zipped file of the directory with your R project through Canvas. This should contain all the materials for another person to run your R Markdown file This should contain:</p>
 <ul>
@@ -207,7 +205,7 @@ img {
 <li>Plot the residuals against the fitted values</li>
 <li>Plot the residuals against each covariate</li>
 <li>Plot the studentized residuals against the standardized hat values.</li>
-<li>Calculate the heteroskedastic consistent standard errors and compare to the classical standard erros. Use the <strong>car</strong> function <code>hccm</code>.</li>
+<li>Calculate the heteroskedastic consistent standard errors and compare to the classical standard errors. Use the <strong>car</strong> function <code>hccm</code>.</li>
 </ol>
 <p>What do these diagnostics tell you about the presence of heteroskedasticity, specification error, and outliers?</p></li>
 <li>Rerun the regression using either log or logit transformations on any covariates you see fit. You will likely run several specifications. In each run, record the standard error of the regression, and the expected change in <code>regime1</code> given a change in <code>oilL5</code> from the 50th percentile to the 95th percentile of the fully observed data. See the appendix for some tips and warnings about transforming these data, though.</li>
@@ -222,7 +220,7 @@ img {
 <p>If you try to log or logit transform a covariate <span class="math">\(x\)</span> with observed zeros, you will discover a problem: you can’t log a zero! A common (but wrong) “solution” is to add a small amount to the zeros (e.g., 0.1 or 0.001, etc.). It turns out that you can introduce substantial large bias in your <span class="math">\(\hat \beta\)</span>s by choosing different tiny amounts to add to your 0s: logging small numbers spreads those numbers out over a huge range. Adding 0.001 before logging a variable is not very different from subtracting 10,000 from an unlogged variable! So don’t ever do this, even as a first try.</p>
 <div id="a-solution-the-logbound-and-logitbound-transformations" class="section level2">
 <h2>A Solution: the logBound and logitBound Transformations</h2>
-<p>A better solution that avoids arbitrary assumptions and bias is to “dummy out” the zeros before logging. This procedure treats the zero cases as : they are uniquely different from the rest of our cases, and we estimate the way in which they are different through a separate parameter. We end up with two variables on the right-hand side: an indicator of whether <span class="math">\(x_i=0\)</span>, and the log (or logit) of <span class="math">\(x_i\)</span> in those cases where <span class="math">\(x_i \ne 0\)</span>. That is, if you want to regress <span class="math">\(y\)</span> on <span class="math">\(\textrm{log}(x)\)</span> but <span class="math">\(x\)</span> contains <span class="math">\(0\)</span>s, estimate this regression: <span class="math">\[
+<p>A better solution that avoids arbitrary assumptions and bias is to “dummy out” the zeros before logging. This procedure treats the zero cases as <em>sui generis</em>: they are uniquely different from the rest of our cases, and we estimate the way in which they are different through a separate parameter. We end up with two variables on the right-hand side: an indicator of whether <span class="math">\(x_i=0\)</span>, and the log (or logit) of <span class="math">\(x_i\)</span> in those cases where <span class="math">\(x_i \ne 0\)</span>. That is, if you want to regress <span class="math">\(y\)</span> on <span class="math">\(\textrm{log}(x)\)</span> but <span class="math">\(x\)</span> contains <span class="math">\(0\)</span>s, estimate this regression: <span class="math">\[
 y_i = \beta_0 + \beta_1 I(x_i&gt;0) + \beta_2 \log'(x_i) + \epsilon_i
 \]</span> where <span class="math">\(I(\cdot)\)</span> is an indicator function and <span class="math">\(\log'(\cdot)\)</span> is defined as: <span class="math">\[
 \log'(x) =

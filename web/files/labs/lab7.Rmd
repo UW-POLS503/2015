@@ -1,7 +1,7 @@
 ---
 title: Lab 7 - More Regression Interpretation
 author: Carolina Johnson, Jeffrey B. Arnold
-date: Friday May 8, 2015
+date: Friday May 15, 2015
 ---
 
 ```{r, results = 'hide', echo = FALSE}
@@ -288,31 +288,6 @@ However, the function `augment` easily returns these as `.fit` and `.resid`.
 model1_aug <- augment(model1)
 ```
 
-#trying out old code:
-
-```{r results = 'hide'}
-# Understanding residuals
-model1$residuals
-which.max(model1$residuals)
-#why 4299? new data has only 79 rows?!
-rownames(rossdata)
-rossdata["4283",]
-
-#examine the residuals
-par(mfrow=c(2,2))
-plot(model1$fitted,model1$residuals) #what is this plot showing?
-plot(rossdata$GDPcap,model1$residuals) #what is this plot showing?
-plot(rossdata$oil,model1$residuals)
-plot(rossdata$oecd,model1$residuals)
-
-#model with logged GDP per capita
-blim<-lm(regime1~log(GDPcap)+oil+oecd, data=rossdata)
-summary(blim)
-
-plot(blim$fitted,blim$residuals)
-plot(log(rossdata$GDPcap),blim$residuals)
-```
-
 We can plot the fitted values vs. the outcome variable to look for nonlinearity,
 ```{r}
 ggplot(model1_aug, aes(x = regime1, y = .fitted)) + 
@@ -346,6 +321,40 @@ ggplot(model1_aug, aes(x = .fitted, y = sqrt(abs(.std.resid)))) +
 **Challenge:** Plot residuals against each independent variable, and the fitted values. 
 Is there evidence of heteroskedasticity or nonlinearity?
 
+**Answer:**
+```{r}
+ggplot(model1_aug, aes(x = regime1, y = .resid)) + 
+  geom_point() +
+  geom_smooth() +
+  ylab("Residual") +
+  xlab("Oil")
+
+ggplot(model1_aug, aes(x = GDPcap, y = .resid)) + 
+  geom_point() +
+  geom_smooth() +
+  ylab("Residual") +
+  xlab("GDPcap")
+```
+
+**Challenge:** Compare residual plot for model with `log(GDPcap)`. How have the residual plots changed?
+
+**Answer:**
+```{r}
+#model with logged GDP per capita
+summary(model_logGDP)
+logGDP_aug <- augment(model_logGDP)
+
+#look at how the augment dataframe updates to the transformed variables:
+head(logGDP_aug)
+
+ggplot(logGDP_aug, aes(x = log.GDPcap., y = .resid)) + 
+  geom_point() +
+  geom_smooth() +
+  ylab("Residual") +
+  xlab("log(GDPcap)")
+```
+
+
 What about the normality of errors? 
 
 ```{r}
@@ -364,6 +373,16 @@ Also try using `plot` on an `lm` object:
 ```{r eval=FALSE}
 
 plot(model1)
+```
+
+Alternatively, base graphics can be appropriate for quickly generating plots of residuals:
+```{r}
+par(mfrow=c(2,2))
+plot(model1$fitted,model1$residuals) #what is this plot showing?
+plot(rossdata$GDPcap,model1$residuals) #what is this plot showing?
+plot(rossdata$oil,model1$residuals)
+plot(rossdata$oecd,model1$residuals)
+par(mfrow = c(1,1))
 ```
 
 
@@ -392,7 +411,7 @@ Note: you can view the codebook here: http://socserv.socsci.mcmaster.ca/jfox/Boo
 jobs<-read.table("http://socserv.socsci.mcmaster.ca/jfox/Books/Applied-Regression-2E/datasets/Prestige.txt")
 summary(jobs)
 
-foxmodel<-lm(prestige~education+income+women, data=jobs)
+foxmodel<-lm(prestige ~ education + income + women, data=jobs)
 summary(foxmodel)
 ```
 
@@ -425,18 +444,19 @@ Let's now try to model the uncertainty around this estimate.  We can do this by 
 
 ```{r}
 library(MASS)
-simbetas<-mvrnorm(1000, pe, vc) # this gives us 1000 estimates of the coefficient estimates
+simbetas <- mvrnorm(1000, pe, vc) # this gives us 1000 estimates of the coefficient estimates
 head(simbetas) # look at it
 ```
 
-Examine the uncertainty around each coefficient:
+Examine the uncertainty around each coefficient (this is using base graphics for quick and dirty data exploration):
 ```{r}
-plot(density(simbetas[,2]), col="blue", lwd=2, xlim=c(-1,6))
-lines(density(simbetas[,3]), col="red", lwd=2)
-lines(density(simbetas[,4]), col="green", lwd=2)
+plot(density(simbetas[,2]), col="blue", lwd=2, xlim=c(-1,6), 
+     ylim = c(0,20), main = "", xlab = "Coef Estimate") #initiating a plot with the first density
+lines(density(simbetas[,3]), col="red", lwd=2) # adding next coef
+lines(density(simbetas[,4]), col="green", lwd=2) # adding last coef
 ```
 
-Examine coefficient for income more closely
+What's going on with the red one? Examine coefficient for income more closely (it's still normal):
 ```{r}
 plot(density(simbetas[,3]), col="red")
 ```
@@ -451,7 +471,7 @@ head(predictions) # look at it
 Now let's look at the distribution of predicted values:
 ```{r}
 hist(predictions)
-plot(density(predictions), main="Predicted Prestige", lwd=3, col="blue", bty="n", xlab="Prestige", ylab="Relative Frequency")
+plot(density(predictions), main="Predicted Prestige", lwd=2, col="blue", xlab="Prestige", ylab="Relative Frequency")
 ```
 
 We can calculate the mean of this distribution, and the lower and upper 95% confidence intervals like this:
@@ -476,9 +496,10 @@ upperCI
 
 ```
 
-Let's add lines to the graph indicating the 95% CIs:
+Let's add lines to the graph indicating the mean and 95% CIs:
 ```{r}
-plot(density(predictions), main="Predicted Prestige", lwd=3, col="blue", bty="n", xlab="Prestige", ylab="Relative Frequency")
+plot(density(predictions), 
+     main="Predicted Prestige", lwd=2, col="blue", xlab="Prestige", ylab="Relative Frequency")
 abline(v=EV, col="red")
 abline(v=c(lowerCI,upperCI), lty=2)
 ```
@@ -499,16 +520,16 @@ Hint: look at the mean of the income variable.
 ## Plotting Expected Values
 
 Suppose we want to examine the effect of changes in income on prestige over a continuous range of values - i.e., not just the $10k and $12k scenarios we looked at above.
-```{r}
-income_range<-seq(from=min(jobs$income), to=max(jobs$income), length.out=10)
-```
-(Note we're using "length.out" instead of "by")
 
-Then, create placeholders for the results:
+Create the range of X for which  you want to explore the expectations for y, in a dataframe with placeholders for the results (Note we're using "length.out" instead of "by" in `seq`):
 ```{r}
-EVs<-rep(NA,10)
-lowerCIs<-rep(NA,10)
-upperCIs<-rep(NA,10)
+
+scenarios <- data_frame(
+  income = seq(from=min(jobs$income), to=max(jobs$income), length.out=10),
+  EVs = NA,
+  lowerCIs = NA,
+  upperCIs = NA
+  )
 ```
 
 Then get the coefficients and vcmatrix from the model:
@@ -524,42 +545,41 @@ simbetas<-mvrnorm(1000, pe, vc)
 
 Set up a loop that goes through all 10 values in the income.range vector:
 ```{r}
-for (i in 1:10){
+for (i in 1:nrow(scenarios)){
   
   # define the covariate values for the current scenario
-  xhyp <-c(1, 10, income_range[i], 50) # make sure you understand where these numbers come from
+  xhyp <-c(1, 10, scenarios$income[i], 50) #make sure you understand what these numbers represent
   
   # calculate the 1000 predictions:
   yhyp <- simbetas %*% xhyp
   
   # Now slot the mean, lowerCI and upperCI values into the appropriate positions in the results vectors:
-  EVs[i]<-mean(yhyp)
-  lowerCIs[i]<-sort(yhyp)[25]
-  upperCIs[i]<-sort(yhyp)[975]
+  scenarios$EVs[i]<-mean(yhyp)
+  scenarios$lowerCIs[i]<-sort(yhyp)[25]
+  scenarios$upperCIs[i]<-sort(yhyp)[975]
   
 } # close i loop
 
 ```
 
-So, now that we've got the results, we can look at them in a table:
+So, now that we've got the results, we can look at them :
 ```{r}
-cbind(income_range, EVs, lowerCIs, upperCIs)
+scenarios
 ```
 
 But of course it's much better to plot them:
 ```{r}
-plot(income_range, EVs, type="n", bty="n", xlab="Income", ylab="Prestige", main="50% Women; 10 years of education", ylim=c(30, 80), las=1)
-lines(income_range, EVs, lwd=2)
-lines(income_range, lowerCIs, lty=2)
-lines(income_range, upperCIs, lty=2)
+ggplot(scenarios, aes(x = income)) + geom_line(aes(y = EVs)) +
+  geom_ribbon(aes(ymin = lowerCIs, ymax = upperCIs), alpha = 1/3) +
+  labs(x = "Income",
+       y = "Expected Prestige",
+       title = "Relationship of Income and Prestige, 50% Women & 10 Years of Education")
 ```
 
-#Convert to ggplot with ribbon
-
-## 4b. Illustrating interaction terms with a first differences plot -- including confidence intervals!
+##Illustrating interaction terms with a first differences plot -- including confidence intervals!
 
 ```{r}
-foxmodel2<-lm(prestige~education+income*women, data=jobs)
+foxmodel2<-lm(prestige ~ education + income * women, data=jobs)
 summary(foxmodel2)
 ```
 What do these results mean? Let's use first differences
@@ -584,50 +604,53 @@ income_lo<-mean(jobs$income)-sd(jobs$income)
 
 Create placeholders for the results:
 ```{r}
-firstdiff_mean<-rep(NA, length(women_range)) 
-firstdiff_lowerCI<-rep(NA, length(women_range)) 
-firstdiff_upperCI<-rep(NA, length(women_range)) 
+scenarios_women <- data_frame(
+  women = women_range,
+  fd_mean = NA,
+  fd_lowerCI = NA,
+  fd_upperCI = NA
+  ) 
 ```
 
 Set up a loop that goes through all 11 values in the women_range vector:
 ```{r}
-for (i in 1:length(women_range)){
+for (i in 1:nrow(scenarios_women)){
   
   # define the covariate values for the current scenario
   x.income_hi<-c(1, 10, income_hi, women_range[i], income_hi*women_range[i]) 
   #make sure you understand where these numbers are coming from
   x.income_lo<-c(1, 10, income_lo, women_range[i], income_lo*women_range[i])
   
-  firstdifferences<-(simbetas2 %*% x.income_hi) - (simbetas2 %*% x.income_lo)
-  firstdiff_mean[i]<-mean(firstdifferences)
-  firstdiff_lowerCI[i]<-quantile(firstdifferences,probs=.025)
-  firstdiff_upperCI[i]<-quantile(firstdifferences,probs=.975) #why these numbers instead of .5 and .95?
+  firstdifferences <- (simbetas2 %*% x.income_hi) - (simbetas2 %*% x.income_lo)
+  scenarios_women$fd_mean[i] <- mean(firstdifferences)
+  scenarios_women$fd_lowerCI[i] <- quantile(firstdifferences,probs=.025)
+  scenarios_women$fd_upperCI[i] <- quantile(firstdifferences,probs=.975) #why these numbers instead of .5 and .95?
   
 } # close i loop
 ```
 
 Examine the results in a table:
 ```{r}
-cbind(women_range, firstdiff_mean, firstdiff_lowerCI, firstdiff_upperCI)
+scenarios_women
 ```
 
 But of course it's much better to plot them:
 ```{r}
-plot(women_range, firstdiff_mean, type="n", bty="n", xlab="Percentage of Individuals in \n an Occupation who are Women", ylab="Expected Increase in Prestige", main="Changing Effect of Income on Occupational Prestige\nDepending on Women Employed in that Occupation, \n change from 1 s.d to 1 s.d. above mean income", ylim=c(0, 60), las=1)
-lines(women_range, firstdiff_mean, lwd=2)
-lines(women_range, firstdiff_lowerCI, lty=2)
-lines(women_range, firstdiff_upperCI, lty=2)
+ggplot(scenarios_women, aes(x = women)) +
+  geom_line(aes(y = fd_mean)) + 
+  geom_ribbon(aes(ymin = fd_lowerCI, ymax = fd_upperCI), alpha = 1/3) +
+  labs(x = "Percentage of Individuals in an Occupation who are Women",
+       y = "Expected Increase in Prestige",
+       title = "Effect of a change in income from 1 s.d. below to 1 s.d. above mean")
 ```
-
-#convert to ggplot
 
 *Note: Chris has a package called simcf that does this and integrates well with his package tile for plotting - more detail on this later*
 
-**Challenge* 
+**Challenge**
 
 Return to the first model we ran on the occupational prestige data.
 ```{r}
-foxmodel<-lm(prestige~education+income+women, data=jobs)
+foxmodel<-lm(prestige ~ education + income + women, data=jobs)
 summary(foxmodel)
 ```
 
