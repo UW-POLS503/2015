@@ -17,3 +17,17 @@
   emphasizing statistical tests
 - Consider not using the Fox textbook.
   Students do not like it.
+- Reorder content
+
+    - Even more emphasis on programming earlier
+	- Require calculus prerequisite, cover matrix algebra on the 1st day
+	- Do interpretation, substantive analysis right after introducing linear regression
+
+- Reconsider live progamming. Discuss with sofwarecarpentry and others the best way to do lab.
+- Ideas about final paper
+
+    - Require students to have data after 2-3 weeks.
+	- More checkups througout the course. Peer-review of progress?
+
+- Ability to use cross-validation or bootstrapping is constrained by the usability of the commands.
+  Consider caret or mlr for cross validation.
