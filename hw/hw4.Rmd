@@ -24,10 +24,6 @@ library("broom")
 library("tidyr")
 ```
 
-TODO: go the typical route of data analysis. 
-
-1. Analyze functional form of each variable with residuals
-2. Compare models with out of sample testing.
 
 # Instructions and Introduction
 
@@ -43,6 +39,9 @@ TODO: go the typical route of data analysis.
 	  - Any data or other files needed to run the analyses in your R Markdown document.
 
 4. Your R Markdown file should follow the guidance from [here](http://pols503.github.io/pols_503_sp15/r_markdown_assignments.html) and your R code should follow the guidelines [here](http://pols503.github.io/pols_503_sp15/r_best_practices.html).
+   **You should not include many, if any, comments in your code chunks**. 
+   Your discussion should be included directly in the document.
+   
 5. Turn in a paper copy of the document compiled from the analyses at lab.
 6. You can work together on this but you should each turn in your own assignments and write up your work separately.
    Include the names of your collaborators on your assignment.
@@ -52,25 +51,30 @@ TODO: go the typical route of data analysis.
 ## Showing Confidence
 
 We will revisit the sprinters data we considered in Problem Set 2.
-```{r eval=FALSE}
-sprinters <- read.csv("")
+```{r}
+sprinters <- read.csv("http://pols503.github.io/pols_503_sp15/data/sprinters.csv")
 ```
 
 a. Add confidence intervals to the plots you made for Problem Set 2, problem 1d. using the  `predict()` command to generate the confidence intervals around the expected finish times.
 
 b. Rerun the analysis and recreate the plot, adding confidence intervals, for the
 model:
-    $$
-    \log(\mathtt{Finish}_o) = \beta_9 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i × \mathtt{women}_i + \epsilon_i
+$$
+    \begin{aligned}[t]
+    \log(\mathtt{Finish}_i) &= \beta_9 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i × \mathtt{women}_i + \epsilon_i
+    \end{aligned}
     $$
     Be sure to explain in words how this specification differs from the one used in part a.
 
 c. Rerun the analysis and recreate the plot, adding confidence intervals, for the
 model:
-   $$
-   \log(\mathtt{Finish}_o) = \beta_9 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i × \mathtt{women}_i + \epsilon_i
-   $$
-   Be sure to explain in words how this specification differs from the ones used in part a. and b.
+    $$
+    \begin{aligned}[t]
+    \log(\mathtt{Finish}_i) &= \beta_9 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i × \mathtt{women}_i \\
+	& + \beta_4 \mathtt{year}_i^2 + \beta_5 \mathtt{year}_i^2 × \mathtt{women}_i + \epsilon_i
+    \end{aligned}
+    $$
+    Be sure to explain in words how this specification differs from the ones used in part a. and b.
 d. Compare the visual fit of these models to the data within the observed period.
     Which do you find plausible fits?
 e. Do these models have different predictions for the Olympics of 2156? (Hint:
@@ -83,16 +87,30 @@ f. Now create a new variable, the ratio of men’s time to women’s time in eac
 
 ## Model Selection: Oil & Democracy
 
-For this problem, we will use a cleaned-up version of the dataset employed by Michael Ross in ``Does Oil Hinder Democracy?'' World Politics, 2001.
-In that paper, we estimated a time series cross-section model of Polity scores regressed on oil exports and a battery of controls.
-In this problem, we will focus on a single cross-section (saving the time series cross-section analysis for a later optional homework), and instead focus on model fitting and robustness to outliers.
-Load this data using the following code
+For this problem, we will use a cleaned-up version of the dataset of Michael Ross, ``Does Oil Hinder Democracy?'' *World Politics*, 2001.
+That paper estimated a time series cross-section model of Polity scores regressed on oil exports and a battery of controls.
+In this problem, we will focus on a single cross-section, and instead focus on model fitting.
+
+Load this data using the following code:
 ```{r}
 ross95 <- read.csv("http://pols503.github.io/pols_503_sp15/data/rossoildata.csv") %>%
+   group_by(id) %>%
+   mutate(oilL5 = lag(oil, 5),
+          metalL5 = lag(metal, 5),
+          GDPcapL5 = lag(GDPcap, 5)) %>%
    filter(year == 1995) %>%
-   select(regime1, oilL5, metalL5, GDPpcL5, islam, oecd, cty_name, id, id1) %>%
+   select(regime1, oilL5, metalL5, GDPcapL5, islam, oecd, cty_name, id, id1) %>%
    na.omit()
 ```
+
+The above code:
+
+- `lag()` calculates the lag values of `oil`, `metal`, and `GDPcap`. The second argument of `5`, means that it calculates a lag of 5.[^1]
+- `group_by` ensures that the lag values are only calculated within each country.
+- Keeps only observations from 1995 and a subset of variables
+- Omits missing values with `na.omit()`.
+
+[^1]: The original `ross95` data has separate variables with the lagged values, but I wanted to show how to calculate lags with `dplyr`.
 
 A description of the included variables follows:
 
@@ -101,7 +119,7 @@ A description of the included variables follows:
 | `regime1` |    1–10 scale increasing in democracy; computed from Polity components |
 | `oilL5` |      Fuel exports as a proportion of GDP, lagged 5 years |
 | `metalL5` |    Ore and mineral exports as a proportion of GDP, lagged 5 years |
-| `GDPpcL5` |    per capita GDP in PPP dollars, lagged 5 years |
+| `GDPcapL5` |    per capita GDP in PPP dollars, lagged 5 years |
 | `islam` |      Muslims as a proportion of population, 1970 data |
 | `oecd` |       Dummy for rich industrialized countries |
 | `cty_name` |   The name of the country observed |
@@ -111,13 +129,14 @@ A description of the included variables follows:
 
 
 a. Load the dataset `ross95.csv`, which contains a partially cleaned cross-section of replication data for the year 1995.
-    Estimate a linear regression of `regime1` on `oilL5`, ``metalL5`, `GDPpcL5`, `islam`, and `oecd`.
+    Estimate a linear regression of `regime1` on `oilL5`, `metalL5`, `GDPpcL5`, `islam`, and `oecd`.
     Record the standard error of the regression, and calculate the expected change in `regime1` given a change in `oilL5` from the 50th percentile to the 95th percentile of the fully observed data, all else equal.
 b. Using the residuals from the regression in part a., create the following diagnostic plots:
     
-    1. plot the residuals against the fitted values
-    2. plot the residuals against each covariate
-    3. plot the studentized residuals against the standardized hat values.
+    1. Plot the residuals against the fitted values
+    2. Plot the residuals against each covariate
+    3. Plot the studentized residuals against the standardized hat values.
+    4. Calculate the heteroskedastic standard errors
     
     What do these diagnostics tell you about the presence of heteroskedasticity, specification error, and outliers?
     

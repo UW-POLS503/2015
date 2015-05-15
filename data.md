@@ -12,3 +12,4 @@ Datasets used in this course
 - [nes00a.csv](data/nes00a.csv): Subset of data from the American National Election Studies ([ANES](http://www.electionstudies.org/)) 2000 survey.
   Csv file from <http://staff.washington.edu/csjohns/503/nes00a.csv>.
 - [ross_2012.csv](data/ross_2012.csv): csv file derived from: Michael L. Ross, 2012, "Replication data for: "The Oil Curse"", <http://hdl.handle.net/1902.1/17976>, Harvard Dataverse, V1
+- [ross_2012.csv](data/rossoildata.csv): csv file derived from, Michael L. Ross, 2001, "Does Oil Hinder Democracy", *World Politics*. http://dx.doi.org/10.1353/wp.2001.0011. csv file from <http://staff.washington.edu/csjohns/503/rossoildata.csv>.
