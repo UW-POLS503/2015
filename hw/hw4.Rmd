@@ -153,11 +153,11 @@ c. Rerun the regression using either log or logit transformations on any covaria
     You will likely run several specifications.
     In each run, record the standard error of the regression, and the expected change in `regime1` given a change in `oilL5` from the 50th percentile to the 95th percentile of the fully observed data.
     See the appendix for some tips and warnings about transforming these data, though.
-f. How much substantive difference does finding the best model make?
+d. How much substantive difference does finding the best model make?
     Be specific and concrete; i.e., show what each model does.
     I’m asking for a more detailed answer than you usually see in articles.
     How much substantive doubt is there in the result if we are not sure which of the models you fit is the  "right" one?
-g. Which model of those you have estimated do you trust most, and why?
+e. Which model of those you have estimated do you trust most, and why?
     What other problems in the specification or estimation method remain unaddressed by our efforts?
     
 # Appendix:  How Do I Log a Covariate with Zeros?
