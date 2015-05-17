@@ -129,6 +129,7 @@ NAVIGATION_LINKS = {
                 ("hw/hw1.html", "PS 1"),
                 ("hw/hw2.html", "PS 2"),
                 ("hw/hw3.html", "PS 3"),
+                ("hw/hw4.html", "PS 4"),                
             ),
             "Problem Sets"
         ),

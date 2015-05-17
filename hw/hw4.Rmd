@@ -1,6 +1,6 @@
 ---
 title: "POLS 503: Problem Set 4"
-author: "Jeffrey B. Arnold, Christopher Adolph"
+author: "Christopher Adolph, Jeffrey B. Arnold"
 date: "May 15, 2015"
 ---
 
