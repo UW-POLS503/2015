@@ -65,7 +65,7 @@ a. Estimate the model
 b. Create the same plot as in the previous part for the model
     $$
     \begin{aligned}[t]
-    \log(\mathtt{finish}_i) &= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i \times \mathtt{women}_i + \epsilon_i
+    \mathtt{finish}_i &= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i \times \mathtt{women}_i + \epsilon_i
     \end{aligned}
     $$
     Be sure to explain in words how this specification differs from the one used in part a.
@@ -74,7 +74,7 @@ c. Rerun the analysis and recreate the plot, adding confidence intervals, for th
 model:
     $$
     \begin{aligned}[t]
-    \log(\mathtt{Finish}_i) &= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i × \mathtt{women}_i \\
+    \mathtt{Finish}_i &= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i × \mathtt{women}_i \\
 	& + \beta_4 \mathtt{year}_i^2 + \beta_5 \mathtt{year}_i^2 × \mathtt{women}_i + \epsilon_i
     \end{aligned}
     $$
