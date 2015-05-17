@@ -56,7 +56,7 @@ sprinters <- read.csv("http://pols503.github.io/pols_503_sp15/data/sprinters.csv
 a. Estimate the model
     $$
     \begin{aligned}[t]
-    \log(\mathtt{finish}_i) &= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{women}_i \mathtt{year}_i  + \epsilon_i
+    \mathtt{finish}_i &= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{women}_i \times \mathtt{year}_i  + \epsilon_i
     \end{aligned}
     $$
     Create a plot of the fitted values with confidence with respect to `year`, grouped by `women`.
@@ -65,7 +65,7 @@ a. Estimate the model
 b. Create the same plot as in the previous part for the model
     $$
     \begin{aligned}[t]
-    \log(\mathtt{finish}_i) &= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i × \mathtt{women}_i + \epsilon_i
+    \log(\mathtt{finish}_i) &= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i \times \mathtt{women}_i + \epsilon_i
     \end{aligned}
     $$
     Be sure to explain in words how this specification differs from the one used in part a.
