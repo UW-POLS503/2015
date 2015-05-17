@@ -10,7 +10,7 @@
 
 <meta name="author" content="Jeffrey B. Arnold, Christopher Adolph" />
 
-<meta name="date" content="2015-04-30" />
+<meta name="date" content="2015-05-15" />
 
 <title>POLS 503: Problem Set 4</title>
 
@@ -65,7 +65,7 @@ img {
 <div id="header">
 <h1 class="title">POLS 503: Problem Set 4</h1>
 <h4 class="author"><em>Jeffrey B. Arnold, Christopher Adolph</em></h4>
-<h4 class="date"><em>April 30, 2015</em></h4>
+<h4 class="date"><em>May 15, 2015</em></h4>
 </div>
 
 <div id="TOC">
@@ -82,7 +82,6 @@ img {
 </ul>
 </div>
 
-<p><em>Revised:</em> May 8, 2015</p>
 <p><span class="math">\[
 \DeclareMathOperator{\cor}{cor}
 \DeclareMathOperator{\cov}{cov}
@@ -95,9 +94,8 @@ img {
 <div id="instructions-and-introduction" class="section level1">
 <h1>Instructions and Introduction</h1>
 <ol style="list-style-type: decimal">
-<li>Create a new R project for this homework named <code>hw3</code> and load that project.</li>
-<li>Do your analyses in an R markdown document based off of <a href="hw3-template.Rmd" class="uri">hw3-template.Rmd</a></li>
-<li>Download <a href="hw4-functions.R" class="uri">hw4-functions.R</a> and save in to your project directory.</li>
+<li>Create a new R project for this homework named <code>hw4</code> and load that project.</li>
+<li>Download <a href="hw4-functions.R">hw4-functions.R</a> and save in to your project directory.</li>
 <li><p>Submit a zipped file of the directory with your R project through Canvas. This should contain all the materials for another person to run your R Markdown file This should contain:</p>
 <ul>
 <li>The R project (<code>.Rproj</code>) file.</li>
@@ -117,15 +115,19 @@ img {
 <p>We will revisit the sprinters data we considered in Problem Set 2.</p>
 <pre class="r"><code>sprinters &lt;- read.csv(&quot;http://pols503.github.io/pols_503_sp15/data/sprinters.csv&quot;)</code></pre>
 <ol style="list-style-type: lower-alpha">
-<li><p>Add confidence intervals to the plots you made for Problem Set 2, problem 1d. using the <code>predict()</code> command to generate the confidence intervals around the expected finish times.</p></li>
-<li><p>Rerun the analysis and recreate the plot, adding confidence intervals, for the model: <span class="math">\[
+<li><p>Estimate the model <span class="math">\[
 \begin{aligned}[t]
-\log(\mathtt{Finish}_i) &amp;= \beta_9 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i × \mathtt{women}_i + \epsilon_i
+\log(\mathtt{finish}_i) &amp;= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{women}_i \mathtt{year}_i  + \epsilon_i
+\end{aligned}
+\]</span> Create a plot of the fitted values with confidence with respect to <code>year</code>, grouped by <code>women</code>. Do not use <code>geom_smooth()</code>.</p></li>
+<li><p>Create the same plot as in the previous part for the model <span class="math">\[
+\begin{aligned}[t]
+\log(\mathtt{finish}_i) &amp;= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i × \mathtt{women}_i + \epsilon_i
 \end{aligned}
 \]</span> Be sure to explain in words how this specification differs from the one used in part a.</p></li>
 <li>Rerun the analysis and recreate the plot, adding confidence intervals, for the model: <span class="math">\[
 \begin{aligned}[t]
-\log(\mathtt{Finish}_i) &amp;= \beta_9 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i × \mathtt{women}_i \\
+\log(\mathtt{Finish}_i) &amp;= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i × \mathtt{women}_i \\
 &amp; + \beta_4 \mathtt{year}_i^2 + \beta_5 \mathtt{year}_i^2 × \mathtt{women}_i + \epsilon_i
 \end{aligned}
 \]</span> Be sure to explain in words how this specification differs from the ones used in part a. and b.</li>
@@ -137,21 +139,25 @@ img {
 <div id="model-selection-oil-democracy" class="section level2">
 <h2>Model Selection: Oil &amp; Democracy</h2>
 <p>For this problem, we will use a cleaned-up version of the dataset of Michael Ross, “Does Oil Hinder Democracy?” <em>World Politics</em>, 2001. That paper estimated a time series cross-section model of Polity scores regressed on oil exports and a battery of controls. In this problem, we will focus on a single cross-section, and instead focus on model fitting.</p>
-<p>Load this data using the following code:</p>
-<pre class="r"><code>ross95 &lt;- read.csv(&quot;http://pols503.github.io/pols_503_sp15/data/rossoildata.csv&quot;) %&gt;%
-   group_by(id) %&gt;%
-   mutate(oilL5 = lag(oil, 5),
-          metalL5 = lag(metal, 5),
-          GDPcapL5 = lag(GDPcap, 5)) %&gt;%
-   filter(year == 1995) %&gt;%
-   select(regime1, oilL5, metalL5, GDPcapL5, islam, oecd, cty_name, id, id1) %&gt;%
-   na.omit()</code></pre>
+<p>Load and pre-process this data using the following code:</p>
+<pre class="r"><code>rossoil &lt;- read.csv(&quot;http://pols503.github.io/pols_503_sp15/data/rossoildata.csv&quot;) %&gt;%
+   arrange(id1, year) %&gt;%
+   group_by(id1) %&gt;%
+   mutate(oilL5 = lag(wdr123, 5) / 100,
+          metalL5 = lag(wdr313, 5) / 100,
+          GDPpcL5 = lag(wdr135, 5) / 100,
+          islam = islam / 100) %&gt;%
+   filter(year == 1990) %&gt;%
+   select(regime1, oilL5, metalL5, GDPpcL5, islam, oecd, cty_name, id, id1) %&gt;%
+   na.omit() %&gt;%
+   ungroup()</code></pre>
 <p>The above code:</p>
 <ul>
 <li><code>lag()</code> calculates the lag values of <code>oil</code>, <code>metal</code>, and <code>GDPcap</code>. The second argument of <code>5</code>, means that it calculates a lag of 5.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></li>
 <li><code>group_by</code> ensures that the lag values are only calculated within each country.</li>
 <li>Keeps only observations from 1995 and a subset of variables</li>
 <li>Omits missing values with <code>na.omit()</code>.</li>
+<li><code>ungroup()</code> ensures that the data is no longer grouped by <code>id</code>. If you try to use <code>summarize()</code> while the data is still grouped by <code>id</code>, you would not get the results that you thought you would.</li>
 </ul>
 <p>A description of the included variables follows:</p>
 <table>
@@ -201,13 +207,13 @@ img {
 </tbody>
 </table>
 <ol style="list-style-type: lower-alpha">
-<li>Load the dataset <code>ross95.csv</code>, which contains a partially cleaned cross-section of replication data for the year 1995. Estimate a linear regression of <code>regime1</code> on <code>oilL5</code>, <code>metalL5</code>, <code>GDPpcL5</code>, <code>islam</code>, and <code>oecd</code>. Record the standard error of the regression, and calculate the expected change in <code>regime1</code> given a change in <code>oilL5</code> from the 50th percentile to the 95th percentile of the fully observed data, all else equal.</li>
+<li>Estimate a linear regression of <code>regime1</code> on <code>oilL5</code>, <code>metalL5</code>, <code>GDPcapL5</code>, <code>islam</code>, and <code>oecd</code>. Record the standard error of the regression, and calculate the expected change in <code>regime1</code> given a change in <code>oilL5</code> from the 50th percentile to the 95th percentile of the fully observed data, all else equal.</li>
 <li><p>Using the residuals from the regression in part a., create the following diagnostic plots:</p>
 <ol style="list-style-type: decimal">
 <li>Plot the residuals against the fitted values</li>
 <li>Plot the residuals against each covariate</li>
 <li>Plot the studentized residuals against the standardized hat values.</li>
-<li>Calculate the heteroskedastic consistent standard errors and compare to the classical standard erros. Use the <strong>car</strong> function <code>hccm</code>.</li>
+<li>Calculate the heteroskedasticity consistent standard errors and compare to the classical standard errors. Use the <strong>car</strong> function <code>hccm</code>.</li>
 </ol>
 <p>What do these diagnostics tell you about the presence of heteroskedasticity, specification error, and outliers?</p></li>
 <li>Rerun the regression using either log or logit transformations on any covariates you see fit. You will likely run several specifications. In each run, record the standard error of the regression, and the expected change in <code>regime1</code> given a change in <code>oilL5</code> from the 50th percentile to the 95th percentile of the fully observed data. See the appendix for some tips and warnings about transforming these data, though.</li>
@@ -222,7 +228,7 @@ img {
 <p>If you try to log or logit transform a covariate <span class="math">\(x\)</span> with observed zeros, you will discover a problem: you can’t log a zero! A common (but wrong) “solution” is to add a small amount to the zeros (e.g., 0.1 or 0.001, etc.). It turns out that you can introduce substantial large bias in your <span class="math">\(\hat \beta\)</span>s by choosing different tiny amounts to add to your 0s: logging small numbers spreads those numbers out over a huge range. Adding 0.001 before logging a variable is not very different from subtracting 10,000 from an unlogged variable! So don’t ever do this, even as a first try.</p>
 <div id="a-solution-the-logbound-and-logitbound-transformations" class="section level2">
 <h2>A Solution: the logBound and logitBound Transformations</h2>
-<p>A better solution that avoids arbitrary assumptions and bias is to “dummy out” the zeros before logging. This procedure treats the zero cases as : they are uniquely different from the rest of our cases, and we estimate the way in which they are different through a separate parameter. We end up with two variables on the right-hand side: an indicator of whether <span class="math">\(x_i=0\)</span>, and the log (or logit) of <span class="math">\(x_i\)</span> in those cases where <span class="math">\(x_i \ne 0\)</span>. That is, if you want to regress <span class="math">\(y\)</span> on <span class="math">\(\textrm{log}(x)\)</span> but <span class="math">\(x\)</span> contains <span class="math">\(0\)</span>s, estimate this regression: <span class="math">\[
+<p>A better solution that avoids arbitrary assumptions and bias is to “dummy out” the zeros before logging. This procedure treats the zero cases as <em>sui generis</em>: they are uniquely different from the rest of our cases, and we estimate the way in which they are different through a separate parameter. We end up with two variables on the right-hand side: an indicator of whether <span class="math">\(x_i=0\)</span>, and the log (or logit) of <span class="math">\(x_i\)</span> in those cases where <span class="math">\(x_i \ne 0\)</span>. That is, if you want to regress <span class="math">\(y\)</span> on <span class="math">\(\textrm{log}(x)\)</span> but <span class="math">\(x\)</span> contains <span class="math">\(0\)</span>s, estimate this regression: <span class="math">\[
 y_i = \beta_0 + \beta_1 I(x_i&gt;0) + \beta_2 \log'(x_i) + \epsilon_i
 \]</span> where <span class="math">\(I(\cdot)\)</span> is an indicator function and <span class="math">\(\log'(\cdot)\)</span> is defined as: <span class="math">\[
 \log'(x) =
@@ -246,7 +252,7 @@ y_i = \beta_0 + \beta_1 I(x_i&gt;0) + \beta_2 I(x_i \ge 1) + \beta_3 \logit'(x_i
 \end{cases}
 \]</span> Note that we will only need all three pieces of Equation 4 if the covariate to be logit transformed contains <strong>both</strong> 0s and 1s; should either extreme be missing, we need only add one dummy variable to the specification.</p>
 <p>The <code>logBound()</code> and <code>logitBound()</code> functions are included in <code>hw4-functions.R</code>. You can load these functions with the following code (provided you downloaded <code>hw4-functions.R</code> and put it in your package directory):</p>
-<pre class="r"><code>source(&quot;hw4-functions.R&quot;)</code></pre>
+<pre class="r"><code>source(&quot;http://pols503.github.io/pols_503_sp15/hw/hw4-functions.R&quot;)</code></pre>
 <p>After loading these functions, the above regression is as simple as:</p>
 <pre class="r"><code>res &lt;- lm(y ~ logBound(x), data)</code></pre>
 <p>You can compare goodness of fit as usual. Moreover, you can use this technique on the right-hand side of any regression-like model, not just least squares regression.</p>
@@ -256,7 +262,7 @@ y_i = \beta_0 + \beta_1 I(x_i&gt;0) + \beta_2 I(x_i \ge 1) + \beta_3 \logit'(x_i
 <p>Take special care in interpreting models in models with <code>logBound(x)</code> or <code>logitBound(x)</code> in the model formula. In setting up a hypothetical scenario for post-estimation prediction, make sure both the dummy term and the log term are set consistent with each other. For example, if the dummy is set to 0, the log must also be zero. And if the log is set to something other than 0, the dummy must be set to 1. Otherwise, you are asking the model to predict a logically impossible scenario; e.g., asking what happens when someone both smokes zero cigarettes and smokes twenty cigarettes in the same day.</p>
 <p>I recommend either calculating the predicted values of <code>regime1</code> “by hand”, or using the <strong>simcf</strong> package, as illustrated below. Our old friend <code>predict()</code> is very unlikely to return results for models including these terms, though if it does return an answer it will agree with other methods.</p>
 <hr />
-<p>Derived from of Christopher Adolph, “Problem Set 4”, <em>POLS/CSSS 503</em>, University of Washington, Spring 2014. <a href="http://faculty.washington.edu/cadolph/503/503hw4.pdf" class="uri">http://faculty.washington.edu/cadolph/503/503hw4.pdf</a>. Used with permission.</p>
+<p>Derived from of Christopher Adolph, “Problem Set 4”, <em>POLS/CSSS 503</em>, University of Washington, Spring 2014. <a href="http://faculty.washington.edu/cadolph/503/503hw4.pdf">http://faculty.washington.edu/cadolph/503/503hw4.pdf</a>. Used with permission.</p>
 <p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,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" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
 </div>
 </div>
