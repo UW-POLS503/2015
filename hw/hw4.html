@@ -117,17 +117,17 @@ img {
 <ol style="list-style-type: lower-alpha">
 <li><p>Estimate the model <span class="math">\[
 \begin{aligned}[t]
-\log(\mathtt{finish}_i) &amp;= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{women}_i \mathtt{year}_i  + \epsilon_i
+\mathtt{finish}_i &amp;= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{women}_i \times \mathtt{year}_i  + \epsilon_i
 \end{aligned}
 \]</span> Create a plot of the fitted values with confidence with respect to <code>year</code>, grouped by <code>women</code>. Do not use <code>geom_smooth()</code>.</p></li>
 <li><p>Create the same plot as in the previous part for the model <span class="math">\[
 \begin{aligned}[t]
-\log(\mathtt{finish}_i) &amp;= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i × \mathtt{women}_i + \epsilon_i
+\mathtt{finish}_i &amp;= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i \times \mathtt{women}_i + \epsilon_i
 \end{aligned}
 \]</span> Be sure to explain in words how this specification differs from the one used in part a.</p></li>
 <li>Rerun the analysis and recreate the plot, adding confidence intervals, for the model: <span class="math">\[
 \begin{aligned}[t]
-\log(\mathtt{Finish}_i) &amp;= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i × \mathtt{women}_i \\
+\mathtt{Finish}_i &amp;= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i × \mathtt{women}_i \\
 &amp; + \beta_4 \mathtt{year}_i^2 + \beta_5 \mathtt{year}_i^2 × \mathtt{women}_i + \epsilon_i
 \end{aligned}
 \]</span> Be sure to explain in words how this specification differs from the ones used in part a. and b.</li>

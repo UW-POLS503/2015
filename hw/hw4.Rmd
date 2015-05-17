@@ -56,7 +56,7 @@ sprinters <- read.csv("http://pols503.github.io/pols_503_sp15/data/sprinters.csv
 a. Estimate the model
     $$
     \begin{aligned}[t]
-    \log(\mathtt{finish}_i) &= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{women}_i \mathtt{year}_i  + \epsilon_i
+    \mathtt{finish}_i &= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{women}_i \times \mathtt{year}_i  + \epsilon_i
     \end{aligned}
     $$
     Create a plot of the fitted values with confidence with respect to `year`, grouped by `women`.
@@ -65,7 +65,7 @@ a. Estimate the model
 b. Create the same plot as in the previous part for the model
     $$
     \begin{aligned}[t]
-    \log(\mathtt{finish}_i) &= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i × \mathtt{women}_i + \epsilon_i
+    \mathtt{finish}_i &= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i \times \mathtt{women}_i + \epsilon_i
     \end{aligned}
     $$
     Be sure to explain in words how this specification differs from the one used in part a.
@@ -74,7 +74,7 @@ c. Rerun the analysis and recreate the plot, adding confidence intervals, for th
 model:
     $$
     \begin{aligned}[t]
-    \log(\mathtt{Finish}_i) &= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i × \mathtt{women}_i \\
+    \mathtt{Finish}_i &= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i × \mathtt{women}_i \\
 	& + \beta_4 \mathtt{year}_i^2 + \beta_5 \mathtt{year}_i^2 × \mathtt{women}_i + \epsilon_i
     \end{aligned}
     $$
@@ -153,11 +153,11 @@ c. Rerun the regression using either log or logit transformations on any covaria
     You will likely run several specifications.
     In each run, record the standard error of the regression, and the expected change in `regime1` given a change in `oilL5` from the 50th percentile to the 95th percentile of the fully observed data.
     See the appendix for some tips and warnings about transforming these data, though.
-f. How much substantive difference does finding the best model make?
+d. How much substantive difference does finding the best model make?
     Be specific and concrete; i.e., show what each model does.
     I’m asking for a more detailed answer than you usually see in articles.
     How much substantive doubt is there in the result if we are not sure which of the models you fit is the  "right" one?
-g. Which model of those you have estimated do you trust most, and why?
+e. Which model of those you have estimated do you trust most, and why?
     What other problems in the specification or estimation method remain unaddressed by our efforts?
     
 # Appendix:  How Do I Log a Covariate with Zeros?
