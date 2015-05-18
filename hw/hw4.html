@@ -115,15 +115,19 @@ img {
 <p>We will revisit the sprinters data we considered in Problem Set 2.</p>
 <pre class="r"><code>sprinters &lt;- read.csv(&quot;http://pols503.github.io/pols_503_sp15/data/sprinters.csv&quot;)</code></pre>
 <ol style="list-style-type: lower-alpha">
-<li><p>Add confidence intervals to the plots you made for Problem Set 2, problem 1d. using the <code>predict()</code> command to generate the confidence intervals around the expected finish times.</p></li>
-<li><p>Rerun the analysis and recreate the plot, adding confidence intervals, for the model: <span class="math">\[
+<li><p>Estimate the model <span class="math">\[
 \begin{aligned}[t]
-\log(\mathtt{Finish}_i) &amp;= \beta_9 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i × \mathtt{women}_i + \epsilon_i
+\mathtt{finish}_i &amp;= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{women}_i \times \mathtt{year}_i  + \epsilon_i
+\end{aligned}
+\]</span> Create a plot of the fitted values with confidence with respect to <code>year</code>, grouped by <code>women</code>. Do not use <code>geom_smooth()</code>.</p></li>
+<li><p>Create the same plot as in the previous part for the model <span class="math">\[
+\begin{aligned}[t]
+\mathtt{finish}_i &amp;= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i \times \mathtt{women}_i + \epsilon_i
 \end{aligned}
 \]</span> Be sure to explain in words how this specification differs from the one used in part a.</p></li>
 <li>Rerun the analysis and recreate the plot, adding confidence intervals, for the model: <span class="math">\[
 \begin{aligned}[t]
-\log(\mathtt{Finish}_i) &amp;= \beta_9 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i × \mathtt{women}_i \\
+\mathtt{Finish}_i &amp;= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i × \mathtt{women}_i \\
 &amp; + \beta_4 \mathtt{year}_i^2 + \beta_5 \mathtt{year}_i^2 × \mathtt{women}_i + \epsilon_i
 \end{aligned}
 \]</span> Be sure to explain in words how this specification differs from the ones used in part a. and b.</li>
@@ -135,21 +139,25 @@ img {
 <div id="model-selection-oil-democracy" class="section level2">
 <h2>Model Selection: Oil &amp; Democracy</h2>
 <p>For this problem, we will use a cleaned-up version of the dataset of Michael Ross, “Does Oil Hinder Democracy?” <em>World Politics</em>, 2001. That paper estimated a time series cross-section model of Polity scores regressed on oil exports and a battery of controls. In this problem, we will focus on a single cross-section, and instead focus on model fitting.</p>
-<p>Load this data using the following code:</p>
-<pre class="r"><code>ross95 &lt;- read.csv(&quot;http://pols503.github.io/pols_503_sp15/data/rossoildata.csv&quot;) %&gt;%
-   group_by(id) %&gt;%
-   mutate(oilL5 = lag(oil, 5),
-          metalL5 = lag(metal, 5),
-          GDPcapL5 = lag(GDPcap, 5)) %&gt;%
-   filter(year == 1995) %&gt;%
-   select(regime1, oilL5, metalL5, GDPcapL5, islam, oecd, cty_name, id, id1) %&gt;%
-   na.omit()</code></pre>
+<p>Load and pre-process this data using the following code:</p>
+<pre class="r"><code>rossoil &lt;- read.csv(&quot;http://pols503.github.io/pols_503_sp15/data/rossoildata.csv&quot;) %&gt;%
+   arrange(id1, year) %&gt;%
+   group_by(id1) %&gt;%
+   mutate(oilL5 = lag(wdr123, 5) / 100,
+          metalL5 = lag(wdr313, 5) / 100,
+          GDPpcL5 = lag(wdr135, 5) / 100,
+          islam = islam / 100) %&gt;%
+   filter(year == 1990) %&gt;%
+   select(regime1, oilL5, metalL5, GDPpcL5, islam, oecd, cty_name, id, id1) %&gt;%
+   na.omit() %&gt;%
+   ungroup()</code></pre>
 <p>The above code:</p>
 <ul>
 <li><code>lag()</code> calculates the lag values of <code>oil</code>, <code>metal</code>, and <code>GDPcap</code>. The second argument of <code>5</code>, means that it calculates a lag of 5.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></li>
 <li><code>group_by</code> ensures that the lag values are only calculated within each country.</li>
 <li>Keeps only observations from 1995 and a subset of variables</li>
 <li>Omits missing values with <code>na.omit()</code>.</li>
+<li><code>ungroup()</code> ensures that the data is no longer grouped by <code>id</code>. If you try to use <code>summarize()</code> while the data is still grouped by <code>id</code>, you would not get the results that you thought you would.</li>
 </ul>
 <p>A description of the included variables follows:</p>
 <table>
@@ -199,13 +207,13 @@ img {
 </tbody>
 </table>
 <ol style="list-style-type: lower-alpha">
-<li>Load the dataset <code>ross95.csv</code>, which contains a partially cleaned cross-section of replication data for the year 1995. Estimate a linear regression of <code>regime1</code> on <code>oilL5</code>, <code>metalL5</code>, <code>GDPpcL5</code>, <code>islam</code>, and <code>oecd</code>. Record the standard error of the regression, and calculate the expected change in <code>regime1</code> given a change in <code>oilL5</code> from the 50th percentile to the 95th percentile of the fully observed data, all else equal.</li>
+<li>Estimate a linear regression of <code>regime1</code> on <code>oilL5</code>, <code>metalL5</code>, <code>GDPcapL5</code>, <code>islam</code>, and <code>oecd</code>. Record the standard error of the regression, and calculate the expected change in <code>regime1</code> given a change in <code>oilL5</code> from the 50th percentile to the 95th percentile of the fully observed data, all else equal.</li>
 <li><p>Using the residuals from the regression in part a., create the following diagnostic plots:</p>
 <ol style="list-style-type: decimal">
 <li>Plot the residuals against the fitted values</li>
 <li>Plot the residuals against each covariate</li>
 <li>Plot the studentized residuals against the standardized hat values.</li>
-<li>Calculate the heteroskedastic consistent standard errors and compare to the classical standard errors. Use the <strong>car</strong> function <code>hccm</code>.</li>
+<li>Calculate the heteroskedasticity consistent standard errors and compare to the classical standard errors. Use the <strong>car</strong> function <code>hccm</code>.</li>
 </ol>
 <p>What do these diagnostics tell you about the presence of heteroskedasticity, specification error, and outliers?</p></li>
 <li>Rerun the regression using either log or logit transformations on any covariates you see fit. You will likely run several specifications. In each run, record the standard error of the regression, and the expected change in <code>regime1</code> given a change in <code>oilL5</code> from the 50th percentile to the 95th percentile of the fully observed data. See the appendix for some tips and warnings about transforming these data, though.</li>
@@ -244,7 +252,7 @@ y_i = \beta_0 + \beta_1 I(x_i&gt;0) + \beta_2 I(x_i \ge 1) + \beta_3 \logit'(x_i
 \end{cases}
 \]</span> Note that we will only need all three pieces of Equation 4 if the covariate to be logit transformed contains <strong>both</strong> 0s and 1s; should either extreme be missing, we need only add one dummy variable to the specification.</p>
 <p>The <code>logBound()</code> and <code>logitBound()</code> functions are included in <code>hw4-functions.R</code>. You can load these functions with the following code (provided you downloaded <code>hw4-functions.R</code> and put it in your package directory):</p>
-<pre class="r"><code>source(&quot;hw4-functions.R&quot;)</code></pre>
+<pre class="r"><code>source(&quot;http://pols503.github.io/pols_503_sp15/hw/hw4-functions.R&quot;)</code></pre>
 <p>After loading these functions, the above regression is as simple as:</p>
 <pre class="r"><code>res &lt;- lm(y ~ logBound(x), data)</code></pre>
 <p>You can compare goodness of fit as usual. Moreover, you can use this technique on the right-hand side of any regression-like model, not just least squares regression.</p>
