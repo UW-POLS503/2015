@@ -23,11 +23,6 @@ Courses with open materials to build from:
 - Jeff Leek (John Hopkins) Coursera data science specialization and JHU Biostatistics 753 and 754: https://github.com/jtleek/jhsph753and4
 - R for Cats: http://rforcats.net/
 
-# Data
-
-We always need more interesting data sets- [Advanced](http://adv-r.had.co.nz/Style.html)
-- http://jefworks.github.io/R-style-guide/#naming-conventions
-
 ## Assessments
 
 - Software carpentry in-lesson assessment http://software-carpentry.org/blog/2015/03/teaching-tips.html
@@ -109,4 +104,28 @@ Focus on a set of specific functions. Generally focus on the Hadleyverse.
 - Logit
     - Nyblade and Krauss (2006), "Logit analysis of electoral incentives and LDP post allocation" used in Using Graps Instead of Tables
 
+- From Amelia / missing data
 
+    -  Burgoon, Brian. 2006. “On Welfare and Terror.” Journal of Conflict Resolution 50(2): 176–203. Effect of national welfare and economic politices on the number of terrorism inicidents caused by citizens of that country. Panel data. Example in Honaker and King, "What to do about Missing Values in Time-Series Cross-Section Data"
+    - Baum, Matthew A., and David A. Lake. 2003. "The Political Economy of Growth: Democracy and Human Capital." American Journal of Political Science 47(2): 333–47. Democracy on economic growth. Panel data. Example in Honaker and King, "What to do about Missing Values in Time-Series Cross-Section Data"
+
+
+   - Examples of missing data in the lit. Honaker and King p. 562:
+
+     This problem is recognized in the comparative politics literature
+	 where scholars have begun to examine the effect of missing data
+	 on their empirical results. For example, Ross (2006) finds that
+	 the estimated relationship between democracy and infant mortality
+	 depends on the sample that remains after listwise
+	 deletion. Timmons (2005) shows that the relationship found
+	 between taxation and redistribution depends on the choice of
+	 taxation measure, but superior measures are subject to increased
+	 missingness and so not used by researchers. And Spence (2007)
+	 finds that Rodrik’s (1998) results are dependent on the treatment
+	 of missing data.
+
+   - Effects of voting in Russia. Colton, Timothy. 2000. Transitional Citizens: Voters and What Influences Them in the New Russia. Cambridge, MA: Harvard University Press. Example in from King et. al, "Aanalyzing Incomplete Political Science Data: An Alternative Algorithm for Multiple Imputation", APSR, 2001.
+   - Public Opinion about racial policy preferences. Brehm, John. 1993. The Phantom Respondents: Opinion Surveys and Political Representation. Ann Arbor: University of Michigan Press. Example in from King et. al, "Aanalyzing Incomplete Political Science Data: An Alternative Algorithm for Multiple Imputation", APSR, 2001.
+   - Unemployment and Presdiential Approval. A toy example used in Blackwell et. al. http://gking.harvard.edu/files/gking/files/measure.pdf
+   - Abortion attitudes. Data from 17 neighborhoods in South Bend, IN. uckfeldt, Robert, Eric Plutzer and John Sprague. 1993. “Alternative Contexts of Political Behavior: Churches, Neighborhoods, and Individuals.” Journal of Politics 55(2, May):365–381. Example from Blackwell et. al. http://gking.harvard.edu/files/gking/files/measure.pdf
+   - Effect of democracy on trade policy. From Milner, Helen and Keiko Kubota. 2005. “Why the move to free trade? Democracy and trade policy in the developing countries.” International Organization 59(1):107–143. Example in Amelia vignette http://r.iq.harvard.edu/docs/amelia/amelia.pdf

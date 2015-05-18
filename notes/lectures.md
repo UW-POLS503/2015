@@ -30,3 +30,16 @@ Comments
 - The usage of Rmarkdown documents is still awkward.
 - Need to streamline my advice of model fitting. It was rambling and not coherent, even in light of a lack of coherence in model choice.
 
+# May 17
+
+## Pre
+
+Decided to consider issues with linear regression before turning to causal inference / 
+
+- missing data
+- outliers: covered in previous versions of the course; also somewhat important for considering weighting
+- limited dependent variables, since several have it. Look at linear probability model.
+- discuss general statistical approach and thoughts of statistical inference currently
+
+## Post
+

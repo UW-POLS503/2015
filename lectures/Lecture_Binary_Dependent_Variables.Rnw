@@ -1,0 +1,68 @@
+% Copyright (C) 2015 Jeffrey B. Arnold
+% License CC BY-NC-SA 4.0 http://creativecommons.org/licenses/by-nc-sa/4.0/
+
+<<init,echo=FALSE,results='hide',warning=FALSE,message=FALSE>>=
+LECTURE_NUM <- "Transformation"
+source("init.R")
+@
+<<header>>=
+suppressPackageStartupMessages({
+  library("car")
+  library("gapminder")
+})
+@
+
+
+\input{\jobname-options}
+\ifdefined\ishandout%
+  \documentclass[handout]{beamer}
+\else
+  \documentclass[]{beamer}
+\fi
+
+% HEADER HERE
+\input{includes.tex}
+
+\usepackage{verbatim}
+
+\newcommand{\thetitle}{Binary Dependent Variables}
+\date{May 19, 2015}
+\title{\thetitle{}}
+\hypersetup{
+  pdftitle={\thetitle{}},
+  pdfkeywords={statistics}
+}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+\begin{frame}
+  \maketitle{}
+\end{frame}
+
+\begin{frame}
+\frametitle{Overview}
+\tableofcontents
+\end{frame}
+
+\section{Linear Probability Model}
+
+\begin{frame}
+
+  
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{}
+\end{frame}
+
+\section{Logit Model}
+
+\section{References}
+
+\begin{frame}
+  
+\end{frame}
+
+\end{document}

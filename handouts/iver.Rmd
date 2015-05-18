@@ -1,0 +1,286 @@
+---
+title: "Outliers and Robust Regression"
+author: "Jeffrey B. Arnold"
+date: "05/19/2015"
+output: html_document
+---
+```{r echo = FALSE, results = 'hide'}
+knitr::opts_chunk$set(cache = TRUE, autodep = TRUE,
+                  fig.height = 3, fig.width = 5)
+```
+
+
+```{r message = FALSE}
+library("MASS")
+library("dplyr")
+library("tidyr")
+library("broom")
+library("boot")
+library("ggplot2")
+select <- dplyr::select
+```
+
+## Iver Data
+
+This is an example of from Iversen and Soskice (2003).
+That paper is interested in the relationship between party systems and redistributive efforts of the government. 
+
+The party system is measured using the effective number of parties;
+the redistributive efforts of the government is measured as the percent people lifted from poverty by taxes and transfers
+
+First, let's load the data
+```{r}
+iver <- read.csv("http://pols503.github.io/pols_503_sp15/data/iver.csv")
+glimpse(iver)
+```
+The variables of interest are `lnemp` (log effective number of parties),
+and `povred` (poverty reduction).
+Let's plot the relationship between them
+```{r}
+ggplot(iver, aes(x = lnenp, y = povred)) + 
+  geom_point() +
+  geom_smooth(method = "lm") +
+  xlab("log(Number of Effective parties)") +
+  ylab("Poverty Reduction")
+```
+
+## Influential Observations
+
+What are influential points in a regression? 
+They are points that 
+How much would the regression line change if we deleted a the point and reran the regression? 
+```{r}
+iver_mod1 <- lm(povred ~ lnenp, data = iver)
+
+iver_loo_regs <-
+  # Start with the iver data
+  iver %>%
+  # Group by country
+  group_by(cty) %>%
+  # For each country
+  # Run the regression without that country and store the coefficient values
+  do({
+    tidy(lm(povred ~ lnenp, data = filter(iver, cty != .$cty))) %>%
+      select(term, estimate)
+  }) %>%
+  # Reshape the dataset so that each coefficient is in a column
+  spread(term, estimate) %>%
+  # Calculate how much these slopes differ from the one with all the data
+  mutate(diff_slope = lnenp - coef(iver_mod1)["lnenp"],
+         abs_diff_slope = abs(diff_slope)) %>%
+  # Sort by the difference in slopes
+  arrange(- abs_diff_slope)
+    
+iver_loo_regs
+```
+Switzerland looks particularly problematic.
+The effect of `lnenp` on `povred` is 7.
+
+We could also plot these lines against the original data, to get a more intuitive sense of how much dropping one observation affects the regression slopes.
+```{r}
+ggplot() +
+  geom_abline(data = iver_loo_regs, aes(intercept = `(Intercept)`,
+                                        slope = lnenp)) + 
+  geom_point(data = iver, aes(x = lnenp, y = povred)) +
+  xlab("log(Number of Effective parties)") +
+  ylab("Poverty Reduction")
+```
+
+Conveniently, in linear regression we can find which observations will have the largest influence on regression lines without rerunning the regression.
+Three statistics are of interest:
+
+- Cook's distance: a single number that summarizes how much dropping an observation changes **all** the regression coefficients.
+- Studentized residual: The scaled residual of the observation. 
+- Hat score: How far the observation is from the center of the data.
+
+Use the **broom** function augment to add residuals and other diagnostic data to the original regression data.
+See `help(influence)` for functions to get these diagnostics using base R.
+```{r}
+iver_mod1_aug <- augment(iver_mod1) %>%
+  mutate(cty = iver$cty)
+glimpse(iver_mod1_aug)
+```
+Oddly, `augment` calculates the *standardized residual*,
+$$
+\mathtt{.std.resid} = E'_i = \frac{E_i}{S_E \sqrt{1 - h_i}}
+$$
+which divides by the regression residual standard error, which is itself a function of the residual of $i$, $S_E = \sqrt{\frac{\sum_j E_j}{n - k - 1}}$.
+What we want is the *studentized residual* which divides by the standard error of the regression calculated omitting observation $i$:
+$$
+\mathtt{.resid / .sigma * sqrt(1 - .hat)} = E^*_i = \frac{E_i}{S_{E_{(i)}} \sqrt{1 - h_i}}
+$$
+where $S_{E_(i)}$ is the standard error of the regression run without observation $i$.
+It is called the studentized residual, because it is distributed Student's $t$; the standardized residual is not.
+Add a new variable called `.student.resid`, which we can calculate using the residual (`.resid`), standard error of the regression that omits that observation (`.sigma`), and the hat value (`.hat`):
+```{r}
+iver_mod1_aug <- iver_mod1_aug %>% mutate(.student.resid = .resid / .sigma * (1 - .hat))
+```
+In base R, the function `rstudent` calculates the studentized residuals, and `rstandard` calculates the standardized residuals:
+```{r}
+setNames(rstudent(iver_mod1), iver$cty)
+setNames(rstandard(iver_mod1), iver$cty)
+```
+
+
+A standard plot to assess outliers is the Influence Plot.
+The x-axis is hat scores, the y-axis is studentized residuals.
+The points are sized by Cook's Distance.
+Rules of thumb lines are drawn at -2 and 2 for studentized residuals, and $\bar{h} + 2 sd(h)$ and $\bar{h} + 3 sd(h)$ for hat scores.
+```{r}
+ggplot() +
+  geom_point(data = iver_mod1_aug,
+             mapping = aes(x = .hat, y = .student.resid, size = .cooksd)) +
+  geom_hline(data = data.frame(yintercept = c(-2, 0, 2)),
+             mapping = aes(yintercept = yintercept)) +
+  geom_text(data = iver_mod1_aug,
+             mapping = aes(x = .hat, y = .student.resid, label = cty), hjust = 0) +
+  geom_hline(data = data.frame(yintercept = c(-2, 0, 2)),
+             mapping = aes(yintercept = yintercept)) +
+  geom_vline(data = data.frame(xintercept = mean(iver_mod1_aug$.hat) +
+                                 sd(iver_mod1_aug$.hat) * c(2, 3)),
+             mapping = aes(xintercept = xintercept)) +
+  xlab("hat") +
+  ylab("Studentized residuals")
+```
+
+Observations with high Cook's distance (greater than $4 / (n - k - 1)$):
+```{r}
+filter(iver_mod1_aug, .cooksd > (4 / iver_mod1$df.residual)) %>%
+  select(cty, .cooksd, lnenp)
+  
+```
+Observations with high hat scores (greater than 2 standard deviations than the mean hat score):
+```{r}
+filter(iver_mod1_aug, .hat > mean(.hat) + 2 * sd(.hat)) %>%
+  select(cty, .hat, lnenp)
+  
+```
+Observations with high studentized residuals (+/- 2):
+```{r}
+filter(iver_mod1_aug, .student.resid > abs(2)) %>%
+  select(cty, .student.resid, lnenp)
+```
+
+```{r}
+ggplot(data = iver_mod1_aug, aes(x = lnenp, y = povred)) +
+  geom_point(mapping = aes(size = .hat)) +
+  geom_smooth(method = "lm")
+```
+
+```{r}
+ggplot(data = iver_mod1_aug, aes(x = lnenp, y = povred)) +
+  geom_point(mapping = aes(size = .student.resid)) +
+  geom_smooth(method = "lm")
+```
+
+```{r}
+ggplot(data = iver_mod1_aug, aes(x = lnenp, y = povred)) +
+  geom_point(mapping = aes(size = abs(.student.resid))) +
+  geom_smooth(method = "lm")
+```
+
+```{r}
+ggplot(data = iver_mod1_aug, aes(x = lnenp, y = povred)) +
+  geom_point(mapping = aes(size = .cooksd)) +
+  geom_smooth(method = "lm")
+```
+
+## Robust and Resistant Regression Methods
+
+Methods of dealing with outliers include robust and resistant regression methods.
+Many forms of robust regression are available through the **MASS* library functions `lqs` and `rls`.
+These include least median squares:
+```{r}
+library("MASS")
+iver_lms <- lqs(povred ~ lnenp, data = iver, method = "lms")
+iver_lms
+```
+least trimmed squares
+```{r}
+iver_lts <- lqs(povred ~ lnenp, data = iver, method = "lts")
+iver_lts
+```
+M-method with Huber weighting,
+```{r}
+iver_huber <- rlm(povred ~ lnenp, data = iver, method = "M",
+                  scale.est = "Huber")
+iver_huber
+```
+MM-methods,
+```{r}
+iver_mm <- rlm(povred ~ lnenp, data = iver, method = "MM",
+               scale.est = "Huber")
+iver_mm
+```
+
+Now plot all of them together,
+```{r}
+iver_line_compare <-
+  bind_rows(data_frame(method = "OLS",
+                       intercept = coef(iver_mod1)["(Intercept)"],
+                       slope = coef(iver_mod1)["lnenp"]),
+            data_frame(method = "LMS",
+                       intercept = coef(iver_lms)["(Intercept)"],
+                       slope = coef(iver_lms)["lnenp"]),
+            data_frame(method = "LTS",
+                       intercept = coef(iver_lts)["(Intercept)"],
+                       slope = coef(iver_lts)["lnenp"]),
+            data_frame(method = "Huber",
+                       intercept = coef(iver_huber)["(Intercept)"],
+                       slope = coef(iver_huber)["lnenp"]),
+            data_frame(method = "MM",
+                       intercept = coef(iver_mm)["(Intercept)"],
+                       slope = coef(iver_mm)["lnenp"])
+            )
+
+print(iver_line_compare)
+
+ggplot() +
+  geom_point(data = iver, mapping = aes(x = lnenp, y = povred)) +
+  geom_abline(data = iver_line_compare, 
+              mapping = aes(intercept = intercept, slope = slope,
+                            colour = method)) +
+  xlab("log(number of effective parties)") +
+  ylab("Poverty reduction")
+
+```
+
+Note that these robust and resistant estimators do no include standard errors.
+To get standard errors, we ned to bootstrap these estimates.
+The following code uses the `bootstrap` function combined `do` to generate bootstraps; see this [vignette](http://cran.r-project.org/web/packages/broom/vignettes/bootstrapping.html).
+Then 
+```{r}
+iver %>%
+  bootstrap(5000) %>%
+  do({
+    mod <- lqs(povred ~ lnenp, method = "lms",
+               data = .)
+    data.frame(term = names(coef(mod)),
+               estimate = coef(mod))
+  }) %>%
+  group_by(term) %>%
+  summarise(mean = mean(estimate),
+            lb = quantile(estimate, 0.025),
+            ub = quantile(estimate, 0.975))
+  
+  
+```
+We find that the standard errors are very large compared to those of the OLS.
+```{r}
+sqrt(diag(vcov(iver_mod1)))
+```
+This makes LTS not particularly useful in small datasets.
+
+This is alternative code to calculate the bootstrap of LTS using the **boot** package.
+`boot` is a more general and powerful method of bootstrapping, supporting many different sampling methods. 
+However, it requires defining a function to calculate the statistic (in this case I write the function `leasttrimmed`), and does not return a dataframe, but a special `boot` object.
+```{r}
+run_lqs <- function(d, i, ...) {
+  coef(lqs(povred ~ lnenp, data = d, subset = i))
+}
+
+boot(iver[ , c("povred", "lnenp")], run_lqs, R = 1000)
+```
+
+
+Adapted from an example in Christopher Adolph (Spring 2014), "Outliers and Robust Regression Techniques" [lecture slides]. <http://faculty.washington.edu/cadolph/503/topic6.pw.pdf>.

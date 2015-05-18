@@ -29,5 +29,6 @@
     - Require students to have data after 2-3 weeks.
 	- More checkups througout the course. Peer-review of progress?
 
-- Ability to use cross-validation or bootstrapping is constrained by the usability of the commands.
-  Consider caret or mlr for cross validation.
+- Ability to use cross-validation or bootstrapping is constrained by the ease of the workflow.
+  Consider caret or mlr for cross validation. Write my own functions.
+- Do not allow anyone to use limited dependent variables in final project. It distracts from the main purpose of the class. 
