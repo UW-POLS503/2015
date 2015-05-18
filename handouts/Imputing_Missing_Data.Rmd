@@ -1,0 +1,189 @@
+---
+title: "Imputing Missing Data"
+author: "Jeffrey B. Arnold"
+date: "05/19/2015"
+output: html_document
+---
+
+```{r message = FALSE}
+library("car")
+library("dplyr")
+library("tidyr")
+library("broom")
+library("ggplot2")
+library("Amelia")
+```
+
+
+```{r}
+UN <- read.table("http://socserv.socsci.mcmaster.ca/jfox/Books/Applied-Regression-3E/datasets/UnitedNations.txt") %>%
+  add_rownames(var = "country") %>%
+  mutate(illiteracyMale = illiteracyMale / 100,
+         illiteracyFemale = illiteracyFemale / 100,
+         economicActivityMale = economicActivityMale / 100,
+         economicActivityFemale = economicActivityFemale / 100,
+         contraception = contraception / 100)
+```
+
+Data File: UnitedNations.txt
+Source: Downloaded from http://www.un.org/Depts/unsd/social/main.htm in 1998.
+Variables:
+region: Africa, America, Asia, Europe, Oceania.
+tfr: Total fertility rate, number of children per woman.
+contraception: Percentage of married women using any method of contraception.
+educationMale: Average number of years of education for men.
+educationFemale: Average number of years of education for women.
+lifeMale: Expectation of life at birth for men.
+lifeFemale: Expectation of life at birth for women.
+infantMortality: infant deaths per 1000 live births.
+GDPperCapita: Gross domestic product per person in U.S. dollars.
+economicActivityMale: Percentage of men who are economically active.
+economicActivityFemale: Percentage of women who are economically active.
+illiteracyMale: Percentage of males 15 years of age and older who are illiterate.
+illiteracyFemale: Percentage of females 15 years of age and older who are illiterate. 
+
+```{r}
+fill_na <- function(x, fill = 0) {
+  x[is.na(x)] <- fill
+  x
+}
+
+frac_missing <- function(x) {
+  sum(is.na(x)) / length(x)
+}
+```
+
+
+```{r}
+summary(UN)
+```
+
+The highest amount of missingness is in `educationMale` and `educationFemale` 
+with approximately 60%.
+```{r warning = FALSE}
+UN %>%
+  gather(variable, value) %>%
+  group_by(variable) %>%
+  summarise(missing = frac_missing(value)) %>%
+  arrange(- missing)
+
+```
+
+The function `missmap` in **Amelia** is a useful way to view the missingness of the data.
+```{r}
+missmap(UN)
+```
+
+The model we would like to estimate is to regress Infant Mortality on 
+log GDP, contraception and Female Education.
+
+Method 1: listwise deletion is the default in R.
+```{r}
+mod_listwise <- 
+  lm(infantMortality ~ log(GDPperCapita) + contraception + educationFemale, 
+     data = UN)
+summary(mod_listwise)
+```
+Note that 145 observations were deleted due to missingness.
+
+Method 2: dummy variables 
+```{r}
+UN_with_dummies <- 
+  UN %>%
+  mutate(GDPperCapita_na = as.integer(is.na(GDPperCapita)),
+         GDPperCapita = fill_na(GDPperCapita, 1),
+         contraception_na = as.integer(is.na(contraception)),
+         contraception = fill_na(contraception, 0),
+         educationFemale_na = as.integer(is.na(educationFemale)),
+         educationFemale = fill_na(educationFemale, 0))
+mod_dummies <- lm(infantMortality ~ log(GDPperCapita) + GDPperCapita_na + contraception + 
+     contraception_na + educationFemale + educationFemale, data = UN_with_dummies)
+mod_dummies
+```
+
+Method 3: mean imputation
+```{r}
+UN_with_means <- 
+  UN %>%
+  mutate(GDPperCapita = fill_na(GDPperCapita, mean(GDPperCapita, na.rm = TRUE)),
+         contraception = fill_na(contraception, mean(contraception, na.rm = TRUE)),
+         educationFemale = fill_na(educationFemale, mean(educationFemale, na.rm = TRUE)))
+mod_means <- lm(infantMortality ~ log(GDPperCapita) + contraception + 
+      educationFemale, data = UN_with_means)
+mod_means
+```
+
+Method 4: multiple imputation
+```{r message = FALSE, results = 'hide'}
+UN_mi <- 
+  amelia(UN,
+         m = 10,
+         logs = c("GDPperCapita"),
+         lgstc = c("economicActivityMale", "economicActivityFemale",
+                   "illiteracyMale", "illiteracyFemale", "contraception"),
+         noms = c("region"),
+         idvars = "country")
+
+```
+
+```{r}
+for (var in c("GDPperCapita", "contraception", "illiteracyFemale")) {
+  overimpute(UN_mi, var, main = var)
+}
+```
+
+```{r}
+for (var in c("GDPperCapita", "contraception", "illiteracyFemale")) {
+  compare.density(UN_mi, var, main = var)
+}
+
+```
+
+```{r}
+b_out <- list()
+se_out <- list()
+for (i in seq_along(UN_mi$imputations)) {
+  mod <- lm(infantMortality ~ log(GDPperCapita) + contraception + educationFemale, data = UN_mi$imputations[[i]])
+  b_out[[i]] <- coef(mod)
+  se_out[[i]] <- sqrt(diag(vcov(mod)))
+}
+b_out <- do.call(rbind, b_out)
+se_out <- do.call(rbind, se_out)
+```
+
+```{r}
+mod_mi_res <- mi.meld(q = b_out, se = se_out)
+mod_mi_res
+```
+
+Now we will combine these into a single dataset,
+```{r}
+model_comp <-
+  bind_rows(tidy(mod_listwise) %>%
+              mutate(model = "listwise"),
+            tidy(mod_dummies) %>%
+              mutate(model = "dummies"),
+            tidy(mod_means) %>%
+              mutate(model = "means"),
+            data_frame(term = colnames(mod_mi_res$q.mi),
+                       estimate = as.numeric(mod_mi_res$q.mi),
+                       std.error = as.numeric(mod_mi_res$se.mi),
+                       model = "mi"))
+
+```
+
+
+```{r}
+ggplot(model_comp %>%
+         filter(term %in% c("log(GDPperCapita)", "contraception", "educationFemale")), aes(x = model, y = estimate,
+                                                                                           ymin = estimate - 2 * std.error,
+                                                                                           ymax = estimate + 2 * std.error)) +
+  geom_pointrange() +
+  coord_flip() +
+  facet_wrap(~ term, ncol = 1)
+
+```
+
+
+
+
