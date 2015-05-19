@@ -65,7 +65,7 @@ a. Estimate the model
 b. Create the same plot as in the previous part for the model
     $$
     \begin{aligned}[t]
-    \mathtt{finish}_i &= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i \times \mathtt{women}_i + \epsilon_i
+    \log (\mathtt{finish}_i) &= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i \times \mathtt{women}_i + \epsilon_i
     \end{aligned}
     $$
     Be sure to explain in words how this specification differs from the one used in part a.
