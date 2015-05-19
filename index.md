@@ -337,7 +337,7 @@ Lab notes: [.html](labs/lab7.html), [.Rmd](labs/lab7.Rmd)
 - Missing Data
 
     - Slides on Missing Data [pdf](lecture/Lecture_Missing_Data_handout.pdf)
-	- Worked Example [Rmd](docs/Imputing_Missing_Data.Rmd), [Rmd](docs/Imputing_Missing_Data.html)
+	- Worked Example [Rmd](docs/Imputing_Missing_Data.Rmd), [html](docs/Imputing_Missing_Data.html)
     - King, Gary, James Honaker, Anne Joseph, and Kenneth Scheve. 2001. "Analyzing Incomplete Political Science Data: An Alternative Algorithm for Multiple Imputation." American Political Science Review 95: 49–69. Copy at http://j.mp/1zTTZUT
 
 - Miscellaneous Thoughts on the state of quantitative analysis in political science
