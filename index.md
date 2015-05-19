@@ -328,9 +328,11 @@ Lab notes: [.html](labs/lab7.html), [.Rmd](labs/lab7.Rmd)
 
 - Limited Dependent Variables
 
+    - Slides on the Linear Probability Model and Logit [pdf](lectures/Lecture_Binary_Dependent_Variables_handout.pdf)
+
 - Outliers
 
-   -  Worked Example [Rmd](docs/Outliers_Robust_Regression.Rmd), [html](docs/Outliers_Robust_Regression.html)
+    - Worked Example [Rmd](docs/Outliers_Robust_Regression.Rmd), [html](docs/Outliers_Robust_Regression.html)
 
 - Missing Data
 
