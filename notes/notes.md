@@ -129,3 +129,15 @@ Focus on a set of specific functions. Generally focus on the Hadleyverse.
    - Unemployment and Presdiential Approval. A toy example used in Blackwell et. al. http://gking.harvard.edu/files/gking/files/measure.pdf
    - Abortion attitudes. Data from 17 neighborhoods in South Bend, IN. uckfeldt, Robert, Eric Plutzer and John Sprague. 1993. “Alternative Contexts of Political Behavior: Churches, Neighborhoods, and Individuals.” Journal of Politics 55(2, May):365–381. Example from Blackwell et. al. http://gking.harvard.edu/files/gking/files/measure.pdf
    - Effect of democracy on trade policy. From Milner, Helen and Keiko Kubota. 2005. “Why the move to free trade? Democracy and trade policy in the developing countries.” International Organization 59(1):107–143. Example in Amelia vignette http://r.iq.harvard.edu/docs/amelia/amelia.pdf
+
+## LPM vs. Logit/Probit
+
+A blog exchange between David Giles and Pischke
+
+- http://davegiles.blogspot.co.uk/2012/06/yet-another-reason-for-avoiding-linear.html
+- http://davegiles.blogspot.ca/2012/06/another-gripe-about-linear-probability.html
+- http://www.mostlyharmlesseconometrics.com/2012/07/probit-better-than-lpm/
+- http://blogs.worldbank.org/impactevaluations/whether-to-probit-or-to-probe-it-in-defense-of-the-linear-probability-model
+- https://nonparibus.wordpress.com/2012/07/13/the-linear-education-model/
+- https://nonparibus.wordpress.com/2014/03/31/bogus-complaints-about-the-use-of-discrete-variablesttwit
+
