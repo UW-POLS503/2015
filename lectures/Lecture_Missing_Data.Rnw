@@ -2,7 +2,6 @@
 % License CC BY-NC-SA 4.0 http://creativecommons.org/licenses/by-nc-sa/4.0/
 
 <<init,echo=FALSE,results='hide',warning=FALSE,message=FALSE>>=
-LECTURE_NUM <- "Missing Data"
 source("init.R")
 @
 <<header>>=
@@ -20,13 +19,14 @@ suppressPackageStartupMessages({
   \documentclass[]{beamer}
 \fi
 
-% HEADER HERE
+%%%INSERTHEADERHERE
 \input{includes.tex}
 
 \usepackage{verbatim}
+\usepackage{tikz}
 
 \newcommand{\thetitle}{Missing Data}
-\date{May 17, 2015}
+\date{May 19, 2015}
 \title{\thetitle{}}
 \hypersetup{
   pdftitle={\thetitle{}},
@@ -55,46 +55,52 @@ suppressPackageStartupMessages({
 \item \textbf{MAR} Missingness at random
 \item \textbf{MNAR} Missingness that depends on unobserved variables, or \textbf{NI} Non-ignorable missingness
 \end{itemize}
+
+\begin{block}{Funamental Problem with Missing Data}
+  Cannot tell from data alone whether missingness is MAR or MNAR.
+\end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Examples of Missingness}
+  
+  \begin{itemize}
+  \item \textbf{MCAR} 
+  \end{itemize}
+  
 \end{frame}
 
 \begin{frame}
   \frametitle{What we will cover and not cover}
-  
+
   \begin{itemize}
-  \item Missing values of $X$: (Bayesian) multiple imputation 
-  \item MNAR models
+  \item Covering: MCAR 
     \begin{itemize}
-    \item Selection bias
-    \item Censoring, Truncation 
+    \item Missing values in $X$
+    \item Methods: listwise-deletion, multiple imputation
+    \end{itemize}
+  \item Not-covering: MNAR models
+    \begin{itemize}
+    \item Selection models
+    \item Censoring, Truncation
     \end{itemize}
   \end{itemize}
 \end{frame}
 
-\begin{frame}
-  \frametitle{When is Listwise Deletion Preferrable to MI?}
-  
-  \begin{itemize}
-  \item Analysis model is conditional on $X$ and correctly specified
-  \item There is NI missingness in $X$
-  \item Missingness in $X$ is not a function of $Y$, and unobserved variable affecting $Y$ do not exist
-  \item Number of observations after deletion is large
-  \end{itemize}
-\end{frame}
+\section{Methods of Dealing with Missing Data}
 
-\section{Multiple Imputation}
 
 \begin{frame}
   \frametitle{Methods}
-  
   \begin{itemize}
   \item Complete case (Listwise deletion)
     \begin{itemize}
-    \item Consistent and valid inferences when MCAR (or MAR but missingess does not depend on the dependent variable)
+    \item Consistent and valid inferences when MCAR (or MAR but missingness does not depend on the dependent variable)
     \item Even in MCAR, inefficient
     \end{itemize}
-  \item Available case (pairwise deletion): 
+  \item Available case (pairwise deletion):
     \begin{itemize}
-    \item E.g. covariance matrix. Calculate $\sum_{i} (x_{i,j} - \bar{x}_{j})(x_{i,k} - \bar{x}_{k})$ for all obs in which $x_{i,j}, x_{i,k}$ are not-missing, regardless of missingness of other variables.
+    \item E.g. Covariance matrix. Calculate $\sum_{i} (x_{i,j} - \bar{x}_{j})(x_{i,k} - \bar{x}_{k})$ for all obs in which $x_{i,j}, x_{i,k}$ are not-missing, regardless of missingness of other variables.
     \item Does not work for all analyses
     \item Can result in nonsensical results
     \end{itemize}
@@ -102,33 +108,101 @@ suppressPackageStartupMessages({
     \begin{itemize}
     \item preserves mean of variables; reduced variance
     \item attenuates relationships between variables
-    \item overstates certainty - increases ``effective'' sample size and distorts inference
+    \item overstates certainty---increases ``effective'' sample size and distorts inference
     \end{itemize}
-    
   \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Overview of Multiple Imputation}
+  \begin{tikzpicture}
+[inner sep = 2.5mm,
+missdata/.style={rectangle, draw=red!50, fill=red!20, thick},
+ impdata/.style={rectangle, draw=blue!50, fill=blue!20, thick},
+results/.style= {circle, draw=blue!50, fill=blue!20, thick}]
+
+\node  (odata) at (3,2) [missdata] {};
+\node [red!80,right] at (5.25,2) {incomplete data};
+\node [black!80,right] at (5.25,1) {imputation};
+
+\node (imp1) at (1,0) [impdata] {}
+  edge [<-, bend left=40] (odata);
+\node (imp2) at (2,0) [impdata] {}
+  edge [<-, bend left=20] (odata);
+\node (imp3) at (3,0) [impdata] {}
+  edge [<-] (odata);
+\node (imp4) at (4,0) [impdata] {}
+  edge [<-, bend right=20] (odata);
+\node (imp5) at (5,0) [impdata] {}
+  edge [<-, bend right=40] (odata);
+
+\node [blue!80,right] at (5.25,0) {imputed datasets};
+
+\node (res1) at (1,-1) [results] {}
+  edge [<-] (imp1);
+\node (res2) at (2,-1) [results] {}
+  edge [<-] (imp2);
+\node (res3) at (3,-1) [results] {}
+  edge [<-] (imp3);
+\node (res4) at (4,-1) [results] {}
+  edge [<-] (imp4);
+\node (res5) at (5,-1) [results] {}
+  edge [<-] (imp5);
+
+\node [black!80, right] at (5.25, -0.5) {analysis};
+\node [blue!80, right] at (5.25, -1) {separate results};
+
+\node[circle, draw=green!50!black!50, fill=green!20, thick] at (3,-3) {}
+  edge [<-, bend right=40] (res5)
+  edge [<-, bend left=40] (res1)
+  edge [<-, bend right=20] (res4)
+  edge [<-, bend left=20] (res2)
+  edge [<-] (res3);
+
+\node [black!80, right] at (5.25, -2) {combination};
+\node [green!80!black!80, right] at (5.25, -3) { final results};
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+  \frametitle{When is Listwise Deletion Preferable to MI?}
+
+  \begin{enumerate}
+  \item All of the following need to hold
+    \begin{itemize}
+    \item Analysis model is conditional on $X$ and correctly specified
+    \item There is NI missingness in $X$
+    \item Missingness in $X$ is not a function of $Y$, and unobserved variable affecting $Y$ do not exist
+    \item Number of observations after deletion is large
+    \end{itemize}
+  \item Know $X$ well enough that we don't trust it to impute, but trust it enough to analyze $Y$
+  \item Rarely would you prefer listwise deletion to multiple imputation
+  \end{enumerate}
   
 \end{frame}
 
 \begin{frame}
   \frametitle{Multiple Imputation Estimator Combines Individual Estimates}
-  
-  Given $B^{(1)}_{j}, \dots, B^{(g)}_{j}$, and $\se(B_{j}^{(1)}), \dots, \se(B_{j}^{(g)})$ from imputations:
- 
+
+  Given $B^{(1)}_{j}, \dots, B^{(g)}_{j}$, and $\se(B_{j}^{(1)}), \dots, \se(B_{j}^{(g)})$ from $g$ imputations:
+
   Estimate for \textbf{single coefficients is:}
   \begin{align*}
-    \tilde{\beta}_{j} 
-    &= \frac{\sum_{l = 1^{g}} B_{j}^{(l)}}{g} \\
+    \text{Point Estimate}&&
+    \tilde{\beta}_{j}
+    &= \frac{\sum_{l = 1}^{g} B_{j}^{(l)}}{g} \\
+    \text{Std. Error.} &&
     \tilde{\se}
     \left(
     \tilde{\beta}_{j}
     \right)
     &=
-      \sqrt{V_{j}^{(W)} + \frac{g + 1}{g} V_{j}^{(B)} \\
-    V_{j}^{(W)} &= \frac{1}{g} \sum_{l = 1}^{g} (\se B_{j}^{(l)})^{2}
-    V_{j}^{(B)} &= \frac{1}{g - 1} \sum_{l = 1}^{g} (B_{j}^{(l)} - \tilde{\beta}_{j})^{2}    
+      \sqrt{V_{j}^{(W)} + \frac{g + 1}{g} V_{j}^{(B)}} \\
+    \text{Within Imputation Variance}&&V_{j}^{(W)} &= \frac{1}{g} \sum_{l = 1}^{g} \var(B_{j}^{(l)}) \\
+    \text{Between Imputation Variance}&&V_{j}^{(B)} &= \frac{1}{g - 1} \sum_{l = 1}^{g} {(B_{j}^{(l)} - \tilde{\beta}_{j})}^{2}
   \end{align*}
   where $\tilde{\beta}_{j}$ distributed $t$ with complicated d.f. (see Fox, 564)
-  
+
 \end{frame}
 
 
@@ -137,33 +211,34 @@ suppressPackageStartupMessages({
 
   \begin{block}{Relative efficiency of multiple imputation}
   \begin{equation*}
-    V(\tilde{\beta}^{MLE}_{j}) / V(\tilde{\beta}^{MI}_{j}) = \frac{g}{g + \gamma_{j}}
+    RE(\tilde{\beta}_{j}) = V(\tilde{\beta}^{MLE}_{j}) / V(\tilde{\beta}^{MI}_{j}) = \frac{g}{g + \gamma_{j}}
   \end{equation*}
   where $\gamma_{j}$ is the relative rate of missing information
   \begin{align*}
-    \gamma_{j} &= \frac{R_{j}}{R_{j} + 1}   \\
-    R_{j} &= \frac{g + 1}{g} \frac{V_{j}^{(B)}}{V_{j}^{(W)}}
+    \gamma_{j} &= \frac{R_{j}}{R_{j} + 1} 
+    & R_{j} &= \frac{g + 1}{g} \times \frac{V_{j}^{(B)}}{V_{j}^{(W)}}
   \end{align*}
   \end{block}
 
   \begin{block}{Main point!}
-    Suppose $R_{j} = \gamma$, then with $g = 5$ iterations efficiency is $\frac{5}{5 + 0.5} = 0.91$.
+    Suppose $R_{j} = \gamma$, then with $g = 5$ iterations, then efficiency is 
+    $$\frac{5}{5 + 0.5} = 0.91$$
   \end{block}
-  
+
 \end{frame}
 
 \begin{frame}
-  \frametitle{Advice on }
-  
+  \frametitle{Advice on Missing Data}
+
   \begin{itemize}
   \item Include all relevant variables in the imputation; at least all used in the estimation, including the dependent variable.
   \item Even if data are not multivariate normal, multivariate normal works okay.
   \item Transform data to approximate normality (Amelia has options)
   \item See TSCS extensions in Amelia
-  \item Post-hoc adjustments okay. Impute and
+  \item Post-hoc adjustments okay. Impute naively and adjust, e.g.\@round to integers, or 0/1.
   \item If need to save time, work with a single iteration until ``final'' analysis.
   \item Potential problems: complex interactions between variables
-  \item Try default methods; they often work. 
+  \item Try default methods; they often work.
   \item If not ...
     \begin{itemize}
     \item Multiple Chained Equations: \textbf{mice}, \textbf{mi} packages
@@ -171,22 +246,24 @@ suppressPackageStartupMessages({
     \item Full Bayesian models
     \end{itemize}
   \end{itemize}
-  
+
 \end{frame}
-
-
 
 \section{References}
 
 \begin{frame}
   \frametitle{References}
-  
+
+  \small
   \begin{itemize}
   \item Gelman and Hill, Ch. 25 ``Missing Data Imputation''
   \item Fox, Ch 20 ``Missing Data in Regression Models''
-  \item Amelia
+  \item Blackwell, Matthew, James Honaker, and Gary King. 10030. ``A Unified Approach to Measurement Error and Missing Data: Overview.'' \textit{Sociological Methods and Research}. \url{http://j.mp/jqdj72}.
+  \item Honaker, James, Gary King, and Matthew Blackwell. 2011. ``Amelia II:\@A Program for Missing Data.'' \textit{Journal of Statistical Software} 45(7). \url{http://www.jstatsoft.org/v45/i07/}.
+  \item Honaker, James, and Gary King. 2010. ``What to Do about Missing Values in Time-Series Cross-Section Data.'' \textit{American Journal of Political Science} 54(2): 561–81. \url{http://onlinelibrary.wiley.com/doi/10.1111/j.1540-5907.2010.00447.x/abstract} (May 19, 2015).
+  \item King, Gary, James Honaker, Anne Joseph, and Kenneth Scheve. 2001. ``Analyzing Incomplete Political Science Data: An Alternative Algorithm for Multiple Imputation.'' \textit{American Political Science Review} null (01): 49–69. \url{http://journals.cambridge.org/article_S0003055401000235} (May 19, 2015).
   \end{itemize}
-  
+
 \end{frame}
 
 

@@ -2,7 +2,6 @@
 % License CC BY-NC-SA 4.0 http://creativecommons.org/licenses/by-nc-sa/4.0/
 
 <<init,echo=FALSE,results='hide',warning=FALSE,message=FALSE>>=
-LECTURE_NUM <- "Transformation"
 source("init.R")
 @
 <<header>>=
@@ -20,7 +19,7 @@ suppressPackageStartupMessages({
   \documentclass[]{beamer}
 \fi
 
-% HEADER HERE
+%%%INSERTHEADERHERE
 \input{includes.tex}
 
 \usepackage{verbatim}

@@ -2,7 +2,6 @@
 % License CC BY-NC-SA 4.0 http://creativecommons.org/licenses/by-nc-sa/4.0/
 
 <<init,echo=FALSE,results='hide',warning=FALSE,message=FALSE>>=
-LECTURE_NUM <- "Transformation"
 source("init.R")
 @
 <<header>>=
@@ -12,7 +11,6 @@ suppressPackageStartupMessages({
 })
 @
 
-
 \input{\jobname-options}
 \ifdefined\ishandout%
   \documentclass[handout]{beamer}
@@ -20,7 +18,8 @@ suppressPackageStartupMessages({
   \documentclass[]{beamer}
 \fi
 
-% HEADER HERE
+%%%INSERTHEADERHERE
+
 \input{includes.tex}
 
 \usepackage{verbatim}
@@ -33,6 +32,8 @@ suppressPackageStartupMessages({
   pdfkeywords={statistics}
 }
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+
+\DeclareMathOperator{\logit}{logit}
 \begin{document}
 
 \begin{frame}
@@ -46,43 +47,345 @@ suppressPackageStartupMessages({
 
 \section{Linear Probability Model}
 
-\begin{frame}
 
-  
-  
+\begin{frame}
+\frametitle{Example of Linear Probability Model}
+\framesubtitle{Vote for Bush in U.S. Presidential Election 1992}
+
+<<>>=
+nes <- read.dta("../data/nes5200_processed_voters_realideo.dta")
+nes_sample <- nes %>%
+  filter(year == 1992) %>%
+  filter(! is.na(presvote) & ! is.na(income)) %>%
+  sample_n(1000) %>%
+  mutate(voterep = as.integer(presvote == "2. republican"),
+         income = as.integer(income))
+ggplot(nes_sample, aes(x = income, y = voterep)) +
+  geom_point(position = position_jitter(h = 0.1)) +
+  geom_smooth(method = "lm") +
+  ylab("Voted for Bush (1992)") +
+  xlab("Income Category (low to high)") +
+  theme_local()
+@
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Residuals in LPM}
+  \framesubtitle{Vote for Bush in U.S. Presidential Election 1992}
+
+<<>>=
+mod <- augment(lm(voterep ~ income, data = nes_sample))
+ggplot(mod, aes(x = income, y = .resid)) +
+  geom_point(position = position_jitter(h = 0.1)) +
+  geom_hline(yintercept = 0, colour = "gray") +
+  theme_local()
+
+@
+
 \end{frame}
 
 
 \begin{frame}
-  \frametitle{}
+\frametitle{Example of Linear Probability Model}
+\framesubtitle{Vote Intention in Chilean Plebiscite in 1973}
+
+<<warning = FALSE>>=
+data("Chile", package = "car")
+Chile <- mutate(Chile, vote_yes = as.integer((vote == "Y")))
+ggplot(Chile,
+       aes(x = statusquo, y = vote_yes)) +
+  geom_point(position = position_jitter(h = 0.1)) +
+  geom_smooth(method = "lm") +
+  ylab("Voting Intention") +
+  xlab("Support for Status Quo") +
+  theme_local()
+@
+
+
 \end{frame}
 
-\section{Logit Model}
+
+
+
+\begin{frame}
+  \frametitle{Residuals in LPM}
+  \framesubtitle{Vote Intention in Chilean Plebiscite in 1973}
+
+<<warning = FALSE>>=
+mod2 <- lm(vote_yes ~ statusquo, data = Chile)
+ggplot(augment(mod2),
+       aes(x = statusquo, y = .resid)) +
+  geom_point(position = position_jitter(h = 0.1)) +
+  geom_hline(colour = "gray") + 
+  ylab("Voting Intention") +
+  xlab("Support for Status Quo") +
+  theme_local()
+@
+
+\end{frame}
 
 \begin{frame}
   \frametitle{Linear Probability Model}
-  
-  
-  
-  
+
+  OLS with a binary dependent variable.
+  When $Y_{i} \in \{0, 1\}$:
+  \begin{equation*}
+    Y_{i} = \alpha + \beta X_{i} + \epsilon_{i}
+  \end{equation*}
+
+  The expected value is a probability
+  \begin{equation*}
+    E(Y_{i} | X_{i}) = \Pr(Y_{i} = 1 | X_{i}) = \alpha + \beta X_{i}
+  \end{equation*}
+
 \end{frame}
 
 \begin{frame}
-  \frametitle{The LPM Strikes Back}
-  
+  \frametitle{Problems with the LPM}
+
   \begin{itemize}
-  \item LPM is popular among econometricians, causal inference folks - 
-  \item See the debate here
+  \item Errors are not normally distributed
+    \begin{align*}
+      \epsilon_{i} | Y_{i} = 1 = 1 - E(Y_{i} | X_{i}) &= 1 - (\alpha - \beta X_{i}) = 1 - \pi_{i} \\
+      \epsilon_{i} | Y_{i} = 1 = 1 - E(Y_{i} | X_{i}) &= 1 - (\alpha - \beta X_{i}) = - \pi_{i}
+    \end{align*}
+  \item Errors have non-constant variance (heteroskedasticity)
+    \begin{equation*}
+      V(\epsilon_{i}) = \pi (1 - \pi_{i})
+    \end{equation*}
+  \item Expected values $\alpha + \beta X_{i}$ can extend beyond (0, 1)
+  \item Improper specification leads to bias; heteroskedasticity and errors leads to incorrect standard errors.
+  \end{itemize}
+
+\end{frame}
+
+\section{Logit Models}
+
+
+\begin{frame}[fragile]
+  \frametitle{Logit Function}
+<<>>=
+ggplot(data_frame(x = seq(0.05, 0.95, by = 0.01),
+                  y = log(x) - log(1 - x)),
+       aes(x = x, y = y)) +
+  geom_line() +
+  xlab("p") +
+  ylab("logit^-1 (p)") +
+  theme_local()
+@
+
+$\logit(x) = \log \left(\frac{p}{1 - p} \right)$
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Inverse Logit (Logistic) Function}
+<<>>=
+ggplot(data_frame(x = seq(-5, 5, by = 0.1),
+                  y = 1 / (1 + exp(- x))),
+       aes(x = x, y = y)) +
+  geom_line() +
+  xlab("x") +
+  ylab("1 / (1 + exp(- x))") +
+  theme_local()
+@
+
+$\logit^{-1}(x) = \frac{1}{1 + e^{-x}} = \frac{e^{x}}{e^{x} + 1}$
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Logit and Logistic Function}
+
+  \begin{block}{Logit Function}
+    Log-odds: Goes from $(0, 1)$ to $- (\infty, -\infty)$
+    \begin{equation*}
+    \logit(p) = \log \left(\frac{p}{1 - p}\right) = \log(p) - \log(1 - p)
+    \end{equation*}
+  \end{block}
+
+  \begin{block}{Logistic or Inverse Logit Function}
+    Goes from $- (\infty, -\infty)$ to $(0, 1)$
+    \begin{equation*}
+      \logit^{-1}(x) =
+      \frac{1}{1 + \exp(-x)} = \frac{\exp(x)}{\exp(x) + 1}
+    \end{equation*}
+  \end{block}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Logit Model}
+
+  \begin{align*}
+    \Pr(Y_{i} = 1) &= f(X_{i} \beta) \\
+    &= \frac{1}{1 + \exp(-(\alpha + X_{i} \beta))} \\
+    &= \logit^{-1}(\alpha + X_{i} \beta)
+  \end{align*}
+
+  \begin{itemize}
+  \item Model $\Pr(Y_{i} = 1)$
+  \item $X_{i} \beta$ is a linear predictor
+  \item Not OLS anymore; parameters estimated by MLE
+  \item $f$ is a function that maps $(-\infty, +\infty)$ to $(0, 1)$
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Logit Model}
+
+  Alternative specification:
+  \begin{align*}
+    \Pr(Y_{i} = 1) &= \pi_{i} \\
+    \logit(\pi_{i}) &= \alpha + X_{i} \beta
+  \end{align*}
+
+  Log-odds of the probability of $Y$ is a linear function
+
+\end{frame}
+
+\begin{frame}[fragile]
+
+<<echo=TRUE, results = "markup", size = "tiny">>=
+summary(glm(voterep ~ income, data = nes_sample,
+            family = binomial(link = "logit")))
+@
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Example of Linear Probability Model}
+\framesubtitle{Vote for Bush in U.S. Presidential Election 1992}
+
+<<>>=
+ggplot(nes_sample, aes(x = income, y = voterep)) +
+  geom_point(position = position_jitter(h = 0.1)) +
+  geom_smooth(method = "lm", se = FALSE, colour = "red") +
+  geom_smooth(method = "lm", family = binomial(link = "logit")) +
+  ylab("Voted for Bush (1992)") +
+  xlab("Income Category (low to high)") +
+  theme_local()
+@
+
+\end{frame}
+
+\begin{frame}[fragile]
+
+<<echo = TRUE, size = "tiny">>=
+summary(glm(vote_yes ~ statusquo, data = Chile,
+            family = binomial(link = "logit")))
+@
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Example of Linear Probability Model}
+\framesubtitle{Vote Intention in Chilean Plebiscite in 1973}
+
+<<warning = FALSE>>=
+ggplot(Chile,
+       aes(x = statusquo, y = vote_yes)) +
+  geom_point(position = position_jitter(h = 0.1)) +
+  geom_smooth(method = "lm", se = FALSE, colour = "red") +
+  geom_smooth(method = "glm", family = binomial(link = "logit")) +
+  ylab("Voting Intention") +
+  xlab("Support for Status Quo") +
+  theme_local()
+@
+
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Logit Coefficients are Less Transparent}
+
+  In linear regression, $\partial Y/ \partial X_{j} = \beta_{j}$
+  \begin{equation*}
+    \frac{\partial Y}{\partial X_{j}} = \frac{\partial}{\partial X_{j}} (\alpha + \beta_{1} X_{1} + \dots \beta_{k} X_{k}) = \beta_{j}
+  \end{equation*}
+  In logistic regression, $\partial Y/ \partial X_{j} = \beta_{j}$
+  \begin{equation*}
+    \frac{\partial \Pr(Y_{i} = 1)}{\partial X_{j}} = \frac{\partial}{\partial X_{j}} \frac{1}{1 + \exp(\alpha + \beta X_{i})} = \Pr(Y = 1 | X_{i}) \Pr(Y = 0 | X_{i}) \beta_j
+  \end{equation*}
+  or 
+  \begin{equation*}
+    \frac{\partial logit(Y_{i} = 1)}{\partial X_{j}} = \frac{\partial}{\partial X_{j}} X_{i} \beta_{j} = \beta_j
+  \end{equation*}
+
+  \begin{itemize}
+  \item Unlike OLS, the partial derivative depends on value of $X_{i}$
+  \end{itemize}
+
+\end{frame}
+
+
+
+\section{LPM vs. Logit}
+
+\begin{frame}
+  \frametitle{The LPM Strikes Back}
+
+  \begin{itemize}
+  \item LPM has renewed popular among econometricians, causal inference folks -
+  \item See the debate \href{http://www.mostlyharmlesseconometrics.com/2012/07/probit-better-than-lpm/}{here}
   \item OLS is still Min MSE linear approx of Conditional Expectation Function
   \item It is biased if functional form is wrong; but so it logit / probit.
     And the functional form is \textbf{always} wrong
-  \item Important thing is the \textbf{average} marginal effects and
-    OLS does okay with that.
+  \item If you care about \textbf{average marginal effects} OLS does well
+    \begin{equation*}
+      \text{Avg. Marginal Effect} = \frac{1}{n} x\sum_i \frac{\partial Y}{\partial x_j} |_{X_i}
+    \end{equation*}
+  \item Angrist and Pischke recommend LPM with heteroskedasticity consistent errors
   \end{itemize}
-  
+
 \end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Comparing Average Marginal Effects of Logit and LPM}
+\framesubtitle{1992 U.S. Election Example}
+
+
+<<echo = TRUE>>=
+mod <- glm(voterep ~ income, data = nes_sample,
+           family = binomial(link = "logit"))
+mod_aug <- augment(mod, type.predict = "response")
+mean(mod_aug$.fitted * (1 - mod_aug$.fitted) * coef(mod)[2])
+
+lm(voterep ~ income, data = nes_sample)
+@
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Comparing Average Marginal Effects of Logit and LPM}
+\framesubtitle{Chile Plebiscite Example}
+
+<<echo = TRUE>>=
+mod <- glm(vote_yes ~ statusquo, data = Chile,
+           family = binomial(link = "logit"))
+mod_aug <- augment(mod, type.predict = "response")
+mean(mod_aug$.fitted * (1 - mod_aug$.fitted) * coef(mod)[2])
+
+lm(vote_yes ~ statusquo, data = Chile)
+@
+\end{frame}
+
+
 
 \section{References}
 
+\begin{frame}
+  \frametitle{References}
+
+  \begin{itemize}
+  \item Fox, Ch. 14
+  \item Gelman and Hill, Ch 5. This should have most material you need.
+  \end{itemize}
+\end{frame}
 
 \end{document}

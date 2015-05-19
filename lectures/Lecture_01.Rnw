@@ -6,7 +6,7 @@
 \else
   \documentclass[12pt]{beamer}
 \fi
-% HEADER HERE
+%%%INSERTHEADERHERE
 \input{includes.tex}
 
 \newcommand{\thetitle}{Introduction}

@@ -17,7 +17,7 @@ suppressPackageStartupMessages({
   \documentclass[]{beamer}
 \fi
 
-% HEADER HERE
+%%%INSERTHEADERHERE
 
 \input{includes.tex}
 
