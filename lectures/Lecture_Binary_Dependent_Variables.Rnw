@@ -59,10 +59,30 @@ suppressPackageStartupMessages({
 
 \section{Logit Model}
 
-\section{References}
-
 \begin{frame}
+  \frametitle{Linear Probability Model}
+  
+  
+  
   
 \end{frame}
+
+\begin{frame}
+  \frametitle{The LPM Strikes Back}
+  
+  \begin{itemize}
+  \item LPM is popular among econometricians, causal inference folks - 
+  \item See the debate here
+  \item OLS is still Min MSE linear approx of Conditional Expectation Function
+  \item It is biased if functional form is wrong; but so it logit / probit.
+    And the functional form is \textbf{always} wrong
+  \item Important thing is the \textbf{average} marginal effects and
+    OLS does okay with that.
+  \end{itemize}
+  
+\end{frame}
+
+\section{References}
+
 
 \end{document}

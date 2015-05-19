@@ -2,9 +2,19 @@
 title: "Imputing Missing Data"
 author: "Jeffrey B. Arnold"
 date: "05/19/2015"
-output: html_document
+output:
+  html_document:
+    toc: true
+    fig_height: 4
+    fig_width: 5
 ---
+```{r echo = FALSE, results = 'hide'}
+knitr::opts_chunk$set(cache = TRUE, autodep = TRUE)
+```
 
+
+This example uses the following packages.
+The important one is **Amelia** which provides functions for multiple imputation.
 ```{r message = FALSE}
 library("car")
 library("dplyr")
@@ -14,7 +24,12 @@ library("ggplot2")
 library("Amelia")
 ```
 
+## Data
 
+For this example we will run a regression model of infant mortality (number of deaths per 1,000) on GDP per capita, percentage of married women practicing contraception, and average number of years of education for women.
+This is the data and model used for missing data in Chapter 20 of Fox, *Applied Regression Analysis*, although our methods of imputation and implementations thereof will be different.
+
+We will load the data and do some minor cleaning of it
 ```{r}
 UN <- read.table("http://socserv.socsci.mcmaster.ca/jfox/Books/Applied-Regression-3E/datasets/UnitedNations.txt") %>%
   add_rownames(var = "country") %>%
@@ -25,99 +40,184 @@ UN <- read.table("http://socserv.socsci.mcmaster.ca/jfox/Books/Applied-Regressio
          contraception = contraception / 100)
 ```
 
-Data File: UnitedNations.txt
-Source: Downloaded from http://www.un.org/Depts/unsd/social/main.htm in 1998.
-Variables:
-region: Africa, America, Asia, Europe, Oceania.
-tfr: Total fertility rate, number of children per woman.
-contraception: Percentage of married women using any method of contraception.
-educationMale: Average number of years of education for men.
-educationFemale: Average number of years of education for women.
-lifeMale: Expectation of life at birth for men.
-lifeFemale: Expectation of life at birth for women.
-infantMortality: infant deaths per 1000 live births.
-GDPperCapita: Gross domestic product per person in U.S. dollars.
-economicActivityMale: Percentage of men who are economically active.
-economicActivityFemale: Percentage of women who are economically active.
-illiteracyMale: Percentage of males 15 years of age and older who are illiterate.
-illiteracyFemale: Percentage of females 15 years of age and older who are illiterate. 
+The variables in the dataset are described in the table below.
+Although we will only use `infantMortality`, `educationFemale`, `contraception`, and `illiteracyFemale` in the regressions, it will be useful to use all of the available data for imputation.
 
+variable                   description
+-------------------------- -------------------------------------------------------------------
+`region`                   Africa, America, Asia, Europe, Oceania.
+`tfr`                      Total fertility rate, number of children per woman.
+`contraception`            Percentage of married women using any method of contraception.
+`educationMale`            Average number of years of education for men.
+`educationFemale`          Average number of years of education for women.
+`lifeMale`                 Expectation of life at birth for men.
+`lifeFemale`               Expectation of life at birth for women.
+`infantMortality`          infant deaths per 1000 live births.
+`GDPperCapita`             Gross domestic product per person in U.S. dollars.
+`economicActivityMale`     Percentage of men who are economically active.
+`economicActivityFemale`   Percentage of women who are economically active.
+`illiteracyMale`           Percentage of males 15 years of age and older who are illiterate.
+`illiteracyFemale`         Percentage of females 15 years of age and older who are illiterate. 
+-------------------------- -----------------------------------------------------------------
+
+Before starting let's summarize the data
 ```{r}
-fill_na <- function(x, fill = 0) {
-  x[is.na(x)] <- fill
-  x
-}
-
+summary(UN)
+```
+We are particularly interested in the amount of missing values in each variable.
+Although `summary()` lists the missingness in each variable, it can be useful to use 
+The function `frac_missing` calculates the fraction of missing values in `x`.
+```{r}
 frac_missing <- function(x) {
   sum(is.na(x)) / length(x)
 }
 ```
-
-
-```{r}
-summary(UN)
-```
-
-The highest amount of missingness is in `educationMale` and `educationFemale` 
-with approximately 60%.
-```{r warning = FALSE}
-UN %>%
+The amount of missingness in the variables of interests is highest for `educationFemale` 
+at over 63%, followed by contraception at 30%.
+```{r warning = FALSE,message = FALSE}
+UN_miss_by_var <- 
+  UN %>%
   gather(variable, value) %>%
   group_by(variable) %>%
   summarise(missing = frac_missing(value)) %>%
   arrange(- missing)
-
+UN_miss_by_var
 ```
+The function `missmap` in **Amelia** is a useful way to view the missingness of variables in your data
 
-The function `missmap` in **Amelia** is a useful way to view the missingness of the data.
-```{r}
+```{r fig.height = 5}
 missmap(UN)
 ```
+
+As an aside, and to show you how the combination of `dplyr`, `ggplot` occupy a nice spot on the flexibility / amount of code frontier,
+
+```{r fig.width = 6,warning = FALSE,message = FALSE}
+UN_miss_mat <- 
+  mutate(UN, n = row_number()) %>%
+  gather(variable, value, - n) %>%
+  mutate(is_na = is.na(value)) %>%
+  filter(! variable %in% "country")
+ggplot(UN_miss_mat,
+       aes(x = reorder(variable, is_na, mean), y = n, fill = is_na)) + 
+  geom_tile() +
+  theme_minimal() +
+  coord_flip() + 
+  # this manually sets the colors of the plot; guide = FALSE removes the legend
+  scale_fill_manual(values = c("black", NA), guide = FALSE) +
+  xlab("") + ylab("Observation number")
+```
+
+
+Considering that analyses that we will run, with `infantMortality`, `educationFemale`,
+`contraception`, `GDPperCapita`. 
+What is the level of missingness if we keep only observations will non-missing values in all the variables?
+Although the original data has observations for 207 countries, 145 (70%) of them have a missing value for at least one of those variables.
+```{r}
+UN %>%
+  mutate(n = row_number()) %>%
+  select(n, infantMortality, educationFemale, contraception, GDPperCapita) %>%
+  gather(variable, value, - n) %>%
+  group_by(n) %>%
+  summarize(any_missing = any(is.na(value))) %>%
+  summarise(total = length(n), total_miss = sum(any_missing),
+            miss_frac = total_miss / total)
+
+```
+
+## Models
 
 The model we would like to estimate is to regress Infant Mortality on 
 log GDP, contraception and Female Education.
 
-Method 1: listwise deletion is the default in R.
+
+### Listwise deletion
+
+We will only use rows for which **all** the variables used in the model are non-missing.
+This is what `lm()` does by default when it encounters missing values.
 ```{r}
 mod_listwise <- 
   lm(infantMortality ~ log(GDPperCapita) + contraception + educationFemale, 
      data = UN)
 summary(mod_listwise)
 ```
-Note that 145 observations were deleted due to missingness.
 
-Method 2: dummy variables 
+### Indicator Variables for Missing Values
+
+For each variable, we will add a dummy variable that is equal 1 if that variable is missing and 0 if not. Then for each variable we will replace its missing values with 0 (or its mean).
+To assist in that, we will define the function `fill_na` which fills in missing values in `x` with whatever value is given in `fill`.
+```{r}
+fill_na <- function(x, fill = 0) {
+  x[is.na(x)] <- fill
+  x
+}
+```
+Now we generate a new dataset with those dummy variables and with the missing values replaced by 0s.
 ```{r}
 UN_with_dummies <- 
   UN %>%
   mutate(GDPperCapita_na = as.integer(is.na(GDPperCapita)),
-         GDPperCapita = fill_na(GDPperCapita, 1),
+         GDPperCapita = fill_na(GDPperCapita, mean(GDPperCapita, na.rm = TRUE)),
          contraception_na = as.integer(is.na(contraception)),
-         contraception = fill_na(contraception, 0),
+         contraception = fill_na(contraception, mean(contraception, na.rm = TRUE)),
          educationFemale_na = as.integer(is.na(educationFemale)),
-         educationFemale = fill_na(educationFemale, 0))
+         educationFemale = fill_na(educationFemale, mean(educationFemale, na.rm = TRUE)))
 mod_dummies <- lm(infantMortality ~ log(GDPperCapita) + GDPperCapita_na + contraception + 
      contraception_na + educationFemale + educationFemale, data = UN_with_dummies)
 mod_dummies
 ```
 
-Method 3: mean imputation
+### Unconditional Mean Imputation
+
+Another ad hoc method is to replace missing values with their means.
+Since we filled in the missing values in `UN_with_dummies` with the mean values,
+we will use that, but not include the dummy variables.
+
+These bivariate plots illustrate how unconditional imputation means work, and give an indication of how they will affect results.
 ```{r}
-UN_with_means <- 
-  UN %>%
-  mutate(GDPperCapita = fill_na(GDPperCapita, mean(GDPperCapita, na.rm = TRUE)),
-         contraception = fill_na(contraception, mean(contraception, na.rm = TRUE)),
-         educationFemale = fill_na(educationFemale, mean(educationFemale, na.rm = TRUE)))
+ggplot(UN_with_dummies,
+       aes(y = infantMortality, x = educationFemale,
+           colour = as.factor(educationFemale_na))) +
+  geom_point() +
+  scale_colour_discrete("Imputed")
+```
+
+```{r}
+ggplot(UN_with_dummies,
+       aes(y = infantMortality, x = contraception,
+           colour = as.factor(contraception_na))) +
+  geom_point() +
+  geom_smooth(method = lm, aes) +
+  scale_colour_discrete("Imputed")
+```
+
+
+
+```{r}
 mod_means <- lm(infantMortality ~ log(GDPperCapita) + contraception + 
       educationFemale, data = UN_with_means)
 mod_means
 ```
 
-Method 4: multiple imputation
+
+### Multiple Imputation
+
+Our **preferred** method is multiple imputation. 
+For multiple imputation we will use the implementation in **Amelia**.[^1]
+Multiple imputation works by creates $m$ datasets with the missing values filled in with imputations.
+The analyst then runs the analysis on each of the datasets, and there are (fairly easy) methods to combine the estimates and standard errors from the individual analyses into an overall point estimate and standard error.
+The function `amelia` creates these imputations.
+
+- `m = 5` is the number of observations. Usually `5 - 10` are sufficient. 
+   See Fox, p. 564.
+- `amelia` models the distribution of the data as multivariate normal so it is useful to transform the data to make it more normal.
+  Use the arguments `logs` to indicate variables to log transform, and `lgstc` to logistic transform variables.
+- Additionally, you need to tell `amelia` which variables are nominal (`noms = `) so 
+  it creates dummy variables; and which variables are id variables (`idvars = `) so it can ignore them in the imputation process, but still include them in the final datasets.
+
 ```{r message = FALSE, results = 'hide'}
 UN_mi <- 
   amelia(UN,
-         m = 10,
+         m = 5,
          logs = c("GDPperCapita"),
          lgstc = c("economicActivityMale", "economicActivityFemale",
                    "illiteracyMale", "illiteracyFemale", "contraception"),
@@ -126,6 +226,16 @@ UN_mi <-
 
 ```
 
+Note several things about the imputation process.
+
+First, the number of imputations is **small**, `m = 5`. There is not much improvement in the performance of multiple imputation from using many imputations. Usually 5--10 is more than sufficient. See Fox, p. 564.
+
+Second, we use the dependent variable as well as variables not used in the regression in the imputation. (Fox, p. 567)
+This is not an issue. 
+Concerns like endogeneity and multicollinearity are not concerns in this context; we are not interested in estimating unbiased coefficients.
+We are concerned with predicting the values of these variables.
+
+**Amelia** suggests a couple diagnostics for multiple imputation:
 ```{r}
 for (var in c("GDPperCapita", "contraception", "illiteracyFemale")) {
   overimpute(UN_mi, var, main = var)
@@ -136,7 +246,6 @@ for (var in c("GDPperCapita", "contraception", "illiteracyFemale")) {
 for (var in c("GDPperCapita", "contraception", "illiteracyFemale")) {
   compare.density(UN_mi, var, main = var)
 }
-
 ```
 
 ```{r}
@@ -156,6 +265,23 @@ mod_mi_res <- mi.meld(q = b_out, se = se_out)
 mod_mi_res
 ```
 
+Plot imputed datasets
+```{r}
+ggplot(UN_mi$imputations[[1]] %>%
+         mutate(missing =UN_mi$missMatrix[ , "educationFemale"]),
+       aes(x = educationFemale, y = infantMortality, colour = missing)) + 
+  geom_point()
+```
+
+```{r}
+ggplot(UN_mi$imputations[[1]] %>%
+         mutate(missing =UN_mi$missMatrix[ , "contraception"]),
+       aes(x = contraception, y = infantMortality, colour = missing)) + 
+  geom_point()
+```
+
+### Model Comparison
+
 Now we will combine these into a single dataset,
 ```{r}
 model_comp <-
@@ -169,21 +295,31 @@ model_comp <-
                        estimate = as.numeric(mod_mi_res$q.mi),
                        std.error = as.numeric(mod_mi_res$se.mi),
                        model = "mi"))
-
 ```
 
 
-```{r}
-ggplot(model_comp %>%
-         filter(term %in% c("log(GDPperCapita)", "contraception", "educationFemale")), aes(x = model, y = estimate,
-                                                                                           ymin = estimate - 2 * std.error,
-                                                                                           ymax = estimate + 2 * std.error)) +
+```{r fig.height = 2}
+plot_mi_models <- function(data, variable) {
+  ggplot(data %>%
+         filter(term %in% variable),
+         aes(x = model, y = estimate,
+             ymin = estimate - 2 * std.error,
+             ymax = estimate + 2 * std.error)) +
   geom_pointrange() +
-  coord_flip() +
-  facet_wrap(~ term, ncol = 1)
+  geom_hline(yintercept = 0, colour = "red", alpha = 0.2) +
+  coord_flip() + 
+  theme_minimal()
+}
+
+plot_mi_models(model_comp, "log(GDPperCapita)")
+plot_mi_models(model_comp, "contraception")
+plot_mi_models(model_comp, "educationFemale")
 
 ```
 
-
+[^1]: There are several other R packages that do multiple imputation.
+      For example, [mice](http://www.jstatsoft.org/v45/i03/paper) and [mi](http://www.jstatsoft.org/v45/i02/), which use a different method, called chained equations.
+      We will use **Amelia** because it is stable, works well, and since it is written
+      by Gary King, it is the one that most political scientists are familiar with.
 
 

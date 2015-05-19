@@ -51,18 +51,130 @@ suppressPackageStartupMessages({
 \frametitle{Types of Missingness}
 
 \begin{itemize}
-\item Missingness completely at random
-\item Missingness at random
-\item Missingness that depends on unobserved variables
-\item Missingness that depends on the values of the missing variable
+\item \textbf{MCAR} Missingness completely at random
+\item \textbf{MAR} Missingness at random
+\item \textbf{MNAR} Missingness that depends on unobserved variables, or \textbf{NI} Non-ignorable missingness
 \end{itemize}
 \end{frame}
 
 \begin{frame}
+  \frametitle{What we will cover and not cover}
+  
+  \begin{itemize}
+  \item Missing values of $X$: (Bayesian) multiple imputation 
+  \item MNAR models
+    \begin{itemize}
+    \item Selection bias
+    \item Censoring, Truncation 
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{When is Listwise Deletion Preferrable to MI?}
+  
+  \begin{itemize}
+  \item Analysis model is conditional on $X$ and correctly specified
+  \item There is NI missingness in $X$
+  \item Missingness in $X$ is not a function of $Y$, and unobserved variable affecting $Y$ do not exist
+  \item Number of observations after deletion is large
+  \end{itemize}
+\end{frame}
+
+\section{Multiple Imputation}
+
+\begin{frame}
+  \frametitle{Methods}
+  
+  \begin{itemize}
+  \item Complete case (Listwise deletion)
+    \begin{itemize}
+    \item Consistent and valid inferences when MCAR (or MAR but missingess does not depend on the dependent variable)
+    \item Even in MCAR, inefficient
+    \end{itemize}
+  \item Available case (pairwise deletion): 
+    \begin{itemize}
+    \item E.g. covariance matrix. Calculate $\sum_{i} (x_{i,j} - \bar{x}_{j})(x_{i,k} - \bar{x}_{k})$ for all obs in which $x_{i,j}, x_{i,k}$ are not-missing, regardless of missingness of other variables.
+    \item Does not work for all analyses
+    \item Can result in nonsensical results
+    \end{itemize}
+  \item Unconditional Mean Imputation (Mean substitution)
+    \begin{itemize}
+    \item preserves mean of variables; reduced variance
+    \item attenuates relationships between variables
+    \item overstates certainty - increases ``effective'' sample size and distorts inference
+    \end{itemize}
+    
+  \end{itemize}
   
 \end{frame}
 
-\section{What to do about it?}
+\begin{frame}
+  \frametitle{Multiple Imputation Estimator Combines Individual Estimates}
+  
+  Given $B^{(1)}_{j}, \dots, B^{(g)}_{j}$, and $\se(B_{j}^{(1)}), \dots, \se(B_{j}^{(g)})$ from imputations:
+ 
+  Estimate for \textbf{single coefficients is:}
+  \begin{align*}
+    \tilde{\beta}_{j} 
+    &= \frac{\sum_{l = 1^{g}} B_{j}^{(l)}}{g} \\
+    \tilde{\se}
+    \left(
+    \tilde{\beta}_{j}
+    \right)
+    &=
+      \sqrt{V_{j}^{(W)} + \frac{g + 1}{g} V_{j}^{(B)} \\
+    V_{j}^{(W)} &= \frac{1}{g} \sum_{l = 1}^{g} (\se B_{j}^{(l)})^{2}
+    V_{j}^{(B)} &= \frac{1}{g - 1} \sum_{l = 1}^{g} (B_{j}^{(l)} - \tilde{\beta}_{j})^{2}    
+  \end{align*}
+  where $\tilde{\beta}_{j}$ distributed $t$ with complicated d.f. (see Fox, 564)
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Why we don't need to run many imputations}
+
+  \begin{block}{Relative efficiency of multiple imputation}
+  \begin{equation*}
+    V(\tilde{\beta}^{MLE}_{j}) / V(\tilde{\beta}^{MI}_{j}) = \frac{g}{g + \gamma_{j}}
+  \end{equation*}
+  where $\gamma_{j}$ is the relative rate of missing information
+  \begin{align*}
+    \gamma_{j} &= \frac{R_{j}}{R_{j} + 1}   \\
+    R_{j} &= \frac{g + 1}{g} \frac{V_{j}^{(B)}}{V_{j}^{(W)}}
+  \end{align*}
+  \end{block}
+
+  \begin{block}{Main point!}
+    Suppose $R_{j} = \gamma$, then with $g = 5$ iterations efficiency is $\frac{5}{5 + 0.5} = 0.91$.
+  \end{block}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Advice on }
+  
+  \begin{itemize}
+  \item Include all relevant variables in the imputation; at least all used in the estimation, including the dependent variable.
+  \item Even if data are not multivariate normal, multivariate normal works okay.
+  \item Transform data to approximate normality (Amelia has options)
+  \item See TSCS extensions in Amelia
+  \item Post-hoc adjustments okay. Impute and
+  \item If need to save time, work with a single iteration until ``final'' analysis.
+  \item Potential problems: complex interactions between variables
+  \item Try default methods; they often work. 
+  \item If not ...
+    \begin{itemize}
+    \item Multiple Chained Equations: \textbf{mice}, \textbf{mi} packages
+    \item Hot-deck imputation
+    \item Full Bayesian models
+    \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
+
 
 \section{References}
 
@@ -72,7 +184,7 @@ suppressPackageStartupMessages({
   \begin{itemize}
   \item Gelman and Hill, Ch. 25 ``Missing Data Imputation''
   \item Fox, Ch 20 ``Missing Data in Regression Models''
-  \item 
+  \item Amelia
   \end{itemize}
   
 \end{frame}
