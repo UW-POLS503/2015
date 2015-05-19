@@ -6,270 +6,278 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/2015/index.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/archive.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/categories/admin.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/categories/announcement.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/categories/cpe.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/categories/data.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/categories/error-messages.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/categories/index.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/categories/ipe.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/categories/ir.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/categories/lecture.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/categories/nhst.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/categories/ols.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/categories/problem-sets.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/categories/programming.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/categories/r-errors.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/categories/r.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/categories/significance-testing.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/categories/syllabus.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/categories/visualization.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/categories/writing.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/data.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/docs/Challenger_Analysis.html</loc>
-  <lastmod>2015-04-01</lastmod>
+  <lastmod>2015-03-31</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/docs/Duncan_regression_example.html</loc>
   <lastmod>2015-04-23</lastmod>
  </url>
  <url>
+  <loc>http://pols503.github.io/pols_503_sp15/docs/Imputing_Missing_Data.html</loc>
+  <lastmod>2015-05-19</lastmod>
+ </url>
+ <url>
   <loc>http://pols503.github.io/pols_503_sp15/docs/Life_Expectancy_Example.html</loc>
-  <lastmod>2015-05-13</lastmod>
- </url>
- <url>
-  <loc>http://pols503.github.io/pols_503_sp15/docs/Sampling_Distribution_Linear_Regression.html</loc>
-  <lastmod>2015-05-11</lastmod>
- </url>
- <url>
-  <loc>http://pols503.github.io/pols_503_sp15/getting_help_with_r.html</loc>
-  <lastmod>2015-05-17</lastmod>
- </url>
- <url>
-  <loc>http://pols503.github.io/pols_503_sp15/hw/hw1.html</loc>
-  <lastmod>2015-05-11</lastmod>
- </url>
- <url>
-  <loc>http://pols503.github.io/pols_503_sp15/hw/hw2.html</loc>
-  <lastmod>2015-05-11</lastmod>
- </url>
- <url>
-  <loc>http://pols503.github.io/pols_503_sp15/hw/hw3-template.html</loc>
-  <lastmod>2015-05-11</lastmod>
- </url>
- <url>
-  <loc>http://pols503.github.io/pols_503_sp15/hw/hw3.html</loc>
-  <lastmod>2015-05-14</lastmod>
- </url>
- <url>
-  <loc>http://pols503.github.io/pols_503_sp15/hw/hw4.html</loc>
-  <lastmod>2015-05-17</lastmod>
- </url>
- <url>
-  <loc>http://pols503.github.io/pols_503_sp15/index.html</loc>
-  <lastmod>2015-05-17</lastmod>
- </url>
- <url>
-  <loc>http://pols503.github.io/pols_503_sp15/install_r.html</loc>
-  <lastmod>2015-05-17</lastmod>
- </url>
- <url>
-  <loc>http://pols503.github.io/pols_503_sp15/labs/Gauss_Markov_Simulations.html</loc>
-  <lastmod>2015-04-21</lastmod>
- </url>
- <url>
-  <loc>http://pols503.github.io/pols_503_sp15/labs/Lab3.html</loc>
-  <lastmod>2015-04-21</lastmod>
- </url>
- <url>
-  <loc>http://pols503.github.io/pols_503_sp15/labs/lab1.html</loc>
-  <lastmod>2015-05-11</lastmod>
- </url>
- <url>
-  <loc>http://pols503.github.io/pols_503_sp15/labs/lab2.html</loc>
-  <lastmod>2015-05-11</lastmod>
- </url>
- <url>
-  <loc>http://pols503.github.io/pols_503_sp15/labs/lab3.html</loc>
-  <lastmod>2015-05-11</lastmod>
- </url>
- <url>
-  <loc>http://pols503.github.io/pols_503_sp15/labs/lab4.html</loc>
-  <lastmod>2015-05-11</lastmod>
- </url>
- <url>
-  <loc>http://pols503.github.io/pols_503_sp15/labs/lab5.html</loc>
-  <lastmod>2015-05-14</lastmod>
- </url>
- <url>
-  <loc>http://pols503.github.io/pols_503_sp15/labs/lab6.html</loc>
-  <lastmod>2015-05-14</lastmod>
- </url>
- <url>
-  <loc>http://pols503.github.io/pols_503_sp15/labs/lab7.html</loc>
   <lastmod>2015-05-15</lastmod>
  </url>
  <url>
+  <loc>http://pols503.github.io/pols_503_sp15/docs/Outliers_Robust_Regression.html</loc>
+  <lastmod>2015-05-19</lastmod>
+ </url>
+ <url>
+  <loc>http://pols503.github.io/pols_503_sp15/docs/Sampling_Distribution_Linear_Regression.html</loc>
+  <lastmod>2015-04-14</lastmod>
+ </url>
+ <url>
+  <loc>http://pols503.github.io/pols_503_sp15/getting_help_with_r.html</loc>
+  <lastmod>2015-05-19</lastmod>
+ </url>
+ <url>
+  <loc>http://pols503.github.io/pols_503_sp15/hw/hw1.html</loc>
+  <lastmod>2015-05-03</lastmod>
+ </url>
+ <url>
+  <loc>http://pols503.github.io/pols_503_sp15/hw/hw2.html</loc>
+  <lastmod>2015-05-03</lastmod>
+ </url>
+ <url>
+  <loc>http://pols503.github.io/pols_503_sp15/hw/hw3-template.html</loc>
+  <lastmod>2015-05-08</lastmod>
+ </url>
+ <url>
+  <loc>http://pols503.github.io/pols_503_sp15/hw/hw3.html</loc>
+  <lastmod>2015-05-15</lastmod>
+ </url>
+ <url>
+  <loc>http://pols503.github.io/pols_503_sp15/hw/hw4.html</loc>
+  <lastmod>2015-05-18</lastmod>
+ </url>
+ <url>
+  <loc>http://pols503.github.io/pols_503_sp15/index.html</loc>
+  <lastmod>2015-05-19</lastmod>
+ </url>
+ <url>
+  <loc>http://pols503.github.io/pols_503_sp15/install_r.html</loc>
+  <lastmod>2015-05-19</lastmod>
+ </url>
+ <url>
+  <loc>http://pols503.github.io/pols_503_sp15/labs/Gauss_Markov_Simulations.html</loc>
+  <lastmod>2015-04-20</lastmod>
+ </url>
+ <url>
+  <loc>http://pols503.github.io/pols_503_sp15/labs/Lab3.html</loc>
+  <lastmod>2015-04-17</lastmod>
+ </url>
+ <url>
+  <loc>http://pols503.github.io/pols_503_sp15/labs/lab1.html</loc>
+  <lastmod>2015-05-03</lastmod>
+ </url>
+ <url>
+  <loc>http://pols503.github.io/pols_503_sp15/labs/lab2.html</loc>
+  <lastmod>2015-05-03</lastmod>
+ </url>
+ <url>
+  <loc>http://pols503.github.io/pols_503_sp15/labs/lab3.html</loc>
+  <lastmod>2015-05-03</lastmod>
+ </url>
+ <url>
+  <loc>http://pols503.github.io/pols_503_sp15/labs/lab4.html</loc>
+  <lastmod>2015-05-08</lastmod>
+ </url>
+ <url>
+  <loc>http://pols503.github.io/pols_503_sp15/labs/lab5.html</loc>
+  <lastmod>2015-05-15</lastmod>
+ </url>
+ <url>
+  <loc>http://pols503.github.io/pols_503_sp15/labs/lab6.html</loc>
+  <lastmod>2015-05-15</lastmod>
+ </url>
+ <url>
+  <loc>http://pols503.github.io/pols_503_sp15/labs/lab7.html</loc>
+  <lastmod>2015-05-18</lastmod>
+ </url>
+ <url>
   <loc>http://pols503.github.io/pols_503_sp15/links.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/loading_data_in_r.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/matrices_in_r.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/package_loading_warnings_and_errors.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/posts/2015-04-25.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/posts/awesome-r.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/posts/good-visualization-of-ols.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/posts/index-1.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/posts/index.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/posts/p-values-and-nhst-links.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/posts/problem-set-3-posted.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/posts/problem-set-3-updated.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/posts/r-resources-for-country-year-data.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/posts/r-warning-messages-involving-lc_type.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/posts/reminder-for-problem-set-3.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/posts/solutions-to-hw-3-posted.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/posts/some-other-advice-on-model-choice-and-specification.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/posts/update-2-to-problem-set-3.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/posts/updated-lecture-slides-and-example-from-this-week.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/posts/week-7-and-syallbus-updates.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/posts/writing-a-paper-for-this-course.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/r_best_practices.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/r_markdown_assignments.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/updated-syllabus.html</loc>
-  <lastmod>2015-05-17</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
 </urlset>
