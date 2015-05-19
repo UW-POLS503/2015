@@ -100,7 +100,7 @@ qqPlot(mod_slid)
 @
 \end{frame}
 
-\begin{frame}
+\begin{frame}[fragile]
 <<>>=
 ggplot(augment(mod_slid), aes(x = .std.resid)) +
   geom_density() +

@@ -151,7 +151,7 @@ fill_na <- function(x, fill = 0) {
   x
 }
 ```
-Now we generate a new dataset with those dummy variables and with the missing values replaced by 0s.
+Now we generate a new dataset with those dummy variables and with the missing values replaced by their means.
 ```{r}
 UN_with_dummies <- 
   UN %>%
@@ -173,6 +173,7 @@ Since we filled in the missing values in `UN_with_dummies` with the mean values,
 we will use that, but not include the dummy variables.
 
 These bivariate plots illustrate how unconditional imputation means work, and give an indication of how they will affect results.
+
 ```{r warning=FALSE}
 ggplot(UN_with_dummies,
        aes(y = infantMortality, x = educationFemale,
@@ -189,14 +190,11 @@ ggplot(UN_with_dummies,
   scale_colour_discrete("Imputed")
 ```
 
-
-
 ```{r}
 mod_means <- lm(infantMortality ~ log(GDPperCapita) + contraception + 
       educationFemale, data = UN_with_dummies)
 mod_means
 ```
-
 
 ### Multiple Imputation
 
@@ -225,6 +223,7 @@ UN_mi <-
 
 ```
 
+<<<<<<< HEAD
 Note several things about the imputation process.
 
 First, the number of imputations is **small**, `m = 5`. There is not much improvement in the performance of multiple imputation from using many imputations. Usually 5--10 is more than sufficient. See Fox, p. 564.
@@ -252,19 +251,37 @@ ggplot(UN_mi$imputations[[1]] %>%
 The plots we just made suggest **Amelia** is working weel, but let's look at a couple of diagnostics that **Amelia** suggests:
 The first is to drop each observation of a variable, impute it, and plot the values against the original values.
 If the imputed values resemble the original values, then the imputation procedure has worked well.
+
+Amelia suggests several diagnostics for evaluating
+The first is "overimputation".
+This is similar to leave-one-out cross validation.
+Each observation is removed and treated as a missing value to be imputated.
+Amelia plots 90% confidence intervals for each observation against the true values. 
+If the imputation is reasonable, then these confidence intervals should have 90% coverage of the true value.
+The following code runs the overimputation diagnostic for the variables of interest (the ones that will be used in the regression).
+The overimputation diagnostics do not suggest any issues with the imputation of these variables.
+
 ```{r}
 for (var in c("GDPperCapita", "contraception", "illiteracyFemale")) {
   overimpute(UN_mi, var, main = var)
 }
 ```
-The second method is to compare the density of the imputed values to the density of the observed values for each variable.
-If they do not appear too different, then the imputation procedure has worked well.
-It is not necessary that the marginal distribution of the imputed variable should match that of the observed values, but if they appear significantly different, then you should think about whether this could be expected or whether your imputation model is missing something.
+
+The second method is to plot the marginal density of the imputed values against observed values. 
+If these appear too different, then there *may* be issues with imputation.
+However, there is no particular criteria for what is **too different**, and there may be reasons why these distributions diverge; see the Amelia vignette for an example of what would be a big difference.
+But if these distributions are different, then you should revisit the data to see whether imputation makes sense.
+The following code performs this for each variable of interest.
+The plots do not suggest any differences to be concerned about.
 ```{r}
 for (var in c("GDPperCapita", "contraception", "illiteracyFemale")) {
   compare.density(UN_mi, var, main = var)
 }
 ```
+
+Now that we are satisfied that the imputations are reasonable, we run the analysis on each of the imputated datasets.
+The following code runs the regression on each imputed dataset saving the coefficients to `b_out`, and the standard errors of the coefficients to `se_out`. 
+These are originally saved to a list, but `rbind` converts it to a matrix with each imputations as rows and coefficients as columns.
 
 Now estimate the model using each imputed dataset.
 We save the results to `b_out` and `se_out`.
@@ -280,7 +297,8 @@ b_out <- do.call(rbind, b_out)
 se_out <- do.call(rbind, se_out)
 ```
 
-The function `mi.meld` combines the point estimates and standard errors from the analysis on each imputation:
+As described in Fox or Gelman, the coefficients from the imputations can be combined to calculate a single point estimate and standard error.
+The function `mi.meld` does this, and returns a list with point estimates in the element `q.mi` and standard errors in `se.mi`:
 ```{r}
 mod_mi_res <- mi.meld(q = b_out, se = se_out)
 mod_mi_res
@@ -289,7 +307,27 @@ mod_mi_res
 
 ### Model Comparison
 
-Now we will combine these into a single dataset,
+Now that we've estimated this model using various methods to handle missing data, let's compare the results.
+First, we combine these into a single dataset.
+For the results returned by `Amelia`, since there is no `tidy` function defined for Amelia objects we need to manually create a data frame consistent with those returned by `tidy`.
+
+```{r echo = FALSE , results = 'hide'}
+mi.df <- function(q, se) {
+  am.m <- nrow(q)
+  ones <- matrix(1, nrow = 1, ncol = am.m)
+  imp.q <- (ones %*% q)/am.m
+  ave.se2 <- (ones %*% (se^2))/am.m
+  diff <- q - matrix(1, nrow = am.m, ncol = 1) %*% imp.q
+  sq2 <- (ones %*% (diff^2))/(am.m - 1)
+  R <- (am.m + 1) / am.m * ave.se2 / sq2
+  gamma <- R / (R + 1)
+  list(df = (am.m - 1) * (1 + am.m / (am.m + 1) * (ave.se2 / sq2)) ^ 2,
+       rate_mi = gamma,
+       efficiency = am.m / (am.m + gamma))
+}
+
+```
+
 ```{r}
 model_comp <-
   bind_rows(tidy(mod_listwise) %>%
