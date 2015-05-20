@@ -14,6 +14,7 @@ $$
 \DeclareMathOperator{\logit}{logit}
 $$
 
+- 2015-05-19: Added logit function. Add note on dealing with data transformations in sprinters data.
 
 ```{r load,message = FALSE, echo = FALSE}
 library("MASS")
@@ -42,7 +43,17 @@ library("tidyr")
    
 5. Turn in a paper copy of the document compiled from the analyses at lab.
 6. You can work together on this but you should each turn in your own assignments and write up your work separately.
-   Include the names of your collaborators on your assignment.
+Include the names of your collaborators on your assignment.
+
+Something which will be of use to you later is the logit function.
+The logit function is defined as
+$$
+\logit(x) = \log \left(\frac{x}{1-x} \right) = \log(x) - \log(1 - x)
+$$
+where $x \in (0, 1)$. It takes a value between 0 and 1 and returns a value between $-\infty$ and $\infty$.
+```{r}
+logit <- function(x) log(x) - log(1 - x)
+```
 
 # Problems {#problems}
 
@@ -88,6 +99,7 @@ f. Now create a new variable, the ratio of men’s time to women’s time in eac
    year.
    Logit-transform this variable and regress it on year. Plot the results,    with confidence intervals, on the scale of the ratio men’s time to women’s time (i.e., transform it back from logit).
    Does this approach make any assumptions about men’s times or women’s times that might be problematic?
+   *Hint:* You will need to manipulate the data frame for this. Your new data frame will have years as the unit of observation rather than (year, sex). You can do this using manually using `filter` and other post-processing. Alternatively, look at the **tidyr** function `spread`.
 
 ## Model Selection: Oil & Democracy
 

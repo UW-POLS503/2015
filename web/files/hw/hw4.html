@@ -91,6 +91,9 @@ img {
 \DeclareMathOperator{\quantile}{quantile}
 \DeclareMathOperator{\logit}{logit}
 \]</span></p>
+<ul>
+<li>2015-05-19: Added logit function. Add note on dealing with data transformations in sprinters data.</li>
+</ul>
 <div id="instructions-and-introduction" class="section level1">
 <h1>Instructions and Introduction</h1>
 <ol style="list-style-type: decimal">
@@ -107,6 +110,10 @@ img {
 <li>Turn in a paper copy of the document compiled from the analyses at lab.</li>
 <li><p>You can work together on this but you should each turn in your own assignments and write up your work separately. Include the names of your collaborators on your assignment.</p></li>
 </ol>
+<p>Something which will be of use to you later is the logit function. The logit function is defined as <span class="math">\[
+\logit(x) = \log \left(\frac{x}{1-x} \right) = \log(x) - \log(1 - x)
+\]</span> where <span class="math">\(x \in (0, 1)\)</span>. It takes a value between 0 and 1 and returns a value between <span class="math">\(-\infty\)</span> and <span class="math">\(\infty\)</span>.</p>
+<pre class="r"><code>logit &lt;- function(x) log(x) - log(1 - x)</code></pre>
 </div>
 <div id="problems" class="section level1">
 <h1>Problems</h1>
@@ -133,7 +140,7 @@ img {
 \]</span> Be sure to explain in words how this specification differs from the ones used in part a. and b.</li>
 <li>Compare the visual fit of these models to the data within the observed period. Which do you find plausible fits?</li>
 <li>Do these models have different predictions for the Olympics of 2156? (Hint: extending your plots to go up to 2156 is an easy way to see this.) Why or why not?</li>
-<li><p>Now create a new variable, the ratio of men’s time to women’s time in each year. Logit-transform this variable and regress it on year. Plot the results, with confidence intervals, on the scale of the ratio men’s time to women’s time (i.e., transform it back from logit). Does this approach make any assumptions about men’s times or women’s times that might be problematic?</p></li>
+<li><p>Now create a new variable, the ratio of men’s time to women’s time in each year. Logit-transform this variable and regress it on year. Plot the results, with confidence intervals, on the scale of the ratio men’s time to women’s time (i.e., transform it back from logit). Does this approach make any assumptions about men’s times or women’s times that might be problematic? <em>Hint:</em> You will need to manipulate the data frame for this. Your new data frame will have years as the unit of observation rather than (year, sex). You can do this using manually using <code>filter</code> and other post-processing. Alternatively, look at the <strong>tidyr</strong> function <code>spread</code>.</p></li>
 </ol>
 </div>
 <div id="model-selection-oil-democracy" class="section level2">
