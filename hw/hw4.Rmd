@@ -14,7 +14,7 @@ $$
 \DeclareMathOperator{\logit}{logit}
 $$
 
-- 2015-05-19: added logit function
+- 2015-05-19: Added logit function. Add note on dealing with data transformations in sprinters data.
 
 ```{r load,message = FALSE, echo = FALSE}
 library("MASS")
@@ -99,6 +99,7 @@ f. Now create a new variable, the ratio of men’s time to women’s time in eac
    year.
    Logit-transform this variable and regress it on year. Plot the results,    with confidence intervals, on the scale of the ratio men’s time to women’s time (i.e., transform it back from logit).
    Does this approach make any assumptions about men’s times or women’s times that might be problematic?
+   *Hint:* You will need to manipulate the data frame for this. Your new data frame will have years as the unit of observation rather than (year, sex). You can do this using manually using `filter` and other post-processing. Alternatively, look at the **tidyr** function `spread`.
 
 ## Model Selection: Oil & Democracy
 
