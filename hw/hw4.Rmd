@@ -302,7 +302,7 @@ This will return a `data.frame` object with columns
 - `lower`: Lower bound of the confidence interval
 - `upper`: Upper bound of the confidence interval
 
-```{r}
+```{r message = FALSE}
 library("simcf")
 predOil <- function(res, formula, data, sims = 1000, ci = 0.95) {
   pe <- res$coefficients
@@ -324,10 +324,7 @@ pred0_oil <- predOil(mod0, mod0_formula, rossoil)
 
 ```
 
-After this step, it would be a good idea to place the latest
-values of summary(res0.lm)$sigma, PredOil0.lm$pe, PredOil0$lower,
-and PredOil1$upper in vectors collecting your results across
-different runs
+It may be useful to combine the estimates from several runs using the function `bind_rows` from **dplyr**.
 
 * * *
 
