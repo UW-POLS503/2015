@@ -91,6 +91,9 @@ img {
 \DeclareMathOperator{\quantile}{quantile}
 \DeclareMathOperator{\logit}{logit}
 \]</span></p>
+<ul>
+<li>2015-05-19: added logit function</li>
+</ul>
 <div id="instructions-and-introduction" class="section level1">
 <h1>Instructions and Introduction</h1>
 <ol style="list-style-type: decimal">
@@ -107,6 +110,10 @@ img {
 <li>Turn in a paper copy of the document compiled from the analyses at lab.</li>
 <li><p>You can work together on this but you should each turn in your own assignments and write up your work separately. Include the names of your collaborators on your assignment.</p></li>
 </ol>
+<p>Something which will be of use to you later is the logit function. The logit function is defined as <span class="math">\[
+\logit(x) = \log \left(\frac{x}{1-x} \right) = \log(x) - \log(1 - x)
+\]</span> where <span class="math">\(x \in (0, 1)\)</span>. It takes a value between 0 and 1 and returns a value between <span class="math">\(-\infty\)</span> and <span class="math">\(\infty\)</span>.</p>
+<pre class="r"><code>logit &lt;- function(x) log(x) - log(1 - x)</code></pre>
 </div>
 <div id="problems" class="section level1">
 <h1>Problems</h1>
@@ -122,7 +129,7 @@ img {
 \]</span> Create a plot of the fitted values with confidence with respect to <code>year</code>, grouped by <code>women</code>. Do not use <code>geom_smooth()</code>.</p></li>
 <li><p>Create the same plot as in the previous part for the model <span class="math">\[
 \begin{aligned}[t]
-\mathtt{finish}_i &amp;= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i \times \mathtt{women}_i + \epsilon_i
+\log (\mathtt{finish}_i) &amp;= \beta_0 + \beta_1 \mathtt{year}_i + \beta_2 \mathtt{women}_i + \beta_3 \mathtt{year}_i \times \mathtt{women}_i + \epsilon_i
 \end{aligned}
 \]</span> Be sure to explain in words how this specification differs from the one used in part a.</p></li>
 <li>Rerun the analysis and recreate the plot, adding confidence intervals, for the model: <span class="math">\[
