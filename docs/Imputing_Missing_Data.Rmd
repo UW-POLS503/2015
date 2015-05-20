@@ -9,7 +9,7 @@ output:
     fig_width: 5
 ---
 ```{r echo = FALSE, results = 'hide'}
-knitr::opts_chunk$set(cache = TRUE, autodep = TRUE)
+knitr::opts_chunk$set(cache = TRUE, autodep = TRUE, tidy = TRUE)
 ```
 
 
@@ -22,6 +22,7 @@ library("tidyr")
 library("broom")
 library("ggplot2")
 library("Amelia")
+theme_local <- theme_minimal
 ```
 
 ## Data
@@ -107,6 +108,7 @@ ggplot(UN_miss_mat,
   xlab("") + ylab("Observation number")
 ```
 
+Other tools for visualization missingness are in the [VIM](http://cran.r-project.org/web/packages/VIM/index.html) package.
 
 Considering that analyses that we will run, with `infantMortality`, `educationFemale`,
 `contraception`, `GDPperCapita`. 
@@ -179,7 +181,8 @@ ggplot(UN_with_dummies,
        aes(y = infantMortality, x = educationFemale,
            colour = as.factor(educationFemale_na))) +
   geom_point() +
-  scale_colour_discrete("Imputed")
+  scale_colour_discrete("Imputed") +
+  theme_local()
 ```
 
 ```{r warning=FALSE}
@@ -187,7 +190,8 @@ ggplot(UN_with_dummies,
        aes(y = infantMortality, x = contraception,
            colour = as.factor(contraception_na))) +
   geom_point() +
-  scale_colour_discrete("Imputed")
+  scale_colour_discrete("Imputed") +
+  theme_local()
 ```
 
 ```{r}
@@ -223,7 +227,6 @@ UN_mi <-
 
 ```
 
-<<<<<<< HEAD
 Note several things about the imputation process.
 
 First, the number of imputations is **small**, `m = 5`. There is not much improvement in the performance of multiple imputation from using many imputations. Usually 5--10 is more than sufficient. See Fox, p. 564.
@@ -233,22 +236,67 @@ This is not an issue.
 Concerns like endogeneity and multicollinearity are not concerns in this context; we are not interested in estimating unbiased coefficients.
 We are concerned with predicting the values of these variables.
 
-Let's see how one of these imputed datasets looks:
+The multiple imputation process has created `m = 5` separate datasets, which are stored as a list of data frames in the `imputations` element of the object:
+```{r results='hide'}
+str(UN_mi$imputations)
+```
+
+Each of these datasets is **complete**, meaning it has no missing observations.
+But for values which were missing in the original data, they are filled with different imputations.
+For example, compare this subset in the orginal data and two imputations.
+```{r}
+countries <- c("Afghanistan", "Angola", "Algeria", "Antigua")
+UN %>% filter(country %in% countries) %>% select(country, contraception)
+UN_mi$imputations[[1]] %>% filter(country %in% countries) %>% select(country, contraception)
+UN_mi$imputations[[2]] %>% filter(country %in% countries) %>% select(country, contraception)
+```
+
+The following creates plots of each variable, overplotting the values from each imputation against the observation number. 
+Points which are black were observed in the original data; points which are gray are imputed.
+```{r}
+all_imputations <-
+  data_frame(i = seq_len(UN_mi$m)) %>%
+    rowwise() %>%
+    do({
+      mutate(UN_mi$imputations[[.$i]],
+             .obsnum = row_number(),
+             .imputation = .$i)
+    })
+
+imputation_plot <- function(yvar) {
+  ggplot(all_imputations, aes_string(x = ".obsnum",
+                                     y = yvar)) +
+  geom_point(alpha = 0.2) +
+  theme_minimal() +
+  xlab("Observation number") +
+  theme_local()
+}
+
+imputation_plot("educationFemale")
+imputation_plot("contraception")
+imputation_plot("log(GDPperCapita)")
+
+```
+
+Let's see how one of these imputed datasets looks and compare the imputed and non-imputed values as an informal way of judging its plausibility. 
 ```{r}
 ggplot(UN_mi$imputations[[1]] %>%
-         mutate(missing =UN_mi$missMatrix[ , "educationFemale"]),
+         mutate(missing = UN_mi$missMatrix[ , "educationFemale"]),
        aes(x = educationFemale, y = infantMortality, colour = missing)) + 
-  geom_point()
+  geom_point() +
+  theme_local()
 ```
 ```{r}
 ggplot(UN_mi$imputations[[1]] %>%
-         mutate(missing =UN_mi$missMatrix[ , "contraception"]),
+         mutate(missing = UN_mi$missMatrix[ , "contraception"]),
        aes(x = contraception, y = infantMortality, colour = missing)) + 
-  geom_point()
+  geom_point() +
+  theme_local()
 ```
 
+These look much more plausible than those of the unconditionally imputed mean.
 
-The plots we just made suggest **Amelia** is working weel, but let's look at a couple of diagnostics that **Amelia** suggests:
+The plots we just made suggest **Amelia** is working well, but let's look at a couple of diagnostics that **Amelia** suggests:
 The first is to drop each observation of a variable, impute it, and plot the values against the original values.
 If the imputed values resemble the original values, then the imputation procedure has worked well.
 
@@ -361,6 +409,9 @@ plot_mi_models(model_comp, "contraception")
 plot_mi_models(model_comp, "educationFemale")
 
 ```
+
+These plots show that the various methods produce different answers both in terms of point-estimates and standard errors. 
+The reasons why multiple imputation answers are **better** are better handled by [cites].
 
 [^1]: There are several other R packages that do multiple imputation.
       For example, [mice](http://www.jstatsoft.org/v45/i03/paper) and [mi](http://www.jstatsoft.org/v45/i02/), which use a different method, called chained equations.
