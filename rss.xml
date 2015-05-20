@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>POLS/CS&amp;SS 503</title><link>http://pols503.github.io/pols_503_sp15/</link><description>Site for POLS/CS&amp;SS 503: Advanced Quantitative Political Methodology (University of Washington; Spring 2015)</description><atom:link href="http://pols503.github.io/pols_503_sp15/rss.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Fri, 15 May 2015 18:21:08 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Updated Lecture Slides and Example from This Week</title><link>http://pols503.github.io/pols_503_sp15/posts/updated-lecture-slides-and-example-from-this-week.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0"><channel><title>POLS/CS&amp;SS 503</title><link>http://pols503.github.io/pols_503_sp15/</link><description>Site for POLS/CS&amp;SS 503: Advanced Quantitative Political Methodology (University of Washington; Spring 2015)</description><atom:link type="application/rss+xml" rel="self" href="http://pols503.github.io/pols_503_sp15/rss.xml"></atom:link><language>en</language><lastBuildDate>Wed, 20 May 2015 21:55:10 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Updated Problem Set 4</title><link>http://pols503.github.io/pols_503_sp15/posts/updated-problem-set-4.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
+.. title: Updated Problem Set 4
+.. slug: updated-problem-set-4
+.. date: 2015-05-20 14:50:15 UTC-07:00
+.. tags: problem sets
+.. category: 
+.. link: 
+.. description: 
+.. type: text
+.. author: Jeffrey Arnold
+--&gt;
+
+&lt;p&gt;I updated problem set 4 with the following:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;added code for calculating a &lt;code&gt;logit&lt;/code&gt; transformation&lt;/li&gt;
+&lt;li&gt;added instructions for installing &lt;strong&gt;simcf&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;added example code using &lt;strong&gt;simcf&lt;/strong&gt; functions to do simulations relevant to the problem set&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Also, I’ve updated, corrected and expanded some the outliers and missing data imputation examples that I went through in class.&lt;/p&gt;
+&lt;p&gt;Next week, I’ll be talking about limited dependent variables, and starting on causal inference. For this week, I had assigned readings by Schrodt and Achen. It is unlikely that we will have time to talk about them in class, but I &lt;strong&gt;suggest&lt;/strong&gt; that you read them, especially Schrodt’s 7 Deadly Sins piece. It is a modern classic.&lt;/p&gt;</description><category>problem sets</category><guid>http://pols503.github.io/pols_503_sp15/posts/updated-problem-set-4.html</guid><pubDate>Wed, 20 May 2015 21:50:15 GMT</pubDate></item><item><title>Updated Lecture Slides and Example from This Week</title><link>http://pols503.github.io/pols_503_sp15/posts/updated-lecture-slides-and-example-from-this-week.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
 .. title: Updated Lecture Slides and Example from This Week
 .. slug: updated-lecture-slides-and-example-from-this-week
 .. date: 2015-05-14 15:02:27 UTC-07:00
@@ -148,16 +167,4 @@
 &lt;/ul&gt;&lt;/li&gt;
 &lt;li&gt;Type S (Sign) and Type M (magnitude) errors: &lt;a href="http://andrewgelman.com/2004/12/29/type_1_type_2_t/"&gt;http://andrewgelman.com/2004/12/29/type_1_type_2_t/&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;
-&lt;/li&gt;&lt;/ul&gt;</description><category>nhst</category><category>significance testing</category><guid>http://pols503.github.io/pols_503_sp15/posts/p-values-and-nhst-links.html</guid><pubDate>Mon, 27 Apr 2015 21:26:06 GMT</pubDate></item><item><title>awesome-R</title><link>http://pols503.github.io/pols_503_sp15/posts/awesome-r.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
-.. title: awesome-R
-.. slug: awesome-r
-.. date: 2015-04-27 12:54:42 UTC-07:00
-.. tags: R, programming
-.. category: 
-.. link: 
-.. description: 
-.. type: text
-.. author: Jeffrey Arnold
---&gt;
-
-&lt;p&gt;&lt;a href="https://github.com/qinwf/awesome-R"&gt;awesome-R&lt;/a&gt; looks like a good curated list of links to R resources. Probably more than is relevant to you, but you may find something interesting.&lt;/p&gt;</description><category>programming</category><category>R</category><guid>http://pols503.github.io/pols_503_sp15/posts/awesome-r.html</guid><pubDate>Mon, 27 Apr 2015 19:54:42 GMT</pubDate></item></channel></rss>
+&lt;/li&gt;&lt;/ul&gt;</description><category>nhst</category><category>significance testing</category><guid>http://pols503.github.io/pols_503_sp15/posts/p-values-and-nhst-links.html</guid><pubDate>Mon, 27 Apr 2015 21:26:06 GMT</pubDate></item></channel></rss>

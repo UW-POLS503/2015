@@ -15,6 +15,8 @@ $$
 $$
 
 - 2015-05-19: Added logit function. Add note on dealing with data transformations in sprinters data.
+- 2015-05-20: Added function using **simcf** functions for simulation.
+
 
 ```{r load,message = FALSE, echo = FALSE}
 library("MASS")
@@ -258,6 +260,71 @@ Otherwise, you are asking the model to predict a logically impossible scenario; 
 
 I recommend either calculating the predicted values of `regime1` "by hand", or using the **simcf** package, as illustrated below.
 Our old friend `predict()` is very unlikely to return results for models including these terms, though if it does return an answer it will agree with other methods.
+
+# Appendix: Example Code
+
+This section provides some example code that will make it easier to answer the homework using simulation from **simcf**.
+
+If you haven't already installed **simcf**, you will need to install it. 
+You will need to have **devtools** installed.
+```{r eval = FALSE}
+library("devtools")
+install_github("chrisadolph/tile-simcf", subdir = "tile")
+install_github("chrisadolph/tile-simcf", subdir = "simcf")  
+```
+
+The following function, `predOil` applies simulation to the particular problem in this problem set.
+The arguments of `predOil` are:
+
+res
+
+:    The object returned by `lm()`.
+
+formula
+
+:    Formula used in the initial call to `lm()` that created `res`.
+
+data
+
+:    The data used in the initial call to `lm()` that created `res`.
+
+sims
+
+:    The number of simulations to run.
+
+ci
+
+:    A number between 0 and 1. The confidence level to use in confidence interval. 
+
+This will return a `data.frame` object with columns
+
+- `pe`: Point estimate
+- `lower`: Lower bound of the confidence interval
+- `upper`: Upper bound of the confidence interval
+
+```{r message = FALSE}
+library("simcf")
+predOil <- function(res, formula, data, sims = 1000, ci = 0.95) {
+  pe <- res$coefficients
+  vc <- vcov(res)
+  simbetas <- mvrnorm(sims, pe, vc)
+  xscen <- cfMake(formula, data = data, nscen = 1)
+  xscen <- cfChange(xscen, "oilL5",
+                    x = quantile(data$oilL5, probs = 0.95),
+                    xpre = quantile(data$oilL5, probs = 0.5),
+                    scen = 1)
+  as.data.frame(linearsimfd(xscen, simbetas, ci = ci))
+}
+```
+An example call to this function.
+```{r}
+mod0_formula <- regime1 ~ oilL5 + metalL5 + GDPpcL5 + logitBound(islam) + oecd
+mod0 <- lm(mod0_formula, data = rossoil)
+pred0_oil <- predOil(mod0, mod0_formula, rossoil)
+
+```
+
+It may be useful to combine the estimates from several runs using the function `bind_rows` from **dplyr**.
 
 * * *
 
