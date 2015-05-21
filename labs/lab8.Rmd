@@ -1,0 +1,32 @@
+---
+title: "Lab 8"
+author: "Jeffrey Arnold"
+date: "Friday, May 22, 2015"
+---
+
+# Saving to Files
+
+- Save to csv
+- Save to RData
+- Save to dta
+
+# Merging
+
+built in merge
+
+Merge ? with ? 
+
+dplyr left_join, right_join, 
+
+# Outliers
+
+Example with ??
+
+# Multiple Imputation
+
+Amelia + Ross Data
+
+* * *
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+R code is licensed under a [BSD 2-clause](http://www.r-project.org/Licenses/BSD_2_clause) license.
