@@ -1,7 +1,7 @@
 ---
 title: "Outliers and Robust Regression"
 author: "Jeffrey B. Arnold"
-date: "05/19/2015"
+date: "05/20/2015"
 output:
   html_document:
     toc: true
@@ -13,6 +13,12 @@ knitr::opts_chunk$set(cache = TRUE, autodep = TRUE,
                   fig.height = 3, fig.width = 5)
 ```
 
+This example works through diagnostics for outliers, as well as methods of robust
+regression.
+
+## Setup
+
+This example will use the following
 
 ```{r message = FALSE}
 library("MASS")
@@ -21,10 +27,21 @@ library("tidyr")
 library("broom")
 library("boot")
 library("ggplot2")
+```
+This ensures that we always use the `select` function from **dplyr** rather than 
+the one from **MASS**.
+```{r}
 select <- dplyr::select
 ```
+For the **ggplot2** plots, we will the default theme settings here, so that we
+can reuse them for all plots, and also, if we feel like changing them, we only
+need to change them in one location.
+```{r}
+theme_local <- theme_minimal
+```
 
-## Iver Data
+
+## Iver and Soskice Data
 
 This is an example of from Iversen and Soskice (2003).
 That paper is interested in the relationship between party systems and redistributive efforts of the government. 
@@ -45,7 +62,8 @@ ggplot(iver, aes(x = lnenp, y = povred)) +
   geom_point() +
   geom_smooth(method = "lm") +
   xlab("log(Number of Effective parties)") +
-  ylab("Poverty Reduction")
+  ylab("Poverty Reduction") +
+  theme_local()
 ```
 
 ## Influential Observations
@@ -87,7 +105,8 @@ ggplot() +
                                         slope = lnenp)) + 
   geom_point(data = iver, aes(x = lnenp, y = povred)) +
   xlab("log(Number of Effective parties)") +
-  ylab("Poverty Reduction")
+  ylab("Poverty Reduction") +
+  theme_local()
 ```
 
 Conveniently, in linear regression we can find which observations will have the largest influence on regression lines without rerunning the regression.
@@ -117,7 +136,9 @@ where $S_{E_(i)}$ is the standard error of the regression run without observatio
 It is called the Studentized residual, because it is distributed Student's $t$; the standardized residual is not.
 Add a new variable called `.student.resid`, which we can calculate using the residual (`.resid`), standard error of the regression that omits that observation (`.sigma`), and the hat value (`.hat`):
 ```{r}
-iver_mod1_aug <- iver_mod1_aug %>% mutate(.student.resid = .resid / .sigma * sqrt(1 - .hat))
+iver_mod1_aug <-
+  iver_mod1_aug %>% 
+  mutate(.student.resid = .resid / .sigma * sqrt(1 - .hat))
 ```
 In base R, the function `rstudent` calculates the Studentized residuals, and `rstandard` calculates the standardized residuals:
 ```{r}
@@ -126,14 +147,13 @@ setNames(rstandard(iver_mod1), iver$cty)
 ```
 
 
-
-
 This scatterplot weights observations by their hat score.
 Points further from the mean of `lnenp` have higher hat scores.
 ```{r}
 ggplot(data = iver_mod1_aug, aes(x = lnenp, y = povred)) +
   geom_point(mapping = aes(size = .hat)) +
-  geom_smooth(method = "lm")
+  geom_smooth(method = "lm") +
+  theme_local()
 ```
 
 This scatterplot weights observations by their absolute Studentized residuals.
@@ -141,7 +161,8 @@ Those observations furthest from the regression line *and* high hat values, have
 ```{r}
 ggplot(data = iver_mod1_aug, aes(x = lnenp, y = povred)) +
   geom_point(mapping = aes(size = abs(.student.resid))) +
-  geom_smooth(method = "lm")
+  geom_smooth(method = "lm") +
+  theme_local()
 ```
 Cook's distance is a measure of the overall influence of points on the regression; the point's effect on *all* the parameters. 
 This plot weights points by their Cook's distance. 
@@ -149,30 +170,42 @@ We can see that the two points on the bottom (Switzerland and the US) have the h
 ```{r}
 ggplot(data = iver_mod1_aug, aes(x = lnenp, y = povred)) +
   geom_point(mapping = aes(size = .cooksd)) +
-  geom_smooth(method = "lm")
+  geom_smooth(method = "lm") +
+  theme_local()
 ```
 
 A standard plot to assess outliers is the Influence Plot.
 The x-axis is hat scores, the y-axis is Studentized residuals.
 The points are sized by Cook's Distance.
 Rules of thumb lines are drawn at -2 and 2 for Studentized residuals, and $\bar{h} + 2 sd(h)$ and $\bar{h} + 3 sd(h)$ for hat scores.
-```{r}
+```{r fig.height = 6, fig.width = 6}
 ggplot() +
   geom_point(data = iver_mod1_aug,
              mapping = aes(x = .hat, y = .student.resid, size = .cooksd)) +
+  # add labels to points, but only those points that are flagged as outliers
+  # for at least one of the diagnostics considered here
+  geom_text(data =
+              filter(iver_mod1_aug,
+                     .cooksd > 4 / iver_mod1$df.residual
+                     | abs(.student.resid) > 2
+                     | .hat > mean(.hat) + 2 * sd(.hat)),
+            mapping = aes(x = .hat, y = .student.resid, label = cty),
+            hjust = 0, size = 4, colour = "red") +
   geom_hline(data = data.frame(yintercept = c(-2, 0, 2)),
-             mapping = aes(yintercept = yintercept)) +
-  geom_text(data = iver_mod1_aug,
-             mapping = aes(x = .hat, y = .student.resid, label = cty), hjust = 0) +
-  geom_hline(data = data.frame(yintercept = c(-2, 0, 2)),
-             mapping = aes(yintercept = yintercept)) +
+             mapping = aes(yintercept = yintercept),
+             colour = "blue", alpha = 0.4) +
   geom_vline(data = data.frame(xintercept = mean(iver_mod1_aug$.hat) +
                                  sd(iver_mod1_aug$.hat) * c(2, 3)),
-             mapping = aes(xintercept = xintercept)) +
+             mapping = aes(xintercept = xintercept),
+             colour = "blue", alpha = 0.4) +
   xlab("hat") +
-  ylab("Studentized residuals")
+  ylab("Studentized residuals") + 
+  scale_size_continuous("Cook's Distance") + 
+  theme_local()
 ```
 
+
+Instead of a plot, we could find the id
 Observations with high Cook's distance (greater than $4 / (n - k - 1)$):
 ```{r}
 filter(iver_mod1_aug, .cooksd > (4 / iver_mod1$df.residual)) %>%
@@ -187,11 +220,92 @@ filter(iver_mod1_aug, .hat > mean(.hat) + 2 * sd(.hat)) %>%
 ```
 Observations with high Studentized residuals (+/- 2):
 ```{r}
-filter(iver_mod1_aug, .student.resid > abs(2)) %>%
+filter(iver_mod1_aug, abs(.student.resid) > 2) %>%
   select(cty, .student.resid, lnenp)
+```
+Or combine these,
+```{r}
+filter(iver_mod1_aug,
+       abs(.student.resid) > 2 |
+         .hat > mean(.hat) + 2 * sd(.hat) |
+         .cooksd > 4 / iver_mod1$df.residual) %>%
+  select(cty, .cooksd, .hat, .student.resid, lnenp)
 ```
 
 Also see `influencePlot` in **car**, and `influencePlot` in **simcf** for other implementations of this plot type.
+One feature of those implementations is that they allow for the ability to identify the points on the plot.
+
+Now that we've identified Switzerland as a problematic point, the question is what to do about it.
+Checking the Switzerland data, it appears that it is correct and is not the result of data entry issues.
+In general, we should avoid dropping points.
+Perhaps the issue is that we have not accounted for different electoral systems. 
+Let's try including 
+```{r}
+iver_mod2 <- lm(povred ~ lnenp + elec_sys, data = iver)
+iver_mod2
+iver_mod2_aug <- augment(iver_mod2) %>%
+  mutate(.student.resid = .resid / (.sigma * sqrt(1 - .hat)),
+         cty = iver$cty)
+```
+
+However, by including a categorical variable for electoral system in which Switzerland is the only
+country with a unanamity government, we are effectively dropping Switzerland from the regression.
+This means that we cannot calculate Cook's distance or studentized residuals, or hat scores
+for Switzerland since a regression estimated *without* switzerland cannot estimate a coefficient
+for the `unam` category, since Switzerland is the only member of that category.
+```{r}
+filter(iver_mod2_aug,
+       abs(.student.resid) > 2 |
+         .hat > mean(.hat) + 2 * sd(.hat) |
+         .cooksd > 4 / iver_mod1$df.residual) %>%
+  select(cty, .cooksd, .hat, .student.resid, lnenp)
+```
+But now that we've ignored Switzerland, both Italy and the United States seem to be influential.
+This is because now that there are fewer observations per group, in some sense it is easier for observations to be influentia.
+But, although the US and Italy have high studentized residuals, neither of them exceed the rule of thumb for
+Cooks distance.
+```{r}
+filter(iver_mod2_aug,
+         .cooksd > 4 / iver_mod1$df.residual) %>%
+  select(cty, .cooksd, .hat, .student.resid, lnenp)
+```
+
+
+```{r fig.height = 6, fig.width = 6}
+ggplot() +
+  geom_point(data = filter(iver_mod2_aug, .cooksd < Inf),
+             mapping = aes(x = .hat, y = .student.resid, size = .cooksd)) +
+  # add labels to points, but only those points that are flagged as outliers
+  # for at least one of the diagnostics considered here
+  geom_text(data =
+              filter(iver_mod2_aug,
+                     .cooksd > 4 / iver_mod2$df.residual
+                     | abs(.student.resid) > 2
+                     | .hat > mean(.hat) + 2 * sd(.hat),
+                     .cooksd < Inf),
+            mapping = aes(x = .hat, y = .student.resid, label = cty),
+            hjust = 0, size = 4, colour = "red") +
+  geom_hline(data = data.frame(yintercept = c(-2, 0, 2)),
+             mapping = aes(yintercept = yintercept),
+             colour = "blue", alpha = 0.4) +
+  geom_vline(data = data.frame(xintercept = mean(iver_mod2_aug$.hat) +
+                                 sd(iver_mod2_aug$.hat) * c(2, 3)),
+             mapping = aes(xintercept = xintercept),
+             colour = "blue", alpha = 0.4) +
+  xlab("hat") +
+  ylab("Studentized residuals") + 
+  scale_size_continuous("Cook's Distance") + 
+  theme_local()
+```
+
+Although there are still a few observations with large residuals, and with a small dataset, it is almost inevitable that some observations will have outsized influence on the results, from an outlier perspective the new model seems less problematic.
+However, we accomplished this at the cost of effectively ignoring Switzerland.
+The model is able to estimate how different Switzerland is from what would be predicted, but by including a dummy variable
+that is only 1 for Switzerland, we are treating Switzerland as *sui generis*.
+Also note, that although the category is called `unam`, it would be inappropriate to interpret it as the effect of that
+type of government since Switzerland is the only country in that category.
+We cannot separate the effect of the government type from all the other things that make Switzerland unique.
+It would be more appropriate to call it the "Switzerland" category in this instance.
 
 ## Robust and Resistant Regression Methods
 
@@ -248,8 +362,10 @@ ggplot() +
               mapping = aes(intercept = intercept, slope = slope,
                             colour = method)) +
   geom_point(data = iver, mapping = aes(x = lnenp, y = povred)) +
+  scale_colour_discrete() +
   xlab("log(number of effective parties)") +
-  ylab("Poverty reduction")
+  ylab("Poverty reduction") +
+  theme_local()
 
 ```
 
