@@ -30,7 +30,7 @@ Comments
 - The usage of Rmarkdown documents is still awkward.
 - Need to streamline my advice of model fitting. It was rambling and not coherent, even in light of a lack of coherence in model choice.
 
-# May 17
+# May 19
 
 ## Pre
 
@@ -41,5 +41,34 @@ Decided to consider issues with linear regression before turning to causal infer
 - limited dependent variables, since several have it. Look at linear probability model.
 - discuss general statistical approach and thoughts of statistical inference currently
 
+## What I covered
+
+- Review hw for 30 minutes
+
+    - Q: what is the logit transformation?
+
+- Outliers using Christopher Adolph's slides and my worked example. Covered until slide 32 of http://faculty.washington.edu/cadolph/503/topic6.pw.pdf.
+  I switched between the slides and my worked example. I started with the slides, moved to the example of how to brute force answer the question,
+  Went back to the slides for leverage and discrepancy, and then back to example for the application. Slides for the overview of what to do about it.
+
+- Measurement / missingness: I mainly used the worked example; barely used the slides.
+
+For the worked examples, I used the html document, but had Rstudio open to answer questions on the fly about what's in the data.
+
+I did not cover limited dependent variables at all, and moved it to the next class.
+I did not discuss the Schrodt and Achen articles and will not discuss them.
+
+### Questions
+
+- Can we compare hat values between regressions
+- I could not think of the quote about outliers being the most interesting part of research
+- Do people really use method X?
+- How much detail is necessary to describe how you used multiple imputation
+- Confusion about why is it okay to use dependent variables and other variables in the imputation stage.
+
 ## Post
+
+- I liked starting with the brute force example of the influence of data points.
+- The discussion of the distance metrics was rough, and needs to be improved.
+- Working through the applied example of missing data was better than the theory, I think. Theory questions came up endogenously.
 

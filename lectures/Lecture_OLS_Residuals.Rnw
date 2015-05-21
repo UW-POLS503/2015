@@ -85,7 +85,7 @@ suppressPackageStartupMessages({
 
 \end{frame}
 
-\begin{frame}
+\begin{frame}[fragile]
 <<>>=
 library("car")
 mod_slid <- lm(wages ~ sex + age + education, data = SLID)
@@ -225,14 +225,14 @@ ggplot(data_frame(x = x,
 
   \begin{block}{Diagnosing}
     \begin{itemize}
-    \item Plot $E$ against $\hat{Y}$ - sometimes $E^2$ or $|E|$ or $\log \hat{Y}$.
-    \item R function \verb|residualPlots|
+    \item Plot $E$ or $\abs{E}^{2}$ against against $\hat{Y}$ $X$
+    \item R function \texttt{residualPlots}
     \end{itemize}
   \end{block}
 
   \begin{block}{Tests}
     \begin{itemize}
-    \item All tests of the form regress residuals on functions of $X$ (Breusch-Pagan, White) \verb|car::ncvTest|
+    \item All tests of the form regress residuals on functions of $X$ (Breusch-Pagan, White) \texttt{car::ncvTest}
     \item Are robust standard errors different from classic standard errors?
     \end{itemze}
   \end{block}

@@ -282,12 +282,6 @@ You will need to cover collinearity, unusual and influential data, and robust re
     - Lecture deck: [.pdf](lectures/Lecture_Measurement_Error_handout.pdf)
     - Fox. Ch. 6.4
 	
-- Unusual and Influential Data and Robust Regression
-
-    - Christopher Adolph, "Outliers and Robust Regression Techniques", POLS 503, Spring 2014. <http://faculty.washington.edu/cadolph/503/topic6.pw.pdf>
-    - Fox, Ch 11, 19
-
-
 - Collinearity
 
     - Fox Ch 13 (13.1, skim the rest)
@@ -302,7 +296,6 @@ Lab notes: [.html](http://pols503.github.io/pols_503_sp15/labs/lab6.html), [.Rmd
 ### Tuesday, May 12
 
 [Problem Set 3](hw/hw3.html) Due
-
 
 - [Deck on Model Specification and Fit](lectures/Lecture_Model_Specification_handout.pdf)
 - Life Expectancy Example: [.html](docs/Life_Expectancy_Example.html), [.Rmd](docs/Life_Expectancy_Example.Rmd)
@@ -326,13 +319,23 @@ Lab notes: [.html](labs/lab7.html), [.Rmd](labs/lab7.Rmd)
 
 ### Tuesday, May 19
 
-- Limited Dependent Variables
+- Unusual and Influential Data and Robust Regression
+
+    - Worked Example [Rmd](docs/Outliers_Robust_Regression.Rmd), [html](docs/Outliers_Robust_Regression.html)
+    - Christopher Adolph, "Outliers and Robust Regression Techniques", POLS 503, Spring 2014. <http://faculty.washington.edu/cadolph/503/topic6.pw.pdf>
+	- Readings
+	
+        - Fox, Ch 11, 19
 
 - Missing Data
 
-    - King, Gary, James Honaker, Anne Joseph, and Kenneth Scheve. 2001. "Analyzing Incomplete Political Science Data: An Alternative Algorithm for Multiple Imputation." American Political Science Review 95: 49–69. Copy at http://j.mp/1zTTZUT
+    - Slides on Missing Data [pdf](lectures/Lecture_Missing_Data_handout.pdf)
+	- Worked Example [Rmd](docs/Imputing_Missing_Data.Rmd), [html](docs/Imputing_Missing_Data.html)
+	- Readings:
+	
+        - King, Gary, James Honaker, Anne Joseph, and Kenneth Scheve. 2001. "Analyzing Incomplete Political Science Data: An Alternative Algorithm for Multiple Imputation." American Political Science Review 95: 49–69. Copy at http://j.mp/1zTTZUT
 
-- Miscellaneous Thoughts on the state of quantitative analysis in political science
+- Miscellaneous Thoughts on the state of quantitative analysis in political science. *We did not talk about this, but these are good readings*
 
     - Schrodt, Philip A. 2014. ``Seven Deadly Sins of Contemporary Quantitative Political Analysis.'' *Journal of Peace Research* 51(2): 287–300. <http://jpr.sagepub.com/content/51/2/287>
 	- Achen, Christopher H. 2002. ``Toward a New Political Methodology: Microfoundations and ART.'' *Annual Review of Political Science* 5(1): 423–50. <http://dx.doi.org/10.1146/annurev.polisci.5.112801.080943>. Read the part on a "Rule of Three"; skim other parts.
@@ -349,11 +352,15 @@ TBD
 
 **Problem Set 4 Due**
 
-Potential outcomes framework, regression, matching
+- Limited Dependent Variables
 
-- Angrist and Pischke, Ch 1--3
-- Gelman and Hill, Ch 9--10
-- Angrist, Joshua D., and Jorn-Steffen Pischke. 2010. ``The Credibility Revolution in Empirical Economics: How Better Research Design Is Taking the Con out of Econometrics.'' *Journal of Economic Perspectives* 24(2): 3–30. <http://www.aeaweb.org/articles.php?doi=10.1257/jep.24.2.3>
+    - Slides on the Linear Probability Model and Logit [pdf](lectures/Lecture_Binary_Dependent_Variables_handout.pdf)
+
+- Potential outcomes framework, regression, matching
+
+	- Gelman and Hill, Ch 9--10. 
+	- Angrist and Pischke, Ch 1--3.
+	- Angrist, Joshua D., and Jorn-Steffen Pischke. 2010. ``The Credibility Revolution in Empirical Economics: How Better Research Design Is Taking the Con out of Econometrics.'' *Journal of Economic Perspectives* 24(2): 3–30. <http://www.aeaweb.org/articles.php?doi=10.1257/jep.24.2.3> *For background reading*
 
 
 ### Friday, May 29
@@ -365,9 +372,10 @@ TBD
 ### Tuesday, June 2
 
 
-Instrumental Variables, Fixed Effects, Diff in Diff, Regression Discontinuity
+Misc Topics: Panel Data, Instrumental Variables, Fixed Effects, Diff in Diff, Regression Discontinuity
 
 - Angrist and Pischke, Ch. 4, 5, 6
+- 
 
 ### Friday, June 5
 

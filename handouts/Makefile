@@ -11,5 +11,8 @@ handouts: $(HANDOUTS_PDF)
 %.pdf: %.Rmd
 	$(RSCRIPT) -e 'rmarkdown::render("$^", output_file="$@", runtime="static")'
 
-.PHONY: all build labs
+clean:
+	-rm -f $(wildcard *_cache) $(wildcard *_files)
+
+.PHONY: all build handouts clean
 

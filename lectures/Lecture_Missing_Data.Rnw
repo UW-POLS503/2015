@@ -62,15 +62,6 @@ suppressPackageStartupMessages({
 \end{frame}
 
 \begin{frame}
-  \frametitle{Examples of Missingness}
-  
-  \begin{itemize}
-  \item \textbf{MCAR} 
-  \end{itemize}
-  
-\end{frame}
-
-\begin{frame}
   \frametitle{What we will cover and not cover}
 
   \begin{itemize}

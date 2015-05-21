@@ -136,17 +136,15 @@ where $S_{E_(i)}$ is the standard error of the regression run without observatio
 It is called the Studentized residual, because it is distributed Student's $t$; the standardized residual is not.
 Add a new variable called `.student.resid`, which we can calculate using the residual (`.resid`), standard error of the regression that omits that observation (`.sigma`), and the hat value (`.hat`):
 ```{r}
-iver_mod1_aug <- 
+iver_mod1_aug <-
   iver_mod1_aug %>% 
-  mutate(.student.resid = .resid / .sigma * (1 - .hat))
+  mutate(.student.resid = .resid / .sigma * sqrt(1 - .hat))
 ```
 In base R, the function `rstudent` calculates the Studentized residuals, and `rstandard` calculates the standardized residuals:
 ```{r}
 setNames(rstudent(iver_mod1), iver$cty)
 setNames(rstandard(iver_mod1), iver$cty)
 ```
-
-
 
 
 This scatterplot weights observations by their hat score.
