@@ -1,6 +1,6 @@
 R = Rscript
 LATEXMK = latexmk
-LATEXMK_OPTS = -use-make -xelatex -pdf -interaction=nonstopmode
+LATEXMK_OPTS = -use-make -quiet -xelatex -pdf -interaction=nonstopmode
 
 LECTURE_RNW = $(wildcard Lecture_*.Rnw)
 LECTURE_TEX = $(LECTURE_RNW:%.Rnw=%.tex)
@@ -16,7 +16,7 @@ presentations: $(LECTURE_PRESENTATIONS)
 handouts: $(LECTURE_HANDOUTS)
 
 Lecture_%.tex : Lecture_%.Rnw $(INPUTS)
-	$(R) -e 'LECTURE_NUM <- "$(patsubst Lecture_%.tex,%,$@)"; knitr::knit("$<",output="$@")'
+	$(R) -e 'LECTURE_NUM <- "$(patsubst Lecture_%.tex,%,$@)"; knitr::knit("$<",output="$@",quiet=TRUE)'
 
 Lecture_%_handout.pdf : Lecture_%.tex 
 	@echo "\def\ishandout{1}" > $(patsubst %.pdf,%-options.tex,$@)

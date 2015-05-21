@@ -234,7 +234,7 @@ ggplot(data_frame(x = x,
     \begin{itemize}
     \item All tests of the form regress residuals on functions of $X$ (Breusch-Pagan, White) \texttt{car::ncvTest}
     \item Are robust standard errors different from classic standard errors?
-    \end{itemze}
+    \end{itemize}
   \end{block}
 \end{frame}
 
@@ -316,7 +316,7 @@ ggplot(data_frame(x = x,
       \tilde{V}(\vc{b}) = (\mat{X}' \mat{X})^{-1} \mat{X}' \hat{\Sigma} \mat{X} (\mat{X}' \mat{X})^{-1}
     \end{equation*}
   \item Where $\hat{\Sigma} = \diag(E^{2}_{1}, \dots, E^{2}_{n})$
-  \item R functions \verb|hccm| in \textbf{car}.
+  \item R functions \texttt{hccm} in \textbf{car}.
   \end{itemize}
 
 \end{frame}
