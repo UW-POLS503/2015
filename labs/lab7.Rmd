@@ -371,7 +371,6 @@ For more advanced residual plots see **car** functions:
 
 Also try using `plot` on an `lm` object:
 ```{r eval=FALSE}
-
 plot(model1)
 ```
 
@@ -592,14 +591,14 @@ vc2<-vcov(foxmodel2)
 
 Take 1000 draws from the multivariate normal distribution:
 ```{r}
-simbetas2<-mvrnorm(1000, pe2, vc2)
+simbetas2 <- mvrnorm(1000, pe2, vc2)
 ```
 
 Set up range of women employed in that occupation, and define the high and low values of income:
 ```{r}
-women_range<-seq(from=0, to=100, by=10)
-income_hi<-mean(jobs$income)+sd(jobs$income)
-income_lo<-mean(jobs$income)-sd(jobs$income)
+women_range <- seq(from=0, to=100, by=10)
+income_hi <- mean(jobs$income)+sd(jobs$income)
+income_lo <- mean(jobs$income)-sd(jobs$income)
 ```
 
 Create placeholders for the results:
@@ -650,7 +649,7 @@ ggplot(scenarios_women, aes(x = women)) +
 
 Return to the first model we ran on the occupational prestige data.
 ```{r}
-foxmodel<-lm(prestige ~ education + income + women, data=jobs)
+foxmodel <- lm(prestige ~ education + income + women, data=jobs)
 summary(foxmodel)
 ```
 

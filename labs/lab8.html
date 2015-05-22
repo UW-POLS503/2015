@@ -71,36 +71,214 @@ img {
 
 <div id="TOC">
 <ul>
-<li><a href="#saving-to-files">Saving to Files</a></li>
+<li><a href="#setup">Setup</a></li>
+<li><a href="#saving-to-files">Saving to Files</a><ul>
+<li><a href="#data">Data</a></li>
+<li><a href="#plots">Plots</a></li>
+</ul></li>
 <li><a href="#merging">Merging</a></li>
 <li><a href="#outliers">Outliers</a></li>
 <li><a href="#multiple-imputation">Multiple Imputation</a></li>
+<li><a href="#sources">Sources</a></li>
 </ul>
 </div>
 
+<div id="setup" class="section level1">
+<h1>Setup</h1>
+<p>This lab uses the following libraries</p>
+<pre class="r"><code>library(&quot;dplyr&quot;)
+library(&quot;ggplot2&quot;)</code></pre>
+</div>
 <div id="saving-to-files" class="section level1">
 <h1>Saving to Files</h1>
+<div id="data" class="section level2">
+<h2>Data</h2>
+<p>Use a dataset as an example and</p>
 <ul>
-<li>Save to csv</li>
-<li>Save to RData</li>
-<li>Save to dta</li>
+<li>save to csv</li>
+<li>save to RData</li>
+<li>save to dta</li>
 </ul>
+</div>
+<div id="plots" class="section level2">
+<h2>Plots</h2>
+<p>You can save plots from within RStudio in the <em>Plots</em> pane with the <em>Export</em> menu item.</p>
+<p>You generally want to export to a vector format such as PDF or SVG if possible. Otherwise, use PNG. You do not want to use JPEG since that is a lossy compression format.</p>
+<p>You can also use R commands to save a plot to a file. The default way to do this in R is to using R’s low level graphics functions: <code>pdf</code>, <code>png</code>.</p>
+<pre class="r"><code>pdf(&quot;carplot.pdf&quot;)
+ggplot(mtcars, aes(wt, mpg)) + geom_point()
+dev.off()</code></pre>
+<p>Note that the file does not save until you close the device using <code>dev.off()</code>. This is to allow devices to work with base R graphics which often require several commands to create the plot.</p>
+<p>The <code>dev</code> functions works for all types of <code>ggplot2</code> For <strong>ggplot2</strong> objects, you can use the function <code>ggsave</code>:</p>
+<pre class="r"><code>mtcars_plot &lt;- ggplot(mtcars, aes(wt, mpg)) + geom_point()
+ggsave(filename = &quot;mtcars_plot.pdf&quot;, plot = mtcars_plot)</code></pre>
+<p><code>ggsave()</code> will determine the file format of the file to save from the extension of the <code>filename</code> argument. There are options for adjusting the height, width, dpi, etc. See the <a href="http://docs.ggplot2.org/0.9.2.1/ggsave.html">documentation</a> for more information.</p>
+<p><em>Important</em> when you run an R markdown file, plots are saved to <code>{filename}_files</code>. So you an use them without manually</p>
+</div>
 </div>
 <div id="merging" class="section level1">
 <h1>Merging</h1>
-<p>built in merge</p>
-<p>Merge ? with ?</p>
-<p>dplyr left_join, right_join,</p>
+<pre class="r"><code>rossoil &lt;- read.csv(&quot;http://pols503.github.io/pols_503_sp15/data/rossoildata.csv&quot;, 
+    na.strings = &quot;&quot;)
+democracy &lt;- read.csv(&quot;http://pols503.github.io/pols_503_sp15/data/democracy.csv&quot;, 
+    header = TRUE, stringsAsFactors = FALSE, na.strings = &quot;.&quot;)</code></pre>
+<p>Merge dataframes, keeping all countries in each even if no match in the other. Because our data is organised by country-year, include each</p>
+<pre class="r"><code>new_data &lt;- merge(rossoil, democracy, by.x = c(&quot;cty_name&quot;, &quot;year&quot;), by.y = c(&quot;CTYNAME&quot;, 
+    &quot;YEAR&quot;), all.x = TRUE, all.y = TRUE)</code></pre>
+<p>how do the original and merged datasets compare?</p>
+<pre class="r"><code>dim(rossoil)</code></pre>
+<pre><code>## [1] 4530   59</code></pre>
+<pre class="r"><code>dim(democracy)</code></pre>
+<pre><code>## [1] 4126   16</code></pre>
+<pre class="r"><code>dim(new_data)</code></pre>
+<pre><code>## [1] 6312   73</code></pre>
+<pre class="r"><code>ncol(democracy) + ncol(rossoil) - 2</code></pre>
+<pre><code>## [1] 73</code></pre>
+<pre class="r"><code>summary(new_data)</code></pre>
+<p>We can also, keep all dataframe 1</p>
+<pre class="r"><code>new_data_allx &lt;- merge(rossoil, democracy, by.x = c(&quot;cty_name&quot;, &quot;year&quot;), by.y = c(&quot;CTYNAME&quot;, 
+    &quot;YEAR&quot;), all.x = TRUE, all.y = FALSE)</code></pre>
+<p>Let’s check what it did</p>
+<pre class="r"><code>filter(new_data_allx, cty_name == &quot;Algeria&quot;) %&gt;% tbl_df() %&gt;% head()</code></pre>
+<pre><code>## Source: local data frame [6 x 73]
+## 
+##   cty_name year  id id1 year1     wdr6   wdr123 wdr135   wdr269 wdr271
+## 1  Algeria 1966 DZA  54  1966 2.364711 59.29279     NA 6.21e+08     NA
+## 2  Algeria 1967 DZA  54  1967 1.702917 77.03384     NA 7.24e+08     NA
+## 3  Algeria 1968 DZA  54  1968 1.291746 70.97992     NA 8.30e+08     NA
+## 4  Algeria 1969 DZA  54  1969 0.804877 67.61797     NA 9.34e+08     NA
+## 5  Algeria 1970 DZA  54  1970 0.508937 70.23643     NA 1.01e+09     NA
+## 6  Algeria 1971 DZA  54  1971 0.891620 74.85199     NA 8.57e+08     NA
+## Variables not shown: wdr272 (dbl), wdr273 (dbl), wdr313 (dbl), wdr344
+##   (dbl), wdr400 (dbl), wdr477 (dbl), ssafrica (int), mideast (int),
+##   me_nafr (int), oecd (int), v6 (dbl), agr (dbl), v123 (dbl), oil (dbl),
+##   v313 (dbl), metal (dbl), regime (dbl), regime1 (dbl), wdr97 (dbl),
+##   wdr151 (int), wdr152 (int), log135 (dbl), milpers (dbl), islam (dbl),
+##   ELF (int), Food (dbl), AgrFood (dbl), WDR85 (dbl), WDR87 (dbl), WDR88
+##   (dbl), illit (dbl), life (dbl), WDR409 (dbl), WDR411 (dbl), tv (dbl),
+##   WDR86 (dbl), phones (dbl), wdr129 (dbl), cgdp (int), GDPcap (dbl),
+##   logGDPcp (dbl), wdr93 (dbl), wdr440 (dbl), eth (dbl), govtconsump (dbl),
+##   regime1_5 (dbl), log135_5 (dbl), oil_5 (dbl), metal_5 (dbl), COUNTRY
+##   (int), REGION (chr), BRITCOL (int), CATH (dbl), CIVLIB (int), EDT (dbl),
+##   ELF60 (dbl), GDPW (int), MOSLEM (dbl), NEWC (int), OIL (int), POLLIB
+##   (int), REG (int), STRA (int)</code></pre>
+<pre class="r"><code>filter(rossoil, cty_name == &quot;Algeria&quot;) %&gt;% tbl_df() %&gt;% head()</code></pre>
+<pre><code>## Source: local data frame [6 x 59]
+## 
+##   cty_name  id id1 year year1     wdr6   wdr123 wdr135   wdr269 wdr271
+## 1  Algeria DZA  54 1966  1966 2.364711 59.29279     NA 6.21e+08     NA
+## 2  Algeria DZA  54 1967  1967 1.702917 77.03384     NA 7.24e+08     NA
+## 3  Algeria DZA  54 1968  1968 1.291746 70.97992     NA 8.30e+08     NA
+## 4  Algeria DZA  54 1969  1969 0.804877 67.61797     NA 9.34e+08     NA
+## 5  Algeria DZA  54 1970  1970 0.508937 70.23643     NA 1.01e+09     NA
+## 6  Algeria DZA  54 1971  1971 0.891620 74.85199     NA 8.57e+08     NA
+## Variables not shown: wdr272 (dbl), wdr273 (dbl), wdr313 (dbl), wdr344
+##   (dbl), wdr400 (dbl), wdr477 (dbl), ssafrica (int), mideast (int),
+##   me_nafr (int), oecd (int), v6 (dbl), agr (dbl), v123 (dbl), oil (dbl),
+##   v313 (dbl), metal (dbl), regime (dbl), regime1 (dbl), wdr97 (dbl),
+##   wdr151 (int), wdr152 (int), log135 (dbl), milpers (dbl), islam (dbl),
+##   ELF (int), Food (dbl), AgrFood (dbl), WDR85 (dbl), WDR87 (dbl), WDR88
+##   (dbl), illit (dbl), life (dbl), WDR409 (dbl), WDR411 (dbl), tv (dbl),
+##   WDR86 (dbl), phones (dbl), wdr129 (dbl), cgdp (int), GDPcap (dbl),
+##   logGDPcp (dbl), wdr93 (dbl), wdr440 (dbl), eth (dbl), govtconsump (dbl),
+##   regime1_5 (dbl), log135_5 (dbl), oil_5 (dbl), metal_5 (dbl)</code></pre>
+<pre class="r"><code>filter(democracy, CTYNAME == &quot;Algeria&quot;) %&gt;% tbl_df() %&gt;% head()</code></pre>
+<pre><code>## Source: local data frame [6 x 16]
+## 
+##   COUNTRY CTYNAME REGION YEAR BRITCOL CATH CIVLIB   EDT ELF60 GDPW MOSLEM
+## 1       1 Algeria Africa 1962       0  0.5     NA 1.160  0.43 5012   99.1
+## 2       1 Algeria Africa 1963       0  0.5     NA 1.250  0.43 6083   99.1
+## 3       1 Algeria Africa 1964       0  0.5     NA 1.345  0.43 6502   99.1
+## 4       1 Algeria Africa 1965       0  0.5     NA 1.450  0.43 6620   99.1
+## 5       1 Algeria Africa 1966       0  0.5     NA 1.560  0.43 6612   99.1
+## 6       1 Algeria Africa 1967       0  0.5     NA 1.675  0.43 6982   99.1
+## Variables not shown: NEWC (int), OIL (int), POLLIB (int), REG (int), STRA
+##   (int)</code></pre>
+<pre class="r"><code>new_data_ally &lt;- merge(rossoil, democracy, by.x = c(&quot;cty_name&quot;, &quot;year&quot;), by.y = c(&quot;CTYNAME&quot;, 
+    &quot;YEAR&quot;), all.x = FALSE, all.y = TRUE)</code></pre>
+<p>Let’s check what it did</p>
+<pre class="r"><code>filter(new_data_ally, cty_name == &quot;Algeria&quot;) %&gt;% tbl_df() %&gt;% head()</code></pre>
+<pre><code>## Source: local data frame [6 x 73]
+## 
+##   cty_name year  id id1 year1     wdr6   wdr123 wdr135   wdr269 wdr271
+## 1  Algeria 1962  NA  NA    NA       NA       NA     NA       NA     NA
+## 2  Algeria 1963  NA  NA    NA       NA       NA     NA       NA     NA
+## 3  Algeria 1964  NA  NA    NA       NA       NA     NA       NA     NA
+## 4  Algeria 1965  NA  NA    NA       NA       NA     NA       NA     NA
+## 5  Algeria 1966 DZA  54  1966 2.364711 59.29279     NA 6.21e+08     NA
+## 6  Algeria 1967 DZA  54  1967 1.702917 77.03384     NA 7.24e+08     NA
+## Variables not shown: wdr272 (dbl), wdr273 (dbl), wdr313 (dbl), wdr344
+##   (dbl), wdr400 (dbl), wdr477 (dbl), ssafrica (int), mideast (int),
+##   me_nafr (int), oecd (int), v6 (dbl), agr (dbl), v123 (dbl), oil (dbl),
+##   v313 (dbl), metal (dbl), regime (dbl), regime1 (dbl), wdr97 (dbl),
+##   wdr151 (int), wdr152 (int), log135 (dbl), milpers (dbl), islam (dbl),
+##   ELF (int), Food (dbl), AgrFood (dbl), WDR85 (dbl), WDR87 (dbl), WDR88
+##   (dbl), illit (dbl), life (dbl), WDR409 (dbl), WDR411 (dbl), tv (dbl),
+##   WDR86 (dbl), phones (dbl), wdr129 (dbl), cgdp (int), GDPcap (dbl),
+##   logGDPcp (dbl), wdr93 (dbl), wdr440 (dbl), eth (dbl), govtconsump (dbl),
+##   regime1_5 (dbl), log135_5 (dbl), oil_5 (dbl), metal_5 (dbl), COUNTRY
+##   (int), REGION (chr), BRITCOL (int), CATH (dbl), CIVLIB (int), EDT (dbl),
+##   ELF60 (dbl), GDPW (int), MOSLEM (dbl), NEWC (int), OIL (int), POLLIB
+##   (int), REG (int), STRA (int)</code></pre>
+<pre class="r"><code>filter(rossoil, cty_name == &quot;Algeria&quot;) %&gt;% tbl_df() %&gt;% head()</code></pre>
+<pre><code>## Source: local data frame [6 x 59]
+## 
+##   cty_name  id id1 year year1     wdr6   wdr123 wdr135   wdr269 wdr271
+## 1  Algeria DZA  54 1966  1966 2.364711 59.29279     NA 6.21e+08     NA
+## 2  Algeria DZA  54 1967  1967 1.702917 77.03384     NA 7.24e+08     NA
+## 3  Algeria DZA  54 1968  1968 1.291746 70.97992     NA 8.30e+08     NA
+## 4  Algeria DZA  54 1969  1969 0.804877 67.61797     NA 9.34e+08     NA
+## 5  Algeria DZA  54 1970  1970 0.508937 70.23643     NA 1.01e+09     NA
+## 6  Algeria DZA  54 1971  1971 0.891620 74.85199     NA 8.57e+08     NA
+## Variables not shown: wdr272 (dbl), wdr273 (dbl), wdr313 (dbl), wdr344
+##   (dbl), wdr400 (dbl), wdr477 (dbl), ssafrica (int), mideast (int),
+##   me_nafr (int), oecd (int), v6 (dbl), agr (dbl), v123 (dbl), oil (dbl),
+##   v313 (dbl), metal (dbl), regime (dbl), regime1 (dbl), wdr97 (dbl),
+##   wdr151 (int), wdr152 (int), log135 (dbl), milpers (dbl), islam (dbl),
+##   ELF (int), Food (dbl), AgrFood (dbl), WDR85 (dbl), WDR87 (dbl), WDR88
+##   (dbl), illit (dbl), life (dbl), WDR409 (dbl), WDR411 (dbl), tv (dbl),
+##   WDR86 (dbl), phones (dbl), wdr129 (dbl), cgdp (int), GDPcap (dbl),
+##   logGDPcp (dbl), wdr93 (dbl), wdr440 (dbl), eth (dbl), govtconsump (dbl),
+##   regime1_5 (dbl), log135_5 (dbl), oil_5 (dbl), metal_5 (dbl)</code></pre>
+<pre class="r"><code>filter(democracy, CTYNAME == &quot;Algeria&quot;) %&gt;% tbl_df() %&gt;% head()</code></pre>
+<pre><code>## Source: local data frame [6 x 16]
+## 
+##   COUNTRY CTYNAME REGION YEAR BRITCOL CATH CIVLIB   EDT ELF60 GDPW MOSLEM
+## 1       1 Algeria Africa 1962       0  0.5     NA 1.160  0.43 5012   99.1
+## 2       1 Algeria Africa 1963       0  0.5     NA 1.250  0.43 6083   99.1
+## 3       1 Algeria Africa 1964       0  0.5     NA 1.345  0.43 6502   99.1
+## 4       1 Algeria Africa 1965       0  0.5     NA 1.450  0.43 6620   99.1
+## 5       1 Algeria Africa 1966       0  0.5     NA 1.560  0.43 6612   99.1
+## 6       1 Algeria Africa 1967       0  0.5     NA 1.675  0.43 6982   99.1
+## Variables not shown: NEWC (int), OIL (int), POLLIB (int), REG (int), STRA
+##   (int)</code></pre>
+<p><strong>dplyr</strong> has its own merge functions described <a href="http://cran.r-project.org/web/packages/dplyr/vignettes/two-table.html">here</a>,</p>
 </div>
 <div id="outliers" class="section level1">
 <h1>Outliers</h1>
-<p>Example with ??</p>
+<p><strong>Challenge</strong> Replicate the analysis in Fox Chapte 11.2 Conduct outlier diagnostics for the regression of the prestige of occuptions in Canada in 1971 on income, education, percent women, and type (white collar, blue collar, professional). Are there any outliers? Consider hat values, Studentized residuals, and Cook’s distance. Which observation has the largest influence on the regression? How does the regression line change if you drop that observation?</p>
+<pre class="r"><code>library(&quot;car&quot;)
+data(&quot;Prestige&quot;)
+mod_prestige &lt;- lm(prestige ~ income + education + women + type, data = Prestige)</code></pre>
 </div>
 <div id="multiple-imputation" class="section level1">
 <h1>Multiple Imputation</h1>
-<p>Amelia + Ross Data</p>
-<hr />
-<p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,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" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>. R code is licensed under a <a href="http://www.r-project.org/Licenses/BSD_2_clause">BSD 2-clause</a> license.</p>
+<p>For this part we will use the <strong>Amelia</strong> package which implements a multiple imputation method.</p>
+<pre class="r"><code>library(&quot;Amelia&quot;)</code></pre>
+<p>We will use the Ross oil data that we’ve used throughout this course.</p>
+<pre class="r"><code>rossoil &lt;- read.csv(&quot;http://pols503.github.io/pols_503_sp15/data/rossoildata.csv&quot;) %&gt;% 
+    arrange(id1, year) %&gt;% group_by(id1) %&gt;% mutate(oilL5 = lag(wdr123, 5)/100, 
+    metalL5 = lag(wdr313, 5)/100, GDPpcL5 = lag(wdr135, 5)/100, islam = islam/100)
+rossoil1980 &lt;- rossoil %&gt;% filter(year == 1980)</code></pre>
+<p><strong>Challenge</strong> Estimate the the following regression of regime type in 1980 with (1) listwise deletion, and (2) multiple imputation. How do the coefficients and standard errors of the regression coefficients differ?</p>
+<pre class="r"><code>model2 &lt;- lm(regime1 ~ log(GDPcap) + metalL5 + oilL5 + oecd + islam, data = rossoil)</code></pre>
+<p>Note, it would be better to both estimate this model as a panel using all available data and to impute the data as a TSCS. See the Amelia <a href="http://cran.r-project.org/web/packages/Amelia/vignettes/amelia.pdf">vignette</a> for examples of how to do that.</p>
+</div>
+<div id="sources" class="section level1">
+<h1>Sources</h1>
+<ul>
+<li><a href="http://staff.washington.edu/csjohns/503/lab6.r">http://staff.washington.edu/csjohns/503/lab6.r</a></li>
+</ul>
 </div>
 
 <hr>
