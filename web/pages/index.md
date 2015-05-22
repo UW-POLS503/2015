@@ -344,7 +344,7 @@ Lab notes: [.html](labs/lab7.html), [.Rmd](labs/lab7.Rmd)
 
 ### Friday, May 22
 
-TBD
+Lab document: [html](labs/lab8.html), [Rmd](labs/lab8.Rmd)
 
 ## Week 9: Causal Inference II
 
@@ -375,7 +375,7 @@ TBD
 Misc Topics: Panel Data, Instrumental Variables, Fixed Effects, Diff in Diff, Regression Discontinuity
 
 - Angrist and Pischke, Ch. 4, 5, 6
-- 
+
 
 ### Friday, June 5
 
