@@ -141,3 +141,14 @@ A blog exchange between David Giles and Pischke
 - https://nonparibus.wordpress.com/2012/07/13/the-linear-education-model/
 - https://nonparibus.wordpress.com/2014/03/31/bogus-complaints-about-the-use-of-discrete-variablesttwit
 
+# Lecture May 24
+
+## Pre-lecture
+
+### Causal inference
+
+Taking material from Gelman and Hill, Angrist and Pischke and Matt Blackwell's notes
+
+Problem: I feel that I am missing good examples; Mostly Harmless has some, but I should get more political science relevant outcomes
+
+

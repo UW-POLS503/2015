@@ -108,6 +108,11 @@ suppressPackageStartupMessages({
 
 
 \begin{frame}
+  Example of potential outcomes
+\end{frame}
+
+
+\begin{frame}
   \frametitle{SUTVA}
   
   How does potential outcome relate to observed outcome?
@@ -295,6 +300,7 @@ suppressPackageStartupMessages({
 
   \begin{itemize}
   \item Matthew Blackwell, PSC 504 Notes, \url{http://www.mattblackwell.org/teaching/psc504/}.
+  \item Matthew Blackwell, GOV 2002 Notes \url{http://www.mattblackwell.org/files/teaching/gov2002-syllabus.pdf}
   \item Gelman and Hill, Ch 5. This should have most material you need.
   \end{itemize}
 \end{frame}
