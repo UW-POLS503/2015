@@ -1,0 +1,302 @@
+% Copyright (C) 2015 Jeffrey B. Arnold
+% License CC BY-NC-SA 4.0 http://creativecommons.org/licenses/by-nc-sa/4.0/
+
+<<init,echo=FALSE,results='hide',warning=FALSE,message=FALSE>>=
+source("init.R")
+@
+<<header>>=
+suppressPackageStartupMessages({
+  library("car")
+  library("gapminder")
+})
+@
+
+\input{\jobname-options}
+\ifdefined\ishandout%
+  \documentclass[handout]{beamer}
+\else
+  \documentclass[]{beamer}
+\fi
+
+%%%INSERTHEADERHERE
+
+\input{includes.tex}
+
+\usepackage{verbatim}
+
+\newcommand{\thetitle}{Casual Inference}
+\date{May 23, 2015}
+\title{\thetitle{}}
+\hypersetup{
+  pdftitle={\thetitle{}},
+  pdfkeywords={statistics}
+}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+
+
+\def\ci{\perp\!\!\!\perp}
+
+\begin{document}
+
+\begin{frame}
+  \maketitle{}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Overview}
+\tableofcontents
+\end{frame}
+
+
+\section{Causal Inference vs. Predictive Comparison}
+
+\begin{frame}
+  \frametitle{Prediction vs. Casual Inference}
+  
+  \begin{equation*}
+    y_{i} = \beta X_{i} + \epsilon_{i}
+  \end{equation*}
+  
+  \begin{block}{Prediction}
+    Comparison \textbf{between} individuals with different $X$
+  \end{block}
+
+  \begin{block}{Causal Inference}
+    \begin{itemize}
+    \item Comparison \textbf{within} individuals if it had a different $X$
+    \item What would $y_{i}$ be if individual $i$ had a different treatment $X_{i} = 1$ instead of $X_{i} = 0$.
+    \end{itemize}
+  \end{block}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Potential Outcomes Causal Framework}
+  
+  \begin{itemize}
+  \item Called \textbf{Rubin Causal Model}
+  \end{itemize}
+
+  \begin{equation*}
+    Y \ci X, T
+  \end{equation*}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Potential Outcomes}
+  
+  What is the affect of binary \textbf{treatment} variable $D_{i} = \{0, 1\}$? 
+  
+  \begin{equation*}
+    \text{Potential outcome} = 
+    \begin{cases}
+      Y_{1i} & \text{if $D_{i} = 1$} \\
+      Y_{0i} & \text{if $D_{i} = 0$} \\      
+    \end{cases}
+  \end{equation*}
+  
+  Example
+  \begin{itemize}
+  \item $D_{i} = 1$ if Alice goes to hospital; $D_{i} = 0$ otherwise
+  \item $Y_{1i}$ is health status of Alice after going to the hospital
+  \item $Y_{1i}$ is health status of Alice after \textbf{not} going to the hospital    
+  \end{itemize}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{SUTVA}
+  
+  How does potential outcome relate to observed outcome?
+  
+  Stable unit treatment value assumption
+  
+  If $Y_{i}(T) = Y_{i}$ if $T_{i} = T$
+  
+  \begin{itemize}
+  \item No interference between units. My potential outcome does not depend on other's treatment.
+  \item There may be ill defined counterfactuals, multiple versions of the treatment, time
+  \item If interference, need to redefine treatment or units
+  \end{itemize}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{The Fundamental Problem of Causal Inference}
+  
+  
+\end{frame}
+
+\begin{frame}
+  \begin{itemize}
+  \item Linear regression is causal when the CEF is causal
+  \item Linear regression estimates the CEF, when the CEF is linear+ 
+    \begin{itemize}
+    \item $X$ is multivariate normal 
+    \item $X$ is saturated, e.g.\@all combinations of binary $X$
+    \end{itemize}
+  \item $X'_{i} \beta$ is minimum MSE predictor of $Y_{i}$
+  \item $X'_{i} \beta$ is minimum MSE predictor of the CEF, $E(Y_{i}|X_{i})$    
+  \item Agnostic view of regression. Regression is a linear approximation of the CEF, 
+    not necessarily the ``true model''. Heteroskedasticity is likely to occur when it is an 
+    approximation.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Saturated Regression}
+  
+  Parameter for each unique combination of the covariates
+  
+  Regression fits CEF because the CEF is a linear combination of the categories
+  
+  \begin{equation*}
+    Y_{i} = \alpha + \beta_{1} X_{1i} + \beta_{2} X_{2i} + \beta_{3} X_{1i} X_{2i} + \epsilon_{i}
+  \end{equation*}
+  
+  \begin{align*}
+    \E(Y_{i} | X_{1i} = 0, X_{2i} = 0) = \alpha
+    \E(Y_{i} | X_{1i} = 0, X_{2i} = 1) = \alpha + \beta_{2}
+    \E(Y_{i} | X_{1i} = 1, X_{2i} = 0) = \alpha + \beta_{1}
+    \E(Y_{i} | X_{1i} = 1, X_{2i} = 1) = \alpha + \beta_{1} + \beta_{2} + \beta_{3}
+  \end{align*}
+  
+  Linear regresion with the set of same set of covariates will fit the CEF because each value 
+  of the CEF is estimated independently
+  
+  Most flexible linear regression model; Dropping interaction terms or making linearity assumptions on multi-category varaibles cause the regression model to be no longer saturated
+  
+  Saturated model perfectly fits the CEF, no assumptions about the CEF
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Regression and Causality}
+  
+  Regression is causal when the CEF it approximates is causal (Angrist and Pischke 2008)
+  
+  Under certain conditions, the regression of the outcome on the treatment and covariates can recover a causal parameter (not always the one we are interested)
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Average Treatment Effect, Average Treatment of the Treated}
+  
+  \begin{align*}
+    \text{Individual Causal Effect} = \text{ICE} = Y_{i}(1) - Y_{i}(0) \\
+    \text{Average Treatment Effect} = \text{ATE} = \E(Y_{i}(1) - Y_{i}(0)) \\
+    \text{Average Treatment Effect, subpop} = \text{ATE} = \frac{1}{N_{f}} \sum_{i:X_{i} = f} (Y_{i}(1) - Y_{i}(0)) \\    
+    \text{Average Treatment Effect on the treated} = \text{ATT} = \E(Y_{i}(1) - Y_{i}(0) | D_{i}  = 1)
+  \end{align*}
+  
+  ATT. Matching methods chooise it. Fewer assumptions. Effect of a policy for those that actually use it.
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Avg. Causal Effects and the Selection Bias}
+    
+  Observation and causal effects:
+  \begin{align*}
+    &\E(Y_{i}|D_{i} = 1) - \E(Y_{i} | D_{i} = 0)  && \text{Obs.\@difference in avg.\@health} \\
+    &\quad = \E(Y_{1i}|D_{i} = 1) - \E(Y_{0i} | D_{i} = 1) && \text{Avg.\@treatment effect on treated} \\
+    &\quad + \E(Y_{0i}|D_{i} = 1) - \E(Y_{0i} | D_{i} = 0) && \text{Selection bias}
+  \end{align*}
+  
+  The \textbf{average causal effect on the treated}
+  \begin{equation*}
+    \E(Y_{1i} | D_{i} = 1) - \E(Y_{0i} | D_{i} = 1) = \E(Y_{1i} - Y_{0i} | D_{i} = 1)
+  \end{equation*}
+  
+  E.g compare hospitalization
+  Observed difference in averge health between hospitalized and non hospitalized is
+  Average effect of hospitalization on health + the difference in health for those who went to the hospital and those that didn't if they didn't go to the hospital
+    
+\end{frame}
+
+\begin{frame}
+  \frametitle{Regression Analysis of Experiments}
+  
+  \begin{equation*}
+    Y_{i} = \alpha + \rho D_{i} + \nu_{i} \\
+    
+  \end{equation*}
+  
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Bad Controls}
+  
+  $Y_{i}$ is income; $W_{i}$ is dummy for white collar; $C_{i}$ is dummy for college education
+  
+  \begin{align*}
+    Y_{i} &= C_{i} Y_{1i} + (1 + C_{i})Y_{0i}\\
+    W_{i} &= C_{i} W_{1i} + (1 + C_{i})W_{0i}
+  \end{align*}
+  
+  $C_{i}$ randomly assigned, indep of potential outcomes
+  
+  \begin{align*}
+    \E(Y_{i} | C_{i} = 1) - \E(Y_{i} | C_{i} = 0) &= \E(Y_{1i} - Y_{0i}) \\
+    \E(W_{i} | C_{i} = 1) - \E(W_{i} | C_{i} = 0) &= \E(W_{1i} - W_{0i})
+  \end{align*}
+  
+  \begin{equation*}
+    \E(Y_{i} | W_{i} = 1, C_{i} = 1) - \E(Y_{i} | W_{i} = 1, C_{i} = 0) =
+    \E(Y_{1i} | W_{1i} = 1, C_{i} = 1) - \E(Y_{0i} | W_{0i} = 1, C_{i} = 0)
+  \end{equation*}
+ 
+  \begin{equation*}
+    \E(Y_{1i} | W_{1i} = 1, C_{i} = 1) - \E(Y_{0i} | W_{0i} = 1, C_{i} = 0) =
+    \E(Y_{1i} | W_{1i} = 1) - \E(Y_{0i} | W_{0i} = 1)
+  \end{equation*}
+
+  Causal effect of college degree for those who work at a white collar job,
+  selection bias, college changes the composition of white collar workers
+  \begin{equation*}
+    \E(Y_{1i} | W_{1i} = 1) - \E(Y_{0i} | W_{0i} = 1) =
+    E(Y_{1i} - Y_{0i} | W_{1i} = 1) + \left(
+      E(Y_{0i} | W_{1i} = 1) - E(Y_{0i} | W_{0i} = 1)
+    \right)
+  \end{equation*}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Heterogeneity and Non-linearity}
+  
+  Estimands ATT
+  
+\end{frame}
+
+\begin{frame}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Comments on ``Credibility Revolution''}
+  
+  \begin{itemize}
+  \item Less concern about finding the \textbf{true model}
+  \item More concern about removing OVB using design
+  \item Focus on average effects
+  \end{itemize}
+\end{frame}
+
+\section{References}
+
+\begin{frame}
+  \frametitle{References}
+
+  \begin{itemize}
+  \item Matthew Blackwell, PSC 504 Notes, \url{http://www.mattblackwell.org/teaching/psc504/}.
+  \item Gelman and Hill, Ch 5. This should have most material you need.
+  \end{itemize}
+\end{frame}
+
+\end{document}

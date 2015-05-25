@@ -1,6 +1,6 @@
 R = Rscript
 LATEXMK = latexmk
-LATEXMK_OPTS = -use-make -quiet -xelatex -pdf -interaction=nonstopmode
+LATEXMK_OPTS = -use-make -xelatex -pdf -interaction=nonstopmode
 
 LECTURE_RNW = $(wildcard Lecture_*.Rnw)
 LECTURE_TEX = $(LECTURE_RNW:%.Rnw=%.tex)
