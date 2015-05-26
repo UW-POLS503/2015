@@ -22,6 +22,8 @@ suppressPackageStartupMessages({
 
 \input{includes.tex}
 
+\DeclareMathOperator{\CEF}{CEF}
+
 \newcommand{\thetitle}{Causal Inference}
 \date{May 26, 2015}
 \title{\thetitle{}}
@@ -52,16 +54,16 @@ suppressPackageStartupMessages({
 
 \begin{frame}
   \frametitle{Prediction vs. Causal Inference}
-  
+
   Consider a relationship between $X$ and $Y$:
-  
+
   \begin{block}{Prediction}
     \begin{itemize}
     \item Given values of $x$ predict $y$.
     \item Compare values of $y$ for different values of $x$
     \item This is a comparison \textbf{between} individuals
     \end{itemize}
-    
+
   \end{block}
 
   \begin{block}{Causal Inference}
@@ -70,56 +72,104 @@ suppressPackageStartupMessages({
     \item For the \textbf{same individual}, what \textit{would happen} as a result of a hypothesized ``treatment'' value of $x$
     \end{itemize}
   \end{block}
-  
+
 \end{frame}
 
 \begin{frame}
   \frametitle{Casual Inference}
-  
+
   \begin{itemize}
-  \item Either everyday inference
-  \item Or a lack of spell checking
+  \item Non causal inference
+  \item A typo
   \end{itemize}
-  
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{What is the effect of hospitals on health?}
+
+  \begin{itemize}[<+->]
+  \item Should we compare the health of those in hospitals with those outside hospitals?
+  \item Counterfactual: For individuals, what would have happened if they went to a hospital, or not?
+  \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{What is the effect of hospitals on health?}
+
+  Consider two individuals, Annie and Jeff.
+
+  The effects of hospital on
+  \begin{itemize}
+  \item (health of Annie if he goes hospital) - (health if she does not)
+  \item (health of Jeff if he goes to the hospital) - (health if he does not)
+  \end{itemize}
+
 \end{frame}
 
 
 \begin{frame}
   \frametitle{Potential Outcome Framework}
-  
-  What is the effect of binary \textbf{treatment} variable $D_{i} = \{0, 1\}$? 
-  
+
+  Consider a  \textbf{treatment} variable $D_{i} = \{0, 1\}$?
+
   \begin{equation*}
-    \text{Potential outcome} = 
+    \text{Potential outcome} =
     \begin{cases}
       Y_{i}(1) & \text{if $D_{i} = 1$} \\
-      Y_{i}(0) & \text{if $D_{i} = 0$} \\      
+      Y_{i}(0) & \text{if $D_{i} = 0$} \\
     \end{cases}
   \end{equation*}
-  
-  Example
-  \begin{itemize}
-  \item $D_{i} = 1$ if Alice goes to hospital; $D_{i} = 0$ otherwise
-  \item $Y_{i}(1)$ is health status of Alice after going to the hospital
-  \item $Y_{i}(0)$ is health status of Alice after \textbf{not} going to the hospital    
-  \end{itemize}
-  
+
 \end{frame}
 
 
 \begin{frame}
+  \begin{tabular}{lccc}
+    & No Hospital & Hospital & Casual Effect \\
+    Person & $Y_{i}(0)$ & $Y_{i}(1)$ & $Y_{i}(0) - Y_{i}(1)$  \\
+    \hline    
+    Annie & 8  & 10 & 2 \\
+    Jeff &  5 &  10 & 5\\
+    Abed & 1 & 7 & 6 \\
+    Britta & 5 & 10 & 5 \\
+    Chang & 3 & 5 & 2 \\
+    Frankie & 6 & 8 & 2 \\
+    \hline                      
+  \end{tabular}
+\end{frame}
+
+\begin{frame}
   \frametitle{The fundamental problem of causal inference}
-  
+
   \begin{center}
     We only observe one potential outcome --- the observation; we cannot observe both $Y_{i}(1)$ and $Y_{i}(0)$.
   \end{center}
-  
+
+\end{frame}
+
+
+\begin{frame}
+  \begin{tabular}{lccc}
+    & No Hospital & Hospital & Treatment \\
+    Person & $Y_{i}(0)$ & $Y_{i}(1)$ & $D_{i}$  \\
+    \hline
+    Annie & 8  &  & 0\\
+    Jeff &  5 &   & 0\\
+    Abed & 1 &  & 0 \\
+    Britta &  & 10 & 1 \\
+    Chang &  & 5 & 1 \\
+    Frankie &  & 8 & 1 \\
+    \hline                      
+  \end{tabular}
 \end{frame}
 
 
 \begin{frame}
   \frametitle{How does the potential outcome relate to observed outcome?}
-  
+
   \begin{itemize}
   \item Need a way to connect potential outcomes to observed outcomes.
   \item \textbf{SUTVA}: Stable unit treatment value assumption
@@ -136,41 +186,81 @@ suppressPackageStartupMessages({
 \end{frame}
 
 
+
+\begin{frame}
+  \begin{tabular}{lcccc}
+    & No Hospital & Hospital & Treatment & Outcome \\
+    Person & $Y_{i}(0)$ & $Y_{i}(1)$ & $D_{i}$ & $Y_i$ \\
+    \hline
+    Annie & 8  &  & 0 & 8 \\
+    Jeff &  5 &   & 0 & 5\\
+    Abed & 1 &  & 0  & 1\\
+    Britta &  & 10 & 1 & 10\\
+    Chang &  & 5 & 1 & 5\\
+    Frankie &  & 8 & 1 & 8\\
+    \hline                      
+  \end{tabular}
+\end{frame}
+
+
+
 \subsection{Estimands}
 
 
 \begin{frame}
   \frametitle{What causal effects are there?}
-  
-  Suppose poulation of units $i = 1, \dots, N$
-  
-  \begin{itemize}
-  \item Individual Causal Effect (ICE): 
+
+  Suppose population of units $i = 1, \dots, N$
+
+  \begin{description}
+  \item [Individual Causal Effect (ICE)]
     \begin{equation*}
       \tau_{i} = Y_{i}(1) - Y_{i}(0)
     \end{equation*}
-  \item Average Treatment Effect (ATE); averge causal effect
+  \item [Average Treatment Effect (ATE)] The average causal effect
     \begin{equation*}
       \tau = \E(\tau_{i}) = \frac{1}{N} \sum_{i:X_{i} = x} Y_{i}(1) - Y_{i}(0)
     \end{equation*}
-  \end{itemize}
-  
-\end{frame}
+  \end{description}
 
+
+\end{frame}
 
 \begin{frame}
   \frametitle{Causal effects for subpopulations}
 
-  \begin{itemize}
-  \item Conditional Average Treatment effect (CATE) for a subpopulation
+  \begin{description}
+  \item [Conditional Average Treatment effect (CATE)] ATE for a subpopulation
     \begin{equation*}
       \tau(x) = \E(\tau_{i} | X = x) = \frac{1}{N_{x}} \sum_{i: X_{i} = x} (Y_{i}(1) - Y_{i}(0))
     \end{equation*}
-  \item Average treatement effect on the treated (ATT). Causal effect for those that were treated.
+  \item [Average treatment effect on the treated (ATT)] Causal effect for those that were treated.
     \begin{equation*}
       \tau_{ATT} = \E(\tau_{i} | D_{i} = 1) = \frac{1}{\sum D_{i}} \sum_{i: D_{i} = 1} (Y_{i}(1) - Y_{i}(0))
     \end{equation*}
-  \end{itemize}
+  \end{description}
+
+\end{frame}
+
+\begin{frame}
+  \begin{tabular}{lcccc}
+    & No Hospital & Hospital & ICE & Treatment  \\
+    Person & $Y_{i}(0)$ & $Y_{i}(1)$ & $Y_{i}(0) - Y_{i}(1)$ & $D_{i}$  \\
+    \hline    
+    Annie & 8  & 10 & 2 & 0\\
+    Jeff &  5 &  10 & 5 & 0 \\
+    Abed & 1 & 7 & 6 & 0 \\
+    Britta & 5 & 10 & 5 & 1 \\
+    Chang & 3 & 5 & 2 & 1 \\
+    Frankie & 6 & 8 & 2 & 1 \\
+    \hline                      
+  \end{tabular}
+
+  \begin{align*}
+    \text{ATE} = (2 + 5 + 6 + 5 + 2 + 2) / 6 \approx 3.7 \\
+    \text{CATE(men)} = (5 + 6 + 2) / 3 \approx 4.3 \\
+    \text{ATT} = (5 + 2 + 2) / 3 = 3 \\    
+  \end{align*}
   
 \end{frame}
 
@@ -179,9 +269,9 @@ suppressPackageStartupMessages({
   \frametitle{Identification}
   \begin{itemize}
   \item If you had infinite data (entire population, no sampling variation) could you estimate the parameter uniquely?
-  \item E.g. example of non-identification in regression is collinearity
+  \item E.g.\@example of non-identification in regression is collinearity
   \item \textbf{Non parametric identification} Don't require a parametric model of data.
-  \item \textbf{Parametric identification} Estimand identified assuming a parametric model of the data, 
+  \item \textbf{Parametric identification} Estimand identified assuming a parametric model of the data,
     not identified otherwise
   \item Causal inference concerned with the identification of causal estimands like ATE, ATT.
   \end{itemize}
@@ -194,15 +284,15 @@ suppressPackageStartupMessages({
   \begin{center}
     Data + assumptions = causal inference
   \end{center}
-  
+
   ``What's your identification strategy?'' means ``What assumptions are required to estimate a causal effect?''
-  
+
 \end{frame}
 
 
 \begin{frame}
   \frametitle{The Selection Problem}
-  
+
   \begin{align*}
       Y_{i} & =
       \begin{cases}
@@ -213,18 +303,20 @@ suppressPackageStartupMessages({
             & = \text{(potential outcome for non-treatment)} \\
             & \qquad + \text{(causal effect of treatment if treated)}
   \end{align*}
-  
+
+  We cannot simply compare group averages to get a causal effect
+
 \end{frame}
 
 
 \begin{frame}
   \frametitle{Avg. Causal Effects and the Selection Bias}
-    
+
   Observation and causal effects:
   \begin{align*}
     &\E(Y_{i}|D_{i} = 1) - \E(Y_{i} | D_{i} = 0)  && \text{Obs.\@difference in avg.\@health} \\
-    &\quad = \E(Y_{i}(1) |D_{i} = 1) - \E(Y_{0i} | D_{i} = 1) && \text{$\tau_{ATT}$, Avg. Treatment on the treated} \\
-    &\quad + \E(Y_{0i}|D_{i} = 1) - \E(Y_{0i} | D_{i} = 0) && \text{Selection bias}
+    &\quad = \E(Y_{i}(1) |D_{i} = 1) - \E(Y_{i}(1) | D_{i} = 1) && \text{$\tau_{ATT}$, Avg. Treatment on the treated} \\
+    &\quad + \E(Y_{i}(0)|D_{i} = 1) - \E(Y_{i}(0) | D_{i} = 0) && \text{Selection bias}
   \end{align*}
 
 \end{frame}
@@ -236,92 +328,254 @@ suppressPackageStartupMessages({
 \begin{frame}
   \frametitle{How randomization solves the selection Problem}
 
-  If $D_{i}$ is randomly assigned then 
-  
+  If $D_{i}$ is randomly assigned then
+
   \begin{align*}
-    \E(Y_{i} | D_{i} = 1) - \E(Y_{i} | D_{i} = 0) && \text{Difference in means}
-    \quad  = \E(Y_{i}(1) | D_{i} = 1) - \E(Y_{i}(0) | D_{i} = 0) && \text{SUTVA}
-    \quad  = \E(Y_{i}(1) | D_{i} = 1) - \E(Y_{i}(0) | D_{i} = 1) && \text{Independence}
-    \quad  = \E(Y_{i}(1) - Y_{i}(0) | D_{i} = 1) && \text{Diff means is mean of diffs}
-    \quad  = \E(Y_{i}(1) - Y_{i}(0)) && \text{$D_{i}$ is indep of potential outcomes}
+    &\E(Y_{i} | D_{i} = 1) - \E(Y_{i} | D_{i} = 0) && \text{Difference in means} \\
+    &\quad  = \E(Y_{i}(1) | D_{i} = 1) - \E(Y_{i}(0) | D_{i} = 0) && \text{SUTVA} \\
+    &\quad  = \E(Y_{i}(1) | D_{i} = 1) - \E(Y_{i}(0) | D_{i} = 1) && (Y_{i}(0), Y_{i}(1)) \ci D_{i} \\
+    &\quad  = \E(Y_{i}(1) - Y_{i}(0) | D_{i} = 1) && \text{Diff means is mean of diffs} \\
+    &\quad  = \E(Y_{i}(1) - Y_{i}(0)) && \text{$D_{i}$ is indep of potential outcomes}
   \end{align*}
-  
+
 \end{frame}
 
 
 \begin{frame}
   \frametitle{How randomization solves the selection problem}
-  
-  \begin{frame}
+
+  \begin{itemize}
   \item Since $D_{i}$ is indep of potential outcomes, can measure average causal effect using
     a simple difference in means
   \item Randomization makes the treated and untreated groups equal on average, e.g. on average
     $E(X_{i} | D_{i} = 1) = E(X_{i} | D_{i} = 0)$ for any known or unknown $X_{i}$
-  \end{frame} 
-  
+  \end{itemize}
+
 \end{frame}
 
 
-\section{Linear Regression and Causal Inference}
+\begin{frame}
+  \frametitle{Linear Constant Effects, Binary Treatment}
+
+  Consider an experiment with a single binary treatment
+  \begin{align*}
+    Y_{i} &=  Y_{i}(0) + (Y_{i}(1) - Y_{i}(0)) D_{i} \\
+          &= \alpha + \tau D_{i} + (Y_{i}(0) - \alpha) \\
+          &= \alpha + \tau D_{i} + \eta
+  \end{align*}
+
+  Compare
+  \begin{align*}
+    E(Y_{i} | D_{i} = 1) &= \alpha + \tau + E(\eta_{i} | D_{i}  = 1) \\
+    E(Y_{i} | D_{i} = 0) &= \alpha + E(\eta_{i} | D_{i} = 0) \\
+  \end{align*}
+
+  Difference is ATE + selection, but selection effect is 0
+  \begin{align*}
+    E(Y_{i} | D_{i} = 1) - E(Y_{i} | D_{i} = 0) &= \tau + E(\eta_{i} | D_{i} = 1) - E(\eta_{i} | D_{i} = 0) \\
+    &= 0
+  \end{align*}
+
+\end{frame}
+
+
+
+\section{Observational Studies, Regression}
+
 
 \begin{frame}
+  \frametitle{Selection on observables}
+
+  Conditional on observed covariates $X_{i}$, selection bias disappears
+  \begin{equation*}
+    \{Y_{i}(1), Y_{i}(0) \} \ci D_{i} | X_{i}
+  \end{equation*}
+  Means
+  \begin{equation*}
+    E(Y_{i} | X_{i}, D_{i} = 1) - E(Y_{i} | X_{i}, D_{i} = 0) = E(Y_{i}(1) - Y_{i}(0) | X_{i})
+  \end{equation*}
+
   \begin{itemize}
-  \item Linear regression is causal when the CEF is causal
-  \item Linear regression estimates the CEF, when the CEF is linear+ 
+  \item Given $X_{i}$, assignment of $D_{i}$ is ``as if'' random
+  \item This assumption allows for a causal interpretation of observational studies
+  \item Also called \textbf{conditional independence assumption}, \textbf{ignorability},
+    \textbf{no omitted variables}, \textbf{no unmeasured confounders}
+
+  \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Estimating Causal Effects Given Observational Data}
+
+  Using the selection on observables assumption several methods to estimate causal effects:
+  \begin{itemize}
+  \item Regression
+  \item Matching
+  \item Propensity
+  \item Weighting
+  \end{itemize}
+
+  Other methods: instrumental variables, panels, difference in difference, regression discontinuity
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Regression and Causality}
+
+  \begin{itemize}
+  \item Regression is causal when the CEF it approximates is causal (Angrist and Pischke 2008)
     \begin{itemize}
-    \item $X$ is multivariate normal 
+    \item Selection-on-observables assumption is correct
+    \end{itemize}
+  \item recovers a causal parameter, not necessarily the one we want.always
+    \begin{itemize}
+    \item When individual causal effects are linear and homogeneous: ATE
+    \item When individual causal effects are non-linear or heterogeneous:
+      \begin{itemize}
+      \item weighted average treatement effect
+      \item weights are the variance of the treatment conditional on the value of $X_{i}$,
+        with binary $D$, highest where $\Pr(D_i = 1 | X_i) = 0.5$.
+      \end{itemize}
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Regression and the CEF}
+
+  Conditional expectation function (CEF)
+  \begin{equation*}
+    \text{CEF} = \E(Y | X)
+  \end{equation*}
+  Linear regression
+  \begin{equation}
+    Y_{i} = X_{i} \beta + \epsilon_{i} \approx \E(Y_{i} | X_{i}) + \epsilon_{i}
+  \end{equation}
+
+  \begin{itemize}
+  \item Linear regression estimates the CEF, when the CEF is linear.
+  \item When is the CEF likely linear
+    \begin{itemize}
+    \item $X$ is multivariate normal
     \item $X$ is saturated, e.g.\@all combinations of binary $X$
     \end{itemize}
-  \item $X'_{i} \beta$ is minimum MSE predictor of $Y_{i}$
-  \item $X'_{i} \beta$ is minimum MSE predictor of the CEF, $E(Y_{i}|X_{i})$    
-  \item Agnostic view of regression. Regression is a linear approximation of the CEF, 
-    not necessarily the ``true model''. Heteroskedasticity is likely to occur when it is an 
-    approximation.
+  \item $X'_{i} \beta$ is minimum MSE predictor of $Y_{i}$.
+  \item $X'_{i} \beta$ is minimum MSE predictor of the CEF, $E(Y_{i}|X_{i})$.
+  \item \textbf{Agnostic view of regression}. Linear approximation of the CEF, not ``true model''.
+    Heteroskedasticity will occur use robust standard errors.
   \end{itemize}
+
 \end{frame}
 
 
 \begin{frame}
   \frametitle{Saturated Regression}
-  
-  Parameter for each unique combination of the covariates
-  
-  Regression fits CEF because the CEF is a linear combination of the categories
-  
+
+  Suppose $X_{1}$, and $X_{2}$ are binary variables, the saturated regression is
   \begin{equation*}
     Y_{i} = \alpha + \beta_{1} X_{1i} + \beta_{2} X_{2i} + \beta_{3} X_{1i} X_{2i} + \epsilon_{i}
   \end{equation*}
-  
+  which implies
   \begin{align*}
     \E(Y_{i} | X_{1i} = 0, X_{2i} = 0) & = \alpha \\
     \E(Y_{i} | X_{1i} = 0, X_{2i} = 1) & = \alpha + \beta_{2} \\
     \E(Y_{i} | X_{1i} = 1, X_{2i} = 0) & = \alpha + \beta_{1} \\
     \E(Y_{i} | X_{1i} = 1, X_{2i} = 1) & = \alpha + \beta_{1} + \beta_{2} + \beta_{3}
   \end{align*}
-  
-  Linear regresion with the set of same set of covariates will fit the CEF because each value 
-  of the CEF is estimated independently
-  
-  Most flexible linear regression model; Dropping interaction terms or making linearity assumptions on multi-category varaibles cause the regression model to be no longer saturated
-  
-  Saturated model perfectly fits the CEF, no assumptions about the CEF
-  
+
+  \begin{itemize}
+  \item There is a parameter for each unique combination of the covariates
+  \item Linear regression \textbf{always} fits the CEF because the CEF is a linear combination of the categories. No assumptions about the CEF.
+  \item Most flexible linear regression model; Dropping interaction terms, making linearity assumptions on multi-category variables cause the regression model to be no longer saturated.
+  \end{itemize}
+
 \end{frame}
 
 
 \begin{frame}
-  \frametitle{Regression and Causality}
-  
-  Regression is causal when the CEF it approximates is causal (Angrist and Pischke 2008)
-  
-  Under certain conditions, the regression of the outcome on the treatment and covariates can recover a causal parameter (not always the one we are interested)
-  
+  \frametitle{Linear Regression, constant effects, binary treatment}
+
+  \begin{itemize}
+  \item
+  Assume a linear model for the potential outcomes
+  \begin{equation*}
+    Y_{i} &= \alpha + \tau D_{i} + \eta_{i}
+  \end{equation*}
+   \item The error term $\eta_{i}$ is mean 0, and captures the other effects of
+     where $\E(\eta_{i}) = 0$.
+   \item Suppose $\E(Y_{i}(1) - Y_{i}(0))$ is the same for everyone, and linear (true because $D_{i}$ is binary).
+  \end{itemize}
+
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Linear Regression, constant effects, binary treatment}
+
+  \begin{itemize}
+  \item Assume $\eta_{i} = X_{i}' \beta + \epsilon_{i}$ and $E(\eta_{i}) = X_{i}' \beta$
+    \begin{align*}
+      \E(Y_{i} | D_{i}, X_{i}) = E(Y_{i}(d) | X_{i}) &= \alpha + \tau D_{i} + \E(\eta_{i} | X_{i}) \\
+      &= \alpha + \tau D_{i} + X'_{i} \beta + \E(\epsilon_{i} | X_{i}) \\
+      &= \alpha + \tau D_{i} + X'_{i} \beta
+    \end{align*}
+  \item Suppose selection-on-observables holds
+  \begin{equation*}
+    (Y_{i}(0), Y_{i}(1)) \ci D_{i} | X_{i}
+  \end{equation*}
+
+  \end{itemize}
+
+
+
+
+
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Heterogeneous or nonlinear effects}
+
+  \begin{itemize}
+  \item Suppose individual causal effects are not equal, or not-linear.
+  \item Regression estimates a single parameter $\tau_{R}$:
+    \begin{equation*}
+      Y_{i} = \tau_{R} D_{i} + \beta X_{i} + \epsilon_{i}
+    \end{equation*}
+  \item Is $\tau_{R}$ equal to ATE or ATT?
+  \item No. $\tau_{R}$ is a weighted ATE, weighted by the variance of $D | X$,
+    and with most weight to highest variance. With binary $D$, this is $\Pr(D_{i} = 1 | X_{i}) = 0.5$.
+  \item Matching methods can give the ATT
+  \item See \textit{Mostly Harmless}, Ch 3.3.
+  \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Why Regression for Causal Effects?}
+
+  \begin{itemize}
+  \item CEF approximation results
+  \item If causal CEF is linear: gives ATE
+  \item If causal CEF is heterogeneous or non-linear: weighted average of ICE
+  \item In all cases can interpret regression coefficient directly
+  \item In other words simple and usually gives you something close to what you want
+  \end{itemize}
+
 \end{frame}
 
 
 \begin{frame}
   \frametitle{Important Considerations when Using Regression for Causal Questions}
-  
+
   \begin{itemize}
   \item Define a ``treatment variable'' and ``control variables''
   \item Consider only one ``treatment variable'':
@@ -332,79 +586,24 @@ suppressPackageStartupMessages({
     \item Always ask yourself, what would be the ideal randomized experiment?
     \end{itemize}
   \end{itemize}
-  
+
 \end{frame}
 
 
-\begin{frame}
-  \frametitle{Regression Analysis of Experiments}
-  
-  \begin{equation*}
-    Y_{i} = \alpha + \rho D_{i} + \nu_{i} \\
-    
-  \end{equation*}
-  
-  
-\end{frame}
-
-
-\begin{frame}
-  \frametitle{Bad Controls}
-  
-  $Y_{i}$ is income; $W_{i}$ is dummy for white collar; $C_{i}$ is dummy for college education
-  
-  \begin{align*}
-    Y_{i} &= C_{i} Y_{1i} + (1 + C_{i})Y_{0i}\\
-    W_{i} &= C_{i} W_{1i} + (1 + C_{i})W_{0i}
-  \end{align*}
-  
-  $C_{i}$ randomly assigned, indep of potential outcomes
-  
-  \begin{align*}
-    \E(Y_{i} | C_{i} = 1) - \E(Y_{i} | C_{i} = 0) &= \E(Y_{1i} - Y_{0i}) \\
-    \E(W_{i} | C_{i} = 1) - \E(W_{i} | C_{i} = 0) &= \E(W_{1i} - W_{0i})
-  \end{align*}
-  
-  \begin{equation*}
-    \E(Y_{i} | W_{i} = 1, C_{i} = 1) - \E(Y_{i} | W_{i} = 1, C_{i} = 0) =
-    \E(Y_{1i} | W_{1i} = 1, C_{i} = 1) - \E(Y_{0i} | W_{0i} = 1, C_{i} = 0)
-  \end{equation*}
- 
-  \begin{equation*}
-    \E(Y_{1i} | W_{1i} = 1, C_{i} = 1) - \E(Y_{0i} | W_{0i} = 1, C_{i} = 0) =
-    \E(Y_{1i} | W_{1i} = 1) - \E(Y_{0i} | W_{0i} = 1)
-  \end{equation*}
-
-  Causal effect of college degree for those who work at a white collar job,
-  selection bias, college changes the composition of white collar workers
-  \begin{equation*}
-    \E(Y_{1i} | W_{1i} = 1) - \E(Y_{0i} | W_{0i} = 1) =
-    E(Y_{1i} - Y_{0i} | W_{1i} = 1) + \left(
-      E(Y_{0i} | W_{1i} = 1) - E(Y_{0i} | W_{0i} = 1)
-    \right)
-  \end{equation*}
-  
-\end{frame}
-
-
-\begin{frame}
-  \frametitle{Heterogeneity and Non-linearity}
-  
-  Estimands ATT
-  
-\end{frame}
+\section{etc}
 
 
 \begin{frame}
   \frametitle{Comments on ``Credibility Revolution''}
-  
+
   \begin{itemize}
   \item Less concern about finding the \textbf{true model}
   \item More concern about removing OVB using design
   \item Focus on estimating average causal effects
   \end{itemize}
-  
+
 \end{frame}
+
 
 
 \section{References}
@@ -414,13 +613,18 @@ suppressPackageStartupMessages({
   \frametitle{References}
 
   \begin{itemize}
-  \item Angrist and Pischke, \textit{Mostly Harmless Econometrics: An Empiricist's Companion}, Ch 2--3
+  \item Many slides derived from: Matthew Blackwell, GOV 2002 Notes \url{http://www.mattblackwell.org/files/teaching/gov2002-syllabus.pdf.
+  \item Many derivations of equations from Angrist and Pischke, \textit{Mostly Harmless Econometrics: An Empiricist's Companion}, Ch 2--3
   \item Angrist and Pischke, \textit{Mastering Metrics: The Path from Cause to Effect}, Ch 1--2
   \item Gelman and Hill, Chapter 9 and 10
   \item Matthew Blackwell, PSC 504 Notes, \url{http://www.mattblackwell.org/teaching/psc504/}.
-  \item Matthew Blackwell, GOV 2002 Notes \url{http://www.mattblackwell.org/files/teaching/gov2002-syllabus.pdf}
   \item Gelman and Hill, Ch 5. This should have most material you need.
   \end{itemize}
 \end{frame}
 
 \end{document}
+
+%%  LocalWords:  SUTVA counterfactuals Estimands ATT Estimand 0i Diff
+%%  LocalWords:  estimands diffs indep ignorability confounders CEF
+%%  LocalWords:  MSE Heteroskedasticity OLS 1i 2i Angrist Pischke OVB
+%%  LocalWords:  Gelman PSC

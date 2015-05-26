@@ -1,8 +1,15 @@
 ---
-title: Causal Inference 
+title: Causal Inference
 ---
 
+# 
+
+This is a small fake data simulation to understand how 
+
+
 ```{r}
+
+
 
 ```
 
