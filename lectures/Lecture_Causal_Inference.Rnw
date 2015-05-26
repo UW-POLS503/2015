@@ -22,17 +22,13 @@ suppressPackageStartupMessages({
 
 \input{includes.tex}
 
-\usepackage{verbatim}
-
-\newcommand{\thetitle}{Casual Inference}
-\date{May 23, 2015}
+\newcommand{\thetitle}{Causal Inference}
+\date{May 26, 2015}
 \title{\thetitle{}}
 \hypersetup{
   pdftitle={\thetitle{}},
   pdfkeywords={statistics}
 }
-\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
-
 
 \def\ci{\perp\!\!\!\perp}
 
@@ -55,7 +51,7 @@ suppressPackageStartupMessages({
 
 
 \begin{frame}
-  \frametitle{Prediction vs. Casual Inference}
+  \frametitle{Prediction vs. Causal Inference}
   
   Consider a relationship between $X$ and $Y$:
   
@@ -74,6 +70,16 @@ suppressPackageStartupMessages({
     \item For the \textbf{same individual}, what \textit{would happen} as a result of a hypothesized ``treatment'' value of $x$
     \end{itemize}
   \end{block}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Casual Inference}
+  
+  \begin{itemize}
+  \item Either everyday inference
+  \item Or a lack of spell checking
+  \end{itemize}
   
 \end{frame}
 
@@ -105,11 +111,29 @@ suppressPackageStartupMessages({
   \frametitle{The fundamental problem of causal inference}
   
   \begin{center}
-    We never observe both $Y_{i}(1)$ and $Y_{i}(0)$
+    We only observe one potential outcome --- the observation; we cannot observe both $Y_{i}(1)$ and $Y_{i}(0)$.
   \end{center}
   
 \end{frame}
 
+
+\begin{frame}
+  \frametitle{How does the potential outcome relate to observed outcome?}
+  
+  \begin{itemize}
+  \item Need a way to connect potential outcomes to observed outcomes.
+  \item \textbf{SUTVA}: Stable unit treatment value assumption
+  \item Also called a ``consistency'' assumption
+  \item What is SUTVA?
+    \begin{equation*}
+      (Y_{i}(D) = Y_{i}) \to (T_{i} = D)
+    \end{equation*}
+  \item No interference between units. My potential outcome does not depend on other's treatment.
+  \item Not all ``treatments'' can be used, there may ill-defined counterfactuals, multiple versions of the treatment, time
+  \item If interference, need to redefine treatment or units
+  \item Variation in treatment $D$ is irrelevant
+  \end{itemize}
+\end{frame}
 
 
 \subsection{Estimands}
@@ -136,31 +160,13 @@ suppressPackageStartupMessages({
 
 \begin{frame}
   \frametitle{Causal effects for subpopulations}
-  
-  Suppose poulation of units $i = 1, \dots, N$
-  
-  \begin{itemize}
-  \item Individual Causal Effect (ICE): 
-    \begin{equation*}
-      \tau_{i} = Y_{i}(1) - Y_{i}(0)
-    \end{equation*}
-  \item Average Treatment Effect (ATE); averge causal effect
-    \begin{equation*}
-      \tau = \E(\tau_{i}) = \frac{1}{N} \sum_{i:X_{i} = x} Y_{i}(1) - Y_{i}(0)
-    \end{equation*}
-  \end{itemize}
-  
-\end{frame}
-
-
-\begin{frame}
 
   \begin{itemize}
   \item Conditional Average Treatment effect (CATE) for a subpopulation
     \begin{equation*}
       \tau(x) = \E(\tau_{i} | X = x) = \frac{1}{N_{x}} \sum_{i: X_{i} = x} (Y_{i}(1) - Y_{i}(0))
     \end{equation*}
-  \item Average treatement effect on the treated (ATT). Casual effect for those that were treated.
+  \item Average treatement effect on the treated (ATT). Causal effect for those that were treated.
     \begin{equation*}
       \tau_{ATT} = \E(\tau_{i} | D_{i} = 1) = \frac{1}{\sum D_{i}} \sum_{i: D_{i} = 1} (Y_{i}(1) - Y_{i}(0))
     \end{equation*}
@@ -195,29 +201,68 @@ suppressPackageStartupMessages({
 
 
 \begin{frame}
-  \frametitle{How does the potential outcome relate to observed outcome?}
+  \frametitle{The Selection Problem}
   
-  \begin{itemize}
-  \item Need a way to connect potential outcomes to observed outcomes.
-  \item \textbf{SUTVA}: Stable unit treatment value assumption
-  \item Also called a ``consistency'' assumption
-  \item What is SUTVA?
-    \begin{equation*}
-      (Y_{i}(D) = Y_{i}) \to (T_{i} = D)
-    \end{equation*}
-  \item No interference between units. My potential outcome does not depend on other's treatment.
-  \item Not all ``treatments'' can be used, there may ill-defined counterfactuals, multiple versions of the treatment, time
-  \item If interference, need to redefine treatment or units
-  \item Variation in treatment $D$ is irrelevant
-  \end{itemize}
+  \begin{align*}
+      Y_{i} & =
+      \begin{cases}
+        Y_{i}(1) & \text{if $D_{i} = 1$} \\
+        Y_{i}(0) & \text{if $D_{i} = 0$}
+      \end{cases} \\
+            & = Y_{i}(0) + (Y_{i}(1) - Y_{i}(0)) D_{i} \\
+            & = \text{(potential outcome for non-treatment)} \\
+            & \qquad + \text{(causal effect of treatment if treated)}
+  \end{align*}
+  
 \end{frame}
 
 
 \begin{frame}
-  \frametitle{The Fundamental Problem of Causal Inference}
+  \frametitle{Avg. Causal Effects and the Selection Bias}
+    
+  Observation and causal effects:
+  \begin{align*}
+    &\E(Y_{i}|D_{i} = 1) - \E(Y_{i} | D_{i} = 0)  && \text{Obs.\@difference in avg.\@health} \\
+    &\quad = \E(Y_{i}(1) |D_{i} = 1) - \E(Y_{0i} | D_{i} = 1) && \text{$\tau_{ATT}$, Avg. Treatment on the treated} \\
+    &\quad + \E(Y_{0i}|D_{i} = 1) - \E(Y_{0i} | D_{i} = 0) && \text{Selection bias}
+  \end{align*}
+
+\end{frame}
+
+
+\section{Experiments and Causal Inference}
+
+
+\begin{frame}
+  \frametitle{How randomization solves the selection Problem}
+
+  If $D_{i}$ is randomly assigned then 
+  
+  \begin{align*}
+    \E(Y_{i} | D_{i} = 1) - \E(Y_{i} | D_{i} = 0) && \text{Difference in means}
+    \quad  = \E(Y_{i}(1) | D_{i} = 1) - \E(Y_{i}(0) | D_{i} = 0) && \text{SUTVA}
+    \quad  = \E(Y_{i}(1) | D_{i} = 1) - \E(Y_{i}(0) | D_{i} = 1) && \text{Independence}
+    \quad  = \E(Y_{i}(1) - Y_{i}(0) | D_{i} = 1) && \text{Diff means is mean of diffs}
+    \quad  = \E(Y_{i}(1) - Y_{i}(0)) && \text{$D_{i}$ is indep of potential outcomes}
+  \end{align*}
   
 \end{frame}
 
+
+\begin{frame}
+  \frametitle{How randomization solves the selection problem}
+  
+  \begin{frame}
+  \item Since $D_{i}$ is indep of potential outcomes, can measure average causal effect using
+    a simple difference in means
+  \item Randomization makes the treated and untreated groups equal on average, e.g. on average
+    $E(X_{i} | D_{i} = 1) = E(X_{i} | D_{i} = 0)$ for any known or unknown $X_{i}$
+  \end{frame} 
+  
+\end{frame}
+
+
+\section{Linear Regression and Causal Inference}
 
 \begin{frame}
   \begin{itemize}
@@ -248,10 +293,10 @@ suppressPackageStartupMessages({
   \end{equation*}
   
   \begin{align*}
-    \E(Y_{i} | X_{1i} = 0, X_{2i} = 0) = \alpha
-    \E(Y_{i} | X_{1i} = 0, X_{2i} = 1) = \alpha + \beta_{2}
-    \E(Y_{i} | X_{1i} = 1, X_{2i} = 0) = \alpha + \beta_{1}
-    \E(Y_{i} | X_{1i} = 1, X_{2i} = 1) = \alpha + \beta_{1} + \beta_{2} + \beta_{3}
+    \E(Y_{i} | X_{1i} = 0, X_{2i} = 0) & = \alpha \\
+    \E(Y_{i} | X_{1i} = 0, X_{2i} = 1) & = \alpha + \beta_{2} \\
+    \E(Y_{i} | X_{1i} = 1, X_{2i} = 0) & = \alpha + \beta_{1} \\
+    \E(Y_{i} | X_{1i} = 1, X_{2i} = 1) & = \alpha + \beta_{1} + \beta_{2} + \beta_{3}
   \end{align*}
   
   Linear regresion with the set of same set of covariates will fit the CEF because each value 
@@ -275,44 +320,7 @@ suppressPackageStartupMessages({
 
 
 \begin{frame}
-  \frametitle{Average Treatment Effect, Average Treatment of the Treated}
-  
-  \begin{align*}
-    \text{Individual Causal Effect} = \text{ICE} = Y_{i}(1) - Y_{i}(0) \\
-    \text{Average Treatment Effect} = \text{ATE} = \E(Y_{i}(1) - Y_{i}(0)) \\
-    \text{Average Treatment Effect, subpop} = \text{ATE} = \frac{1}{N_{f}} \sum_{i:X_{i} = f} (Y_{i}(1) - Y_{i}(0)) \\    
-    \text{Average Treatment Effect on the treated} = \text{ATT} = \E(Y_{i}(1) - Y_{i}(0) | D_{i}  = 1)
-  \end{align*}
-  
-  ATT. Matching methods chooise it. Fewer assumptions. Effect of a policy for those that actually use it.
-  
-\end{frame}
-
-
-\begin{frame}
-  \frametitle{Avg. Causal Effects and the Selection Bias}
-    
-  Observation and causal effects:
-  \begin{align*}
-    &\E(Y_{i}|D_{i} = 1) - \E(Y_{i} | D_{i} = 0)  && \text{Obs.\@difference in avg.\@health} \\
-    &\quad = \E(Y_{1i}|D_{i} = 1) - \E(Y_{0i} | D_{i} = 1) && \text{Avg.\@treatment effect on treated} \\
-    &\quad + \E(Y_{0i}|D_{i} = 1) - \E(Y_{0i} | D_{i} = 0) && \text{Selection bias}
-  \end{align*}
-  
-  The \textbf{average causal effect on the treated}
-  \begin{equation*}
-    \E(Y_{1i} | D_{i} = 1) - \E(Y_{0i} | D_{i} = 1) = \E(Y_{1i} - Y_{0i} | D_{i} = 1)
-  \end{equation*}
-  
-  E.g compare hospitalization
-  Observed difference in averge health between hospitalized and non hospitalized is
-  Average effect of hospitalization on health + the difference in health for those who went to the hospital and those that didn't if they didn't go to the hospital
-    
-\end{frame}
-
-
-\begin{frame}
-  \frametitle{Important Considerations when Using Regression for Casual Questions}
+  \frametitle{Important Considerations when Using Regression for Causal Questions}
   
   \begin{itemize}
   \item Define a ``treatment variable'' and ``control variables''
@@ -321,7 +329,8 @@ suppressPackageStartupMessages({
     \item It is difficult to reasonably ensure selection on observables for different variables.
     \item Study the effects of one cause, not $H_{1}, \dots, H_{\infty}$
     \item Defining the causes of an effect is either hard or ill-defined
-  \item Always ask yourself, what would be the ideal randomized experiment?
+    \item Always ask yourself, what would be the ideal randomized experiment?
+    \end{itemize}
   \end{itemize}
   
 \end{frame}
@@ -392,10 +401,10 @@ suppressPackageStartupMessages({
   \begin{itemize}
   \item Less concern about finding the \textbf{true model}
   \item More concern about removing OVB using design
-  \item Focus on average effects
+  \item Focus on estimating average causal effects
   \end{itemize}
+  
 \end{frame}
-
 
 
 \section{References}
@@ -413,6 +422,5 @@ suppressPackageStartupMessages({
   \item Gelman and Hill, Ch 5. This should have most material you need.
   \end{itemize}
 \end{frame}
-
 
 \end{document}
