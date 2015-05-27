@@ -107,6 +107,23 @@ suppressPackageStartupMessages({
 
 \end{frame}
 
+\begin{frame}
+  \frametitle{Potential Outcomes as imagined by Community}
+  
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \includegraphics{../images/Community3x04_0719.jpg}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \includegraphics{../images/troytimeline.jpg}
+    \end{column}
+  \end{columns}
+  
+  \bigskip{}
+  Episode ``\href{http://en.wikipedia.org/wiki/Remedial_Chaos_Theory}{Remedial Chaos Theory}'' S3, E4; See \url|https://www.youtube.com/watch?v=JTsb5hg04Oc|.
+  
+\end{frame}
+
 
 \begin{frame}
   \frametitle{Potential Outcome Framework}
@@ -358,8 +375,12 @@ suppressPackageStartupMessages({
 \begin{frame}
   \frametitle{How randomization solves the selection Problem}
 
-  If $D_{i}$ is randomly assigned then 
-
+  If $D_{i}$ is randomly assigned then, $D_{i}$ is independent of the potential outcomes
+  \begin{equation*}
+    \{ Y_{i}(1), Y_{i}(0) \} \ci D_{i}
+  \end{equation*}
+  
+  Which means that difference in means between groups simplifies the ATE
   \begin{align*}
     &\E(Y_{i} | D_{i} = 1) - \E(Y_{i} | D_{i} = 0) && \text{Difference in means} \\
     &\quad  = \E(Y_{i}(1) | D_{i} = 1) - \E(Y_{i}(0) | D_{i} = 0) && \text{SUTVA} \\
@@ -389,9 +410,9 @@ suppressPackageStartupMessages({
 
   Consider an experiment with a single binary treatment
   \begin{align*}
-    Y_{i} &=  Y_{i}(0) + (Y_{i}(1) - Y_{i}(0)) D_{i} \\
+    Y_{i} &=  Y_{i}(0) + (Y_{i}(1) - Y_{i}(0)) D_{i}  \\
           &= \alpha + \tau D_{i} + (Y_{i}(0) - \alpha) \\
-          &= \alpha + \tau D_{i} + \eta
+          &= \alpha + \tau D_{i} + \eta 
   \end{align*}
 
   Compare
@@ -400,23 +421,23 @@ suppressPackageStartupMessages({
     E(Y_{i} | D_{i} = 0) &= \alpha + E(\eta_{i} | D_{i} = 0) \\
   \end{align*}
 
-  Difference is ATE + selection, but selection effect is 0
+  Difference is ATE + selection, but selection effect is 0 due to ignorability
   \begin{align*}
-    E(Y_{i} | D_{i} = 1) - E(Y_{i} | D_{i} = 0) &= \tau + E(\eta_{i} | D_{i} = 1) - E(\eta_{i} | D_{i} = 0) \\
-    &= 0
+    E(Y_{i} | D_{i} = 1) - E(Y_{i} | D_{i} = 0) &= \tau + \left( E(\eta_{i} | D_{i} = 1) - E(\eta_{i} | D_{i} = 0) \right) \\
+    &= \tau
   \end{align*}
 
 \end{frame}
 
 
 
-\section{Observational Studies, Regression}
+\section{Observational Data and Regression}
 
 
 \begin{frame}
   \frametitle{Selection on observables}
 
-  Conditional on observed covariates $X_{i}$, selection bias disappears
+  \textbf{Key assumption:} Conditional on observed covariates $X_{i}$, selection bias disappears
   \begin{equation*}
     \{Y_{i}(1), Y_{i}(0) \} \ci D_{i} | X_{i}
   \end{equation*}
@@ -428,8 +449,8 @@ suppressPackageStartupMessages({
   \begin{itemize}
   \item Given $X_{i}$, assignment of $D_{i}$ is ``as if'' random
   \item This assumption allows for a causal interpretation of observational studies
-  \item Also called \textbf{conditional independence assumption}, \textbf{ignorability},
-    \textbf{no omitted variables}, \textbf{no unmeasured confounders}
+  \item Also called \textit{conditional independence assumption}, \textit{ignorability},
+    \textit{no omitted variables}, \textit{no unmeasured confounders}
 
   \end{itemize}
 
@@ -478,24 +499,19 @@ suppressPackageStartupMessages({
 \begin{frame}
   \frametitle{Regression and the CEF}
 
-  Conditional expectation function (CEF)
-  \begin{equation*}
-    \text{CEF} = \E(Y | X)
-  \end{equation*}
-  Linear regression
+  \begin{itemize}
+  \item Linear regression approximates the conditional expectation function (CEF), $\E(Y | X)$.
   \begin{equation}
     Y_{i} = X_{i} \beta + \epsilon_{i} \approx \E(Y_{i} | X_{i}) + \epsilon_{i}
   \end{equation}
-
-  \begin{itemize}
   \item Linear regression estimates the CEF, when the CEF is linear.
-  \item When is the CEF likely linear
+  \item When is the CEF linear?
     \begin{itemize}
     \item $X$ is multivariate normal
-    \item $X$ is saturated, e.g.\@all combinations of binary $X$
+    \item $X$ is saturated, e.g. all combinations of binary $X$
     \end{itemize}
-  \item $X'_{i} \beta$ is minimum MSE predictor of $Y_{i}$.
-  \item $X'_{i} \beta$ is minimum MSE predictor of the CEF, $E(Y_{i}|X_{i})$.
+  \item $X_{i} \beta$ is minimum MSE predictor of $Y_{i}$.
+  \item $X_{i} \beta$ is minimum MSE predictor of the CEF, $E(Y_{i}|X_{i})$.
   \item \textbf{Agnostic view of regression}. Linear approximation of the CEF, not ``true model''.
     Heteroskedasticity will occur use robust standard errors.
   \end{itemize}
@@ -520,8 +536,8 @@ suppressPackageStartupMessages({
 
   \begin{itemize}
   \item There is a parameter for each unique combination of the covariates
-  \item Linear regression \textbf{always} fits the CEF because the CEF is a linear combination of the categories. No assumptions about the CEF.
-  \item Most flexible linear regression model; Dropping interaction terms, making linearity assumptions on multi-category variables cause the regression model to be no longer saturated.
+  \item Linear regression \textbf{always} fits the CEF because the CEF is a linear combination of the categories. It makes no assumptions about the errors
+  \item Not always feasible to estimate this
   \end{itemize}
 
 \end{frame}
@@ -549,11 +565,11 @@ suppressPackageStartupMessages({
   \frametitle{Linear Regression, constant effects, binary treatment}
 
   \begin{itemize}
-  \item Assume $\eta_{i} = X_{i}' \beta + \epsilon_{i}$ and $E(\eta_{i}) = X_{i}' \beta$
+  \item Assume $\eta_{i} = X_{i} \beta + \epsilon_{i}$ and $E(\eta_{i}) = X_{i} \beta$
     \begin{align*}
       \E(Y_{i} | D_{i}, X_{i}) = E(Y_{i}(d) | X_{i}) &= \alpha + \tau D_{i} + \E(\eta_{i} | X_{i}) \\
-      &= \alpha + \tau D_{i} + X'_{i} \beta + \E(\epsilon_{i} | X_{i}) \\
-      &= \alpha + \tau D_{i} + X'_{i} \beta
+      &= \alpha + \tau D_{i} + X_{i} \beta + \E(\epsilon_{i} | X_{i}) \\
+      &= \alpha + \tau D_{i} + X_{i} \beta
     \end{align*}
   \item Suppose selection-on-observables holds
   \begin{equation*}
@@ -578,7 +594,7 @@ suppressPackageStartupMessages({
   \item Is $\tau_{R}$ equal to ATE or ATT?
   \item No. $\tau_{R}$ is a weighted ATE, weighted by the variance of $D | X$,
     and with most weight to highest variance. With binary $D$, this is $\Pr(D_{i} = 1 | X_{i}) = 0.5$.
-  \item Matching methods can give the ATT
+  \item Matching methods can be used to estimate the ATT
   \item See \textit{Mostly Harmless}, Ch 3.3.
   \end{itemize}
 
@@ -616,21 +632,6 @@ suppressPackageStartupMessages({
 \end{frame}
 
 
-\section{etc}
-
-
-\begin{frame}
-  \frametitle{Comments on ``Credibility Revolution''}
-
-  \begin{itemize}
-  \item Less concern about finding the \textbf{true model}
-  \item More concern about removing OVB using design
-  \item Focus on estimating average causal effects
-  \end{itemize}
-
-\end{frame}
-
-
 \section{References}
 
 
@@ -644,6 +645,7 @@ suppressPackageStartupMessages({
   \item Gelman and Hill, Chapter 9 and 10
   \item Matthew Blackwell, PSC 504 Notes, \url{http://www.mattblackwell.org/teaching/psc504/}.
   \item Gelman and Hill, Ch 5. This should have most material you need.
+  \item \textit{Community}, ``Remedial Chaos Theory'', S3E4.
   \end{itemize}
 \end{frame}
 

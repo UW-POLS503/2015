@@ -25,7 +25,7 @@ suppressPackageStartupMessages({
 \usepackage{tikz}
 
 \newcommand{\thetitle}{Binary Dependent Variables}
-\date{May 19, 2015}
+\date{May 26, 2015}
 \title{\thetitle{}}
 \hypersetup{
   pdftitle={\thetitle{}},
@@ -88,7 +88,7 @@ ggplot(mod, aes(x = income, y = .resid)) +
 
 
 \begin{frame}
-  \frametitle{Residuals in LPM}
+  \frametitle{Residuals Squared in LPM}
   \framesubtitle{Vote for Bush in U.S. Presidential Election 1992}
 
 <<>>=
@@ -206,14 +206,14 @@ ggplot(augment(mod2),
   \begin{center}
 \begin{tikzpicture}[>=latex,scale=1.2]
 
-  \node (R) at (0, 0) {$(-\infty, \infty)$} ;
+  \node (R) at (0, 0) {$\R = (-\infty, \infty)$} ;
   \node (p) at (5, 0) {$(0, 1)$};
 
   \draw[->] (p) to [bend right=45]
-  node[midway,below] {$\logit(x) = \log \left( \frac{x}{1 - x} \right)$}
+  node[midway,above] {$\logit(x) = \log \left( \frac{x}{1 - x} \right)$}
   (R);
   \draw[->] (R) to [bend right=45]
-  node[midway,above] {$\logit^{-1}(x) = \frac{e^{x}}{e^{x} + 1} = \frac{1}{1 + e^{-x}}$}
+  node[midway,below] {$\logit^{-1}(x) = \frac{e^{x}}{e^{x} + 1} = \frac{1}{1 + e^{-x}}$}
   (p);
 
 \end{tikzpicture}
@@ -282,51 +282,45 @@ $\logit^{-1}(x) = \frac{1}{1 + e^{-x}} = \frac{e^{x}}{e^{x} + 1}$
 \end{frame}
 
 
-
-\begin{frame}
-  \frametitle{Logit Model}
-
-  \begin{align*}
-    \Pr(Y_{i} = 1) &= f(X_{i} \beta) \\
-    &= \frac{1}{1 + \exp(-(X_{i} \beta))} \\
-    &= \logit^{-1}(X_{i} \beta)
-  \end{align*}
-
-  \begin{itemize}
-  \item Models $\Pr(Y_{i} = 1)$ instead of $Y_i$ directly
-  \item Although $X_{i} \beta$ is linear, $\logit(x)$ is non-linear.
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}
-  \frametitle{Logit Model as a Linear Function of Log Odds}
-
-  Alternative specification:
-  \begin{align*}
-    \Pr(Y_{i} = 1) &= \pi_{i} \\
-    \logit(\pi_{i}) &= \alpha + X_{i} \beta
-  \end{align*}
-
-  Log-odds of the probability of $Y$ is a linear function
-
-\end{frame}
-
 \begin{frame}
   \frametitle{Logit Objective Function}
 
   OLS minimizes squared errors
   \begin{equation*}
-    \hat\beta = \argmin_{b}  \sum_{i} (y_{i} - X_{i} b)^{2}
+    \hat\beta = \argmin_{b}  \sum_{i} {(y_{i} - X_{i} b)}^{2}
   \end{equation*}
 
   Logit minimizes a \textbf{different} function
-  \begin{equation*}
-    \hat{\beta} &= \argmin_{b} \sum_{i} (y_{i} \log P_{i} +  (1 - y_{i}) \log (1 - P_{i}) \\
+  \begin{align*}
+    \hat{\beta} &= \argmin_{b} \sum_{i} \left(y_{i} \log P_{i} +  (1 - y_{i}) \log (1 - P_{i}) \right) \\
     P_{i} &= \logit^{-1}(X_{i} b) = \frac{1}{1 + \exp(- X_{i} b)}
-  \end{equation*}
+  \end{align*}
+  
+  Logit needs to be estimated by an interative maximization method
 
 \end{frame}
+
+\begin{frame}
+  \frametitle{Logit Model}
+  
+  In logit, $\Pr(Y_{i} = 1)$ not $Y_{i}$ is directly a function of $X_{i} \beta$
+
+  \begin{itemize}
+  \item Probabilty of $Y_{i} = 1$:
+    \begin{align*}
+    \Pr(Y_{i} = 1) &= f(X_{i} \beta) \\
+    &= \frac{1}{1 + \exp(-(X_{i} \beta))} \\
+    &= \logit^{-1}(X_{i} \beta)
+    \end{align*}
+  \item Alternative interpretation, log odds ratio ($\log(p / (1 - p))$):
+    \begin{align*}
+    \Pr(Y_{i} = 1) &= \pi_{i} \\
+    \logit(\pi_{i}) &= \alpha + X_{i} \beta
+    \end{align*}
+  \end{itemize}
+
+\end{frame}
+
 
 \begin{frame}[fragile]
 
@@ -385,22 +379,27 @@ ggplot(Chile,
 \begin{frame}
   \frametitle{Logit Coefficients are Less Transparent}
 
-  In linear regression, $\partial Y/ \partial X_{j} = \beta_{j}$
+  \begin{block}{Linear Regression Coeficients}
+    
   \begin{equation*}
     \frac{\partial Y}{\partial X_{j}} = \frac{\partial}{\partial X_{j}} (\alpha + \beta_{1} X_{1} + \dots \beta_{k} X_{k}) = \beta_{j}
   \end{equation*}
-  In logistic regression, $\partial Y/ \partial X_{j} = \beta_{j}$
+  Coefficient equals the marginal effect of $x$
+\end{block}
+
+  \begin{block}{Logistic Regression Coeficients}
   \begin{equation*}
-    \frac{\partial \Pr(Y_{i} = 1)}{\partial X_{j}} = \frac{\partial}{\partial X_{j}} \frac{1}{1 + \exp(\alpha + \beta X_{i})} = \Pr(Y = 1 | X_{i}) \Pr(Y = 0 | X_{i}) \beta_j
+    \frac{\partial \logit(Y)}{\partial X_{j}} = \frac{\partial}{\partial X_{j}} 
+    \left(
+       \frac{1}{1 + \exp(\alpha + \beta X_{i})}
+    \right) = \Pr(Y = 1 | X_{i}) \Pr(Y = 0 | X_{i}) \beta_j
   \end{equation*}
   or
   \begin{equation*}
-    \frac{\partial logit(Y_{i} = 1)}{\partial X_{j}} = \frac{\partial}{\partial X_{j}} X_{i} \beta_{j} = \beta_j
+    \frac{\partial \logit(Y)}{\partial X_{j}} = \frac{\partial}{\partial X_{j}} X_{i} \beta_{j} = \beta_j
   \end{equation*}
-
-  \begin{itemize}
-  \item Unlike OLS, the partial derivative depends on value of $X_{i}$
-  \end{itemize}
+  Coefficient does not equal the marginal effect of $x_{j}$
+  \end{block}
 
 \end{frame}
 
@@ -415,13 +414,32 @@ ggplot(Chile,
   \item LPM has renewed popular among econometricians, causal inference folks -
   \item See the debate \href{http://www.mostlyharmlesseconometrics.com/2012/07/probit-better-than-lpm/}{here}
   \item OLS is still Min MSE linear approx of Conditional Expectation Function
-  \item It is biased if functional form is wrong; but so it logit / probit.
-    And the functional form is \textbf{always} wrong
-  \item If you care about \textbf{average marginal effects} OLS does well
-    \begin{equation*}
-      \text{Avg. Marginal Effect} = \frac{1}{n} x\sum_i \frac{\partial Y}{\partial x_j} |_{X_i}
-    \end{equation*}
+  \item If the functional form is wrong ; but so it logit / probit.
+    And the functional form is \textbf{always} wrong; 
+  \item OLS coefficients are a good estimate of the average marginal effects even if not good for the marginal effects at a given $x$.
+  \item OLS coefficients are directly interpretable
   \item Angrist and Pischke recommend LPM with heteroskedasticity consistent errors
+  \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Average Marginal Effects}
+
+  \begin{itemize}
+  \item The \textbf{average marginal effect} summarizes the marginal effect $\frac{\partial y}{\partial x_{j}}$ averaging over the sample of $x$.
+    \begin{equation*}
+      \text{Avg. Marginal Effect of $x_{j}$} = \frac{1}{n} \sum_{i} \left. \frac{\partial Y}{\partial x_j} \right|_{X_i}
+    \end{equation*}
+  \item In OLS, the marginal effect of $x_{j}$ (assuming no interactions, polynomials, etc.) is simply the coefficient
+    \begin{equation*}
+       \left. \frac{\partial y}{\partial x_j} \right|_{x_i} = \frac{1}{n} \sum_{i} \hat{\beta}_{j} = \hat{\beta}_{j}
+    \end{equation*}
+  \item In Logit, the average
+    \begin{equation*}
+       \left. \frac{\partial y}{\partial x_j} \right|_{x_i} = \frac{1}{n} \sum_{i} \Pr(y_{i} = 1 | \hat{\beta}, x_{i})\Pr(y_{i} = 0 | \hat{\beta}, x_{i}) \hat{\beta}_{j} 
+    \end{equation*}
   \end{itemize}
 
 \end{frame}
@@ -466,6 +484,9 @@ lm(vote_yes ~ statusquo, data = Chile)
   \begin{itemize}
   \item Fox, Ch. 14
   \item Gelman and Hill, Ch 5. This should have most material you need.
+  \item Chile Plebicite example: Fox, Ch. 14. Data from \textbf{arm} package dataset \texttt{Chile}.
+  \item Bush vote in 1992 example: Gelman and Hill, Ch 5. Data from 
+    \url|http://www.stat.columbia.edu/~gelman/arm/examples/ARM_Data.zip| as \texttt{ARM_Data/nes/nes5200_processed_voters_realideo.dta}.
   \end{itemize}
 \end{frame}
 
