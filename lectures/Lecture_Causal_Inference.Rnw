@@ -76,7 +76,7 @@ suppressPackageStartupMessages({
 \end{frame}
 
 \begin{frame}
-  \frametitle{Casual Inference}
+  \frametitle{Causal vs. Casual Inference}
 
   \begin{itemize}
   \item Non causal inference
@@ -99,11 +99,9 @@ suppressPackageStartupMessages({
 \begin{frame}
   \frametitle{What is the effect of hospitals on health?}
 
-  Consider two individuals, Annie and Jeff.
-
-  The effects of hospital on
+  The causal effect of going to the hospital is, for two individuals:
   \begin{itemize}
-  \item (health of Annie if he goes hospital) - (health if she does not)
+  \item (health of Annie if she goes hospital) - (health if she does not)
   \item (health of Jeff if he goes to the hospital) - (health if he does not)
   \end{itemize}
 
@@ -123,10 +121,13 @@ suppressPackageStartupMessages({
     \end{cases}
   \end{equation*}
 
+  The treatment variable can be continuous or ordinal, but easier to reason about the binary case for now.
+  
 \end{frame}
 
 
 \begin{frame}
+  \begin{center}
   \begin{tabular}{lccc}
     & No Hospital & Hospital & Casual Effect \\
     Person & $Y_{i}(0)$ & $Y_{i}(1)$ & $Y_{i}(0) - Y_{i}(1)$  \\
@@ -139,6 +140,7 @@ suppressPackageStartupMessages({
     Frankie & 6 & 8 & 2 \\
     \hline                      
   \end{tabular}
+  \end{center}
 \end{frame}
 
 \begin{frame}
@@ -152,6 +154,7 @@ suppressPackageStartupMessages({
 
 
 \begin{frame}
+  \begin{center}
   \begin{tabular}{lccc}
     & No Hospital & Hospital & Treatment \\
     Person & $Y_{i}(0)$ & $Y_{i}(1)$ & $D_{i}$  \\
@@ -164,6 +167,10 @@ suppressPackageStartupMessages({
     Frankie &  & 8 & 1 \\
     \hline                      
   \end{tabular}
+  \end{center}
+  
+  We can only observe one outcome for any individual.
+  
 \end{frame}
 
 
@@ -175,21 +182,22 @@ suppressPackageStartupMessages({
   \item \textbf{SUTVA}: Stable unit treatment value assumption
   \item Also called a ``consistency'' assumption
   \item What is SUTVA?
+  \item The outcome observed for a value of a treatment is equal to the potential outcome for that treatment value.
     \begin{equation*}
-      (Y_{i}(D) = Y_{i}) \to (T_{i} = D)
+      Y_{i} \text{ if $D_{i} = d$} = Y_{i}(d) \text{ for $d \in \{0, 1\}$}
     \end{equation*}
-  \item No interference between units. My potential outcome does not depend on other's treatment.
-  \item Not all ``treatments'' can be used, there may ill-defined counterfactuals, multiple versions of the treatment, time
-  \item If interference, need to redefine treatment or units
-  \item Variation in treatment $D$ is irrelevant
+  \item No interference between units. Potential outcomes of units is unaffected by the treatments received by other units.
+  \item Not all ``treatments'' can be used, there may ill-defined counterfactuals. 
+  \item If there is interference, you need to think about the problem and redefine treatment or units
   \end{itemize}
 \end{frame}
 
 
-
 \begin{frame}
+  
+  \begin{center}
   \begin{tabular}{lcccc}
-    & No Hospital & Hospital & Treatment & Outcome \\
+    & No Hospital & Hospital & Treatment & Observed Outcome \\
     Person & $Y_{i}(0)$ & $Y_{i}(1)$ & $D_{i}$ & $Y_i$ \\
     \hline
     Annie & 8  &  & 0 & 8 \\
@@ -200,11 +208,19 @@ suppressPackageStartupMessages({
     Frankie &  & 8 & 1 & 8\\
     \hline                      
   \end{tabular}
+  \end{center}
+
+  \begin{itemize}
+  \item If SUTVA, the observed outcome has to match the potential outcome for that treatment
+  \item Example of failure: health of Chang depends on whether Jeff goes to the hospital.
+  \end{itemize}
+  
 \end{frame}
 
 
 
 \subsection{Estimands}
+
 
 
 \begin{frame}
@@ -266,6 +282,12 @@ suppressPackageStartupMessages({
 
 
 \begin{frame}
+  \frametitle{Why use different estimands?}
+  
+  
+\end{frame}
+
+\begin{frame}
   \frametitle{Identification}
   \begin{itemize}
   \item If you had infinite data (entire population, no sampling variation) could you estimate the parameter uniquely?
@@ -289,22 +311,24 @@ suppressPackageStartupMessages({
 
 \end{frame}
 
-
 \begin{frame}
   \frametitle{The Selection Problem}
 
+  We cam rewrite the observed outcome as:
   \begin{align*}
       Y_{i} & =
       \begin{cases}
         Y_{i}(1) & \text{if $D_{i} = 1$} \\
         Y_{i}(0) & \text{if $D_{i} = 0$}
       \end{cases} \\
+            &= Y_{i}(1) D_{i} + 1 - Y_{i}(0) (1 - D_{i}) \\
             & = Y_{i}(0) + (Y_{i}(1) - Y_{i}(0)) D_{i} \\
             & = \text{(potential outcome for non-treatment)} \\
             & \qquad + \text{(causal effect of treatment if treated)}
   \end{align*}
-
-  We cannot simply compare group averages to get a causal effect
+  
+  The observe value of the individual is the sum of their outcome if not treated
+  and the causal effect of the treatment.
 
 \end{frame}
 
@@ -314,10 +338,16 @@ suppressPackageStartupMessages({
 
   Observation and causal effects:
   \begin{align*}
-    &\E(Y_{i}|D_{i} = 1) - \E(Y_{i} | D_{i} = 0)  && \text{Obs.\@difference in avg.\@health} \\
-    &\quad = \E(Y_{i}(1) |D_{i} = 1) - \E(Y_{i}(1) | D_{i} = 1) && \text{$\tau_{ATT}$, Avg. Treatment on the treated} \\
+    &\E(Y_{i}|D_{i} = 1) - \E(Y_{i} | D_{i} = 0)  && \text{Obs.\@difference in means} \\
+    &\quad = \E(Y_{i}(1) | D_{i} = 1) - \E(Y_{i}(1) | D_{i} = 1) && \text{ATT} \\
     &\quad + \E(Y_{i}(0)|D_{i} = 1) - \E(Y_{i}(0) | D_{i} = 0) && \text{Selection bias}
   \end{align*}
+  
+  \begin{itemize}
+  \item Selection bias: how diferent treated and untreated groups are under control (when $D_i = 0$)
+  \item Because of the selection bias, ATT is unidentified. E.g.\@If ATT negative, could chose a large enough 
+    selection effect to make the difference in means positive.
+  \end{itemize}
 
 \end{frame}
 
@@ -328,7 +358,7 @@ suppressPackageStartupMessages({
 \begin{frame}
   \frametitle{How randomization solves the selection Problem}
 
-  If $D_{i}$ is randomly assigned then
+  If $D_{i}$ is randomly assigned then 
 
   \begin{align*}
     &\E(Y_{i} | D_{i} = 1) - \E(Y_{i} | D_{i} = 0) && \text{Difference in means} \\
@@ -531,10 +561,6 @@ suppressPackageStartupMessages({
   \end{equation*}
 
   \end{itemize}
-
-
-
-
 
 \end{frame}
 
