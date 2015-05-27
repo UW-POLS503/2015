@@ -358,9 +358,12 @@ Lab document: [html](labs/lab8.html), [Rmd](labs/lab8.Rmd)
 
 - Potential outcomes framework, regression, matching
 
-	- Gelman and Hill, Ch 9--10. 
-	- Angrist and Pischke, Ch 1--3.
-	- Angrist, Joshua D., and Jorn-Steffen Pischke. 2010. ``The Credibility Revolution in Empirical Economics: How Better Research Design Is Taking the Con out of Econometrics.'' *Journal of Economic Perspectives* 24(2): 3–30. <http://www.aeaweb.org/articles.php?doi=10.1257/jep.24.2.3> *For background reading*
+    - Slides on Casual Inference [pdf](lectures/Lecture_Causal_Inference_handout.pdf)
+    - Readings
+
+		- Gelman and Hill, Ch 9--10. 
+		- Angrist and Pischke, Ch 1--3.
+		- Angrist, Joshua D., and Jorn-Steffen Pischke. 2010. ``The Credibility Revolution in Empirical Economics: How Better Research Design Is Taking the Con out of Econometrics.'' *Journal of Economic Perspectives* 24(2): 3–30. <http://www.aeaweb.org/articles.php?doi=10.1257/jep.24.2.3> *For background reading*
 
 
 ### Friday, May 29

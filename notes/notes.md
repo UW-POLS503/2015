@@ -151,4 +151,42 @@ Taking material from Gelman and Hill, Angrist and Pischke and Matt Blackwell's n
 
 Problem: I feel that I am missing good examples; Mostly Harmless has some, but I should get more political science relevant outcomes
 
+## Post-Lecture
+
+Covered
+
+- Followup on questions on homework.
+
+    - When to use different transformations
+	- Provide explanations of how to choose a specific model
+
+- What to cover next week: panel or IV? Panel.
+- Binary treatment variables
+- Causal Inference and potential outcomes
+
+Questions
+
+- How does the logit transformation relate to the omitted variables.
+- How have I used causal inference in my research?
+- How do methods in MLE relate to causal inference? 
+- Question about Achen Rule of Three - it caused more confusion than it is worth. I think his points may be better made by focusing on controlling for one thing.
+- Do I start simple and expand or start big and contract with models?
+
+## Next Time
+
+I have too many equations on the screen that I yada-yada-yada'd. I need notes. No equation on screen unless I am willing to discuss it.
+
+### Binary Outcomes
+
+- Pretty good.
+- Need to more clear about the LPM argument in Angrist and Pischke.
+    Not clear if I buy all of it. Maybe not worth including.
+- Working through examples and showing plots is good
+- Need to have more details of examples used.
+
+### Causal Inference
+
+- Needs a major reworking.
+- Too much abstract math. Need examples for everything; both simulations and real world data.
+- Need to clarify my thoughts about how potential outcomes relates to other methods of model testing / causal inference.
 
