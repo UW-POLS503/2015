@@ -478,6 +478,7 @@ lm(vote_yes ~ statusquo, data = Chile)
 
 \section{References}
 
+
 \begin{frame}
   \frametitle{References}
 
@@ -485,8 +486,8 @@ lm(vote_yes ~ statusquo, data = Chile)
   \item Fox, Ch. 14
   \item Gelman and Hill, Ch 5. This should have most material you need.
   \item Chile Plebicite example: Fox, Ch. 14. Data from \textbf{arm} package dataset \texttt{Chile}.
-  \item Bush vote in 1992 example: Gelman and Hill, Ch 5. Data from 
-    \url|http://www.stat.columbia.edu/~gelman/arm/examples/ARM_Data.zip| as \texttt{ARM_Data/nes/nes5200_processed_voters_realideo.dta}.
+  \item Bush vote in 1992 example: Gelman and Hill, Ch 5. Data from
+    \url{http://www.stat.columbia.edu/~gelman/arm/examples/ARM_Data.zip} as \texttt{ARM\_Data/nes/nes5200\_processed\_voters\_realideo.dta}.
   \end{itemize}
 \end{frame}
 
