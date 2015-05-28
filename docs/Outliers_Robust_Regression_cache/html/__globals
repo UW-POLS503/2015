@@ -1,23 +1,30 @@
-unnamed-chunk-2	::	library
-unnamed-chunk-3	glimpse	read.csv
-unnamed-chunk-4	aes	geom_point	geom_smooth	ggplot	iver	lnenp	povred	xlab	ylab
-unnamed-chunk-5	~	!=	.	$	%>%	abs	abs_diff_slope	arrange	coef	cty	diff_slope	do	estimate	filter	group_by	iver	lm	lnenp	mutate	select	spread	term	tidy
-unnamed-chunk-6	aes	geom_abline	geom_point	ggplot	(Intercept)	iver	iver_loo_regs	lnenp	povred	xlab	ylab
-unnamed-chunk-7	$	%>%	augment	glimpse	iver	iver_mod1	mutate
-unnamed-chunk-8	%>%	.hat	mutate	.resid	.sigma	sqrt
-unnamed-chunk-9	$	iver	iver_mod1	rstandard	rstudent	setNames
-unnamed-chunk-10	aes	geom_point	geom_smooth	ggplot	.hat	iver_mod1_aug	lnenp	povred
-unnamed-chunk-11	abs	aes	geom_point	geom_smooth	ggplot	iver_mod1_aug	lnenp	povred	.student.resid
-unnamed-chunk-12	aes	.cooksd	geom_point	geom_smooth	ggplot	iver_mod1_aug	lnenp	povred
-unnamed-chunk-13	$	aes	c	.cooksd	cty	data.frame	geom_hline	geom_point	geom_text	geom_vline	ggplot	.hat	iver_mod1_aug	mean	sd	.student.resid	xintercept	xlab	yintercept	ylab
-unnamed-chunk-14	>	$	%>%	.cooksd	cty	filter	iver_mod1	iver_mod1_aug	lnenp	select
-unnamed-chunk-15	>	%>%	cty	filter	.hat	iver_mod1_aug	lnenp	mean	sd	select
-unnamed-chunk-16	>	%>%	abs	cty	filter	iver_mod1_aug	lnenp	select	.student.resid
-unnamed-chunk-17	~	iver	library	lqs
-unnamed-chunk-18	~	iver	lqs
-unnamed-chunk-19	~	iver	rlm
-unnamed-chunk-20	~	iver	rlm
-unnamed-chunk-21	aes	bind_rows	coef	data_frame	geom_abline	geom_point	ggplot	intercept	iver	iver_huber	iver_lms	iver_lts	iver_mm	iver_mod1	lnenp	method	povred	print	slope	xlab	ylab
-unnamed-chunk-22	~	.	%>%	bootstrap	coef	data.frame	do	estimate	group_by	iver	lqs	mean	names	quantile	summarise	term
-unnamed-chunk-23	diag	iver_mod1	sqrt	vcov
-unnamed-chunk-24	~	boot	c	coef	iver	lqs
+unnamed-chunk-2	library
+unnamed-chunk-3	::
+unnamed-chunk-4	theme_minimal
+unnamed-chunk-5	glimpse	read.csv
+unnamed-chunk-6	aes	geom_point	geom_smooth	ggplot	iver	lnenp	povred	theme_local	xlab	ylab
+unnamed-chunk-7	~	!=	.	$	%>%	abs	abs_diff_slope	arrange	coef	cty	diff_slope	do	estimate	filter	group_by	iver	lm	lnenp	mutate	select	spread	term	tidy
+unnamed-chunk-8	aes	geom_abline	geom_point	ggplot	(Intercept)	iver	iver_loo_regs	lnenp	povred	theme_local	xlab	ylab
+unnamed-chunk-9	$	%>%	augment	glimpse	iver	iver_mod1	mutate
+unnamed-chunk-10	%>%	.hat	mutate	.resid	.sigma	sqrt
+unnamed-chunk-11	$	iver	iver_mod1	rstandard	rstudent	setNames
+unnamed-chunk-12	aes	geom_point	geom_smooth	ggplot	.hat	iver_mod1_aug	lnenp	povred	theme_local
+unnamed-chunk-13	abs	aes	geom_point	geom_smooth	ggplot	iver_mod1_aug	lnenp	povred	.student.resid	theme_local
+unnamed-chunk-14	aes	.cooksd	geom_point	geom_smooth	ggplot	iver_mod1_aug	lnenp	povred	theme_local
+unnamed-chunk-15	>	|	$	abs	aes	c	.cooksd	cty	data.frame	filter	geom_hline	geom_point	geom_text	geom_vline	ggplot	.hat	iver_mod1	iver_mod1_aug	mean	scale_size_continuous	sd	.student.resid	theme_local	xintercept	xlab	yintercept	ylab
+unnamed-chunk-16	>	$	%>%	.cooksd	cty	filter	iver_mod1	iver_mod1_aug	lnenp	select
+unnamed-chunk-17	>	%>%	cty	filter	.hat	iver_mod1_aug	lnenp	mean	sd	select
+unnamed-chunk-18	>	%>%	abs	cty	filter	iver_mod1_aug	lnenp	select	.student.resid
+unnamed-chunk-19	>	|	$	%>%	abs	.cooksd	cty	filter	.hat	iver_mod1	iver_mod1_aug	lnenp	mean	sd	select	.student.resid
+unnamed-chunk-20	~	$	%>%	augment	.hat	iver	lm	mutate	.resid	.sigma	sqrt
+unnamed-chunk-21	>	|	$	%>%	abs	.cooksd	cty	filter	.hat	iver_mod1	iver_mod2_aug	lnenp	mean	sd	select	.student.resid
+unnamed-chunk-22	>	$	%>%	.cooksd	cty	filter	.hat	iver_mod1	iver_mod2_aug	lnenp	select	.student.resid
+unnamed-chunk-23	<	>	|	$	abs	aes	c	.cooksd	cty	data.frame	filter	geom_hline	geom_point	geom_text	geom_vline	ggplot	.hat	iver_mod2	iver_mod2_aug	mean	scale_size_continuous	sd	.student.resid	theme_local	xintercept	xlab	yintercept	ylab
+unnamed-chunk-24	~	iver	library	lqs
+unnamed-chunk-25	~	iver	lqs
+unnamed-chunk-26	~	iver	rlm
+unnamed-chunk-27	~	iver	rlm
+unnamed-chunk-28	aes	bind_rows	coef	data_frame	geom_abline	geom_point	ggplot	intercept	iver	iver_huber	iver_lms	iver_lts	iver_mm	iver_mod1	lnenp	method	povred	print	scale_colour_discrete	slope	theme_local	xlab	ylab
+unnamed-chunk-29	~	.	%>%	bootstrap	coef	data.frame	do	estimate	group_by	iver	lqs	mean	names	quantile	summarise	term
+unnamed-chunk-30	diag	iver_mod1	sqrt	vcov
+unnamed-chunk-31	~	boot	c	coef	iver	lqs
