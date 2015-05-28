@@ -206,7 +206,7 @@ ggplot(augment(mod2),
   \begin{center}
 \begin{tikzpicture}[>=latex,scale=1.2]
 
-  \node (R) at (0, 0) {$\R = (-\infty, \infty)$} ;
+  \node (R) at (0, 0) {$\mathbb{R} = (-\infty, \infty)$} ;
   \node (p) at (5, 0) {$(0, 1)$};
 
   \draw[->] (p) to [bend right=45]
