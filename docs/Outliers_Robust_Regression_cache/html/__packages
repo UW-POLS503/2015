@@ -1,0 +1,7 @@
+base
+MASS
+dplyr
+tidyr
+broom
+boot
+ggplot2
