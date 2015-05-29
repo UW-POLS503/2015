@@ -1,0 +1,645 @@
+---
+title: "POLS 503 Lab 9"
+author: "Carolina Johnson"
+date: "Friday May 29, 2015"
+output: html_document
+---
+
+
+#Agenda:
+#1. simcf for linear models (including with logBound/logitBound)
+#2. Exercise part A. (chance to apply to HW 4)
+#3. Introduction to tile
+#4. Using simce for first differences and introduction to ropeladders
+#5. Excericse part B
+#5b. Hint for logit transforming DV
+#6. simcf/tile for logit models
+#7. Practice & application as time available
+
+You will first need to download tile and simcf from Chris Adolph's website.
+```{r eval = FALSE}
+#install.packages("http://faculty.washington.edu/cadolph/software/simcf_0.2.13.tar.gz")
+#install.packages("http://faculty.washington.edu/cadolph/software/tile_0.4.10.tar.gz")
+library("devtools")
+install_github("chrisadolph/tile-simcf", subdir = "tile")
+install_github("chrisadolph/tile-simcf", subdir = "simcf")
+```
+
+Also install RColorBrewer and WhatIf
+
+```{r}
+library(MASS)
+library(tile)
+library(simcf)
+library(RColorBrewer)
+library(WhatIf)
+library(dplyr)
+library(ggplot2)
+```
+
+I am also going set my defaults for displaying scientific notation to be more tolerant of many decimal places
+```{r}
+options(scipen=10)
+```
+
+# `simcf` for linear models
+`simcf` provides a framework for defining scenarios for prediction (estimated outcomes), it's short for "Simulate Counter-Factuals"
+
+Here is a brief introduction to a number of useful commands in `simcf`
+```{r eval = FALSE}
+help(package="simcf")
+?cfMake #make counterfactual scenario... our equivalent of the "newdata" option in predict()
+?linearsimev #simulate expected values for a linear model
+?linearsimfd #simulate first differences for a linear model
+?extractdata #extract data used in a formula from a larger dataframe
+?influencePlot #influence plot for outliers
+?lagpanel #lag panel data by one or multiple years
+?makeFEdummies #make dummy variables out of a factor for fixed effects models
+
+?logBound
+?logitBound
+```
+
+We're going to go through an example of interpreting a regression with the help of `simcf`, using the familiar Rossoil data.
+
+```{r}
+rossdata_url <- "http://staff.washington.edu/csjohns/503/rossoildata.csv"
+rossdata_raw <- read.csv(rossdata_url, stringsAsFactors = FALSE)
+rossdata <- rossdata_raw %>%
+  select(cty_name, year, regime1, oil, GDPcap, oecd, islam) %>%
+  na.omit()
+```
+
+Fist we'll define the formula object and run the regression:
+```{r}
+model_form1 <- regime1 ~ GDPcap + oil + oecd
+model1<-lm(model_form1, data = rossdata)
+summary(model1)
+```
+
+Next we'll extract the coefficients and vcov matrix, draw 1000 of each parameter:
+```{r}
+pe <- model1$coefficients
+vc <- vcov(model1)  #note if you wanted to use heteroskedastic standard errors use: vc <- hccm(model1)
+sims <- 10000
+simbetas <- mvrnorm(sims,pe,vc)
+```
+
+## Calculate expected values of democracy:
+
+Here are the steps we'll follow to get expected values of democracy:
+
+1. Initialize object of hypothetical x's with # number of scenarios - the `simcf` default is mean values for all variables
+2. Change value for variable of interest in each scenario
+3. Simulate expected values of y for each scenario of hypothetical x's
+4. Plot using tile
+
+### Set sequence  for continuous variable to vary, GDP per capita, first:
+```{r}
+valueseq_gdp <- seq(min(rossdata$GDPcap), max(rossdata$GDPcap), length.out=40)
+```
+We choose a value range based on the observed range of the variable to avoid extrapolating beyond our data
+
+### Next, `cfMake()` initializes the set of counterfactual scenarios to be predicted with simcf. 
+In this case, we set all variables in model to their mean, and will later change the ones we want to assign specific values to
+Note that we initialize as many scenarios as we have hypothetical observations of GDP:
+```{r}
+xhyp1_no_oecd <- cfMake(model_form1, rossdata, nscen=length(valueseq_gdp), f=mean)
+xhyp1_no_oecd
+```
+
+### Now change hypothetical value for GDP per capita in each scen, but for a non-oecd country:
+```{r}
+for(i in 1:length(valueseq_gdp)){
+  xhyp1_no_oecd <- cfChange(xhyp1_no_oecd, "GDPcap", valueseq_gdp[i], scen=i)
+  xhyp1_no_oecd <- cfChange(xhyp1_no_oecd, "oecd", 0, scen=i)  
+}
+```
+
+Look at what changed:
+```{r}
+xhyp1_no_oecd
+```
+
+Note two parts of this object,`$x` and `$xpre`.  To calculate expected values, we only need to worry about values in the `x` matrix; `$pre` is ignored unless we're doing first differences (expected change in y resulting from change in x), in which case `$xpre` will be the initial value of x that will be the starting point for the difference.
+
+### Now calculate expected y's:
+This is what took a lengthy loop when we did it "by hand", looping through each of the 1000 draws from the multivariate normal distribution of the betas.
+```{r}
+yhyp_no_oecd <- linearsimev(xhyp1_no_oecd, simbetas)
+yhyp_no_oecd
+```
+
+### At this point, we could combine X and y into a dataframe and plot the way we have before:
+```{r}
+cf1_no_oecd <- cbind(xhyp1_no_oecd$x, yhyp_no_oecd)
+ggplot(cf1_no_oecd, aes(x = GDPcap)) +
+  geom_line(aes(y = pe)) + 
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 1/3) +
+  labs(x = "GDP per capita",
+       y = "Expected Democracy Level",
+       title = "Expected Regime Type Regressed on GDP per Capita")
+```
+
+
+### Let's add the contrasting hypothetical range for OECD countries:
+```{r}
+xhyp1_oecd <- cfMake(model_form1, rossdata, nscen = length(valueseq_gdp), f = mean)
+xhyp1_oecd
+```
+
+### Now change hypothetical value for GDP per capita in each scen, but for an oecd country:
+```{r}
+for(i in 1:length(valueseq_gdp)) {
+  xhyp1_oecd <- cfChange(xhyp1_oecd, "GDPcap", valueseq_gdp[i], scen=i)
+  xhyp1_oecd <- cfChange(xhyp1_oecd, "oecd", 1, scen=i)  
+}
+```
+Look at what changed:
+```{r}
+xhyp1_oecd
+```
+
+### Now calculate expected values of democracy for OECD countries:
+```{r}
+yhyp_oecd <- linearsimev(xhyp1_oecd, simbetas)
+yhyp_oecd
+```
+
+
+#plot the two together:
+#now at this point, we could plot the way we have before:
+```{r}
+cf1_oecd <- cbind(xhyp1_oecd$x, yhyp_oecd)
+cf1_all <- merge(cf1_oecd, cf1_no_oecd, all = TRUE)
+ggplot() +
+  geom_line(data = cf1_no_oecd, aes(x = GDPcap, y = pe), color = "blue") + 
+  geom_ribbon(data = cf1_no_oecd, aes(x = GDPcap, ymin = lower, ymax = upper), alpha = 1/3, color = "blue", fill = "blue") +
+  geom_line(data = cf1_oecd, aes(x = GDPcap,y = pe), color = "red") + 
+  geom_ribbon(data = cf1_oecd, aes(x = GDPcap, ymin = lower, ymax = upper), alpha = 1/3, color = "red", fill = "red") +
+  labs(x = "GDP per capita",
+       y = "Expected Democracy Level",
+       title = "Expected Regime Type Regressed on GDP per Capita")
+  
+#Another way, using merged scenarios:
+ggplot(cf1_all, aes(x = GDPcap, colour = factor(oecd), fill = factor(oecd))) +
+  geom_line(aes(y = pe)) + 
+  geom_ribbon(aes(x = GDPcap, ymin = lower, ymax = upper), alpha = 1/3) +
+  scale_colour_discrete("oecd") +
+  scale_fill_discrete("oecd") +
+  labs(x = "GDP per capita",
+       y = "Expected Democracy Level",
+       title = "Expected Regime Type Regressed on GDP per Capita")
+  
+
+
+```
+
+### Model 2: transforming GDP with logBound
+Here's another similar example, illustrating the use of `logBound()`:
+```{r}
+model_form2 <- regime1 ~ logBound(GDPcap) + oil + oecd
+model2 <- lm(model_form2, data = rossdata)
+summary(model2)
+
+pe <- model2$coefficients
+vc <- vcov(model2)  #note if you wanted to use heteroskedastic standard errors use: vc <- hccm(model1)
+sims <- 10000
+simbetas <- mvrnorm(sims, pe, vc)
+```
+
+Set up counterfactual scenarios, creating hypothetical values for OECD and non-OECD countries:
+```{r}
+xhyp2_no_oecd <- xhyp2_oecd <- cfMake(model_form2, rossdata, nscen = length(valueseq_gdp), f=mean) #using the same valuesequence defined above
+
+#now change hypothetical value for GDP per capita in each scen, for a non-oecd country:
+for(i in 1:length(valueseq_gdp)) {
+  xhyp2_no_oecd <- cfChange(xhyp2_no_oecd, "GDPcap", valueseq_gdp[i], scen=i)
+  xhyp2_no_oecd <- cfChange(xhyp2_no_oecd, "oecd", 0, scen=i)  
+}
+
+xhyp2_no_oecd
+
+# Now make expected y's 
+yhyp2_no_oecd <- linearsimev(xhyp2_no_oecd, simbetas)
+yhyp2_no_oecd
+
+# Now change hypothetical value for GDP per capita in each scen, but for an oecd country:
+for(i in 1:length(valueseq_gdp)){
+  xhyp2_oecd <- cfChange(xhyp2_oecd, "GDPcap", valueseq_gdp[i], scen=i)
+  xhyp2_oecd <- cfChange(xhyp2_oecd, "oecd", 1, scen=i)  
+}
+#look at what changed:
+xhyp2_oecd
+
+#now make expected y's 
+yhyp2_oecd <- linearsimev(xhyp2_oecd, simbetas)
+yhyp2_oecd
+
+#plot the two together:
+cf2_all <- merge(cbind(xhyp2_no_oecd$x, yhyp2_no_oecd), cbind(xhyp2_oecd$x, yhyp2_oecd), all = TRUE)
+ggplot(cf2_all, aes(x = GDPcap, colour = factor(oecd), fill = factor(oecd))) +
+  geom_line(aes(y = pe)) + 
+  geom_ribbon(aes(x = GDPcap, ymin = lower, ymax = upper), alpha = 1/3) +
+  scale_colour_discrete("oecd") +
+  scale_fill_discrete("oecd") +
+  labs(x = "GDP per capita",
+       y = "Expected Democracy Level",
+       title = "Expected Regime Type Regressed on GDP per Capita")
+```
+*Challenge:* What can you say about the model (which had a better fit than model 1) now? What substantive claims are made by selecting this model over Model 1?
+
+## Model 3: demonstrating logitBound with zeros:
+
+Set up the basic model (without logit bounding islam):
+```{r}
+model_form3 <- regime1 ~ log(GDPcap) + oil + oecd + islam
+model3 <- lm(model_form3, data = rossdata)
+summary(model3)
+```
+
+For purposes of illustration, convert islam into proper ratio 0-1:
+```{r}
+rossdata$islam <- rossdata$islam/100
+```
+
+See what logitBound is doing:
+```{r results = 'hide'}
+logitBound(rossdata$islam)
+```
+
+Setup the logit bounded model:
+```{r}
+model_form3b <- regime1 ~ log(GDPcap) + oil + oecd + logitBound(islam)
+model3b<-lm(model_form3b, data = rossdata)
+summary(model3b)
+```
+
+###Getting predicted values for each
+
+Extract the coefficients and vcov matrix, draw 1000 of each parameter:
+```{r}
+pe <- model3b$coefficients
+vc <- vcov(model3b)  #note if you wanted to use heteroskedastic standard errors use: vc <- hccm(model1)
+sims <- 10000
+simbetas <- mvrnorm(sims,pe,vc)
+```
+
+Set up Islam value sequence
+```{r}
+valueseq_islam <- seq(min(rossdata$islam), max(rossdata$islam), length.out=40)
+```
+
+Predicted values for rich country
+# initialize scenarios:
+```{r}
+xhyp3_rich <- xhyp3_poor <- cfMake(model_form3b, rossdata, nscen=length(valueseq_islam), f=mean)
+
+for(i in 1:length(valueseq_islam)) {
+  xhyp3_rich <- cfChange(xhyp3_rich, "islam", valueseq_islam[i], scen=i)
+  xhyp3_rich <- cfChange(xhyp3_rich, "GDPcap", x=quantile(rossdata$GDPcap, p=.9), scen=i)  
+}
+
+for(i in 1:length(valueseq_islam)) {
+  xhyp3_poor <- cfChange(xhyp3_poor, "islam", valueseq_islam[i], scen=i)
+  xhyp3_poor <- cfChange(xhyp3_poor, "GDPcap", x=quantile(rossdata$GDPcap, p=.1), scen=i)  
+}
+
+#Check them out:
+xhyp3_rich$x
+xhyp3_poor$x
+
+```
+
+#now make expected y's (this is what took a lengthy loop when we did it "by hand"):
+```{r}
+# rich countries:
+yhyp3_rich <- linearsimev(xhyp3_rich, simbetas)
+
+# poor countries:
+yhyp3_poor <- linearsimev(xhyp3_poor, simbetas)
+```
+
+Let's plot these now, similarly to before:
+
+```{r}
+cf3_all <- merge(cbind(xhyp3_rich$x, yhyp3_rich), cbind(xhyp3_poor$x, yhyp3_poor), all = TRUE)
+ggplot(cf3_all, aes(x = islam, y = pe, colour = factor(GDPcap), fill = factor(GDPcap))) +
+  geom_line(aes(y = pe)) + 
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 1/6) +
+  scale_colour_discrete("GDPcap") +
+  scale_fill_discrete("GDPcap") +
+  labs(x = "Percent Islam",
+       y = "Expected Democracy Level",
+       title = "Expected Regime Type Regressed on Prevalence of Islam, illustrating Rich and Poor Countries")
+
+```
+This is not actually very interesting, but is a teachable example.
+
+## Challenge part A!:
+###    Using data from homework 4, build a model and use simcf to generate illustrative expected values and confidence intervals.
+###    Try using log or logit transformations
+
+# to load homework data if not downloaded:
+```{r}
+dataHW <- read.csv("http://faculty.washington.edu/cadolph/503/ross95.csv", header=TRUE, stringsAsFactors=FALSE)
+```
+
+
+# Introduction to graphics with `tile`!
+Tile works by first specifying a series of 'traces' that can be lines, ropeladders, legend, text, etc.  Once all traces are specified, they can then all be plotted simultaneously in the `tile()` command (it's logically kind of the reverse order to `ggplot`).  Tile is designed to easily and attractively plot 'tiled' figures, aiding visual inference and interpretation from multiple scenarios. 
+
+In this example, you can also see that I have not needed to combine x and y values in scenarios into a single tidy dataframe (Wickham would be scandalized).  You could also do this using the dataframes of combined x and y scenario information (hey, look, a *challenge*!)
+
+```{r}
+trace1 <- lineplot(x = valueseq_gdp,
+                   y = yhyp_no_oecd$pe,
+                   lower = yhyp_no_oecd$lower,
+                   upper = yhyp_no_oecd$upper,
+                   ci = list(mark="shaded"),
+                   col = "red",
+                   plot = 1
+)
+
+trace1b <- lineplot(x = valueseq_gdp,
+                    y = yhyp_oecd$pe,
+                    lower = yhyp_oecd$lower,
+                    upper = yhyp_oecd$upper,
+                    ci = list(mark="shaded"),
+                    col = "blue",
+                    plot = 1
+)
+
+## This legend trace is designed to automatically map 'in plot' labels to the actual plotted locations of the data
+legendTrace <- textTile(x = c(min(valueseq_gdp)+2500, max(valueseq_gdp)-1500),
+                        y = c(yhyp_oecd$upper[1]+.75, yhyp_no_oecd$lower[length(valueseq_gdp)]-.75),
+                        labels = c("non-OECD","OECD"),
+                        cex = .8,
+                        col = c("blue","red"),
+                        pos = c(4,4),
+                        plot = 1
+)
+
+tc <- tile(trace1, trace1b, legendTrace,
+           RxC = c(1,1), #increase these if you're using multiple plots at once
+           limits = c(min(valueseq_gdp), max(valueseq_gdp),0,15),   #xlim first, then ylim
+           xaxistitle = list(labels="GDP per Capita"), 
+           yaxistitle = list(labels="Expected Value of Democracy"), 
+           plottitle = list(labels="Effect of Democracy from Model 1"),
+           gridlines = list(type="xy"),
+           frame = TRUE,
+           output = list(width=6, outfile="model1_results1", type="pdf")
+)
+```
+
+The logic of `tile` means that you can tweak just one trace and then re-generate the plot, or use the same traces but in a different configuration to create a second plot:
+
+```{r}
+trace1_t <- lineplot(x = valueseq_gdp,
+                    y = yhyp_oecd$pe,
+                    lower = yhyp_oecd$lower,
+                    upper = yhyp_oecd$upper,
+                    ci = list(mark="shaded"),
+                    col = "blue",
+                    plot = 2
+                    )
+
+tc <- tile(trace1, trace1_t,
+           RxC = c(1,2), #increase these if you're using multiple plots at once
+           limits = c(min(valueseq_gdp), max(valueseq_gdp),0,15),   #xlim first, then ylim
+           xaxistitle = list(labels="GDP per Capita"), 
+           yaxistitle = list(labels="Expected Value of Democracy"), 
+           maintitle = list(labels="Effect of Democracy from Model 1"),
+           gridlines = list(type="xy"),
+           frame = TRUE,
+           output = list(width=6, outfile="model1_results1_tiled", type="pdf")
+           )
+```
+
+
+#Let's add a plot for another covariate, and omit counterfactuals outside the convex hull of the rossdata
+```{r}
+pe <- model1$coefficients
+vc <- vcov(model1)  #note if you wanted to use heteroskedastic standard errors use: vc <- hccm(model1)
+sims <- 10000
+simbetas <- mvrnorm(sims,pe,vc)
+valueseq_oil <- seq(min(rossdata$oil), max(rossdata$oil), length.out=40)
+xhyp1_oil <- cfMake(model_form1, rossdata, nscen=length(valueseq_oil), f=mean)
+xhyp1_oil
+
+for(i in 1:length(valueseq_oil)){
+  xhyp1_oil <- cfChange(xhyp1_oil, "oil", valueseq_oil[i], scen=i)
+}
+yhyp1_oil <- linearsimev(xhyp1_oil, simbetas)
+
+trace1c <- lineplot(x = valueseq_oil,
+                    y = yhyp1_oil$pe,
+                    lower = yhyp1_oil$lower,
+                    upper = yhyp1_oil$upper,
+                    ci = list(mark="shaded"),
+                    col = "red",
+                    plot = 2
+)
+
+
+tc <- tile(trace1, trace1b, trace1c, legendTrace,
+           RxC = c(1,2), #increase these if you're using multiple plots at once
+           limits=matrix(c(0,25000,0,15,0,75,0,15),nrow=2,ncol=4,byrow=T),   #xlim first, then ylim
+           xaxistitle=list(labels=c("GDP per Capita","Oil Production")), 
+           yaxistitle=list(labels="Expected Value of Democracy"), 
+           maintitle = list(labels="Results from Model 1"),
+           gridlines = list(type="xy"),
+           frame=TRUE,
+           output=list(width=10, outfile="model1_results2", type="pdf")
+)
+
+```
+See documentation for more detail: ?tile
+
+
+
+### 4. What about first differences with simcf? 
+###    This is where simcf really starts to make things easier
+
+# Let's use model 3 this time
+
+#simple example, moving from mean to 90th percentile oil producing, using model 3
+pe <- model3b$coefficients
+vc <- vcov(model3b)  #note if you wanted to use heteroskedastic standard errors use: vc <- hccm(model1)
+sims <- 10000
+simbetas <- mvrnorm(sims,pe,vc)
+
+xhyp3fd <- cfMake(model_form3b, rossdata, f=mean, nscen=4)
+xhyp3fd <- cfName(xhyp3fd, "GDP, mean to 95%", scen=1)
+xhyp3fd <- cfChange(xhyp3fd, "GDPcap", xpre=mean(rossdata$GDPcap), x=quantile(rossdata$GDPcap, p=.95), scen=1)  # because defaults for scenarios are set to mean, don't actually need to specify xpre
+xhyp3fd <- cfName(xhyp3fd, "Oil, mean to 95%", scen=2)
+xhyp3fd <- cfChange(xhyp3fd, "oil", x=quantile(rossdata$oil, p=.95), scen=2) # see no xpre here
+xhyp3fd <- cfName(xhyp3fd, "Islam, mean to 95%", scen=3)
+xhyp3fd <- cfChange(xhyp3fd, "islam", xpre=mean(rossdata$islam), x=quantile(rossdata$islam, p=.95), scen=3)
+xhyp3fd <- cfName(xhyp3fd, "OECD", scen=4)
+xhyp3fd <- cfChange(xhyp3fd, "oecd", xpre=0, x=1, scen=4) # here we set xpre to 0, to show first difference in for a binary covariate
+xhyp3fd
+
+yfd<-linearsimfd(xhyp3fd, simbetas) #note linearsimFD instead of EV
+yfd # here's the first difference in regime1 for a change from mean to 90th percentile of oil production
+
+### Now plot in tile with ropeladders
+rlTrace <- ropeladder(x=yfd$pe,
+                      lower=yfd$lower,
+                      upper=yfd$upper,
+                      labels=row.names(xhyp3fd$x),
+                      #extrapolate=list(model, data=UScrime, cfact=xscen$x),
+                      plot=1
+)
+
+vertmark <- linesTile(x = c(0,0),
+                      y = c(0,1),
+                      lty = "solid",
+                      plot = 1
+)
+
+# Create plot
+tc <- tile(rlTrace, vertmark,
+           output = list(file = "model3rl", width=6), #adjusting output width is an effective way to get nicer proportions within a plot
+           xaxistitle = list(labels=c("Expected change in democracy score")),
+           maintitle = list(labels="First differences in regime for all Model 3 covariates"),
+           gridlines=list(type="xy",lty=3, col="grey")#,
+           #         draw=TRUE
+)
+
+
+### 5. Exercise part B
+###    Working with the model you created in part 1, create an interesting visualization of the model, using at least two panels in tile
+
+#5b: hint for working with logit transformed DV (example from homework data) - can't use logitBound etc. for DV as can only have one column DV
+data.tr <- read.csv("http://faculty.washington.edu/cadolph/503/ross95.csv",header=T,stringsAsFactors=FALSE)
+head(data.tr)
+
+model.form <- logit(oilL5) ~ regime1 + metalL5
+model <- lm(model.form, data.tr)
+summary(model)
+
+simbetas <- mvrnorm(10000,model$coefficients,vcov(model))
+
+xscen <- cfMake(model.form, data.tr)
+yhyp_logit <- linearsimev(xscen,simbetas)
+yhyp <- lapply(yhyp_logit,inv.logit)
+yhyp
+
+# or with predict:
+inv.logit(predict(model, newdata=list(regime1=mean(rossdata$regime1),metalL5=mean(rossdata$metalL5))))
+
+### 6. simcf/tile for logit
+###    Logit in simcf/tile works much the same as linear models - one nice thing about Chris's packages is the flexibility as you move into more complex models
+
+# Voting example using 2000 NES data after King, Tomz, and Wittenberg
+# Chris Adolph
+
+# Load data
+nesdata <- read.csv("nes00a.csv", header=TRUE)
+
+# Set up model formula and model specific data frame
+model <- vote00 ~ age + I(age^2) + hsdeg + coldeg
+mdata <- extractdata(model, nesdata, na.rm=TRUE)
+
+# Run logit & extract results
+logit.result <- glm(model, family=binomial(link=logit), data=mdata)
+pe <- logit.result$coefficients  # point estimates
+vc <- vcov(logit.result)         # var-cov matrix
+
+# Simulate parameter distributions
+sims <- 10000
+simbetas <- mvrnorm(sims, pe, vc)
+
+# Set up counterfactuals:  all ages, each of three educations
+xhyp <- seq(18,97,1)
+nscen <- length(xhyp)
+nohsScen <- hsScen <- collScen <- cfMake(model, mdata, nscen)
+for (i in 1:nscen) {
+  # No High school scenarios (loop over each age)
+  nohsScen <- cfChange(nohsScen, "age", x = xhyp[i], scen = i)
+  nohsScen <- cfChange(nohsScen, "hsdeg", x = 0, scen = i)
+  nohsScen <- cfChange(nohsScen, "coldeg", x = 0, scen = i)
+  
+  # HS grad scenarios (loop over each age)
+  hsScen <- cfChange(hsScen, "age", x = xhyp[i], scen = i)
+  hsScen <- cfChange(hsScen, "hsdeg", x = 1, scen = i)
+  hsScen <- cfChange(hsScen, "coldeg", x = 0, scen = i)
+  
+  # College grad scenarios (loop over each age)
+  collScen <- cfChange(collScen, "age", x = xhyp[i], scen = i)
+  collScen <- cfChange(collScen, "hsdeg", x = 1, scen = i)
+  collScen <- cfChange(collScen, "coldeg", x = 1, scen = i)
+}
+
+# Simulate expected probabilities for all scenarios
+nohsSims <- logitsimev(nohsScen, simbetas, ci=0.95)
+hsSims <- logitsimev(hsScen, simbetas, ci=0.95)
+collSims <- logitsimev(collScen, simbetas, ci=0.95)
+
+# Get 3 nice colors for traces
+col <- brewer.pal(3,"Dark2")
+
+# Set up lineplot traces of expected probabilities # using extrapolate to only plot predictions within the convex hull of the data. Uses WhatIf package
+nohsTrace <- lineplot(x=xhyp,
+                      y=nohsSims$pe,
+                      lower=nohsSims$lower,
+                      upper=nohsSims$upper,
+                      col=col[1],
+                      extrapolate=list(data=mdata,
+                                       cfact=nohsScen$x,
+                                       omit.extrapolated=TRUE),
+                      plot=1)
+
+hsTrace <- lineplot(x=xhyp,
+                    y=hsSims$pe,
+                    lower=hsSims$lower,
+                    upper=hsSims$upper,
+                    col=col[2],
+                    extrapolate=list(data=mdata,
+                                     cfact=hsScen$x,
+                                     omit.extrapolated=TRUE),
+                    plot=1)
+
+collTrace <- lineplot(x=xhyp,
+                      y=collSims$pe,
+                      lower=collSims$lower,
+                      upper=collSims$upper,
+                      col=col[3],
+                      extrapolate=list(data=mdata,
+                                       cfact=collScen$x,
+                                       omit.extrapolated=TRUE),
+                      plot=1)
+
+# Set up traces with labels and legend
+labelTrace <- textTile(labels=c("Less than HS", "High School", "College"),
+                       x=c( 55,    49,     30),
+                       y=c( 0.26,  0.56,   0.87),
+                       col=col,
+                       plot=1)
+
+legendTrace <- textTile(labels=c("Logit estimates:", "95% confidence", "interval is shaded"),
+                        x=c(82, 82, 82),
+                        y=c(0.2, 0.16, 0.12),
+                        plot=1)
+
+# Plot traces using tile
+tile(nohsTrace,
+     hsTrace,
+     collTrace,
+     labelTrace,
+     legendTrace,
+     output = list(file="logit", width=6),
+     #     width=list(null=5),
+     limits=c(18,94,0,1),
+     xaxis=list(at=c(20,30,40,50,60,70,80,90)),
+     xaxistitle=list(labels="Age of Respondent"),
+     yaxistitle=list(labels="Probability of Voting"),
+     frame=TRUE
+)
+
+
+
+### 7. Practice if time:
+
+# Using either your own data or one of the datasets used in this lab, run an interesting model and use simcf to present the results (you can use either tile or the base graphics to plot). 
