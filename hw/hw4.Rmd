@@ -4,15 +4,6 @@ author: "Christopher Adolph, Jeffrey B. Arnold"
 date: "May 15, 2015"
 ---
 
-$$
-\DeclareMathOperator{\cor}{cor}
-\DeclareMathOperator{\cov}{cov}
-\DeclareMathOperator{\sd}{sd}
-\DeclareMathOperator{\se}{se}
-\DeclareMathOperator{\diag}{diag}
-\DeclareMathOperator{\quantile}{quantile}
-\DeclareMathOperator{\logit}{logit}
-$$
 
 - 2015-05-19: Added logit function. Add note on dealing with data transformations in sprinters data.
 - 2015-05-20: Added function using **simcf** functions for simulation.
