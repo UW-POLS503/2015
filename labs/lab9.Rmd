@@ -3,18 +3,10 @@ title: "POLS 503 Lab 9"
 author: "Carolina Johnson"
 date: "Friday May 29, 2015"
 output: html_document
+
 ---
 
 
-#Agenda:
-#1. simcf for linear models (including with logBound/logitBound)
-#2. Exercise part A. (chance to apply to HW 4)
-#3. Introduction to tile
-#4. Using simce for first differences and introduction to ropeladders
-#5. Excericse part B
-#5b. Hint for logit transforming DV
-#6. simcf/tile for logit models
-#7. Practice & application as time available
 
 You will first need to download tile and simcf from Chris Adolph's website.
 ```{r eval = FALSE}
@@ -27,7 +19,7 @@ install_github("chrisadolph/tile-simcf", subdir = "simcf")
 
 Also install RColorBrewer and WhatIf
 
-```{r}
+```{r message = FALSE}
 library(MASS)
 library(tile)
 library(simcf)
@@ -103,7 +95,7 @@ We choose a value range based on the observed range of the variable to avoid ext
 ### Next, `cfMake()` initializes the set of counterfactual scenarios to be predicted with simcf. 
 In this case, we set all variables in model to their mean, and will later change the ones we want to assign specific values to
 Note that we initialize as many scenarios as we have hypothetical observations of GDP:
-```{r}
+```{r results = 'hide'}
 xhyp1_no_oecd <- cfMake(model_form1, rossdata, nscen=length(valueseq_gdp), f=mean)
 xhyp1_no_oecd
 ```
@@ -117,7 +109,7 @@ for(i in 1:length(valueseq_gdp)){
 ```
 
 Look at what changed:
-```{r}
+```{r results = 'hide'}
 xhyp1_no_oecd
 ```
 
@@ -143,7 +135,7 @@ ggplot(cf1_no_oecd, aes(x = GDPcap)) +
 
 
 ### Let's add the contrasting hypothetical range for OECD countries:
-```{r}
+```{r results = 'hide'}
 xhyp1_oecd <- cfMake(model_form1, rossdata, nscen = length(valueseq_gdp), f = mean)
 xhyp1_oecd
 ```
@@ -156,7 +148,7 @@ for(i in 1:length(valueseq_gdp)) {
 }
 ```
 Look at what changed:
-```{r}
+```{r results = 'hide'}
 xhyp1_oecd
 ```
 
@@ -167,8 +159,8 @@ yhyp_oecd
 ```
 
 
-#plot the two together:
-#now at this point, we could plot the way we have before:
+### Plot the two together:
+At this point, we could plot the way we have before:
 ```{r}
 cf1_oecd <- cbind(xhyp1_oecd$x, yhyp_oecd)
 cf1_all <- merge(cf1_oecd, cf1_no_oecd, all = TRUE)
@@ -209,7 +201,7 @@ simbetas <- mvrnorm(sims, pe, vc)
 ```
 
 Set up counterfactual scenarios, creating hypothetical values for OECD and non-OECD countries:
-```{r}
+```{r results = 'hide'}
 xhyp2_no_oecd <- xhyp2_oecd <- cfMake(model_form2, rossdata, nscen = length(valueseq_gdp), f=mean) #using the same valuesequence defined above
 
 #now change hypothetical value for GDP per capita in each scen, for a non-oecd country:
@@ -219,24 +211,32 @@ for(i in 1:length(valueseq_gdp)) {
 }
 
 xhyp2_no_oecd
+```
 
-# Now make expected y's 
+Now make expected y's 
+```{r}
 yhyp2_no_oecd <- linearsimev(xhyp2_no_oecd, simbetas)
 yhyp2_no_oecd
+```
 
-# Now change hypothetical value for GDP per capita in each scen, but for an oecd country:
+Now change hypothetical value for GDP per capita in each scen, but for an oecd country:
+```{r results = 'hide'}
 for(i in 1:length(valueseq_gdp)){
   xhyp2_oecd <- cfChange(xhyp2_oecd, "GDPcap", valueseq_gdp[i], scen=i)
   xhyp2_oecd <- cfChange(xhyp2_oecd, "oecd", 1, scen=i)  
 }
 #look at what changed:
 xhyp2_oecd
+```
 
-#now make expected y's 
+Now make expected y's:
+```{r}
 yhyp2_oecd <- linearsimev(xhyp2_oecd, simbetas)
 yhyp2_oecd
+```
 
-#plot the two together:
+Plot the two together:
+```{r}
 cf2_all <- merge(cbind(xhyp2_no_oecd$x, yhyp2_no_oecd), cbind(xhyp2_oecd$x, yhyp2_oecd), all = TRUE)
 ggplot(cf2_all, aes(x = GDPcap, colour = factor(oecd), fill = factor(oecd))) +
   geom_line(aes(y = pe)) + 
@@ -247,6 +247,7 @@ ggplot(cf2_all, aes(x = GDPcap, colour = factor(oecd), fill = factor(oecd))) +
        y = "Expected Democracy Level",
        title = "Expected Regime Type Regressed on GDP per Capita")
 ```
+
 *Challenge:* What can you say about the model (which had a better fit than model 1) now? What substantive claims are made by selecting this model over Model 1?
 
 ## Model 3: demonstrating logitBound with zeros:
@@ -292,7 +293,7 @@ valueseq_islam <- seq(min(rossdata$islam), max(rossdata$islam), length.out=40)
 
 Predicted values for rich country
 # initialize scenarios:
-```{r}
+```{r results = 'hide'}
 xhyp3_rich <- xhyp3_poor <- cfMake(model_form3b, rossdata, nscen=length(valueseq_islam), f=mean)
 
 for(i in 1:length(valueseq_islam)) {
@@ -311,7 +312,7 @@ xhyp3_poor$x
 
 ```
 
-#now make expected y's (this is what took a lengthy loop when we did it "by hand"):
+Now make expected y's:
 ```{r}
 # rich countries:
 yhyp3_rich <- linearsimev(xhyp3_rich, simbetas)
@@ -331,16 +332,17 @@ ggplot(cf3_all, aes(x = islam, y = pe, colour = factor(GDPcap), fill = factor(GD
   scale_fill_discrete("GDPcap") +
   labs(x = "Percent Islam",
        y = "Expected Democracy Level",
-       title = "Expected Regime Type Regressed on Prevalence of Islam, illustrating Rich and Poor Countries")
+       title = "Expected Regime Type Regressed on Islam, Rich and Poor Countries")
 
 ```
+
 This is not actually very interesting, but is a teachable example.
 
 ## Challenge part A!:
-###    Using data from homework 4, build a model and use simcf to generate illustrative expected values and confidence intervals.
-###    Try using log or logit transformations
+Using data from homework 4, build a model and use simcf to generate illustrative expected values and confidence intervals.
+Try using log or logit transformations
 
-# to load homework data if not downloaded:
+To load homework data
 ```{r}
 dataHW <- read.csv("http://faculty.washington.edu/cadolph/503/ross95.csv", header=TRUE, stringsAsFactors=FALSE)
 ```
@@ -417,8 +419,8 @@ tc <- tile(trace1, trace1_t,
 ```
 
 
-#Let's add a plot for another covariate, and omit counterfactuals outside the convex hull of the rossdata
-```{r}
+###Let's add a plot for another covariate, and omit counterfactuals outside the convex hull of the data
+```{r results = 'hide'}
 pe <- model1$coefficients
 vc <- vcov(model1)  #note if you wanted to use heteroskedastic standard errors use: vc <- hccm(model1)
 sims <- 10000
@@ -454,41 +456,57 @@ tc <- tile(trace1, trace1b, trace1c, legendTrace,
 )
 
 ```
-See documentation for more detail: ?tile
+See documentation for more detail: `?tile`
 
 
 
-### 4. What about first differences with simcf? 
-###    This is where simcf really starts to make things easier
+# More fun with simcf: what about first differences with simcf? 
+This is where simcf really starts to make things easier (that, and transformations, and interactions and more)
 
-# Let's use model 3 this time
+Let's use model 3 this time
 
-#simple example, moving from mean to 90th percentile oil producing, using model 3
+### Simple example: moving from mean to 90th percentile oil producing, using model 3
+Generate simulated betas from the transformed model 3
+```{r}
 pe <- model3b$coefficients
 vc <- vcov(model3b)  #note if you wanted to use heteroskedastic standard errors use: vc <- hccm(model1)
 sims <- 10000
 simbetas <- mvrnorm(sims,pe,vc)
+```
 
-xhyp3fd <- cfMake(model_form3b, rossdata, f=mean, nscen=4)
-xhyp3fd <- cfName(xhyp3fd, "GDP, mean to 95%", scen=1)
-xhyp3fd <- cfChange(xhyp3fd, "GDPcap", xpre=mean(rossdata$GDPcap), x=quantile(rossdata$GDPcap, p=.95), scen=1)  # because defaults for scenarios are set to mean, don't actually need to specify xpre
-xhyp3fd <- cfName(xhyp3fd, "Oil, mean to 95%", scen=2)
-xhyp3fd <- cfChange(xhyp3fd, "oil", x=quantile(rossdata$oil, p=.95), scen=2) # see no xpre here
+Intialize and modify the scenarios for comparison, setting up the before and after values of x for the first differencing.  We're going to set up four scenarios, cycling through each variable of interest and holding all other constant at their means.
+
+This illustrates the three main cf functions, `cfMake`, `cfChange`, and `cfName`:
+
+```{r results = 'hide'}
+xhyp3fd <- cfMake(model_form3b, rossdata, f = mean, nscen = 4)
+xhyp3fd <- cfName(xhyp3fd, "GDP, mean to 95%", scen = 1)
+xhyp3fd <- cfChange(xhyp3fd, "GDPcap", xpre = mean(rossdata$GDPcap), x = quantile(rossdata$GDPcap, p = .95), scen = 1)  
+# Note, because defaults for scenarios are set to mean, don't actually need to specify xpre
+xhyp3fd <- cfName(xhyp3fd, "Oil, mean to 95%", scen = 2)
+xhyp3fd <- cfChange(xhyp3fd, "oil", x = quantile(rossdata$oil, p = .95), scen = 2)
 xhyp3fd <- cfName(xhyp3fd, "Islam, mean to 95%", scen=3)
-xhyp3fd <- cfChange(xhyp3fd, "islam", xpre=mean(rossdata$islam), x=quantile(rossdata$islam, p=.95), scen=3)
-xhyp3fd <- cfName(xhyp3fd, "OECD", scen=4)
-xhyp3fd <- cfChange(xhyp3fd, "oecd", xpre=0, x=1, scen=4) # here we set xpre to 0, to show first difference in for a binary covariate
+xhyp3fd <- cfChange(xhyp3fd, "islam", x = quantile(rossdata$islam, p = .95), scen = 3)
+xhyp3fd <- cfName(xhyp3fd, "OECD", scen = 4)
+# here we set xpre to 0, to show first difference in for a binary covariate:
+xhyp3fd <- cfChange(xhyp3fd, "oecd", xpre = 0, x = 1, scen = 4) 
 xhyp3fd
 
-yfd<-linearsimfd(xhyp3fd, simbetas) #note linearsimFD instead of EV
-yfd # here's the first difference in regime1 for a change from mean to 90th percentile of oil production
+```
 
-### Now plot in tile with ropeladders
-rlTrace <- ropeladder(x=yfd$pe,
-                      lower=yfd$lower,
-                      upper=yfd$upper,
-                      labels=row.names(xhyp3fd$x),
-                      #extrapolate=list(model, data=UScrime, cfact=xscen$x),
+We calculate the first difference (and its confidence) just as easily as we did the point estimates, just using the `linearsimfd()` function instead of `linearsimev()`:
+```{r}
+yfd<-linearsimfd(xhyp3fd, simbetas) 
+yfd 
+```
+
+One of the easiet and most effective way to present first differences is with a ropeladder plot.  This is easily generated in `tile()`, but you can also make similar plots in `ggplot` (see `geom_pointrange()`; use `coord_flip()` to get horizontal lines as in ropeladders here).  I will illustrate `tile` here as another example. 
+
+```{r}
+rlTrace <- ropeladder(x = yfd$pe,
+                      lower = yfd$lower,
+                      upper = yfd$upper,
+                      labels = row.names(xhyp3fd$x),
                       plot=1
 )
 
@@ -497,61 +515,103 @@ vertmark <- linesTile(x = c(0,0),
                       lty = "solid",
                       plot = 1
 )
-
+dev.off()
 # Create plot
 tc <- tile(rlTrace, vertmark,
            output = list(file = "model3rl", width=6), #adjusting output width is an effective way to get nicer proportions within a plot
            xaxistitle = list(labels=c("Expected change in democracy score")),
            maintitle = list(labels="First differences in regime for all Model 3 covariates"),
-           gridlines=list(type="xy",lty=3, col="grey")#,
-           #         draw=TRUE
+           gridlines=list(type="xy",lty=3, col="grey"),
+           draw=TRUE
+)
+```
+
+**Challenge**: Repeat the above simcf() calculations to get first differences for a change from 5th percentile to the mean for the same model.  How do the effect sizes change? Why do you think this would happen?
+
+```{r results = 'hide'}
+xhyp3fd_2 <- cfMake(model_form3b, rossdata, f = mean, nscen = 4)
+xhyp3fd_2 <- cfName(xhyp3fd_2, "GDP, 5% to mean", scen = 1)
+xhyp3fd_2 <- cfChange(xhyp3fd_2, "GDPcap", xpre = quantile(rossdata$GDPcap, p = .05), x = mean(rossdata$GDPcap), scen = 1)  
+# Note, because defaults for scenarios are set to mean, don't actually need to specify x, as we're leaving x at it's mean
+xhyp3fd_2 <- cfName(xhyp3fd_2, "Oil, 5% to mean", scen = 2)
+xhyp3fd_2 <- cfChange(xhyp3fd_2, "oil", xpre = quantile(rossdata$oil, p = .05), scen = 2)
+xhyp3fd_2 <- cfName(xhyp3fd_2, "Islam, 5% to mean", scen=3)
+xhyp3fd_2 <- cfChange(xhyp3fd_2, "islam", xpre = quantile(rossdata$islam, p = .05), scen = 3)
+xhyp3fd_2 <- cfName(xhyp3fd_2, "OECD", scen = 4)
+# here we set xpre to 0, to show first difference in for a binary covariate:
+xhyp3fd_2 <- cfChange(xhyp3fd_2, "oecd", xpre = 0, x = 1, scen = 4) 
+xhyp3fd_2
+
+yfd_2<-linearsimfd(xhyp3fd_2, simbetas) 
+yfd_2 
+
+rlTrace_2 <- ropeladder(x = yfd_2$pe,
+                      lower = yfd_2$lower,
+                      upper = yfd_2$upper,
+                      labels = row.names(xhyp3fd_2$x),
+                      col = "red",
+                      plot=2
 )
 
+vertmark$plot = c(1)
+rlTrace_2$plot = 1
+rlTrace$labels = c("GDP", "Oil", "Islam", "OECD")
+rlTrace_2$labels = c("GDP", "Oil", "Islam", "OECD")
 
-### 5. Exercise part B
-###    Working with the model you created in part 1, create an interesting visualization of the model, using at least two panels in tile
+rlTrace$sublabels = rep("mean to 95%", 4)
+rlTrace_2$sublabels = rep("5% to mean", 4)
+rlTrace$sublabelsX <- 0.05
+rlTrace_2$sublabelsX <- 0.05
+rlTrace$sublabelsyoffset <- 0.04
 
-#5b: hint for working with logit transformed DV (example from homework data) - can't use logitBound etc. for DV as can only have one column DV
-data.tr <- read.csv("http://faculty.washington.edu/cadolph/503/ross95.csv",header=T,stringsAsFactors=FALSE)
-head(data.tr)
 
-model.form <- logit(oilL5) ~ regime1 + metalL5
-model <- lm(model.form, data.tr)
-summary(model)
+dev.off()
+# Create plot
+tc <- tile(rlTrace, rlTrace_2, vertmark,
+           #RxC = c(2,1),
+           output = list(file = "model3rl", width=6), #adjusting output width is an effective way to get nicer proportions within a plot
+           xaxistitle = list(labels=c("Expected change in democracy score")),
+           maintitle = list(labels="First differences in regime for all Model 3 covariates"),
+           gridlines=list(type="xy",lty=3, col="grey"),
+           draw=TRUE
+)
+```
 
-simbetas <- mvrnorm(10000,model$coefficients,vcov(model))
 
-xscen <- cfMake(model.form, data.tr)
-yhyp_logit <- linearsimev(xscen,simbetas)
-yhyp <- lapply(yhyp_logit,inv.logit)
-yhyp
+# `simcf/tile` for logistic regression
 
-# or with predict:
-inv.logit(predict(model, newdata=list(regime1=mean(rossdata$regime1),metalL5=mean(rossdata$metalL5))))
+Logit in simcf/tile works much the same as linear models - one nice thing about Chris's packages is the consistent structure as you move into more complex models. 
 
-### 6. simcf/tile for logit
-###    Logit in simcf/tile works much the same as linear models - one nice thing about Chris's packages is the flexibility as you move into more complex models
+## Voting example using 2000 NES data after King, Tomz, and Wittenberg
+Example originally developed by Chris Adolph
 
-# Voting example using 2000 NES data after King, Tomz, and Wittenberg
-# Chris Adolph
+####Load data
+```{r}
+nesdata <- read.csv("http://staff.washington.edu/csjohns/503/nes00a.csv", header=TRUE)
+```
 
-# Load data
-nesdata <- read.csv("nes00a.csv", header=TRUE)
-
-# Set up model formula and model specific data frame
+####Set up model formula and model specific data frame:
+This is using the very handy `extractdata()` function in the `simcf` package.  This helps you to be working with a consistent and manageable dataset across multiple models, especially useful in cases of missing data that will be dropped rather than imputed.
+```{r}
 model <- vote00 ~ age + I(age^2) + hsdeg + coldeg
 mdata <- extractdata(model, nesdata, na.rm=TRUE)
+```
 
-# Run logit & extract results
+####Run logit & extract results
+```{r}
 logit.result <- glm(model, family=binomial(link=logit), data=mdata)
 pe <- logit.result$coefficients  # point estimates
 vc <- vcov(logit.result)         # var-cov matrix
+```
 
-# Simulate parameter distributions
+####Simulate parameter distributions
+```{r}
 sims <- 10000
 simbetas <- mvrnorm(sims, pe, vc)
+```
 
-# Set up counterfactuals:  all ages, each of three educations
+####Set up counterfactuals:  all ages, each of three educations
+```{r}
 xhyp <- seq(18,97,1)
 nscen <- length(xhyp)
 nohsScen <- hsScen <- collScen <- cfMake(model, mdata, nscen)
@@ -571,16 +631,24 @@ for (i in 1:nscen) {
   collScen <- cfChange(collScen, "hsdeg", x = 1, scen = i)
   collScen <- cfChange(collScen, "coldeg", x = 1, scen = i)
 }
+```
 
-# Simulate expected probabilities for all scenarios
+
+####Simulate expected probabilities for all scenarios
+```{r}
 nohsSims <- logitsimev(nohsScen, simbetas, ci=0.95)
 hsSims <- logitsimev(hsScen, simbetas, ci=0.95)
 collSims <- logitsimev(collScen, simbetas, ci=0.95)
+```
 
-# Get 3 nice colors for traces
+####Get 3 nice colors for traces, using the `colorbrewer` package
+```{r}
 col <- brewer.pal(3,"Dark2")
+```
 
-# Set up lineplot traces of expected probabilities # using extrapolate to only plot predictions within the convex hull of the data. Uses WhatIf package
+####Set up lineplot traces of expected probabilities:
+This is also showing the use of the extrapolate option to only plot predictions within the convex hull of the data. Uses the `WhatIf` package.
+```{r  results = 'hide'}
 nohsTrace <- lineplot(x=xhyp,
                       y=nohsSims$pe,
                       lower=nohsSims$lower,
@@ -622,24 +690,22 @@ legendTrace <- textTile(labels=c("Logit estimates:", "95% confidence", "interval
                         x=c(82, 82, 82),
                         y=c(0.2, 0.16, 0.12),
                         plot=1)
-
 # Plot traces using tile
 tile(nohsTrace,
      hsTrace,
      collTrace,
      labelTrace,
      legendTrace,
-     output = list(file="logit", width=6),
-     #     width=list(null=5),
      limits=c(18,94,0,1),
      xaxis=list(at=c(20,30,40,50,60,70,80,90)),
      xaxistitle=list(labels="Age of Respondent"),
      yaxistitle=list(labels="Probability of Voting"),
-     frame=TRUE
+     frame=TRUE,
+     output = list(file="logit", width=6)
 )
+```
 
 
 
-### 7. Practice if time:
-
-# Using either your own data or one of the datasets used in this lab, run an interesting model and use simcf to present the results (you can use either tile or the base graphics to plot). 
+## Practice if time:
+Using either your own data or one of the datasets used in this lab, run an interesting model and use simcf to present the results (you can use either tile or the base graphics to plot). 
