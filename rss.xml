@@ -1,17 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>POLS/CS&amp;SS 503</title><link>http://pols503.github.io/pols_503_sp15/</link><description>Site for POLS/CS&amp;SS 503: Advanced Quantitative Political Methodology (University of Washington; Spring 2015)</description><atom:link rel="self" type="application/rss+xml" href="http://pols503.github.io/pols_503_sp15/rss.xml"></atom:link><language>en</language><lastBuildDate>Thu, 28 May 2015 17:42:54 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Homework 4 solutions posted</title><link>http://pols503.github.io/pols_503_sp15/posts/homework-4-solutions-posted.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
-.. title: Homework 4 solutions posted
-.. slug: homework-4-solutions-posted
-.. date: 2015-05-28 10:10:04 UTC-07:00
-.. tags: 
-.. category: 
-.. link: 
-.. description: 
-.. type: text
-.. author: Jeffrey Arnold
---&gt;
-
-&lt;p&gt;I posted homework 4 solutions on &lt;a href="https://canvas.uw.edu/files/31855949/"&gt;canvas&lt;/a&gt;. Your answers may (and likely will) diverge on the model selection question using the Ross data. Model selection is not an easy problem, and in research, there is not simple algorithm to find the “best” model. In part, this is because the “best” model is contingent on your purposes. Generally what you are looking for while exploring the space of models is how sensitive your results are to model specification. If they are robust to a variety of specifications, that is a good sign. If they are sensitive to the particular specification, it could be the case that the result was spurious, or you need to bring other data or theory to the problem to understand why one particular specification should be preferred to the others.&lt;/p&gt;</description><guid>http://pols503.github.io/pols_503_sp15/posts/homework-4-solutions-posted.html</guid><pubDate>Thu, 28 May 2015 17:10:04 GMT</pubDate></item><item><title>Final Papers</title><link>http://pols503.github.io/pols_503_sp15/posts/final-papers.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>POLS/CS&amp;SS 503</title><link>http://pols503.github.io/pols_503_sp15/</link><description>Site for POLS/CS&amp;SS 503: Advanced Quantitative Political Methodology (University of Washington; Spring 2015)</description><atom:link href="http://pols503.github.io/pols_503_sp15/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><lastBuildDate>Thu, 28 May 2015 00:35:48 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Final Papers</title><link>http://pols503.github.io/pols_503_sp15/posts/final-papers.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
 .. title: Final Papers
 .. slug: final-papers
 .. date: 2015-05-27 17:01:04 UTC-07:00
@@ -176,4 +164,16 @@
 --&gt;
 
 &lt;p&gt;I posted lecture notes from this week, after cleaning them up based off of the mistakes I noticed, and what we actually talked about in class. One topic we did not cover was outliers and robust regression methods. I encourage you to look at Chris Adolph’s lecture &lt;a href="http://faculty.washington.edu/cadolph/503/topic6.pw.pdf"&gt;notes&lt;/a&gt; on this.&lt;/p&gt;
-&lt;p&gt;I have adjusted the syllabus yet again. Next week we will cover regression interpretation, model selection and the bootstrap. Please read the articles that were assigned: King et. al, Schrodt, and Achen.&lt;/p&gt;</description><category>lecture</category><category>syllabus</category><guid>http://pols503.github.io/pols_503_sp15/posts/week-7-and-syallbus-updates.html</guid><pubDate>Thu, 07 May 2015 02:08:11 GMT</pubDate></item></channel></rss>
+&lt;p&gt;I have adjusted the syllabus yet again. Next week we will cover regression interpretation, model selection and the bootstrap. Please read the articles that were assigned: King et. al, Schrodt, and Achen.&lt;/p&gt;</description><category>lecture</category><category>syllabus</category><guid>http://pols503.github.io/pols_503_sp15/posts/week-7-and-syallbus-updates.html</guid><pubDate>Thu, 07 May 2015 02:08:11 GMT</pubDate></item><item><title>Problem Set 3 Posted</title><link>http://pols503.github.io/pols_503_sp15/posts/problem-set-3-posted.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
+.. title: Problem Set 3 Posted
+.. slug: problem-set-3-posted
+.. date: 2015-05-03 14:03:56 UTC-07:00
+.. tags: problem sets
+.. category: 
+.. link: 
+.. description: 
+.. type: text
+.. author: Jeffrey Arnold
+--&gt;
+
+&lt;p&gt;&lt;a href="http://pols503.github.io/pols_503_sp15/hw/hw3.html"&gt;Problem Set 3&lt;/a&gt; is posted; it will be due at class on Tuesday, May 12. This problem sets involves simulation of models with R. Please look at it, and work through the setup/introduction, before class on Tuesday so I an answre questions.&lt;/p&gt;</description><category>problem sets</category><guid>http://pols503.github.io/pols_503_sp15/posts/problem-set-3-posted.html</guid><pubDate>Sun, 03 May 2015 21:03:56 GMT</pubDate></item></channel></rss>
