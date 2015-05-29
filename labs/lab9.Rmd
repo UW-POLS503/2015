@@ -2,8 +2,6 @@
 title: "POLS 503 Lab 9"
 author: "Carolina Johnson"
 date: "Friday May 29, 2015"
-output: html_document
-
 ---
 
 
@@ -17,7 +15,7 @@ install_github("chrisadolph/tile-simcf", subdir = "tile")
 install_github("chrisadolph/tile-simcf", subdir = "simcf")
 ```
 
-Also install RColorBrewer and WhatIf
+Also install **RColorBrewer** and **WhatIf**
 
 ```{r message = FALSE}
 library(MASS)
