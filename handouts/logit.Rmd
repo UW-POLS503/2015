@@ -1,0 +1,350 @@
+---
+title: "Logit"
+author: "Jeffrey B. Arnold"
+date: "05/29/2015"
+output: html_document
+---
+
+```{r echo = FALSE, results = 'hide'}
+knitr::opts_chunk$set(cache = TRUE, autodep = TRUE)
+```
+
+
+```{r message = FALSE}
+library("MASS")
+library("tidyr")
+library("dplyr")
+library("broom")
+library("ggplot2")
+```
+
+
+## Data
+
+The example data used in this tutorial is individual level turnout data for the 1992 U.S. Presidential election from the American National Election Survey (ANES). 
+The data used here are 2,000 observations from the ANES that are included in the package **Zelig**
+
+```{r message = FALSE}
+library("Zelig")
+data("turnout")
+```
+
+- `vote`: Whether the individual voted in the 1992 US Presidential election. 1 if yes, 0 if no.
+- `race`: Race of the individual: "white", "other"
+- `age`: Age
+- `educate`: Years of education
+- `income`: 
+
+This data and model is similar to that used in 
+
+> King, Gary, Michael Tomz, Jason Wittenberg (2000). “Making the Most of Statistical Analyses: Improving Interpretation and Presentation,” American Journal of Political Science, vol. 44, pp.341–355.
+
+
+## glm function
+
+To run a logit regression, use the R function `glm`, which stands for generalized linear model.
+```{r}
+mod1 <- glm(vote ~ age + I(age ^ 2) + race + educate, data = turnout,
+            family = binomial(link = "logit"))
+mod1
+```
+The call to `glm` looks similar to `lm`.
+There is a formula that uses the same syntax as `lm`, as well as a `data` argument.
+Different families correspond to different types of GLMs.
+The `binomial()` family is for binary outcome variables.
+The `link="logit"` argument spefies that the type of binary outcome model is a logit model.
+The argument is named `link` because is specifies a link function, which for binary dependent variables, is the function that maps values of `X \beta` into probabilities.
+Another option for a link function is `link="probit"` for a probit model, as well as other, lesser used, link functions.
+
+As in `lm`, the summary of the object has more detailed information, including standard errors and p-values of the estimates.
+```{r}
+summary(mod1)
+```
+
+The coefficients of logit are not as transparent to interpret as OLS coefficients since $X \beta$ is on the log-odds ratio .
+
+The type `"link"` (which is the default) is the predicted value of $x_i \beta$, which in units of the link function, $\log(p_i / (1 - p_i))$:
+```{r}
+head(predict(mod1, type = "link"))
+```
+
+The type `"response"` is in units of the dependent value ($\Pr(Y_i = 1)$):
+```{r}
+head(predict(mod1, type = "response"))
+```
+
+The function `predict` has an option `se.fit = TRUE` that can be used to calculate confidence intervals, but it is preferrable to use the simulation methods below.
+
+## broom
+
+As with `lm`, the **broom** package functions `glance`, `tidy`, and `augment` can be used with the results of `glm` objects.
+```{r}
+glance(mod1)
+tidy(mod1)
+glimpse(augment(mod1))
+```
+
+
+
+## First differences
+
+```{r}
+pred_logit <- function(mod, data, sims = 1000, conf.level = 0.95) {
+  formula <- delete.response(terms(mod))
+  simbetas <- mvrnorm(sims, coef(mod1), vcov(mod1))
+  # Turns data in model frame
+  X <- model.matrix(formula, data = data)
+  phat <- plogis(X %*% t(simbetas))
+  lwr <- (1 - conf.level) / 2
+  upr <- 1 - lwr
+  data.frame(mean = apply(phat, 1, mean),
+             lower = apply(phat, 1, quantile, prob = lwr),
+             upper = apply(phat, 1, quantile, prob = upr),
+             row.names = NULL)
+}
+
+```
+
+Predict for different values of age, holding educate at its mean, for both white and others
+```{r}
+mod1_vary_age <-
+  expand.grid(age = min(turnout$age, na.rm = TRUE):max(turnout$age, na.rm = TRUE),
+                        race = unique(turnout$race, na.rm = TRUE),
+                        educate = mean(turnout$educate, na.rm = TRUE))
+
+mod1_vary_educate <-
+  expand.grid(age = mean(turnout$age),
+                        race = unique(turnout$race, na.rm = TRUE),
+                        educate = unique(turnout$educate))
+
+mod1_pred_age <- 
+  predict(mod1, newdata = mod1_vary_age,
+          type="response")
+
+ggplot(mutate(mod1_vary_age, pred = mod1_pred_age), 
+       aes(x = age, y = pred, colour = race)) +
+  geom_line()
+
+```
+
+Varying education for groups of race, holding age at its mean.
+```{r}
+bind_cols(mod1_vary_educate, pred_logit(mod1, mod1_vary_educate))
+```
+Varying age for groups of race, holding education at its mean.
+```{r}
+bind_cols(mod1_vary_age, pred_logit(mod1, mod1_vary_age))
+```
+
+
+## Marginal Effects
+
+The marginal effects for a logit model are:
+$$
+\begin{aligned}[t]
+\frac{\partial y}{\partial x_j} &= p_i (1 - p_i) * \\
+p_i &= \frac{1}{1 + \exp(- x_i \beta)}
+\end{aligned}
+$$
+Note these vary 
+
+Using that tat formula, we can calculate the marginal effect of age for all observations in the data, for all variables.
+Note that the marginal effect of "age" has to account for the squared term.
+```{r}
+mfx <- 
+  augment(mod1, type.predict = "response") %>%
+    mutate(dy = .fitted * (1 - .fitted),
+             mfx_age = dy *
+             (coef(mod1)["age"] + 2 * coef(mod1)["I(age^2)"] * age),
+           mfx_educate = dy * coef(mod1)["educate"],
+           mfx_racewhite = dy * coef(mod1)["racewhite"])
+
+```
+
+Now we can plot the marginal effects for each 
+```{r}
+ggplot(mfx, aes(x = age, y = mfx_age)) +
+  geom_point() +
+  ylab("Marginal Effects of Age")
+ggplot(mfx, aes(x = educate, y = mfx_educate)) +
+  geom_point() +
+  ylab("Marginal Effects of Education")
+```
+Marginal effects do not make much sense for binary covariates, and first differences make more sense.
+In any case, this only makes sense to calculate for non-white individuals.
+```{r}
+ggplot(filter(mfx, race == "others"),
+       aes(x = educate, y = mfx_educate)) +
+  geom_point() +
+  ylab("Marginal Effects of Education")
+```
+
+One way of summarizing the effect of a variable is to average these marginal effects over all the individuals in the sample
+```{r}
+summarise_each(mfx, funs(mean), matches("mfx_"))
+```
+Note: in the code above I used `matches` to select all variables matching a pattern. See the `dplyr` documentation for `select` for more information.
+
+
+## Assessing model fit
+
+
+### AIC / BIC
+ 
+There are multiple methods to assess model fit for logit models.
+The simplest are the AIC and BIC, which are defined as,
+$$
+\begin{aligned}[t]
+AIC &= 2 k - 2 * \log(L) \\
+BIC &= k * \log(n) - 2 * \log(L)
+\end{aligned}
+$$
+where $L$ is the log-likelihood of the model at its maximum likelihood estimates, $k$ is the number of variables, and $n$ is the number of observations.
+The both work in a similar manner, taking how well the model explains the data (the log-likelihood) and penalizing it for complexity (in terms of parameters).
+For most values of $k$ and $n$, the BIC penalizes the complexity more and chooses simpler models.
+For both AIC and BIC, the model with the *smaller* value is preferred. 
+
+You can calculate the AIC and BIC using functions of the same names,
+```{r}
+AIC(mod1)
+BIC(mod1)
+```
+
+Note that these are not statistics, so there is no test as to whether the AIC of models are the same or a clear meaning for the difference of AIC between models.
+All you can say is that the model with the lower AIC is preferred.
+
+
+## Classification Peformance
+
+One way to assess model performance is to pick a threshold with which to assign predicted probabilities to either 0 or 1, and then compare then with the actual values of either 0 or 1. 
+
+Here's a simple function (created by Brian Greenhill) that gives you the same information in a more user-friendly way.
+
+```{r}
+contingencytable <- function(modelobject, threshold = 0.5) {
+    phat <- fitted(modelobject)
+    y <- model.response(model.frame(modelobject))
+    
+    tp <- (phat >= threshold & y == 1)
+    fp <- (phat >= threshold & y == 0)
+    tn <- (phat < threshold & y == 0)
+    fn <- (phat < threshold & y == 1)
+    
+    results <- matrix(c(sum(tn), sum(fp), sum(fn), sum(tp)), 2, 2)
+    rownames(results) <- c("Predicted Non-Events", "Predicted Events")
+    colnames(results) <- c("Actual Non-Events", "Actual Events")
+    
+    fpr <- sum(fp)/(sum(tn) + sum(fp))
+    tpr <- sum(tp)/(sum(tp) + sum(fn))
+    
+    print(results)
+    cat(paste("\nFalse positive rate is", round(fpr, 2), "\nTrue Positive Rate is", 
+        round(tpr, 2)))
+    
+    invisible(list(fpr = fpr, tpr = tpr))
+}
+```
+
+For example, to calculate a contigency table using the natural threshold of 0.5,
+```{r}
+contingencytable(mod1, threshold = 0.5)
+```
+
+
+## ROC
+
+```{r message = FALSE}
+library("ROCR")
+```
+
+You can imagine running this over a range of different thresholds.  The next tool, the ROC plot.
+Each pair of FPR and TPR values represents one point on the ROC curve.
+
+```{r}
+pred_mod1 <- prediction(mod1$fitted.values, mod1$y)
+perf_mod1 <- performance(pred_mod1, "tpr", "fpr")
+plot(perf_mod1)
+```
+
+The ROC curve is interesting, but if we want a single number with which to compare models, we can use the AUC (area unde r the curve) of the ROC plot.
+Plots with higher AUC values have better classification success averaging overall all possible threshhold values.
+
+```{r}
+performance(pred_mod1, "auc")@y.values[[1]]
+```
+Note that you need to use `@` to extract `y.values` from the object because the object returned by `pred_mod1` is an S4 object (the differences between object types in R is way beyond this class).
+However, if this is `TRUE`, then it is an `S4` object and you need to 
+```{r}
+isS4(performance(pred_mod1, "auc"))
+```
+
+
+
+## separation plots
+
+The separation plot is a graphical method for assessing the model fit of binary response models. 
+
+> Greenhill, Brian, Michael D. Ward, and Audrey Sacks. 2011. “The Separation Plot: A New Visual Method for Evaluating the Fit of Binary Models.” American Journal of Political Science 55(4): 991–1002. <http://onlinelibrary.wiley.com/doi/10.1111/j.1540-5907.2011.00525.x/abstract>
+
+The authors implement this method in the R package **separationplot** (available on CRAN):
+```{r message = FALSE}
+library("separationplot")
+```
+
+Here is a separation plot applied to `mod1`
+```{r}
+separationplot(fitted(mod1), turnout$vote, newplot = TRUE)
+```
+Note: `separationplot` does not play nice with **knitr** documents and only saves to pdf, so the output is not shown here.
+
+## actual-versus-predicted (AVP) plots
+
+The idea behind the AVP plot is that if the model is working well, for observations where it predicts that $\hat p$% of the observations are 1's, $\hat p$% of the observations should be 1s. 
+In order to calculate this, since the $\hat p$ will take many values, we need to bin the observations by values of $\hat p$. 
+The function `avpbins` does that. 
+```{r}
+avpbins <- function(x, predicted, breaks = 10, ...) {
+  hh <- hist(x, breaks = breaks, ..., plot = FALSE)
+  data_frame(bin = findInterval(fitted(mod1), hh$breaks),
+             actual = x) %>%
+    group_by(bin) %>%
+    dplyr::summarize(actual = mean(actual),
+              count = length(bin)) %>%
+    right_join(data_frame(bin = seq_len(length(hh$mids)),
+                          fitted = hh$mids), 
+               by = "bin") %>%
+    mutate(actual = ifelse(! is.na(actual), actual, 0),
+           count = ifelse(! is.na(count), count, 0),
+           density = count / sum(count))
+}
+```
+
+To see the performance of this model, we can calculate an AVP plot for
+```{r}
+ggplot(avpbins(mod1$y, fitted(mod1), breaks = seq(0, 1, by = 0.05)),
+       aes(x = fitted, y = actual, size = count)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0)
+```
+
+Chris Adolph has an alternative implementation of the actual-versus-predicted plot on his [site](http://faculty.washington.edu/cadolph/?page=60).
+
+## Heatmap fit
+
+A method similar to actual-versus-predicted plots was introduced in
+
+> Esarey, Justin, and Andrew Pierce. 2012. “Assessing Fit Quality and Testing for Misspecification in Binary-Dependent Variable Models.” Political Analysis 20(4): 480–500. http://pan.oxfordjournals.org/content/20/4/480 
+
+The heatmap fit plot plots a line with the empirical probability of the response against the fitted probability.
+The ideal line would follow a 45 degree line.
+The authors implemented this method in the package **heatmapFit** (available on CRAN).
+
+```{r message = FALSE}
+library("heatmapFit")
+```
+
+```{r results='hide'}
+heatmap.fit(turnout$vote, fitted(mod1))
+dev.off()
+```
+
