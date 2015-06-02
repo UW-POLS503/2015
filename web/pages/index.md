@@ -368,7 +368,7 @@ Lab document: [html](labs/lab8.html), [Rmd](labs/lab8.Rmd)
 
 ### Friday, May 29
 
-TBD
+Lab document: [Rmd](labs/lab9.Rmd), [html](labs/lab9.html)
 
 ## Week 10: Panel Data 
 

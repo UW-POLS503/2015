@@ -190,3 +190,42 @@ I have too many equations on the screen that I yada-yada-yada'd. I need notes. N
 - Too much abstract math. Need examples for everything; both simulations and real world data.
 - Need to clarify my thoughts about how potential outcomes relates to other methods of model testing / causal inference.
 
+## Replication Data
+
+The best (in terms of ease of use) replication data is from those who've already replicated
+
+### Zelig
+
+- least squares: macro
+- binary data: turnout
+
+KTW 2007, "Making the Most of Statistical Analyses":
+
+King, Tomz and Wittenberg: Replication data at King, Gary; Tomz, Michael; and Wittenberg, Jason, 2007, "Replication data for: Making the Most of Statistical Analyses: Improving Interpretation and Presentation", http://hdl.handle.net/1902.1/QTCABXZZRQ, Harvard Dataverse, V4
+
+- OLS: State level employment data
+- Binary: `turnout` data included in **Zelig** This data set contains individual-level turnout data. It pools several American National Election Surveys conducted during the 1992 presidential election year. Only the first 2,000 observations (from a total of 15,837 observations) are included in the sample data.
+- Multinomial Logit: Dominguez and McCann 1998 presidential election
+- Censored Weibull Model: survival of political leaders. Bueno de Mesquita and Siverson 1995
+
+
+Greenhill et al 2011, "The Separation Plot: A New Visual Method for Evaluating the Fit of Binary Models":
+
+> Greenhill, Brian, Michael D. Ward, and Audrey Sacks. 2011. “The Separation Plot: A New Visual Method for Evaluating the Fit of Binary Models.” American Journal of Political Science 55(4): 991–1002. <http://onlinelibrary.wiley.com/doi/10.1111/j.1540-5907.2011.00525.x/abstract>.
+
+The replication data
+
+> Brian Greenhill; Michael D. Ward; Audrey Sacks, 2011, "Replication data for: The Separation Plot: A New Visual Method for Evaluating the Fit of Binary Models", http://hdl.handle.net/1902.1/16199, Harvard Dataverse, V1
+
+Examples. Unfortunately the replication doesn't directly include the replication data.
+
+- Political Campaigns: Hillygus and Jackman (2003)
+- Civil War: Fearon and Laitin (2003)
+- Voting Behavior. Rosenstone and Hansen 1993
+- Levels of Personal Integrity Rights from Neumayer 2005
+
+Applications:
+
+- Model of interstate rivalries: Morey, Daniel. 2011. When war brings peace: A dynamic model of the rivalry process. American Journal of Political
+Science 55:263–75.
+- Democratization, Civil Conflict and Foreign aid: Savun, Burcu, and Daniel C. Tirone. 2011. Foreign aid, democratization, and civil conflict: How does democracy aid civil conflict? American Journal of Political Science 55:233–46.
