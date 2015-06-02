@@ -7,8 +7,6 @@
   \documentclass[12pt]{beamer}
 \fi
 
-\usepackage{graphicx}
-\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 
 %%%INSERTHEADERHERE
 \input{includes.tex}
@@ -194,13 +192,11 @@ $N = \Sexpr{garrettN}$ OECD countries, $T = \Sexpr{garrettT}$ years (\Sexpr{garr
 \begin{frame}
   \frametitle{Varying Intercepts Models}
 
-  \begin{equation*}
     \begin{align*}
     \mathtt{gdp}_{i,t} = \textcolor{red}{\alpha_{i}} + \beta_{1} \mathtt{corp}_{i,t} + \beta_{2} \mathtt{leftlab}_{i,t} + \beta_{3} \mathtt{leftlab} \times \mathtt{corp}_{i,t} \\
       &\quad + \beta_{4} \mathtt{demand}_{i,t} + \epsilon_{i,t}
     \end{align*}
-  \end{equation*}
-  
+
   \begin{block}{Fixed Effects}
     No stochastic component of intercepts
     \begin{equation*}
@@ -218,17 +214,15 @@ $N = \Sexpr{garrettN}$ OECD countries, $T = \Sexpr{garrettT}$ years (\Sexpr{garr
 \end{frame}
 
 \begin{frame}
-  \frametitle{Varying Intercepts Models}
+  \frametitle{Fixed effects}
 
-  \begin{equation*}
     \begin{align*}
     \mathtt{gdp}_{i,t} = \textcolor{red}{\alpha_{i}} + \beta_{1} \mathtt{corp}_{i,t} + \beta_{2} \mathtt{leftlab}_{i,t} + \beta_{3} \mathtt{leftlab} \times \mathtt{corp}_{i,t} \\
-      &\quad + \beta_{4} \mathtt{demand}_{i,t} + \epsilon_{i,t} \\
+      &\quad + \beta_{4} \mathtt{demand}_{i,t} + \epsilon_{i,t}
     \end{align*}
-  \end{equation*}
 
   \begin{itemize}
-  \item $\alpha_{i}$ are individual for each country
+  \item $\alpha_{i} = \alpha^{*}_{i}$ are individual for each country
   \item $\alpha_{i}$ can be correlated with $x_{i,t}$. Controls for \textit{all} (known and unknown) time-invariant variables
   \item Cost: we're purging the cross-sectional variation from the analysis
   \item Assuming change in $x_{i,t}$ has same response in each series
@@ -296,7 +290,7 @@ $N = \Sexpr{garrettN}$ OECD countries, $T = \Sexpr{garrettT}$ years (\Sexpr{garr
   \begin{align*}
     \mathtt{gdp}_{i,t} &= \beta_{0}  + \beta x_{i,t} + \alpha_{i} + \epsilon_{i,t} \\
     \alpha_{i} & \sim N(0, \sigma_{\alpha}^{2}) \\
-    \epsilon_{i,t}_{i} & \sim N(0, \sigma_{\epsilon}^{2})
+    \epsilon_{i,t} & \sim N(0, \sigma_{\epsilon}^{2})
   \end{align*}
   
   \begin{itemize}
