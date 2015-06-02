@@ -374,10 +374,14 @@ TBD
 
 ### Tuesday, June 2
 
+Panel Data
 
-Misc Topics: Panel Data, Instrumental Variables, Fixed Effects, Diff in Diff, Regression Discontinuity
+- Readings
 
-- Angrist and Pischke, Ch. 4, 5, 6
+    - Angrist and Pischke, Ch. 5, 8.2
+    - Peter Kennedy, *A Guide to Econometrics*, 6th edition, Chapter 18, "Panel Data". On [canvas](https://canvas.uw.edu/files/31875436/)
+	- Wooldridge, *Econometric Analysis of Cross Section and Panel Data*, Chapter 10, "Basic Linear Unobserved Effects Panel Data Models". On [canvas](https://canvas.uw.edu/files/31869445/)
+	- Beck, N., & Katz, J. N. (2011). Modeling Dynamics in Time-Series–Cross-Section Political Economy Data. *Annual Review of Political Science*, 14(1), 331–352. <http://doi.org/10.1146/annurev-polisci-071510-103222>
 
 
 ### Friday, June 5

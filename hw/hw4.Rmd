@@ -5,12 +5,6 @@ date: "May 15, 2015"
 ---
 
 $$
-\DeclareMathOperator{\cor}{cor}
-\DeclareMathOperator{\cov}{cov}
-\DeclareMathOperator{\sd}{sd}
-\DeclareMathOperator{\se}{se}
-\DeclareMathOperator{\diag}{diag}
-\DeclareMathOperator{\quantile}{quantile}
 \DeclareMathOperator{\logit}{logit}
 $$
 
