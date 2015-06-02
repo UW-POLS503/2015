@@ -7,6 +7,9 @@
   \documentclass[12pt]{beamer}
 \fi
 
+\usepackage{graphicx}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+
 %%%INSERTHEADERHERE
 \input{includes.tex}
 
@@ -90,7 +93,7 @@ $N = \Sexpr{garrettN}$ OECD countries, $T = \Sexpr{garrettT}$ years (\Sexpr{garr
   \begin{itemize}
   \item Data (and models) structured into units and periods units 
     \begin{equation*}
-      y_{it} = x_{it} \beta + \epsilon_{it}
+      y_{i,t} = x_{i,t} \beta + \epsilon_{i,t}
     \end{equation*}
   \item units $i = 1, \dots, N$ each observed over $t = 1, \dots, T$, for a total of $N \times T$ observations.
   \item balanced data: all units $i$ have same number of observations $T$
@@ -111,23 +114,128 @@ $N = \Sexpr{garrettN}$ OECD countries, $T = \Sexpr{garrettT}$ years (\Sexpr{garr
     \item longitudinal
     \item time-series cross-section (TSCS)
     \end{itemize}
-  \item But can mean different things with different appropriate methods.
+  \item But can mean different things with different appropriate methods depending on the size of
+    $N$ and $T$.
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Different $N$ and $T$ in different contexts}
+  
+  \begin{center}
+    \includegraphics[height=\textheight]{../images/Adolph_Political_Science_Panel_Sizes.png}
+  \end{center}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{What is Panel Data?}
+  \framesubtitle{Different things}
+  
+  \begin{itemize}
   \item Size of dimensions can influence which methods are appropriate:
     \begin{itemize}
     \item Big $N$, small $T$ (e.g. panel surveys)
     \item Small(er) $N$, big $T$ (e.g. country time series, financial)
     \end{itemize}
-  \item Some methods emphasize unit differences, others emphasize time
+  \item Some methods emphasize unit differences (fixed/random effects, PCSE)
+  \item Others emphasize time (lagged dependent variables, serial correlation)
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Why use Panel Data?}
+  
+  \begin{itemize}
+  \item More data, which might make inference more precise
+    (at least if we believe $\beta$ is the same or similar across units)
+  \item Can help with omitted variables, especially if they are time invariant
+  \item Some analysis only possible with panel data;
+    e.g., if variables don’t change much over time, like institutions
+  \item  Heterogeneity is interesting! As long as we can specify a general DGP for whole panel, can parameterize and estimate more substantively interesting relationships
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Difficulties of  Panel Data?}
+  
+    \begin{itemize}
+    \item More complex to conceptualize and model
+    \item Need to worry about issues in \textit{time} and \textit{space}
+    \item Needs more powerful or flexible estimation tools
+    \end{itemize}
+\end{frame}
+
+
+\section{Fixed and Random Effects}
+
+\begin{frame}
+  \frametitle{A Pooled Time Series Model}
+
+  Example with GDP data
+  \begin{equation*}
+    \mathtt{gdp}_{i,t} = \alpha + \beta_{1} \mathtt{corp}_{i,t} + \beta_{2} \mathtt{leftlab}_{i,t} + \beta_{3} \mathtt{leftlab} \times \mathtt{corp}_{i,t} + \beta_{4} \mathtt{demand}_{i,t} + \epsilon_{i,t}
+  \end{equation*}
+  
+  \begin{itemize}
+  \item The model is \textbf{pooled} because it assumes $\beta$ are the same between all countries
+  \item Ignores heterogeneity between units
+  \item Almost always overestimates precision
+  \item However, some amount of pooling is always necessary in a model, the question is how much.
   \end{itemize}
   
 \end{frame}
 
-\section{Pooled Models}
 
+\begin{frame}
+  \frametitle{Varying Intercepts Models}
 
+  \begin{equation*}
+    \begin{align*}
+    \mathtt{gdp}_{i,t} = \textcolor{red}{\alpha_{i}} + \beta_{1} \mathtt{corp}_{i,t} + \beta_{2} \mathtt{leftlab}_{i,t} + \beta_{3} \mathtt{leftlab} \times \mathtt{corp}_{i,t} \\
+      &\quad + \beta_{4} \mathtt{demand}_{i,t} + \epsilon_{i,t}
+    \end{align*}
+  \end{equation*}
+  
+  \begin{block}{Fixed Effects}
+    No stochastic component of intercepts
+    \begin{equation*}
+      \alpha_{i} = \alpha^{*}_{i}
+    \end{equation*}
+  \end{block}
 
+  \begin{block}{Random Effects}
+    Intercepts are modeled as coming from a distribution
+    \begin{equation*}
+      \alpha_{i} \sim N(0, \sigma_{\alpha}^{2})
+    \end{equation*}
+  \end{block}
+  
+\end{frame}
 
-\section{Fixed and Random Effects}
+\begin{frame}
+  \frametitle{Varying Intercepts Models}
+
+  \begin{equation*}
+    \begin{align*}
+    \mathtt{gdp}_{i,t} = \textcolor{red}{\alpha_{i}} + \beta_{1} \mathtt{corp}_{i,t} + \beta_{2} \mathtt{leftlab}_{i,t} + \beta_{3} \mathtt{leftlab} \times \mathtt{corp}_{i,t} \\
+      &\quad + \beta_{4} \mathtt{demand}_{i,t} + \epsilon_{i,t} \\
+    \end{align*}
+  \end{equation*}
+
+  \begin{itemize}
+  \item $\alpha_{i}$ are individual for each country
+  \item $\alpha_{i}$ can be correlated with $x_{i,t}$. Controls for \textit{all} (known and unknown) time-invariant variables
+  \item Cost: we're purging the cross-sectional variation from the analysis
+  \item Assuming change in $x_{i,t}$ has same response in each series
+  \item Uses over-time variation in covariates to estimate parameters
+  \end{itemize}
+  
+\end{frame}
 
 
 \begin{frame}
@@ -135,7 +243,7 @@ $N = \Sexpr{garrettN}$ OECD countries, $T = \Sexpr{garrettT}$ years (\Sexpr{garr
   \framesubtitle{Within Estimator}
   
   \begin{equation*}
-    y_{it} - \bar{y}_{i} = (x_{it} - \bar{x}_{i}) \beta + (\epsilon_{it} - \bar{\epsilon}_{i})
+    y_{i,t} - \bar{y}_{i} = (x_{i,t} - \bar{x}_{i}) \beta + (\epsilon_{i,t} - \bar{\epsilon}_{i})
   \end{equation*}
 
   \begin{itemize}
@@ -151,12 +259,13 @@ $N = \Sexpr{garrettN}$ OECD countries, $T = \Sexpr{garrettT}$ years (\Sexpr{garr
   
 \end{frame}
 
+
 \begin{frame}
   \frametitle{Estimating Fixed Effects}
   \framesubtitle{Dummy Variable Estimator (LSDV)}
   
   \begin{equation*}
-    y_{it} = x_{it} \beta + \alpha_{i} + u_{it}
+    y_{i,t} = x_{i,t} \beta + \alpha_{i} + u_{i,t}
   \end{equation*}
   
   \begin{itemize}
@@ -167,6 +276,7 @@ $N = \Sexpr{garrettN}$ OECD countries, $T = \Sexpr{garrettT}$ years (\Sexpr{garr
   
 \end{frame}
 
+
 \begin{frame}
   \frametitle{Time Varying Covariates and Fixed Effects}
   
@@ -174,23 +284,97 @@ $N = \Sexpr{garrettN}$ OECD countries, $T = \Sexpr{garrettT}$ years (\Sexpr{garr
   \item The fixed effects absorb all time-varying covariates so you cannot get separate estimates of them (perfect collinearity).
   \item Can include \textit{interactions} of time-invariate variables? Estimate how these time-invariate variables \textit{mediate} the effects of other variables.
   \item Methods that decompose fixed effects in to known and unknown covariates (Plumper and Troeger 2007)
+  \item Use random effects
   \end{itemize}
   
 \end{frame}
 
+
 \begin{frame}
+  \frametitle{Random Effects}
+  
+  \begin{align*}
+    \mathtt{gdp}_{i,t} &= \beta_{0}  + \beta x_{i,t} + \alpha_{i} + \epsilon_{i,t} \\
+    \alpha_{i} & \sim N(0, \sigma_{\alpha}^{2}) \\
+    \epsilon_{i,t}_{i} & \sim N(0, \sigma_{\epsilon}^{2})
+  \end{align*}
+  
+  \begin{itemize}
+  \item Error variance is $\sigma_{\alpha}^{2} + \sigma_{\epsilon}^{2}$
+  \item Random effects are another part of the error
+  \item 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Fixed Effects or Random Effects?}
+  
+  \begin{itemize}
+  \item Random effects are more efficient if $\cor(\alpha_{i}, x) = 0$, but inconsistent if $\cor(\alpha_{i}, x) \neq 0$
+  \item Fixed effects are consistent, but less efficient if random effects model is efficient.
+  \item Run Hausmann test on random effects and f  (R function \texttt{phtest}). $H_{a}$ is one test is inconsistent (random effects) and means to use fixed effects.
+  \item Use random effects if you want to estimate effects of time-invariant variables.
+  \item Can include group level averages or time-invariant variables in random effects model to approx the fixed effects part.
+  \end{itemize}
   
 \end{frame}
+
+
+\begin{frame}
+  \frametitle{Implementations}
+  
+  \begin{itemize}
+  \item \textbf{plm} R package for panel estimation. Includes random effects, fixed effects.
+  \item \textbf{lme4} R package for fixed and random effects. From a statistics background, not specific to panel data.
+  \end{itemize}
+  
+\end{frame}
+
 
 \section{Dynamic Panel Models}
 
 
 \begin{frame}
   \frametitle{What makes a panel dynamic?}
-  
-  Including a lagged 
+
+  Static panel model:
+  \begin{equation*}
+    y_{i,t} = X_{i,t} \beta + \epsilon_{i,t}
+  \end{equation*}
+
+  Dynamic panel model (Lagged dependent variable)
+  \begin{equation*}
+    y_{i,t} = \phi y_{i,t - 1} + X_{i,t} \beta + \epsilon_{i,t}
+  \end{equation*}
   
 \end{frame}
+
+\begin{frame}
+  \frametitle{Lagged Dependent Variable}
+  \framesubtitle{Equivalent to geometrically decaying independent variable}
+  
+  \begin{align*}
+    y_{i,t} &= X_{i,t} \beta + \epsilon_{i,t}  + \phi y_{i,t - 1} \\
+            &= X_{i,t} \beta + \epsilon_{i,t}  + \phi (X_{i,t-1} \beta + \epsilon_{i,t-1} + y_{i,t-1}) \\
+            &= \sum_{k=0}^{1} \phi^{k} X_{i,t-k} \beta + \sum_{k=0}^{1} \phi^{k} \epsilon_{i,t - k} + \phi (X_{i,t-2} \beta + \epsilon_{i,t-2} + y_{i,t-2}) \\   
+            &= \sum_{k=0}^{2} \phi^{k} X_{i,t-k} \beta + \sum_{k=0}^{2} \phi^{k} \epsilon_{i,t - k} + \phi (X_{i,t-3} \beta + \epsilon_{i,t-3} + y_{i,t-3}) \\   
+            & \qquad \vdots \\
+            &= \sum_{k=0}^{\infty} \phi^{k} X_{i,t-k} \beta + \sum_{k=0}^{\infty} \phi^{k} \epsilon_{i,t - k}
+  \end{align*}
+\end{frame}
+
+\begin{frametitle}
+  \frametitle{Lagged Dependent Variable}
+  \framesubtitle{Estimation}
+  
+  \begin{itemize}
+  \item OLS is optimal if $\epsilon_{i,t}$ are IID 
+  \item Important that $|\phi| < 1$ (\textbf{stationarity}). What would happen if $|\phi_{i}| > 1$? 
+  \item OLS inconsistent if $\epsilon_{i,t}$ are serially correlated.
+  \item If $\epsilon_{i,t}$ are serially correlated, can estimate with appropriate method (Cochrane-Orcutt, MLE)
+  \end{itemize}
+  
+\end{frametitle}
 
 
 \begin{frame}
@@ -204,6 +388,38 @@ $N = \Sexpr{garrettN}$ OECD countries, $T = \Sexpr{garrettT}$ years (\Sexpr{garr
   
 \end{frame}
 
+\begin{frame}
+  \frametitle{Autoregressive Distributed Lag}
+  
+  \begin{equation*}
+    y_{i,t} = \beta x_{i,t} + \phi y_{i,t-1} + \gamma x_{i,t-1} + \epsilon_{i,t}
+  \end{equation*}
+  
+  \begin{itemize}
+  \item Extremely flexible: nests many different time-series specifications 
+  \item Beck and Katz (2011), De Boef and Keele (2008) suggest it a ``default'' model for TSCS. 
+  \item Does not account for fixed effects; these could be added with previous caveats
+  \item Works with stationary and non-stationary data
+  \item Equivalent to another model: \textbf{error correction model}
+  \item Can usually estimate with OLS
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Serial Correlation}
+  
+  \begin{equation*}
+    y_{i,t} = X \beta_{i,t} + \epsilon_{i,t} + \rho \epsilon_{i,t-1}
+  \end{equation*}
+  
+  \begin{itemize}
+  \item Causes issues with standard errors in OLS
+  \item Can model it directly with other methods (Prais-Winsten, Cochrane-Orcutt), or include lagged $y$ (see Beck-Katz 2011, p. 339)
+  \item If serial correlation and lag DV, then add $y_{t-2}$ (Beck-Katz 2011)
+  \end{itemize}
+  
+\end{frame}
 
 
 \section{Panel-Corrected Standard Errors}
@@ -216,17 +432,17 @@ $N = \Sexpr{garrettN}$ OECD countries, $T = \Sexpr{garrettT}$ years (\Sexpr{garr
     \begin{itemize}
     \item Heteroskedasticity between units, 
       \begin{equation}
-        \Var(\epsilon_{USA}) \neq \Var(\epsilon_{CAN})
+        \var(\epsilon_{USA}) \neq \var(\epsilon_{CAN})
       \end{equation}
     \item Contemporaneous correlation between units,
       \begin{equation}
-        \Cor(\epsilon_{USA,1990}, \epsilon_{CAN, 1990}) \neq 0
+        \cor(\epsilon_{USA,1990}, \epsilon_{CAN, 1990}) \neq 0
       \end{equation}
     \end{itemize}
   \item They do not account for serial correlation or non-contemporaneous correlations.
     \begin{align*}
-      \Cor(\epsilon_{USA,1990}, \epsilon_{USA, 1991}) &= 0 \\
-      \Cor(\epsilon_{USA,1990}, \epsilon_{CAN, 1991}) &= 0 \\
+      \cor(\epsilon_{USA,1990}, \epsilon_{USA, 1991}) &= 0 \\
+      \cor(\epsilon_{USA,1990}, \epsilon_{CAN, 1991}) &= 0 \\
     \end{align*}
   \end{itemize}
   
@@ -246,37 +462,86 @@ $N = \Sexpr{garrettN}$ OECD countries, $T = \Sexpr{garrettT}$ years (\Sexpr{garr
 \end{frame}
 
 
-\section{Causal Interpretation}
-
-
 \begin{frame}
-  \frametitle{Fixed Effects}
+  \frametitle{Panel-corrected Standard Errors}
+  \framesubtitle{How to adjust the standard errors?}
+  
+  \begin{itemize}
+  \item Replace variance-covariance matrix used in calculating standard errors
+    \begin{equation*}
+      \cov(\beta) = (X' X)^{-1} (X' \Omega) (X' X)^{-1}
+    \end{equation*}
+  \item Linear regression with classical SE, $\Omega = \sigma^{2} I_{N}$, so
+    \begin{equation*}
+      \cov(\beta) = \sigma^{2} (X' X)^{-1}
+    \end{equation*}
+  \item In PCSE, $\Omega$ is $NT \times NT$ block-diagonal matrix with $N \times N$ matrix $\Sigma$ of contemporaneous covariances on the diagonal.
+  \end{itemize}
   
 \end{frame}
 
 
 \begin{frame}
-  \frametitle{Lagged Dependent Variable}
+  \frametitle{PCSE}
+  \framesubtitle{What is the variance-covariance matrix? }
   
+  \begin{align*}
+    \Sigma_{N} &=
+    \begin{bmatrix}
+      \sigma^{2}_{\epsilon_{1}} & \sigma_{\epsilon_{1}, \epsilon_{2}} & \dots & \sigma_{\epsilon_{1}, \epsilon_{N}} \\
+      \sigma_{\epsilon_{1}, \epsilon_{2}} & \sigma_{\epsilon_{2}}^{2} & \dots & \sigma_{\epsilon_{1}, \epsilon_{N}} \\ 
+      \vdots & \vdots & \ddots & \vdots \\
+      \sigma_{\epsilon_{1}, \epsilon_{N}} & \sigma_{\epsilon_{2}, \epsilon_{N}} & \dots & \sigma_{\epsilon_{N}}^{2} \\
+    \end{bmatrix} \\
+    \Omega_{NT \times NT} &= 
+    \begin{bmatrix}
+      \Sigma_{N} & 0_{N} & \dots & 0_{N} \\
+      0_{N} & \Sigma_{N} & \dots & 0_{N} \\
+      \vdots  & \vdots & \ddots & \vdots \\
+      0_{N} &  0_{N} & \dots & \Sigma_N 
+    \end{bmatrix}
+    = \Sigma_{N} \otimes I_{T}
+  \end{align*}
   
 \end{frame}
+
+
+\begin{frame}
+  \frametitle{PCSE}
+  \frametitle{How to estimate the matrix $\Sigma$?}
+  
+  \begin{itemize}
+  \item Suppose that the panel is balanced,
+  \item Estimate OLS, and then use residuals to estimate $\Sigma$,
+    \begin{equation*}
+      \hat \Sigma_{i,j} = \sum_{t = 1}^{T} \frac{E_{i,t} E_{j,t}}{T}
+    \end{equation*}
+  \item Plug in $\hat \Sigma$ to calculate the covariance matrix
+  \item This is possible, but notation more tedious in unbalanced panels.
+  \end{itemize}
+  
+\end{frame}
+
 
 
 \section{Advice}
-
 
 \begin{frame}
   \frametitle{}
   
   \begin{itemize}
-  \item Old-school Beck: lagged dependent variable + PCSE
-  \item New-school Beck, Keele
+  \item Old-school Beck and Katz (1995): lagged dependent variable + PCSE
+  \item New-school Beck and Katz (2011), De Boef and Keele (2008)
     \begin{itemize}
-    \item ADL or ECM
-    \item additionally try fixed effects, but 
+    \item ADL or ECM model
+    \item Try fixed effects (OLS will probably be fine as long as $T$ not too small)
+    \item Try not to use error corrections to avoid thinking about dynamics
     \end{itemize}
   \item Angrist and Pischke:
-    lagged dependent variable and fixed effects bound the 
+    \begin{itemize}
+    \item lagged dependent variable and fixed effects bound the effect of $X$: try both
+    \end{itemize}
+    
   \end{itemize}
   
 \end{frame}
@@ -293,5 +558,24 @@ $N = \Sexpr{garrettN}$ OECD countries, $T = \Sexpr{garrettT}$ years (\Sexpr{garr
   
 \end{frame}
 
+\section{References}
+
+\begin{frame}
+  \frametitle{References}
+  
+  \begin{itemize}
+  \item Christopher Adolph, ``Introduction to Panel Data Analysis'' [lecture slides], POLS 503, Spring 2014. \url|http://faculty.washington.edu/cadolph/503/topic9.pw.pdf|.
+  \item De Boef, Suzanna, and Luke Keele. 2008. “Taking Time Seriously.” \textit{American Journal of Political Science} 52(1): 184–200. \url|http://onlinelibrary.wiley.com/doi/10.1111/j.1540-5907.2007.00307.x/abstract|.
+  \item Beck, Nathaniel, and Jonathan N. Katz. 2011. “Modeling Dynamics in Time-Series–Cross-Section Political Economy Data.” \textit{Annual Review of Political Science} 14(1): 331–52. \url|http://www.annualreviews.org/doi/abs/10.1146/annurev-polisci-071510-103222|.
+  \end{itemize}
+  
+\end{frame}
+
 
 \end{document}
+
+%%  LocalWords:  OECD countryname gdp infl unem capmob garrett TSCS
+%%  LocalWords:  missingness er PCSE DGP LSDV invariate Troeger plm
+%%  LocalWords:  lme4 IID Cochrane Orcutt MLE DV Hsiao Arellano RMSE
+%%  LocalWords:  asymptotics Boef Keele Prais Heteroskedasticity pcse
+%%  LocalWords:  vcovBK ADL ECM Angrist Pischke

@@ -5,19 +5,38 @@ date: "06/01/2015"
 output: html_document
 ---
 
-```{r}
+This worked example introduces estimation in panel data in R using example on partisan governments and economics measures for a panel of OECD states.
+
+# Setup
+
+This tutor
+```{r message = FALSE}
 library("lmtest")
 library("car")
+library("dplyr")
+library("ggplot2")
 ```
+
+The panel data specific packages used are **plm** and **pcse**:
+```{r message  = FALSE}
+library("plm")
+library("pcse")
+```
+
 
 
 # Data
  
-This example data was the data
+This example data was the data from Garrett (1989) *Partisan Politics in the Global Economy*.
+The analyses are similar (but not the same) as those run in King, Wittenberg and Tomz (2000), Bailey and Katz, and Beck and Katz (2011). 
+The replication data is from Beck and Katz (2011).
 
-The analyses are similar (but not the same) as those run in King, Wittenberg and Tomz (2000), Bailey and Katz, and Beck and Katz (2011).
 
-Estimates with dummy variables for year and time
+```{r}
+garrett1998 <- read.csv("../data/garrett1998.csv", stringsAsFactors = FALSE)
+```
+
+The data consist of `r nrow(garrett1998)` observations for `r length(unique(garrett1998)$county)` countries for `r length(unique(garrett1998)$year)` years (`r min(garrett1998$year)`--`r(max(garrett1998$year))`.
 
 unem
 
@@ -51,13 +70,11 @@ demand
 
 :    OECD demand (growth rate in all OECD countries)
 
-```{r}
-garrett1998 <- read.csv("../data/garrett1998.csv", stringsAsFactors = FALSE)
-```
+
 
 Effect of the left parties, corporatism and the interaction of the two.
 
-## Multiple models
+## Dummy variable models
 
 Pooled time-series, cross-section
 
@@ -65,7 +82,7 @@ Pooled time-series, cross-section
 mod1 <- lm(gdp ~ corp * leftlab + demand + oild + trade, data = garrett1998)
 ```
 
-Controlling for country (fixed effects)
+Controlling for country
 
 ```{r}
 mod2 <- lm(gdp ~ corp * leftlab + demand + oild + trade + country,
@@ -80,31 +97,6 @@ mod3 <- lm(gdp ~ corp * leftlab + demand + oild + trade + country + year,
            data = garrett1998)
 ```
 
-
-# Panel 
-
-The functions in **plm** need to know which variables correspond to id and time in the data frame. 
-So use the function `pdata.frame` to create a data frame friendly with the **plm** functions.
-```{r}
-pgarrett <- pdata.frame(garrett1998, index = c("country", "year"))
-```
-
-Within model
-
-```{r}
-
-mod_within <- plm(gdp ~ corp * leftlab + demand + oild + trade + year,
-                  data = garrett1998, model = "within")
-summary(mod_within)
-```
-
-First-difference
-```{r}
-mod_fd <- plm(gdp ~ corp * leftlab + demand + oild + trade,
-                  data = pgarrett, model = "fd")
-summary(mod_fd)
-```
-
 Lagged dependent variable
 
 ```{r}
@@ -113,12 +105,33 @@ mod_ldv <- lm(gdp ~ gdpl + corp * leftlab + demand + oild + trade + year,
 mod_ldv
 ```
 
-Lagged dependent variable plus a fixed effect (dummy-variable)
+Lagged dependent variable plus PCSE
+```{r}
+pcse(mod_ldv, groupN = garrett1998$country, groupT = garrett1998$year)
+```
+
+
+# Panel Models using plm
+
+The functions in **plm** need to know which variables correspond to id and time in the data frame. 
+So use the function `pdata.frame` to create a data frame friendly with the **plm** functions.
+```{r}
+pgarrett <- pdata.frame(garrett1998, index = c("country", "year"))
+```
+
+Within (fixed-effects) model
 
 ```{r}
-mod_ldv_fe <- lm(gdp ~ gdpl + corp * leftlab + demand + oild + trade + year + country,
-                 data = garrett1998)
-mod_ldv_fe
+
+mod_within <- plm(gdp ~ corp * leftlab + demand + oild + trade + year,
+                  data = pgarrett, model = "within")
+summary(mod_within)
+```
+
+Recover the fixed effects 
+
+```{r}
+fixef(mod_within)
 ```
 
 Random effects model
@@ -135,9 +148,6 @@ phtest(mod_within, mod_re)
 ```
 If we can reject the null, then we should use the fixed effects estimator.
 
-For any model, calculate Beck and Katz (1995) errors:
-```{r}
-coeftest(mod_re, vcov=vcovBK(mod_re, type="HC1"))
-```
+
 
 
