@@ -1,0 +1,297 @@
+% Copyright (C) 2015 Jeffrey B. Arnold
+% License CC BY-NC-SA 4.0 http://creativecommons.org/licenses/by-nc-sa/4.0/
+\input{\jobname-options}
+\ifdefined\ishandout
+  \documentclass[12pt,handout]{beamer}
+\else
+  \documentclass[12pt]{beamer}
+\fi
+
+%%%INSERTHEADERHERE
+\input{includes.tex}
+
+\newcommand{\thetitle}{Introduction}
+\date{June 2, 2015}
+\title{\thetitle{}}
+\hypersetup{
+  pdftitle={\thetitle{}},
+  pdfkeywords={statistics}
+}
+\begin{document}
+
+\begin{frame}
+  \maketitle{}
+\end{frame}
+
+<<echo = FALSE, results = 'hide'>>=
+garrett1998 <- read.csv("../data/garrett1998.csv", stringsAsFactors = FALSE)
+@ 
+
+\section{Overview}
+
+\begin{frame}
+  \frametitle{Panel Data}
+
+  \begin{itemize}
+  \item What is Panel Data?
+  \item Why use it?
+  \item What are the problems?
+  \item What methods address them?
+  \item Causal inference interpretations? 
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{What is Panel Data?}
+  \framesubtitle{Example: Garrett (1998) government composition and economic indicators in OECD countries}
+
+<<eval = FALSE, echo = FALSE, results = 'hide'>>=
+print(xtable::xtable(garrett1998 %>% arrange(country, year) %>% filter(year %in% c(1966, 1967, 1990)) %>% select(countryname, year, gdp, infl, unem, capmob, corp, capmob) %>% ungroup() %>% slice(1:9)), floating = FALSE, include.rownames = FALSE)
+@     
+\begin{center}
+\footnotesize  
+\begin{tabular}{lrrrrrr}
+  \hline
+countryname & year & gdp & infl & unem & capmob & corp \\ 
+  \hline
+US & 1966 & 5.11 & 2.90 & 3.80 &   0 & 1.80 \\ 
+  US & 1967 & 2.28 & 2.80 & 3.80 &   0 & 1.81 \\ 
+  \dots \\
+  US & 1990 & 0.90 & 5.40 & 5.41 &   0 & 2.01 \\ 
+  Canada & 1966 & 6.80 & 3.70 & 3.60 &   0 & 2.27 \\ 
+  Canada & 1967 & 2.92 & 3.60 & 4.10 &   0 & 2.30 \\ 
+  \dots \\  
+  Canada & 1990 & 0.40 & 4.80 & 8.06 &   0 & 1.71 \\ 
+  UK & 1966 & 1.88 & 3.90 & 1.50 &   1 & 2.14 \\ 
+  UK & 1967 & 2.26 & 2.50 & 2.30 &   1 & 2.13 \\ 
+  \dots \\  
+  UK & 1990 & 0.80 & 9.50 & 5.47 &   0 & 2.89 \\ 
+  \dots \\    
+   \hline
+
+\end{tabular}  
+\end{center}
+
+<<echo = FALSE, results = 'hide'>>=
+garrettN <- length(unique(garrett1998$country))
+garrettT <- length(unique(garrett1998$year))
+garrett_min_yr <- min(garrett1998$year)
+garrett_max_yr <- max(garrett1998$year)
+@ 
+
+$N = \Sexpr{garrettN}$ OECD countries, $T = \Sexpr{garrettT}$ years (\Sexpr{garrett_min_yr}--\Sexpr{garrett_max_yr}).
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{What is Panel Data?}
+  
+  \begin{itemize}
+  \item Data (and models) structured into units and periods units 
+    \begin{equation*}
+      y_{it} = x_{it} \beta + \epsilon_{it}
+    \end{equation*}
+  \item units $i = 1, \dots, N$ each observed over $t = 1, \dots, T$, for a total of $N \times T$ observations.
+  \item balanced data: all units $i$ have same number of observations $T$
+  \item unbalanced data: units have different values of $T$ (missingness, sample selection)
+  \item some methods may require adjustments if using unbalanced data
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{What is Panel Data?}
+  \framesubtitle{Many different names, sometimes different things}
+  
+  \begin{itemize}
+  \item Other names
+    \begin{itemize}
+    \item panel data
+    \item longitudinal
+    \item time-series cross-section (TSCS)
+    \end{itemize}
+  \item But can mean different things with different appropriate methods.
+  \item Size of dimensions can influence which methods are appropriate:
+    \begin{itemize}
+    \item Big $N$, small $T$ (e.g. panel surveys)
+    \item Small(er) $N$, big $T$ (e.g. country time series, financial)
+    \end{itemize}
+  \item Some methods emphasize unit differences, others emphasize time
+  \end{itemize}
+  
+\end{frame}
+
+\section{Pooled Models}
+
+
+
+
+\section{Fixed and Random Effects}
+
+
+\begin{frame}
+  \frametitle{Estimating Fixed Effects}
+  \framesubtitle{Within Estimator}
+  
+  \begin{equation*}
+    y_{it} - \bar{y}_{i} = (x_{it} - \bar{x}_{i}) \beta + (\epsilon_{it} - \bar{\epsilon}_{i})
+  \end{equation*}
+
+  \begin{itemize}
+  \item Differencing absorbs (removes) fixed effects
+  \item Cannot include time-varying 
+  \item The ``between'' estimator
+    \begin{equation}
+      \bar{y}_{i} = \bar{x}_{i} \beta + \epsilon_{i}
+    \end{equation}
+  \item Does not estimate the fixed effects; only removes them
+  \item Errors are now correlate and standard errors need to adjusted
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Estimating Fixed Effects}
+  \framesubtitle{Dummy Variable Estimator (LSDV)}
+  
+  \begin{equation*}
+    y_{it} = x_{it} \beta + \alpha_{i} + u_{it}
+  \end{equation*}
+  
+  \begin{itemize}
+  \item estimates $\alpha_{i}$, which may be useful (suggest omitted variables)
+  \item For large $T$, similar to within estimator
+  \item For small $T$, estimates of $\alpha$ will be poor.
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Time Varying Covariates and Fixed Effects}
+  
+  \begin{itemize}
+  \item The fixed effects absorb all time-varying covariates so you cannot get separate estimates of them (perfect collinearity).
+  \item Can include \textit{interactions} of time-invariate variables? Estimate how these time-invariate variables \textit{mediate} the effects of other variables.
+  \item Methods that decompose fixed effects in to known and unknown covariates (Plumper and Troeger 2007)
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  
+\end{frame}
+
+\section{Dynamic Panel Models}
+
+
+\begin{frame}
+  \frametitle{What makes a panel dynamic?}
+  
+  Including a lagged 
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Lagged Dependent Variables with Fixed Effects}
+  
+  \begin{itemize}
+  \item Lagged DV + fixed effects: \textbf{ estimates are biased}
+  \item Methods exist to correct for that bias. IV methods of Anderson and Hsiao, Arellano and Bond. Rely on asymptotics. Variance of those estimators much higher.
+  \item However, in most TSCS research, the bias of the RMSE of LS is better than or not much worse than the more complicated estimators.
+  \end{itemize}
+  
+\end{frame}
+
+
+
+\section{Panel-Corrected Standard Errors}
+
+\begin{frame}
+  \frametitle{Panel-corrected standard errors}
+  
+  \begin{itemize}
+  \item What PCSE account for:
+    \begin{itemize}
+    \item Heteroskedasticity between units, 
+      \begin{equation}
+        \Var(\epsilon_{USA}) \neq \Var(\epsilon_{CAN})
+      \end{equation}
+    \item Contemporaneous correlation between units,
+      \begin{equation}
+        \Cor(\epsilon_{USA,1990}, \epsilon_{CAN, 1990}) \neq 0
+      \end{equation}
+    \end{itemize}
+  \item They do not account for serial correlation or non-contemporaneous correlations.
+    \begin{align*}
+      \Cor(\epsilon_{USA,1990}, \epsilon_{USA, 1991}) &= 0 \\
+      \Cor(\epsilon_{USA,1990}, \epsilon_{CAN, 1991}) &= 0 \\
+    \end{align*}
+  \end{itemize}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Panel-corrected standard errors}
+  
+  \begin{itemize}
+  \item Suggest using OLS with PCSE and lagged DV as a baseline model
+  \item Many think that fixed effects should also be used
+  \item PCSE (and other error corrections) are 2nd order to getting lag structure and including fixed effects where appropriate
+  \item Implementations: R packages \textbf{pcse}, \textbf{plm} (\texttt{vcovBK})
+  \end{itemize}
+  
+\end{frame}
+
+
+\section{Causal Interpretation}
+
+
+\begin{frame}
+  \frametitle{Fixed Effects}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Lagged Dependent Variable}
+  
+  
+\end{frame}
+
+
+\section{Advice}
+
+
+\begin{frame}
+  \frametitle{}
+  
+  \begin{itemize}
+  \item Old-school Beck: lagged dependent variable + PCSE
+  \item New-school Beck, Keele
+    \begin{itemize}
+    \item ADL or ECM
+    \item additionally try fixed effects, but 
+    \end{itemize}
+  \item Angrist and Pischke:
+    lagged dependent variable and fixed effects bound the 
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{There is no advice}
+  
+  \begin{itemize}
+  \item Know your data
+  \item Know your model
+  \item Ensure your results are robust
+  \item Think!
+  \end{itemize}
+  
+\end{frame}
+
+
+\end{document}

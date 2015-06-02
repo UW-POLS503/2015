@@ -1,0 +1,143 @@
+---
+title: "Panel Data"
+author: "Jeffrey B. Arnold"
+date: "06/01/2015"
+output: html_document
+---
+
+```{r}
+library("lmtest")
+library("car")
+```
+
+
+# Data
+ 
+This example data was the data
+
+The analyses are similar (but not the same) as those run in King, Wittenberg and Tomz (2000), Bailey and Katz, and Beck and Katz (2011).
+
+Estimates with dummy variables for year and time
+
+unem
+
+:    unemployment
+
+inf
+
+:    inflation
+
+gdp
+
+:    Growth in GDP
+
+leftlab
+
+:    Political power of left parties in the government. Index from 0--5.
+
+corp
+
+:    A measure of corporatism or how encompassing the labor movement is. Index from 0--4.
+
+capmob
+
+:    Capital mobility. Index from 0--4.
+
+oild
+
+:    Oil dependency
+
+demand
+
+:    OECD demand (growth rate in all OECD countries)
+
+```{r}
+garrett1998 <- read.csv("../data/garrett1998.csv", stringsAsFactors = FALSE)
+```
+
+Effect of the left parties, corporatism and the interaction of the two.
+
+## Multiple models
+
+Pooled time-series, cross-section
+
+```{r}
+mod1 <- lm(gdp ~ corp * leftlab + demand + oild + trade, data = garrett1998)
+```
+
+Controlling for country (fixed effects)
+
+```{r}
+mod2 <- lm(gdp ~ corp * leftlab + demand + oild + trade + country,
+           data = garrett1998)
+```
+
+
+Controlling for country and year
+
+```{r}
+mod3 <- lm(gdp ~ corp * leftlab + demand + oild + trade + country + year,
+           data = garrett1998)
+```
+
+
+# Panel 
+
+The functions in **plm** need to know which variables correspond to id and time in the data frame. 
+So use the function `pdata.frame` to create a data frame friendly with the **plm** functions.
+```{r}
+pgarrett <- pdata.frame(garrett1998, index = c("country", "year"))
+```
+
+Within model
+
+```{r}
+
+mod_within <- plm(gdp ~ corp * leftlab + demand + oild + trade + year,
+                  data = garrett1998, model = "within")
+summary(mod_within)
+```
+
+First-difference
+```{r}
+mod_fd <- plm(gdp ~ corp * leftlab + demand + oild + trade,
+                  data = pgarrett, model = "fd")
+summary(mod_fd)
+```
+
+Lagged dependent variable
+
+```{r}
+mod_ldv <- lm(gdp ~ gdpl + corp * leftlab + demand + oild + trade + year,
+              data = garrett1998)
+mod_ldv
+```
+
+Lagged dependent variable plus a fixed effect (dummy-variable)
+
+```{r}
+mod_ldv_fe <- lm(gdp ~ gdpl + corp * leftlab + demand + oild + trade + year + country,
+                 data = garrett1998)
+mod_ldv_fe
+```
+
+Random effects model
+
+```{r}
+mod_re <- plm(gdp ~ corp * leftlab + demand + oild + trade,
+                  data = pgarrett, model = "random")
+summary(mod_re)
+```
+
+Compare the random effects model with the fixed effects model using a Hausman test
+```{r}
+phtest(mod_within, mod_re)
+```
+If we can reject the null, then we should use the fixed effects estimator.
+
+For any model, calculate Beck and Katz (1995) errors:
+```{r}
+coeftest(mod_re, vcov=vcovBK(mod_re, type="HC1"))
+```
+
+

@@ -61,7 +61,11 @@ As in `lm`, the summary of the object has more detailed information, including s
 summary(mod1)
 ```
 
-The coefficients of logit are not as transparent to interpret as OLS coefficients since $X \beta$ is on the log-odds ratio .
+The coefficients of logit are not as transparent to interpret as OLS coefficients since $X \beta$ is on the log-odds ratio. 
+The most intuitive intrpetation of the coefficients is $\beta_j / 4$ is $d y / d x_j$ when $p_i = 0.5$ holding all other $x$ constant.
+
+Like `lm`, you can use the `predict` funtion on the result object. 
+However, there are several types of predictions that 
 
 The type `"link"` (which is the default) is the predicted value of $x_i \beta$, which in units of the link function, $\log(p_i / (1 - p_i))$:
 ```{r}
