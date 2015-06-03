@@ -33,10 +33,19 @@ The replication data is from Beck and Katz (2011).
 
 
 ```{r}
-garrett1998 <- read.csv("../data/garrett1998.csv", stringsAsFactors = FALSE)
+data_path <- "http://pols503.github.io/pols_503_sp15/data/garrett1998.csv"
+garrett1998 <- read.csv(data_path, stringsAsFactors = FALSE)
 ```
 
-The data consist of `r nrow(garrett1998)` observations for `r length(unique(garrett1998)$county)` countries for `r length(unique(garrett1998)$year)` years (`r min(garrett1998$year)`--`r(max(garrett1998$year))`.
+The data consist of `r nrow(garrett1998)` observations for `r length(unique(garrett1998$county))` countries for `r length(unique(garrett1998$year))` years (`r min(garrett1998$year)` -- `r max(garrett1998$year)` with the following variables
+
+country
+
+:    A country identifier (number)
+
+year
+
+:    Year
 
 unem
 
@@ -56,7 +65,7 @@ leftlab
 
 corp
 
-:    A measure of corporatism or how encompassing the labor movement is. Index from 0--4.
+:    A measure of corporatism or how encompassing the labor movement, e.g. encompassing unions. Index from 0--4.
 
 capmob
 
@@ -70,11 +79,16 @@ demand
 
 :    OECD demand (growth rate in all OECD countries)
 
+countryname
 
+:    The country name
 
 Effect of the left parties, corporatism and the interaction of the two.
 
-## Dummy variable models
+
+Garret's theories involve the combination of left-leaning parties in government and encompassing trade unions.
+
+## Models estimated with LM
 
 Pooled time-series, cross-section
 
@@ -85,7 +99,7 @@ mod1 <- lm(gdp ~ corp * leftlab + demand + oild + trade, data = garrett1998)
 Controlling for country
 
 ```{r}
-mod2 <- lm(gdp ~ corp * leftlab + demand + oild + trade + country,
+mod2 <- lm(gdp ~ corp * leftlab + demand + oild + trade + countryname,
            data = garrett1998)
 ```
 
@@ -93,7 +107,7 @@ mod2 <- lm(gdp ~ corp * leftlab + demand + oild + trade + country,
 Controlling for country and year
 
 ```{r}
-mod3 <- lm(gdp ~ corp * leftlab + demand + oild + trade + country + year,
+mod3 <- lm(gdp ~ corp * leftlab + demand + oild + trade + countryname + factor(year),
            data = garrett1998)
 ```
 
@@ -105,18 +119,18 @@ mod_ldv <- lm(gdp ~ gdpl + corp * leftlab + demand + oild + trade + year,
 mod_ldv
 ```
 
-Lagged dependent variable plus PCSE
+Estimating panel-corrected standard errors after a lagged dependent variable model.
 ```{r}
 pcse(mod_ldv, groupN = garrett1998$country, groupT = garrett1998$year)
 ```
 
 
-# Panel Models using plm
+# Panel Models using **plm**
 
 The functions in **plm** need to know which variables correspond to id and time in the data frame. 
 So use the function `pdata.frame` to create a data frame friendly with the **plm** functions.
 ```{r}
-pgarrett <- pdata.frame(garrett1998, index = c("country", "year"))
+pgarrett <- pdata.frame(garrett1998, index = c("countryname", "year"))
 ```
 
 Within (fixed-effects) model
@@ -127,9 +141,7 @@ mod_within <- plm(gdp ~ corp * leftlab + demand + oild + trade + year,
                   data = pgarrett, model = "within")
 summary(mod_within)
 ```
-
 Recover the fixed effects 
-
 ```{r}
 fixef(mod_within)
 ```

@@ -83,9 +83,16 @@ library(&quot;pcse&quot;)</code></pre>
 <div id="data" class="section level1">
 <h1>Data</h1>
 <p>This example data was the data from Garrett (1989) <em>Partisan Politics in the Global Economy</em>. The analyses are similar (but not the same) as those run in King, Wittenberg and Tomz (2000), Bailey and Katz, and Beck and Katz (2011). The replication data is from Beck and Katz (2011).</p>
-<pre class="r"><code>garrett1998 &lt;- read.csv(&quot;../data/garrett1998.csv&quot;, stringsAsFactors = FALSE)</code></pre>
-<p>The data consist of 350 observations for 0 countries for 350 years (1966–<code>r(max(garrett1998$year))</code>.</p>
+<pre class="r"><code>data_path &lt;- &quot;http://pols503.github.io/pols_503_sp15/data/garrett1998.csv&quot;
+garrett1998 &lt;- read.csv(data_path, stringsAsFactors = FALSE)</code></pre>
+<p>The data consist of 350 observations for 0 countries for 25 years (1966 – 1990 with the following variables</p>
 <dl>
+<dt>country</dt>
+<dd><p>A country identifier (number)</p>
+</dd>
+<dt>year</dt>
+<dd><p>Year</p>
+</dd>
 <dt>unem</dt>
 <dd><p>unemployment</p>
 </dd>
@@ -99,7 +106,7 @@ library(&quot;pcse&quot;)</code></pre>
 <dd><p>Political power of left parties in the government. Index from 0–5.</p>
 </dd>
 <dt>corp</dt>
-<dd><p>A measure of corporatism or how encompassing the labor movement is. Index from 0–4.</p>
+<dd><p>A measure of corporatism or how encompassing the labor movement, e.g. encompassing unions. Index from 0–4.</p>
 </dd>
 <dt>capmob</dt>
 <dd><p>Capital mobility. Index from 0–4.</p>
@@ -110,17 +117,21 @@ library(&quot;pcse&quot;)</code></pre>
 <dt>demand</dt>
 <dd><p>OECD demand (growth rate in all OECD countries)</p>
 </dd>
+<dt>countryname</dt>
+<dd><p>The country name</p>
+</dd>
 </dl>
 <p>Effect of the left parties, corporatism and the interaction of the two.</p>
-<div id="dummy-variable-models" class="section level2">
-<h2>Dummy variable models</h2>
+<p>Garret’s theories involve the combination of left-leaning parties in government and encompassing trade unions.</p>
+<div id="models-estimated-with-lm" class="section level2">
+<h2>Models estimated with LM</h2>
 <p>Pooled time-series, cross-section</p>
 <pre class="r"><code>mod1 &lt;- lm(gdp ~ corp * leftlab + demand + oild + trade, data = garrett1998)</code></pre>
 <p>Controlling for country</p>
-<pre class="r"><code>mod2 &lt;- lm(gdp ~ corp * leftlab + demand + oild + trade + country,
+<pre class="r"><code>mod2 &lt;- lm(gdp ~ corp * leftlab + demand + oild + trade + countryname,
            data = garrett1998)</code></pre>
 <p>Controlling for country and year</p>
-<pre class="r"><code>mod3 &lt;- lm(gdp ~ corp * leftlab + demand + oild + trade + country + year,
+<pre class="r"><code>mod3 &lt;- lm(gdp ~ corp * leftlab + demand + oild + trade + countryname + factor(year),
            data = garrett1998)</code></pre>
 <p>Lagged dependent variable</p>
 <pre class="r"><code>mod_ldv &lt;- lm(gdp ~ gdpl + corp * leftlab + demand + oild + trade + year,
@@ -136,7 +147,7 @@ mod_ldv</code></pre>
 ##    80.061094      0.293309     -0.403889     -0.617747      0.008225  
 ##         oild         trade          year  corp:leftlab  
 ##    -4.890031     -0.029882     -0.038558      0.176266</code></pre>
-<p>Lagged dependent variable plus PCSE</p>
+<p>Estimating panel-corrected standard errors after a lagged dependent variable model.</p>
 <pre class="r"><code>pcse(mod_ldv, groupN = garrett1998$country, groupT = garrett1998$year)</code></pre>
 <pre><code>## $vcov
 ##               X.Intercept.          gdpl          corp       leftlab
@@ -214,10 +225,10 @@ mod_ldv</code></pre>
 </div>
 </div>
 <div id="panel-models-using-plm" class="section level1">
-<h1>Panel Models using plm</h1>
+<h1>Panel Models using <strong>plm</strong></h1>
 <p>The functions in <strong>plm</strong> need to know which variables correspond to id and time in the data frame. So use the function <code>pdata.frame</code> to create a data frame friendly with the <strong>plm</strong> functions.</p>
-<pre class="r"><code>pgarrett &lt;- pdata.frame(garrett1998, index = c(&quot;country&quot;, &quot;year&quot;))</code></pre>
-<p>Within model</p>
+<pre class="r"><code>pgarrett &lt;- pdata.frame(garrett1998, index = c(&quot;countryname&quot;, &quot;year&quot;))</code></pre>
+<p>Within (fixed-effects) model</p>
 <pre class="r"><code>mod_within &lt;- plm(gdp ~ corp * leftlab + demand + oild + trade + year,
                   data = pgarrett, model = &quot;within&quot;)
 summary(mod_within)</code></pre>
@@ -273,68 +284,14 @@ summary(mod_within)</code></pre>
 ## R-Squared      :  0.50873 
 ##       Adj. R-Squared :  0.44477 
 ## F-statistic: 10.5625 on 30 and 306 DF, p-value: &lt; 2.22e-16</code></pre>
-<p>First-difference</p>
-<pre class="r"><code>mod_fd &lt;- plm(gdp ~ corp * leftlab + demand + oild + trade,
-                  data = pgarrett, model = &quot;fd&quot;)
-summary(mod_fd)</code></pre>
-<pre><code>## Oneway (individual) effect First-Difference Model
-## 
-## Call:
-## plm(formula = gdp ~ corp * leftlab + demand + oild + trade, data = pgarrett, 
-##     model = &quot;fd&quot;)
-## 
-## Balanced Panel: n=14, T=25, N=350
-## 
-## Residuals :
-##    Min. 1st Qu.  Median 3rd Qu.    Max. 
-## -8.3300 -1.4100 -0.0294  1.3700  7.6000 
-## 
-## Coefficients :
-##                Estimate Std. Error t-value  Pr(&gt;|t|)    
-## (intercept)   0.0270051  0.1349755  0.2001  0.841546    
-## corp         -3.0232959  1.2973371 -2.3304  0.020390 *  
-## leftlab      -0.7913934  0.7991717 -0.9903  0.322771    
-## demand        0.0065260  0.0012625  5.1691 4.091e-07 ***
-## oild         -0.7875735 15.3759588 -0.0512  0.959180    
-## trade        -0.1081595  0.0365717 -2.9575  0.003326 ** 
-## corp:leftlab  0.2583320  0.2699937  0.9568  0.339367    
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Total Sum of Squares:    2379.9
-## Residual Sum of Squares: 1940.8
-## R-Squared      :  0.18453 
-##       Adj. R-Squared :  0.18068 
-## F-statistic: 12.4077 on 6 and 329 DF, p-value: 1.3226e-12</code></pre>
-<p>Lagged dependent variable plus a fixed effect (dummy-variable)</p>
-<pre class="r"><code>mod_ldv_fe &lt;- lm(gdp ~ gdpl + corp * leftlab + demand + oild + trade + year + country,
-                 data = pgarrett)
-mod_ldv_fe</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = gdp ~ gdpl + corp * leftlab + demand + oild + trade + 
-##     year + country, data = pgarrett)
-## 
-## Coefficients:
-##  (Intercept)          gdpl          corp       leftlab        demand  
-##     3.426522      0.140049      0.401126     -0.584451     -0.007585  
-##         oild         trade      year1967      year1968      year1969  
-##    -7.174413      0.033230     -0.962333      0.693766      1.970794  
-##     year1970      year1971      year1972      year1973      year1974  
-##    -0.032995     -1.604598      0.655681      1.476538     -4.136236  
-##     year1975      year1976      year1977      year1978      year1979  
-##    -6.432955      0.846757     -2.777863     -1.447968     -1.050803  
-##     year1980      year1981      year1982      year1983      year1984  
-##    -3.960669     -4.780598     -5.916366     -2.675958     -0.760968  
-##     year1985      year1986      year1987      year1988      year1989  
-##    -1.629565     -2.606517     -2.054906     -0.656135     -1.874741  
-##     year1990     country20    country200    country210    country211  
-##    -2.850957      0.298348     -1.398231     -0.931772     -1.648251  
-##   country220    country260    country305    country325    country375  
-##     1.026209     -1.704616     -2.943614     -0.931476     -1.287891  
-##   country380    country385    country390    country740  corp:leftlab  
-##    -3.194935     -1.394772     -2.668700      2.356868      0.251877</code></pre>
 <p>Recover the fixed effects</p>
+<pre class="r"><code>fixef(mod_within)</code></pre>
+<pre><code>##     Austria     Belgium      Canada     Denmark     Finland      France 
+##   0.1183194   1.6125709   4.0759096   0.4528291   2.1303994   4.9929682 
+##     Germany       Italy       Japan Netherlands     Norway       Sweden 
+##   1.5925973   2.5675705   6.4440796   2.5177996   1.9605038  -0.1088838 
+##          UK          US 
+##   2.0211691   3.7676501</code></pre>
 <p>Random effects model</p>
 <pre class="r"><code>mod_re &lt;- plm(gdp ~ corp * leftlab + demand + oild + trade,
                   data = pgarrett, model = &quot;random&quot;)

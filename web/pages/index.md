@@ -110,7 +110,7 @@ Students may work in pairs on the final paper with instructor permission.
 
 The final paper is due on **June 9, 2015 15:00 PDT**.
 
-For advice see the [FAQ](faq.html#paper).
+For details, see the [Guidelines for the Final Papers](posts/final-papers.html).
 
 ## Email & Canvas: 
 
@@ -374,8 +374,8 @@ Lab document: [Rmd](labs/lab9.Rmd), [html](labs/lab9.html)
 
 ### Tuesday, June 2
 
-Panel Data
-
+- Slides on Panel data: [pdf](lectures/Lecture_Panel_Data_handout.pdf)
+- Example with R code: [html](docs/panel.html), [Rmd](docs/panel.Rmd)
 - Readings
 
     - Angrist and Pischke, Ch. 5, 8.2
@@ -386,7 +386,7 @@ Panel Data
 
 ### Friday, June 5
 
-TBD
+Open office hours to answer questions about your papers
 
 
 * * * 
