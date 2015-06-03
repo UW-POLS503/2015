@@ -94,7 +94,7 @@
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/docs/Challenger_Analysis.html</loc>
-  <lastmod>2015-04-01</lastmod>
+  <lastmod>2015-03-31</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/docs/Duncan_regression_example.html</loc>
@@ -102,23 +102,23 @@
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/docs/Imputing_Missing_Data.html</loc>
-  <lastmod>2015-05-21</lastmod>
+  <lastmod>2015-05-19</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/docs/Life_Expectancy_Example.html</loc>
-  <lastmod>2015-05-13</lastmod>
+  <lastmod>2015-05-15</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/docs/Outliers_Robust_Regression.html</loc>
-  <lastmod>2015-05-27</lastmod>
+  <lastmod>2015-06-02</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/docs/Sampling_Distribution_Linear_Regression.html</loc>
-  <lastmod>2015-05-11</lastmod>
+  <lastmod>2015-04-14</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/docs/panel.html</loc>
-  <lastmod>2015-06-03</lastmod>
+  <lastmod>2015-06-02</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/getting_help_with_r.html</loc>
@@ -126,23 +126,23 @@
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/hw/hw1.html</loc>
-  <lastmod>2015-06-03</lastmod>
- </url>
- <url>
-  <loc>http://pols503.github.io/pols_503_sp15/hw/hw2.html</loc>
-  <lastmod>2015-06-03</lastmod>
- </url>
- <url>
-  <loc>http://pols503.github.io/pols_503_sp15/hw/hw3-template.html</loc>
   <lastmod>2015-05-21</lastmod>
  </url>
  <url>
+  <loc>http://pols503.github.io/pols_503_sp15/hw/hw2.html</loc>
+  <lastmod>2015-05-21</lastmod>
+ </url>
+ <url>
+  <loc>http://pols503.github.io/pols_503_sp15/hw/hw3-template.html</loc>
+  <lastmod>2015-05-08</lastmod>
+ </url>
+ <url>
   <loc>http://pols503.github.io/pols_503_sp15/hw/hw3.html</loc>
-  <lastmod>2015-06-03</lastmod>
+  <lastmod>2015-05-21</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/hw/hw4.html</loc>
-  <lastmod>2015-06-03</lastmod>
+  <lastmod>2015-05-29</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/index.html</loc>
@@ -154,23 +154,23 @@
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/labs/lab1.html</loc>
-  <lastmod>2015-05-21</lastmod>
+  <lastmod>2015-05-03</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/labs/lab2.html</loc>
-  <lastmod>2015-06-03</lastmod>
+  <lastmod>2015-05-21</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/labs/lab3.html</loc>
-  <lastmod>2015-06-03</lastmod>
+  <lastmod>2015-05-21</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/labs/lab4.html</loc>
-  <lastmod>2015-06-03</lastmod>
+  <lastmod>2015-05-21</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/labs/lab5.html</loc>
-  <lastmod>2015-06-03</lastmod>
+  <lastmod>2015-05-21</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/labs/lab6.html</loc>
@@ -178,15 +178,15 @@
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/labs/lab7.html</loc>
-  <lastmod>2015-06-03</lastmod>
+  <lastmod>2015-05-26</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/labs/lab8.html</loc>
-  <lastmod>2015-05-21</lastmod>
+  <lastmod>2015-05-26</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/labs/lab9.html</loc>
-  <lastmod>2015-06-03</lastmod>
+  <lastmod>2015-05-29</lastmod>
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/links.html</loc>
@@ -234,6 +234,10 @@
  </url>
  <url>
   <loc>http://pols503.github.io/pols_503_sp15/posts/index.html</loc>
+  <lastmod>2015-06-03</lastmod>
+ </url>
+ <url>
+  <loc>http://pols503.github.io/pols_503_sp15/posts/more-on-final-papers.html</loc>
   <lastmod>2015-06-03</lastmod>
  </url>
  <url>

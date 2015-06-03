@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>POLS/CS&amp;SS 503</title><link>http://pols503.github.io/pols_503_sp15/</link><description>Site for POLS/CS&amp;SS 503: Advanced Quantitative Political Methodology (University of Washington; Spring 2015)</description><atom:link rel="self" href="http://pols503.github.io/pols_503_sp15/rss.xml" type="application/rss+xml"></atom:link><language>en</language><lastBuildDate>Wed, 03 Jun 2015 17:24:01 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Next week and logit code</title><link>http://pols503.github.io/pols_503_sp15/posts/next-week-and-logit-code.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0"><channel><title>POLS/CS&amp;SS 503</title><link>http://pols503.github.io/pols_503_sp15/</link><description>Site for POLS/CS&amp;SS 503: Advanced Quantitative Political Methodology (University of Washington; Spring 2015)</description><atom:link type="application/rss+xml" rel="self" href="http://pols503.github.io/pols_503_sp15/rss.xml"></atom:link><language>en</language><lastBuildDate>Wed, 03 Jun 2015 22:37:47 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>More on Final Papers</title><link>http://pols503.github.io/pols_503_sp15/posts/more-on-final-papers.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
+.. title: More on Final Papers
+.. slug: more-on-final-papers
+.. date: 2015-06-03 14:07:19 UTC-07:00
+.. tags: 
+.. category: 
+.. link: 
+.. description: 
+.. type: text
+.. author: Jeffrey Arnold
+--&gt;
+
+&lt;p&gt;See the instructions &lt;a href="http://pols503.github.io/pols_503_sp15/posts/final-papers.html"&gt;here&lt;/a&gt;. Additionally, here are a few clarifications.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Your paper should be written in the form as an academic paper. Meaning, it should not be in the format of homeworks.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Your can write your paper in whatever you want (LaTeX, Word, …), but please turn it a pdf. Occassionaly, &lt;code&gt;.doc&lt;/code&gt; files can have issues rendering correctly when opened in programs other than Microsoft Word, so it is safest to export them to a pdf.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Turn in the code and data you used to run the analyses in your paper. These can be R markdown files or R scripts. Your analysis should run without errors. It is &lt;strong&gt;very important&lt;/strong&gt; that you relate your code to the analyses in your paper. E.g. “this is the code used to create the models in Table 1 …”.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If you are using Stata for some data cleaning, include the &lt;code&gt;.do&lt;/code&gt; files.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Explain what is in your analyses in a file named README. This file should explain what is in each of the other files, as well as brief instructions of how to run the analyses that you include. This can be brief, but should be written so that if (when) someone else wants to reproduce your analyses, they have sufficient instructions to be able to do so with the code and data you have provided.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;</description><guid>http://pols503.github.io/pols_503_sp15/posts/more-on-final-papers.html</guid><pubDate>Wed, 03 Jun 2015 21:07:19 GMT</pubDate></item><item><title>Next week and logit code</title><link>http://pols503.github.io/pols_503_sp15/posts/next-week-and-logit-code.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
 .. title: Next week and logit code
 .. slug: next-week-and-logit-code
 .. date: 2015-05-29 10:36:14 UTC-07:00
@@ -156,23 +175,4 @@
 
 &lt;p&gt;A few notes on Problem Set 3:&lt;/p&gt;
 &lt;p&gt;On Problem 3 (Type I and II errors), it asks you to use &lt;span class="math"&gt;&lt;em&gt;n&lt;/em&gt; = 1024&lt;/span&gt;, but later says “using a smaller sample size, n = 32, and a larger sample size n = 1024.”. Use sample sizes of &lt;span class="math"&gt;&lt;em&gt;n&lt;/em&gt; = 32&lt;/span&gt;, &lt;span class="math"&gt;128&lt;/span&gt;, and &lt;span class="math"&gt;1024&lt;/span&gt;. The purpose point is the look at how p-values and errors change with respect to sample size, and I wanted to give you a few values at which to analyze it. But, the precise values of &lt;span class="math"&gt;&lt;em&gt;n&lt;/em&gt;&lt;/span&gt; are not important, as long as you use enough values of &lt;span class="math"&gt;&lt;em&gt;n&lt;/em&gt;&lt;/span&gt; to be able to see the pattern.&lt;/p&gt;
-&lt;p&gt;This does not change the problem, but I also added some plots to visualize how the values of &lt;span class="math"&gt;&lt;em&gt;γ&lt;/em&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;/span&gt; affect the heteroskedasticity in the regression.&lt;/p&gt;</description><guid>http://pols503.github.io/pols_503_sp15/posts/update-2-to-problem-set-3.html</guid><pubDate>Mon, 11 May 2015 02:31:50 GMT</pubDate></item><item><title>Problem Set 3 updated</title><link>http://pols503.github.io/pols_503_sp15/posts/problem-set-3-updated.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
-.. title: Problem Set 3 updated
-.. slug: problem-set-3-updated
-.. date: 2015-05-08 19:05:20 UTC-07:00
-.. tags: problem sets
-.. category: 
-.. link: 
-.. description: 
-.. type: text
-.. author: Jeffrey Arnold
---&gt;
-
-&lt;p&gt;After our discussion in lab, I’ve updated homework 3.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Do not do Problem 7 (Truncated Dependent variable)&lt;/li&gt;
-&lt;li&gt;Use iterations of 1024 in the simulations&lt;/li&gt;
-&lt;li&gt;I added more code examples in all the problems.&lt;/li&gt;
-&lt;li&gt;I removed extraneous printing of function source code that you do not need to know.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Let me know if you have any other questions.&lt;/p&gt;</description><category>problem sets</category><guid>http://pols503.github.io/pols_503_sp15/posts/problem-set-3-updated.html</guid><pubDate>Sat, 09 May 2015 02:05:20 GMT</pubDate></item></channel></rss>
+&lt;p&gt;This does not change the problem, but I also added some plots to visualize how the values of &lt;span class="math"&gt;&lt;em&gt;γ&lt;/em&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;/span&gt; affect the heteroskedasticity in the regression.&lt;/p&gt;</description><guid>http://pols503.github.io/pols_503_sp15/posts/update-2-to-problem-set-3.html</guid><pubDate>Mon, 11 May 2015 02:31:50 GMT</pubDate></item></channel></rss>
