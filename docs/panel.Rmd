@@ -1,0 +1,165 @@
+---
+title: "Panel Data"
+author: "Jeffrey B. Arnold"
+date: "06/01/2015"
+output: html_document
+---
+
+This worked example introduces estimation in panel data in R using example on partisan governments and economics measures for a panel of OECD states.
+
+# Setup
+
+This tutor
+```{r message = FALSE}
+library("lmtest")
+library("car")
+library("dplyr")
+library("ggplot2")
+```
+
+The panel data specific packages used are **plm** and **pcse**:
+```{r message  = FALSE}
+library("plm")
+library("pcse")
+```
+
+
+
+# Data
+ 
+This example data was the data from Garrett (1989) *Partisan Politics in the Global Economy*.
+The analyses are similar (but not the same) as those run in King, Wittenberg and Tomz (2000), Bailey and Katz, and Beck and Katz (2011). 
+The replication data is from Beck and Katz (2011).
+
+
+```{r}
+data_path <- "http://pols503.github.io/pols_503_sp15/data/garrett1998.csv"
+garrett1998 <- read.csv(data_path, stringsAsFactors = FALSE)
+```
+
+The data consist of `r nrow(garrett1998)` observations for `r length(unique(garrett1998$county))` countries for `r length(unique(garrett1998$year))` years (`r min(garrett1998$year)` -- `r max(garrett1998$year)` with the following variables
+
+country
+
+:    A country identifier (number)
+
+year
+
+:    Year
+
+unem
+
+:    unemployment
+
+inf
+
+:    inflation
+
+gdp
+
+:    Growth in GDP
+
+leftlab
+
+:    Political power of left parties in the government. Index from 0--5.
+
+corp
+
+:    A measure of corporatism or how encompassing the labor movement, e.g. encompassing unions. Index from 0--4.
+
+capmob
+
+:    Capital mobility. Index from 0--4.
+
+oild
+
+:    Oil dependency
+
+demand
+
+:    OECD demand (growth rate in all OECD countries)
+
+countryname
+
+:    The country name
+
+Effect of the left parties, corporatism and the interaction of the two.
+
+
+Garret's theories involve the combination of left-leaning parties in government and encompassing trade unions.
+
+## Models estimated with LM
+
+Pooled time-series, cross-section
+
+```{r}
+mod1 <- lm(gdp ~ corp * leftlab + demand + oild + trade, data = garrett1998)
+```
+
+Controlling for country
+
+```{r}
+mod2 <- lm(gdp ~ corp * leftlab + demand + oild + trade + countryname,
+           data = garrett1998)
+```
+
+
+Controlling for country and year
+
+```{r}
+mod3 <- lm(gdp ~ corp * leftlab + demand + oild + trade + countryname + factor(year),
+           data = garrett1998)
+```
+
+Lagged dependent variable
+
+```{r}
+mod_ldv <- lm(gdp ~ gdpl + corp * leftlab + demand + oild + trade + year,
+              data = garrett1998)
+mod_ldv
+```
+
+Estimating panel-corrected standard errors after a lagged dependent variable model.
+```{r}
+pcse(mod_ldv, groupN = garrett1998$country, groupT = garrett1998$year)
+```
+
+
+# Panel Models using **plm**
+
+The functions in **plm** need to know which variables correspond to id and time in the data frame. 
+So use the function `pdata.frame` to create a data frame friendly with the **plm** functions.
+```{r}
+pgarrett <- pdata.frame(garrett1998, index = c("countryname", "year"))
+```
+
+Within (fixed-effects) model
+
+```{r}
+
+mod_within <- plm(gdp ~ corp * leftlab + demand + oild + trade + year,
+                  data = pgarrett, model = "within")
+summary(mod_within)
+```
+Recover the fixed effects 
+```{r}
+fixef(mod_within)
+```
+
+Random effects model
+
+```{r}
+mod_re <- plm(gdp ~ corp * leftlab + demand + oild + trade,
+                  data = pgarrett, model = "random")
+summary(mod_re)
+```
+
+Compare the random effects model with the fixed effects model using a Hausman test
+```{r}
+phtest(mod_within, mod_re)
+```
+If we can reject the null, then we should use the fixed effects estimator.
+
+
+
+
