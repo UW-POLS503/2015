@@ -374,7 +374,7 @@ Lab document: [Rmd](labs/lab9.Rmd), [html](labs/lab9.html)
 
 ### Tuesday, June 2
 
-- Slides on Panel data: [pdf](lectures/Lecture_Panel_data.Rnw)
+- Slides on Panel data: [pdf](lectures/Lecture_Panel_data.pdf)
 - Example with R code: [html](docs/panel.html), [Rmd](docs/panel.Rmd)
 - Readings
 
