@@ -110,7 +110,7 @@ Students may work in pairs on the final paper with instructor permission.
 
 The final paper is due on **June 9, 2015 15:00 PDT**.
 
-For advice see the [Guidelines for the Final Papers](posts/final-papers.html).
+For details, see the [Guidelines for the Final Papers](posts/final-papers.html).
 
 ## Email & Canvas: 
 
