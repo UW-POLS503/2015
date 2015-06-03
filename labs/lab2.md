@@ -586,11 +586,6 @@ In addition to the themes included with ggplot, several other themes are availab
 - Derived from Karthik Ram, "A quick introduction to ggplot2", [Speakerdeck](http://inundata.org/2013/04/10/a-quick-introduction-to-ggplot2/), [github](https://github.com/karthik/ggplot-lecture). License: [CC-BY](http://creativecommons.org/licenses/by/2.0/)
 -->
 
-* * *
-
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
-R code is licensed under a [BSD 2-clause](http://www.r-project.org/Licenses/BSD_2_clause) license.
-
 
 <!--  LocalWords:  'Lab Manipulation' html dplyr summarise frac gd df
  -->

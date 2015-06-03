@@ -1150,58 +1150,62 @@ cat(texreg::htmlreg(list(lm_cat),
 
 
 <table cellspacing="0" align="center" style="border: none;">
-  <caption align="bottom" style="margin-top:0.3em;">Statistical models</caption>
-  <tr>
-    <th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"></th>
-    <th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"><b>Model 1</b></th>
-  </tr>
-  <tr>
-    <td style="padding-right: 12px; border: none;">(Intercept)</td>
-    <td style="padding-right: 12px; border: none;">17.66</td>
-  </tr>
-  <tr>
-    <td style="padding-right: 12px; border: none;"></td>
-    <td style="padding-right: 12px; border: none;">(12.69)</td>
-  </tr>
-  <tr>
-    <td style="padding-right: 12px; border: none;">lnenp</td>
-    <td style="padding-right: 12px; border: none;">26.69</td>
-  </tr>
-  <tr>
-    <td style="padding-right: 12px; border: none;"></td>
-    <td style="padding-right: 12px; border: none;">(14.15)</td>
-  </tr>
-  <tr>
-    <td style="padding-right: 12px; border: none;">elec_syspr</td>
-    <td style="padding-right: 12px; border: none;">9.22</td>
-  </tr>
-  <tr>
-    <td style="padding-right: 12px; border: none;"></td>
-    <td style="padding-right: 12px; border: none;">(11.34)</td>
-  </tr>
-  <tr>
-    <td style="padding-right: 12px; border: none;">elec_sysunam</td>
-    <td style="padding-right: 12px; border: none;">-48.95<sup style="vertical-align: 4px;">*</sup></td>
-  </tr>
-  <tr>
-    <td style="padding-right: 12px; border: none;"></td>
-    <td style="padding-right: 12px; border: none;">(17.86)</td>
-  </tr>
-  <tr>
-    <td style="border-top: 1px solid black;">R<sup style="vertical-align: 4px;">2</sup></td>
-    <td style="border-top: 1px solid black;">0.74</td>
-  </tr>
-  <tr>
-    <td style="padding-right: 12px; border: none;">Adj. R<sup style="vertical-align: 4px;">2</sup></td>
-    <td style="padding-right: 12px; border: none;">0.66</td>
-  </tr>
-  <tr>
-    <td style="border-bottom: 2px solid black;">Num. obs.</td>
-    <td style="border-bottom: 2px solid black;">14</td>
-  </tr>
-  <tr>
-    <td style="padding-right: 12px; border: none;" colspan="2"><span style="font-size:0.8em"><sup style="vertical-align: 4px;">***</sup>p &lt; 0.001, <sup style="vertical-align: 4px;">**</sup>p &lt; 0.01, <sup style="vertical-align: 4px;">*</sup>p &lt; 0.05</span></td>
-  </tr>
+<caption align="bottom" style="margin-top:0.3em;">Statistical models</caption>
+<tr>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"></th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"><b>Model 1</b></th>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">(Intercept)</td>
+<td style="padding-right: 12px; border: none;">17.66</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">(12.69)</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">lnenp</td>
+<td style="padding-right: 12px; border: none;">26.69</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">(14.15)</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">elec_syspr</td>
+<td style="padding-right: 12px; border: none;">9.22</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">(11.34)</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">elec_sysunam</td>
+<td style="padding-right: 12px; border: none;">-48.95<sup style="vertical-align: 0px;">*</sup></td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;"></td>
+<td style="padding-right: 12px; border: none;">(17.86)</td>
+</tr>
+<tr>
+<td style="border-top: 1px solid black;">R<sup style="vertical-align: 0px;">2</sup></td>
+<td style="border-top: 1px solid black;">0.74</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">Adj. R<sup style="vertical-align: 0px;">2</sup></td>
+<td style="padding-right: 12px; border: none;">0.66</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">Num. obs.</td>
+<td style="padding-right: 12px; border: none;">14</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid black;">RMSE</td>
+<td style="border-bottom: 2px solid black;">12.37</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;" colspan="2"><span style="font-size:0.8em"><sup style="vertical-align: 0px;">***</sup>p &lt; 0.001, <sup style="vertical-align: 0px;">**</sup>p &lt; 0.01, <sup style="vertical-align: 0px;">*</sup>p &lt; 0.05</span></td>
+</tr>
 </table>
 
 
@@ -1233,8 +1237,3 @@ stargazer::stargazer(lm_cat, type = "html")
 <tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"><em>Note:</em></td><td style="text-align:right"><sup>*</sup>p<0.1; <sup>**</sup>p<0.05; <sup>***</sup>p<0.01</td></tr>
 </table>
 
-
-* * *
-
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
-R code is licensed under a [BSD 2-clause](http://www.r-project.org/Licenses/BSD_2_clause) license.
