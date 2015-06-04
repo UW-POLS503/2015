@@ -1,3 +1,24 @@
+# Homework 1
+
+The homework is too mechanical. None of the questions require much thinking.
+
+- Do not use ask for the correlation matrix. It is too large to understand. A plot would be better.
+- Most common problem is not checking the units of Catholic.
+- Students often created separate boxplots instead of side-by-side boxplots.
+- Students did not answer the question in prose, but that may be related to the questions being too mechanical.
+- Students had a difficult time generating general solutions to the question that asked for the median.
+- Very poor formatting.
+
+# Homework 2
+
+Overall, everyone got the code corret, the variation was in the quality of the prose responses.
+
+On problem 1: Most cited the problems of out-of-sample forecasting. Few people cited the importance of the linearity assumption.
+
+On problem 2: move to an in-class assignment? Use a randomly generated Anscombe dataset? Additionally, emphasize the relationship between the equation of linear regression (it only uses means, covariance and variance) and the
+
+This homework still seems mechanistic.
+
 # Homework 3
 
 The way in which the results were presented was confusing and did not allow student to effectively assess differences in parameters that would be bias.
