@@ -72,3 +72,32 @@ I did not discuss the Schrodt and Achen articles and will not discuss them.
 - The discussion of the distance metrics was rough, and needs to be improved.
 - Working through the applied example of missing data was better than the theory, I think. Theory questions came up endogenously.
 
+# June 2, 2015
+
+## Pre-lecture
+
+I need to cover panel data because it is commonly end
+
+## What I covered
+
+- Slides on Panel Data.
+- Used the fixed effects and random examples in Adolph
+- Worked example in panel data.
+
+## Lecture
+
+- Q: confusion about the difference between random and fixed effects
+- It seemed dry; I am not entirely happy a
+- Switching to Adolph's slides was not well integrated.
+- The worked example did not integrate well with the slides.
+
+## Post
+
+- Need to have a clearer application and narrative
+- The worked example and application did not include why I was choosing between specifications,
+  what the implications of the different specifications were, or any post analysis.
+- I'd like more simulations to show the implications of RE, FE, and lagged DV
+- I asked students using panel to describe their data. This was useful for highlighting the different
+  types of data that are called "panel", as well as providing examples to turn back to.
+
+  
