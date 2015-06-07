@@ -1,12 +1,17 @@
 # Software
 
-- Update simcf?
+Software workflow needs to handle
+
+   - missing data
+   - first differences and average predictive comparisons using simulation
+
 - Automatic plots of AVP or 1st diff?
 - Average Predictive Comparisons function. Like `predcomp` but slightly different.
 
 # Changes
 
-- More on interpretation.
+- Much more on interpretation.
+  Need to cover analytical calculation of confidence intervals.
 - Usability of simulation software needs to be improved.
   Either update simcf or move to Zelig.
 - Need worked examples of data analysis from start to finish.
