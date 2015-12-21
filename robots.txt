@@ -1,4 +1,4 @@
-Sitemap: http://UW-POLS503.github.io/pols_503_sp15/sitemapindex.xml
+Sitemap: https://UW-POLS503.github.io/pols_503_sp15/sitemapindex.xml
 
 User-Agent: *
 Host: UW-POLS503.github.io
