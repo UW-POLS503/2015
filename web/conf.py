@@ -21,14 +21,14 @@ BLOG_AUTHOR = "Jeffrey B. Arnold"  # (translatable)
 BLOG_TITLE = "POLS/CS&SS 503"  # (translatable)
 # This is the main URL for your site. It will be used
 # in a prominent link
-SITE_URL = "http://pols503.github.io/pols_503_sp15/"
+SITE_URL = "https://UW-POLS503.github.io/pols_503_sp15/"
 # This is the URL where Nikola's output will be deployed.
 # If not set, defaults to SITE_URL
-BASE_URL = "http://pols503.github.io/pols_503_sp15/"
+BASE_URL = "https://UW-POLS503.github.io/pols_503_sp15/"
 BLOG_EMAIL = "jeffrey.arnold@gmail.com"
 BLOG_DESCRIPTION = "Site for POLS/CS&SS 503: Advanced Quantitative Political Methodology (University of Washington; Spring 2015)"  # (translatable)
 
-SOURCE_URL = "http://github.com/pols503/pols_503_sp15/"
+SOURCE_URL = "https://github.com/UW-POLS503/pols_503_sp15/"
 
 # Nikola is multilingual!
 #
@@ -151,8 +151,8 @@ NAVIGATION_LINKS = {
 }
 
 # Name of the theme to use.
-# THEME = "bootstrap3"
-THEME = "custom"
+THEME = "bootstrap3"
+# THEME = "custom"
 
 # Below this point, everything is optional
 
@@ -225,7 +225,7 @@ TIMEZONE = "America/Los_Angeles"
 
 POSTS = (
     ("posts/*.md", "posts", "post.tmpl"),
-    ("posts/*.Rmd", "", "story.tmpl"),
+    ("posts/*.Rmd", "posts", "post.tmpl"),
 )
 PAGES = (
     ("pages/*.md", "", "story.tmpl"),
@@ -426,7 +426,7 @@ RSS_PATH = ""
 # Where the output site should be located
 # If you don't use an absolute path, it will be considered as relative
 # to the location of conf.py
-# OUTPUT_FOLDER = 'output'
+OUTPUT_FOLDER = 'output'
 
 # where the "cache" of partial generated content should be located
 # default: 'cache'
@@ -532,7 +532,7 @@ IMAGE_FOLDERS = {'images': ''}
 #
 # If the following is True, INDEXES_PAGES is also displayed on the main (the
 # newest) index page (index.html):
-# INDEXES_PAGES_MAIN = False
+INDEXES_PAGES_MAIN = False
 #
 # If the following is True, index-1.html has the oldest posts, index-2.html the
 # second-oldest posts, etc., and index.html has the newest posts. This ensures
@@ -617,13 +617,13 @@ FAVICONS = {
 # 'Read more...' for the index page, if INDEX_TEASERS is True (translatable)
 INDEX_READ_MORE_LINK = '<p class="more"><a href="{link}">{read_more}…</a></p>'
 # 'Read more...' for the RSS_FEED, if RSS_TEASERS is True (translatable)
-RSS_READ_MORE_LINK = '<p><a href="{link}">{read_more}…</a> ({min_remaining_read})</p>'
+FEED_READ_MORE_LINK = '<p><a href="{link}">{read_more}…</a> ({min_remaining_read})</p>'
 
 # Append a URL query to the RSS_READ_MORE_LINK and the //rss/item/link in
 # RSS feeds. Minimum example for Piwik "pk_campaign=rss" and Google Analytics
 # "utm_source=rss&utm_medium=rss&utm_campaign=rss". Advanced option used for
 # traffic source tracking.
-RSS_LINKS_APPEND_QUERY = False
+FEED_LINKS_APPEND_QUERY = False
 
 # A HTML fragment describing the license, for the sidebar.
 # (translatable)
@@ -687,7 +687,7 @@ COMMENT_SYSTEM_ID = ""
 # WARNING: if a page would conflict with the index file (usually
 #          caused by setting slug to `index`), the STORY_INDEX
 #          will not be generated for that directory.
-# STORY_INDEX = False
+#STORY_INDEX = False
 # Enable comments on story pages?
 # COMMENTS_IN_STORIES = False
 # Enable comments on picture gallery pages?
@@ -958,7 +958,7 @@ ADDITIONAL_METADATA = {
 USE_BUNDLES = True
 
 # Plugins you don't want to use. Be careful :-)
-# DISABLED_PLUGINS = ["render_galleries"]
+DISABLED_PLUGINS = ["render_galleries"]
 
 # Add the absolute paths to directories containing plugins to use them.
 # For example, the `plugins` directory of your clone of the Nikola plugins

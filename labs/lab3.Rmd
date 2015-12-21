@@ -30,7 +30,7 @@ library("readr")
 
 ## Reading in data review:
 
-1. Download the data [iver.csv](http://pols503.github.io/pols_503_sp15/data/iver.csv)
+1. Download the data [iver.csv](http://UW-POLS503.github.io/pols_503_sp15/data/iver.csv)
 2. Generate summary statistics for all variables in the dataset (number of observations, min, max, median, mean, standard deviation)
 3. Plot the distributions of each numeric variable
 

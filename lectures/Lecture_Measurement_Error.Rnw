@@ -3,7 +3,7 @@
 <<init,echo=FALSE,results='hide',warning=FALSE,message=FALSE>>=
 source("init.R")
 @
-<<header>>=
+<<header, warning = FALSE>>=
 suppressPackageStartupMessages({
   library("mvtnorm")
   library("MASS")

@@ -57,7 +57,7 @@ logit <- function(x) log(x) - log(1 - x)
 
 We will revisit the sprinters data we considered in Problem Set 2.
 ```{r}
-sprinters <- read.csv("http://pols503.github.io/pols_503_sp15/data/sprinters.csv")
+sprinters <- read.csv("http://UW-POLS503.github.io/pols_503_sp15/data/sprinters.csv")
 ```
 
 a. Estimate the model
@@ -105,7 +105,7 @@ In this problem, we will focus on a single cross-section, and instead focus on m
 
 Load and pre-process this data using the following code:
 ```{r}
-rossoil <- read.csv("http://pols503.github.io/pols_503_sp15/data/rossoildata.csv") %>%
+rossoil <- read.csv("http://UW-POLS503.github.io/pols_503_sp15/data/rossoildata.csv") %>%
    arrange(id1, year) %>%
    group_by(id1) %>%
    mutate(oilL5 = lag(wdr123, 5) / 100,
@@ -235,7 +235,7 @@ Note that we will only need all three pieces of Equation 4 if the covariate to b
 The `logBound()` and `logitBound()` functions are included in `hw4-functions.R`.
 You can load these functions with the following code (provided you downloaded `hw4-functions.R` and put it in your package directory):
 ```{r}
-source("http://pols503.github.io/pols_503_sp15/hw/hw4-functions.R")
+source("http://UW-POLS503.github.io/pols_503_sp15/hw/hw4-functions.R")
 ```
 After loading these functions, the above regression is as simple as:
 ```{r eval=FALSE}
@@ -296,7 +296,7 @@ This will return a `data.frame` object with columns
 - `lower`: Lower bound of the confidence interval
 - `upper`: Upper bound of the confidence interval
 
-```{r message = FALSE}
+```{r message = FALSE, eval = FALSE}
 library("simcf")
 predOil <- function(res, formula, data, sims = 1000, ci = 0.95) {
   pe <- res$coefficients
@@ -311,7 +311,7 @@ predOil <- function(res, formula, data, sims = 1000, ci = 0.95) {
 }
 ```
 An example call to this function.
-```{r}
+```{r eval = FALSE}
 mod0_formula <- regime1 ~ oilL5 + metalL5 + GDPpcL5 + logitBound(islam) + oecd
 mod0 <- lm(mod0_formula, data = rossoil)
 pred0_oil <- predOil(mod0, mod0_formula, rossoil)

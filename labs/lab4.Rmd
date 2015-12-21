@@ -24,7 +24,7 @@ library(broom)
 Read in the Ross data
 
 ```{r, results='hide'}
-rossdata <- read.csv("http://pols503.github.io/pols_503_sp15/data/ross_2012.csv",
+rossdata <- read.csv("http://UW-POLS503.github.io/pols_503_sp15/data/ross_2012.csv",
                      stringsAsFactors = FALSE)
 
 head (rossdata)
@@ -170,7 +170,7 @@ ggplot(tidy(model2) %>% filter(term != "(Intercept)"),
 ```
 
 We can also use `coefplot` 
-```{r, warning=FALSE}
+```{r, warning=FALSE, eval = FALSE}
 library("coefplot")
 coefplot(model2, coefficients = c("oecd", "oil", "gdp"))
 ```

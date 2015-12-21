@@ -16,7 +16,7 @@ April 3, 2015
 # Installing R
 
 Install R, RStudio and **devtools**.
-Follow the instructions [here](http://pols503.github.io/pols_503_sp15/getting_help_with_r.html).
+Follow the instructions [here](http://UW-POLS503.github.io/pols_503_sp15/getting_help_with_r.html).
 
 
 
@@ -355,7 +355,7 @@ You can run the current line or highlighted section with *Ctl-Enter* or the *Run
 
 # Getting Help with R
 
-Refer to [Getting Help with R](http://pols503.github.io/pols_503_sp15/getting_help_with_r.html)
+Refer to [Getting Help with R](http://UW-POLS503.github.io/pols_503_sp15/getting_help_with_r.html)
 
 1. Refer to http://docs.ggplot2.org/current/ to find out how to create a density plot. Create a density plot of `gdpPercap`. Is is right skewed, left skewed, or symmetric?
 2. Go to stackoverlow and search for questions with tag `[r]`.

@@ -19,13 +19,16 @@ Also install **RColorBrewer** and **WhatIf**
 
 ```{r message = FALSE}
 library(MASS)
-library(tile)
-library(simcf)
 library(RColorBrewer)
 library(WhatIf)
 library(dplyr)
 library(ggplot2)
 ```
+```{r eval = FALSE}
+library(tile)
+library(simcf)
+```
+
 
 I am also going set my defaults for displaying scientific notation to be more tolerant of many decimal places
 ```{r}
@@ -93,13 +96,13 @@ We choose a value range based on the observed range of the variable to avoid ext
 ### Next, `cfMake()` initializes the set of counterfactual scenarios to be predicted with simcf. 
 In this case, we set all variables in model to their mean, and will later change the ones we want to assign specific values to
 Note that we initialize as many scenarios as we have hypothetical observations of GDP:
-```{r results = 'hide'}
+```{r results = 'hide', eval = FALSE}
 xhyp1_no_oecd <- cfMake(model_form1, rossdata, nscen=length(valueseq_gdp), f=mean)
 xhyp1_no_oecd
 ```
 
 ### Now change hypothetical value for GDP per capita in each scen, but for a non-oecd country:
-```{r}
+```{r, eval = FALSE}
 for(i in 1:length(valueseq_gdp)){
   xhyp1_no_oecd <- cfChange(xhyp1_no_oecd, "GDPcap", valueseq_gdp[i], scen=i)
   xhyp1_no_oecd <- cfChange(xhyp1_no_oecd, "oecd", 0, scen=i)  
@@ -107,7 +110,7 @@ for(i in 1:length(valueseq_gdp)){
 ```
 
 Look at what changed:
-```{r results = 'hide'}
+```{r results = 'hide', eval = FALSE}
 xhyp1_no_oecd
 ```
 
@@ -115,13 +118,13 @@ Note two parts of this object,`$x` and `$xpre`.  To calculate expected values, w
 
 ### Now calculate expected y's:
 This is what took a lengthy loop when we did it "by hand", looping through each of the 1000 draws from the multivariate normal distribution of the betas.
-```{r}
+```{r eval = FALSE}
 yhyp_no_oecd <- linearsimev(xhyp1_no_oecd, simbetas)
 yhyp_no_oecd
 ```
 
 ### At this point, we could combine X and y into a dataframe and plot the way we have before:
-```{r}
+```{r eval = FALSE}
 cf1_no_oecd <- cbind(xhyp1_no_oecd$x, yhyp_no_oecd)
 ggplot(cf1_no_oecd, aes(x = GDPcap)) +
   geom_line(aes(y = pe)) + 
@@ -133,25 +136,25 @@ ggplot(cf1_no_oecd, aes(x = GDPcap)) +
 
 
 ### Let's add the contrasting hypothetical range for OECD countries:
-```{r results = 'hide'}
+```{r results = 'hide', eval = FALSE}
 xhyp1_oecd <- cfMake(model_form1, rossdata, nscen = length(valueseq_gdp), f = mean)
 xhyp1_oecd
 ```
 
 ### Now change hypothetical value for GDP per capita in each scen, but for an oecd country:
-```{r}
+```{r eval = FALSE}
 for(i in 1:length(valueseq_gdp)) {
   xhyp1_oecd <- cfChange(xhyp1_oecd, "GDPcap", valueseq_gdp[i], scen=i)
   xhyp1_oecd <- cfChange(xhyp1_oecd, "oecd", 1, scen=i)  
 }
 ```
 Look at what changed:
-```{r results = 'hide'}
+```{r results = 'hide', eval = FALSE}
 xhyp1_oecd
 ```
 
 ### Now calculate expected values of democracy for OECD countries:
-```{r}
+```{r, eval = FALSE}
 yhyp_oecd <- linearsimev(xhyp1_oecd, simbetas)
 yhyp_oecd
 ```
@@ -159,7 +162,7 @@ yhyp_oecd
 
 ### Plot the two together:
 At this point, we could plot the way we have before:
-```{r}
+```{r eval = FALSE}
 cf1_oecd <- cbind(xhyp1_oecd$x, yhyp_oecd)
 cf1_all <- merge(cf1_oecd, cf1_no_oecd, all = TRUE)
 ggplot() +
@@ -187,7 +190,7 @@ ggplot(cf1_all, aes(x = GDPcap, colour = factor(oecd), fill = factor(oecd))) +
 
 ### Model 2: transforming GDP with logBound
 Here's another similar example, illustrating the use of `logBound()`:
-```{r}
+```{r eval = FALSE}
 model_form2 <- regime1 ~ logBound(GDPcap) + oil + oecd
 model2 <- lm(model_form2, data = rossdata)
 summary(model2)
@@ -199,7 +202,7 @@ simbetas <- mvrnorm(sims, pe, vc)
 ```
 
 Set up counterfactual scenarios, creating hypothetical values for OECD and non-OECD countries:
-```{r results = 'hide'}
+```{r results = 'hide', eval = FALSE}
 xhyp2_no_oecd <- xhyp2_oecd <- cfMake(model_form2, rossdata, nscen = length(valueseq_gdp), f=mean) #using the same valuesequence defined above
 
 #now change hypothetical value for GDP per capita in each scen, for a non-oecd country:
@@ -212,13 +215,13 @@ xhyp2_no_oecd
 ```
 
 Now make expected y's 
-```{r}
+```{r eval = FALSE}
 yhyp2_no_oecd <- linearsimev(xhyp2_no_oecd, simbetas)
 yhyp2_no_oecd
 ```
 
 Now change hypothetical value for GDP per capita in each scen, but for an oecd country:
-```{r results = 'hide'}
+```{r results = 'hide', eval = FALSE}
 for(i in 1:length(valueseq_gdp)){
   xhyp2_oecd <- cfChange(xhyp2_oecd, "GDPcap", valueseq_gdp[i], scen=i)
   xhyp2_oecd <- cfChange(xhyp2_oecd, "oecd", 1, scen=i)  
@@ -228,13 +231,13 @@ xhyp2_oecd
 ```
 
 Now make expected y's:
-```{r}
+```{r eval = FALSE}
 yhyp2_oecd <- linearsimev(xhyp2_oecd, simbetas)
 yhyp2_oecd
 ```
 
 Plot the two together:
-```{r}
+```{r eval = FALSE}
 cf2_all <- merge(cbind(xhyp2_no_oecd$x, yhyp2_no_oecd), cbind(xhyp2_oecd$x, yhyp2_oecd), all = TRUE)
 ggplot(cf2_all, aes(x = GDPcap, colour = factor(oecd), fill = factor(oecd))) +
   geom_line(aes(y = pe)) + 
@@ -251,7 +254,7 @@ ggplot(cf2_all, aes(x = GDPcap, colour = factor(oecd), fill = factor(oecd))) +
 ## Model 3: demonstrating logitBound with zeros:
 
 Set up the basic model (without logit bounding islam):
-```{r}
+```{r eval = FALSE}
 model_form3 <- regime1 ~ log(GDPcap) + oil + oecd + islam
 model3 <- lm(model_form3, data = rossdata)
 summary(model3)
@@ -263,12 +266,12 @@ rossdata$islam <- rossdata$islam/100
 ```
 
 See what logitBound is doing:
-```{r results = 'hide'}
+```{r results = 'hide', eval = FALSE}
 logitBound(rossdata$islam)
 ```
 
 Setup the logit bounded model:
-```{r}
+```{r eval = FALSE}
 model_form3b <- regime1 ~ log(GDPcap) + oil + oecd + logitBound(islam)
 model3b<-lm(model_form3b, data = rossdata)
 summary(model3b)
@@ -277,7 +280,7 @@ summary(model3b)
 ###Getting predicted values for each
 
 Extract the coefficients and vcov matrix, draw 1000 of each parameter:
-```{r}
+```{r eval = FALSE}
 pe <- model3b$coefficients
 vc <- vcov(model3b)  #note if you wanted to use heteroskedastic standard errors use: vc <- hccm(model1)
 sims <- 10000
@@ -285,13 +288,13 @@ simbetas <- mvrnorm(sims,pe,vc)
 ```
 
 Set up Islam value sequence
-```{r}
+```{r eval = FALSE}
 valueseq_islam <- seq(min(rossdata$islam), max(rossdata$islam), length.out=40)
 ```
 
 Predicted values for rich country
 # initialize scenarios:
-```{r results = 'hide'}
+```{r results = 'hide', eval = FALSE}
 xhyp3_rich <- xhyp3_poor <- cfMake(model_form3b, rossdata, nscen=length(valueseq_islam), f=mean)
 
 for(i in 1:length(valueseq_islam)) {
@@ -311,7 +314,7 @@ xhyp3_poor$x
 ```
 
 Now make expected y's:
-```{r}
+```{r eval = FALSE}
 # rich countries:
 yhyp3_rich <- linearsimev(xhyp3_rich, simbetas)
 
@@ -321,7 +324,7 @@ yhyp3_poor <- linearsimev(xhyp3_poor, simbetas)
 
 Let's plot these now, similarly to before:
 
-```{r}
+```{r eval = FALSE}
 cf3_all <- merge(cbind(xhyp3_rich$x, yhyp3_rich), cbind(xhyp3_poor$x, yhyp3_poor), all = TRUE)
 ggplot(cf3_all, aes(x = islam, y = pe, colour = factor(GDPcap), fill = factor(GDPcap))) +
   geom_line(aes(y = pe)) + 
@@ -341,7 +344,7 @@ Using data from homework 4, build a model and use simcf to generate illustrative
 Try using log or logit transformations
 
 To load homework data
-```{r}
+```{r eval = FALSE}
 dataHW <- read.csv("http://faculty.washington.edu/cadolph/503/ross95.csv", header=TRUE, stringsAsFactors=FALSE)
 ```
 
@@ -351,7 +354,7 @@ Tile works by first specifying a series of 'traces' that can be lines, ropeladde
 
 In this example, you can also see that I have not needed to combine x and y values in scenarios into a single tidy dataframe (Wickham would be scandalized).  You could also do this using the dataframes of combined x and y scenario information (hey, look, a *challenge*!)
 
-```{r}
+```{r, eval = FALSE}
 trace1 <- lineplot(x = valueseq_gdp,
                    y = yhyp_no_oecd$pe,
                    lower = yhyp_no_oecd$lower,
@@ -394,7 +397,7 @@ tc <- tile(trace1, trace1b, legendTrace,
 
 The logic of `tile` means that you can tweak just one trace and then re-generate the plot, or use the same traces but in a different configuration to create a second plot:
 
-```{r}
+```{r eval = FALSE}
 trace1_t <- lineplot(x = valueseq_gdp,
                     y = yhyp_oecd$pe,
                     lower = yhyp_oecd$lower,
@@ -418,7 +421,7 @@ tc <- tile(trace1, trace1_t,
 
 
 ###Let's add a plot for another covariate, and omit counterfactuals outside the convex hull of the data
-```{r results = 'hide'}
+```{r results = 'hide', eval = FALSE}
 pe <- model1$coefficients
 vc <- vcov(model1)  #note if you wanted to use heteroskedastic standard errors use: vc <- hccm(model1)
 sims <- 10000
@@ -465,7 +468,7 @@ Let's use model 3 this time
 
 ### Simple example: moving from mean to 90th percentile oil producing, using model 3
 Generate simulated betas from the transformed model 3
-```{r}
+```{r eval = FALSE}
 pe <- model3b$coefficients
 vc <- vcov(model3b)  #note if you wanted to use heteroskedastic standard errors use: vc <- hccm(model1)
 sims <- 10000
@@ -476,7 +479,7 @@ Intialize and modify the scenarios for comparison, setting up the before and aft
 
 This illustrates the three main cf functions, `cfMake`, `cfChange`, and `cfName`:
 
-```{r results = 'hide'}
+```{r results = 'hide', eval = FALSE}
 xhyp3fd <- cfMake(model_form3b, rossdata, f = mean, nscen = 4)
 xhyp3fd <- cfName(xhyp3fd, "GDP, mean to 95%", scen = 1)
 xhyp3fd <- cfChange(xhyp3fd, "GDPcap", xpre = mean(rossdata$GDPcap), x = quantile(rossdata$GDPcap, p = .95), scen = 1)  
@@ -493,14 +496,14 @@ xhyp3fd
 ```
 
 We calculate the first difference (and its confidence) just as easily as we did the point estimates, just using the `linearsimfd()` function instead of `linearsimev()`:
-```{r}
+```{r eval = FALSE}
 yfd<-linearsimfd(xhyp3fd, simbetas) 
 yfd 
 ```
 
 One of the easiet and most effective way to present first differences is with a ropeladder plot.  This is easily generated in `tile()`, but you can also make similar plots in `ggplot` (see `geom_pointrange()`; use `coord_flip()` to get horizontal lines as in ropeladders here).  I will illustrate `tile` here as another example. 
 
-```{r}
+```{r eval = FALSE}
 rlTrace <- ropeladder(x = yfd$pe,
                       lower = yfd$lower,
                       upper = yfd$upper,
@@ -526,7 +529,7 @@ tc <- tile(rlTrace, vertmark,
 
 **Challenge**: Repeat the above simcf() calculations to get first differences for a change from 5th percentile to the mean for the same model.  How do the effect sizes change? Why do you think this would happen?
 
-```{r results = 'hide'}
+```{r results = 'hide', eval = FALSE}
 xhyp3fd_2 <- cfMake(model_form3b, rossdata, f = mean, nscen = 4)
 xhyp3fd_2 <- cfName(xhyp3fd_2, "GDP, 5% to mean", scen = 1)
 xhyp3fd_2 <- cfChange(xhyp3fd_2, "GDPcap", xpre = quantile(rossdata$GDPcap, p = .05), x = mean(rossdata$GDPcap), scen = 1)  
@@ -590,26 +593,26 @@ nesdata <- read.csv("http://staff.washington.edu/csjohns/503/nes00a.csv", header
 
 ####Set up model formula and model specific data frame:
 This is using the very handy `extractdata()` function in the `simcf` package.  This helps you to be working with a consistent and manageable dataset across multiple models, especially useful in cases of missing data that will be dropped rather than imputed.
-```{r}
+```{r eval = FALSE}
 model <- vote00 ~ age + I(age^2) + hsdeg + coldeg
 mdata <- extractdata(model, nesdata, na.rm=TRUE)
 ```
 
 ####Run logit & extract results
-```{r}
+```{r eval = FALSE}
 logit.result <- glm(model, family=binomial(link=logit), data=mdata)
 pe <- logit.result$coefficients  # point estimates
 vc <- vcov(logit.result)         # var-cov matrix
 ```
 
 ####Simulate parameter distributions
-```{r}
+```{r eval = FALSE}
 sims <- 10000
 simbetas <- mvrnorm(sims, pe, vc)
 ```
 
 ####Set up counterfactuals:  all ages, each of three educations
-```{r}
+```{r eval = FALSE}
 xhyp <- seq(18,97,1)
 nscen <- length(xhyp)
 nohsScen <- hsScen <- collScen <- cfMake(model, mdata, nscen)
@@ -633,7 +636,7 @@ for (i in 1:nscen) {
 
 
 ####Simulate expected probabilities for all scenarios
-```{r}
+```{r eval = FALSE}
 nohsSims <- logitsimev(nohsScen, simbetas, ci=0.95)
 hsSims <- logitsimev(hsScen, simbetas, ci=0.95)
 collSims <- logitsimev(collScen, simbetas, ci=0.95)
@@ -646,7 +649,7 @@ col <- brewer.pal(3,"Dark2")
 
 ####Set up lineplot traces of expected probabilities:
 This is also showing the use of the extrapolate option to only plot predictions within the convex hull of the data. Uses the `WhatIf` package.
-```{r  results = 'hide'}
+```{r  results = 'hide', eval = FALSE}
 nohsTrace <- lineplot(x=xhyp,
                       y=nohsSims$pe,
                       lower=nohsSims$lower,

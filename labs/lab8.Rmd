@@ -64,8 +64,8 @@ So you an use them without manually
 # Merging
 
 ```{r}
-rossoil <-read.csv("http://pols503.github.io/pols_503_sp15/data/rossoildata.csv", na.strings="")
-democracy <- read.csv("http://pols503.github.io/pols_503_sp15/data/democracy.csv", header=TRUE, stringsAsFactors=FALSE, na.strings=".")
+rossoil <-read.csv("http://UW-POLS503.github.io/pols_503_sp15/data/rossoildata.csv", na.strings="")
+democracy <- read.csv("http://UW-POLS503.github.io/pols_503_sp15/data/democracy.csv", header=TRUE, stringsAsFactors=FALSE, na.strings=".")
 ```
 
 Merge dataframes, keeping all countries in each even if no match in the other.
@@ -140,7 +140,7 @@ library("Amelia")
 
 We will use the Ross oil data that we've used throughout this course.
 ```{r}
-rossoil <- read.csv("http://pols503.github.io/pols_503_sp15/data/rossoildata.csv") %>%
+rossoil <- read.csv("http://UW-POLS503.github.io/pols_503_sp15/data/rossoildata.csv") %>%
    arrange(id1, year) %>%
    group_by(id1) %>%
    mutate(oilL5 = lag(wdr123, 5) / 100,

@@ -2,7 +2,7 @@
 
 Course materials for POLS/CS&SS 503, University of Washington, Spring 2015.
 
-Course website is at https://pols503.github.io/pols_503_sp15/
+Course website is at https://UW-POLS503.github.io/pols_503_sp15/
 
 ## Contents
 
@@ -69,6 +69,16 @@ In Ubuntu, these can be installed with
 ```console
 > apt-get install pandoc pandoc-citeproc
 ```
+
+## Dependencies
+
+- Fonts: `DejaVu Sans Mono`, `Open Sans`, `Lato`
+- R
+
+    - readr
+	- car
+	- ggplot2
+	- mvtnorm
 
 
 <!--  LocalWords:  nikola cd venv python3 pyvenv txt pandoc citeproc

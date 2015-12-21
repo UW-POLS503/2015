@@ -69,7 +69,7 @@ You can put as many lines of code as you want in between the {} braces, includin
 Read in the Ross data from last week's lab (selecting and renaming variables as appropriate:
 
 ```{r, results='hide'}
-rossdata <- read.csv("http://pols503.github.io/pols_503_sp15/data/ross_2012.csv",
+rossdata <- read.csv("http://UW-POLS503.github.io/pols_503_sp15/data/ross_2012.csv",
                      stringsAsFactors = FALSE)
 
 data <- rossdata %>%
@@ -193,7 +193,7 @@ This is basically an alternate way to work through part 1.e. of Homework 2
 
 Load the data and run the basic regression with interaction:
 ```{r}
-sprinters <- read.csv ("http://pols503.github.io/pols_503_sp15/data/sprinters.csv", na.strings=".")
+sprinters <- read.csv ("http://UW-POLS503.github.io/pols_503_sp15/data/sprinters.csv", na.strings=".")
 sprinter_model <- lm(finish ~ year * women, data=sprinters)
 ```
 

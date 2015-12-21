@@ -27,7 +27,7 @@ library("readr")
 
 ## Reading in data review:
 
-1. Download the data [iver.csv](http://pols503.github.io/pols_503_sp15/data/iver.csv)
+1. Download the data [iver.csv](http://UW-POLS503.github.io/pols_503_sp15/data/iver.csv)
 2. Generate summary statistics for all variables in the dataset (number of observations, min, max, median, mean, standard deviation)
 3. Plot the distributions of each numeric variable
 
@@ -66,21 +66,22 @@ iver
 ```
 ## Source: local data frame [14 x 8]
 ## 
-##               cty elec_sys povred  enp    lnenp maj pr unam
-## 1       Australia      maj  42.16 2.38 0.867100   1  0    0
-## 2         Belgium       pr  78.79 7.01 1.947340   0  1    0
-## 3          Canada      maj  29.90 1.69 0.524729   1  0    0
-## 4         Denmark       pr  71.54 5.04 1.617410   0  1    0
-## 5         Finland       pr  69.08 5.14 1.637050   0  1    0
-## 6          France      maj  57.91 2.68 0.985817   1  0    0
-## 7         Germany      maj  46.90 3.16 1.150570   1  0    0
-## 8           Italy       pr  42.81 4.11 1.413420   0  1    0
-## 9     Netherlands       pr  66.93 3.49 1.249900   0  1    0
-## 10         Norway       pr  67.17 3.09 1.128170   0  1    0
-## 11         Sweden       pr  64.48 3.39 1.220830   0  1    0
-## 12    Switzerland     unam  13.02 5.26 1.660130   0  0    1
-## 13 United Kingdom      maj  48.66 2.09 0.737164   1  0    0
-## 14  United States      maj  12.10 1.95 0.667829   1  0    0
+##               cty elec_sys povred   enp    lnenp   maj    pr  unam
+##             (chr)    (chr)  (dbl) (dbl)    (dbl) (int) (int) (int)
+## 1       Australia      maj  42.16  2.38 0.867100     1     0     0
+## 2         Belgium       pr  78.79  7.01 1.947340     0     1     0
+## 3          Canada      maj  29.90  1.69 0.524729     1     0     0
+## 4         Denmark       pr  71.54  5.04 1.617410     0     1     0
+## 5         Finland       pr  69.08  5.14 1.637050     0     1     0
+## 6          France      maj  57.91  2.68 0.985817     1     0     0
+## 7         Germany      maj  46.90  3.16 1.150570     1     0     0
+## 8           Italy       pr  42.81  4.11 1.413420     0     1     0
+## 9     Netherlands       pr  66.93  3.49 1.249900     0     1     0
+## 10         Norway       pr  67.17  3.09 1.128170     0     1     0
+## 11         Sweden       pr  64.48  3.39 1.220830     0     1     0
+## 12    Switzerland     unam  13.02  5.26 1.660130     0     0     1
+## 13 United Kingdom      maj  48.66  2.09 0.737164     1     0     0
+## 14  United States      maj  12.10  1.95 0.667829     1     0     0
 ```
 
 ```r
@@ -90,13 +91,14 @@ head(iver)
 ```
 ## Source: local data frame [6 x 8]
 ## 
-##         cty elec_sys povred  enp    lnenp maj pr unam
-## 1 Australia      maj  42.16 2.38 0.867100   1  0    0
-## 2   Belgium       pr  78.79 7.01 1.947340   0  1    0
-## 3    Canada      maj  29.90 1.69 0.524729   1  0    0
-## 4   Denmark       pr  71.54 5.04 1.617410   0  1    0
-## 5   Finland       pr  69.08 5.14 1.637050   0  1    0
-## 6    France      maj  57.91 2.68 0.985817   1  0    0
+##         cty elec_sys povred   enp    lnenp   maj    pr  unam
+##       (chr)    (chr)  (dbl) (dbl)    (dbl) (int) (int) (int)
+## 1 Australia      maj  42.16  2.38 0.867100     1     0     0
+## 2   Belgium       pr  78.79  7.01 1.947340     0     1     0
+## 3    Canada      maj  29.90  1.69 0.524729     1     0     0
+## 4   Denmark       pr  71.54  5.04 1.617410     0     1     0
+## 5   Finland       pr  69.08  5.14 1.637050     0     1     0
+## 6    France      maj  57.91  2.68 0.985817     1     0     0
 ```
 
 ```r
@@ -109,6 +111,7 @@ iver %>%
 ## Source: local data frame [1 x 12]
 ## 
 ##   povred_mean enp_mean lnenp_mean  maj_mean pr_mean  unam_mean povred_sd
+##         (dbl)    (dbl)      (dbl)     (dbl)   (dbl)      (dbl)     (dbl)
 ## 1    50.81786 3.605714   1.200533 0.4285714     0.5 0.07142857  21.18363
 ## Variables not shown: enp_sd (dbl), lnenp_sd (dbl), maj_sd (dbl), pr_sd
 ##   (dbl), unam_sd (dbl)
@@ -128,6 +131,7 @@ rbind(mean, sd, min, max, median) %>%
 ## Source: local data frame [5 x 7]
 ## 
 ##     povred      enp     lnenp       maj        pr       unam statistic
+##      (dbl)    (dbl)     (dbl)     (dbl)     (dbl)      (dbl)     (chr)
 ## 1 50.81786 3.605714 1.2005328 0.4285714 0.5000000 0.07142857      mean
 ## 2 21.18363 1.533822 0.4207742 0.5135526 0.5188745 0.26726124        sd
 ## 3 12.10000 1.690000 0.5247290 0.0000000 0.0000000 0.00000000       min
@@ -162,6 +166,10 @@ povred.plot <- ggplot(iver, aes(povred)) + geom_histogram()
 povred.plot
 ```
 
+```
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+```
+
 ![](lab3_files/figure-html/unnamed-chunk-5-1.png) 
 
 ```r
@@ -169,11 +177,19 @@ enp.plot <- ggplot(iver, aes(enp)) + geom_histogram()
 enp.plot
 ```
 
+```
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+```
+
 ![](lab3_files/figure-html/unnamed-chunk-5-2.png) 
 
 ```r
 lnenp.plot <- ggplot(iver, aes(lnenp)) + geom_histogram()
 lnenp.plot
+```
+
+```
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
 ![](lab3_files/figure-html/unnamed-chunk-5-3.png) 
@@ -736,13 +752,14 @@ iver[iver$maj == 1, ] # this selects all columns
 ```
 ## Source: local data frame [6 x 8]
 ## 
-##              cty elec_sys povred  enp    lnenp maj pr unam
-## 1      Australia      maj  42.16 2.38 0.867100   1  0    0
-## 2         Canada      maj  29.90 1.69 0.524729   1  0    0
-## 3         France      maj  57.91 2.68 0.985817   1  0    0
-## 4        Germany      maj  46.90 3.16 1.150570   1  0    0
-## 5 United Kingdom      maj  48.66 2.09 0.737164   1  0    0
-## 6  United States      maj  12.10 1.95 0.667829   1  0    0
+##              cty elec_sys povred   enp    lnenp   maj    pr  unam
+##            (chr)    (chr)  (dbl) (dbl)    (dbl) (int) (int) (int)
+## 1      Australia      maj  42.16  2.38 0.867100     1     0     0
+## 2         Canada      maj  29.90  1.69 0.524729     1     0     0
+## 3         France      maj  57.91  2.68 0.985817     1     0     0
+## 4        Germany      maj  46.90  3.16 1.150570     1     0     0
+## 5 United Kingdom      maj  48.66  2.09 0.737164     1     0     0
+## 6  United States      maj  12.10  1.95 0.667829     1     0     0
 ```
 
 Next let's subset the data to all majoritarian countries but only keep the columns povred and lnenp (for example)
@@ -755,6 +772,7 @@ iver[iver$maj == 1, c("povred", "lnenp")]
 ## Source: local data frame [6 x 2]
 ## 
 ##   povred    lnenp
+##    (dbl)    (dbl)
 ## 1  42.16 0.867100
 ## 2  29.90 0.524729
 ## 3  57.91 0.985817
@@ -772,6 +790,7 @@ iver[iver$maj == 1, c("cty", "povred", "lnenp")]
 ## Source: local data frame [6 x 3]
 ## 
 ##              cty povred    lnenp
+##            (chr)  (dbl)    (dbl)
 ## 1      Australia  42.16 0.867100
 ## 2         Canada  29.90 0.524729
 ## 3         France  57.91 0.985817
@@ -811,6 +830,7 @@ mydata
 ## Source: local data frame [8 x 4]
 ## 
 ##   somenumbers somewords a_number is_silly
+##         (dbl)     (chr)    (dbl)    (lgl)
 ## 1           2    pounce        5     TRUE
 ## 2           4    bounce        5     TRUE
 ## 3           6       IPA        5     TRUE
@@ -1152,7 +1172,7 @@ cat(texreg::htmlreg(list(lm_cat),
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="bottom" style="margin-top:0.3em;">Statistical models</caption>
 <tr>
-<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"></th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"><b></b></th>
 <th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"><b>Model 1</b></th>
 </tr>
 <tr>
@@ -1204,7 +1224,7 @@ cat(texreg::htmlreg(list(lm_cat),
 <td style="border-bottom: 2px solid black;">12.37</td>
 </tr>
 <tr>
-<td style="padding-right: 12px; border: none;" colspan="2"><span style="font-size:0.8em"><sup style="vertical-align: 0px;">***</sup>p &lt; 0.001, <sup style="vertical-align: 0px;">**</sup>p &lt; 0.01, <sup style="vertical-align: 0px;">*</sup>p &lt; 0.05</span></td>
+<td style="padding-right: 12px; border: none;" colspan="3"><span style="font-size:0.8em"><sup style="vertical-align: 0px;">***</sup>p &lt; 0.001, <sup style="vertical-align: 0px;">**</sup>p &lt; 0.01, <sup style="vertical-align: 0px;">*</sup>p &lt; 0.05</span></td>
 </tr>
 </table>
 

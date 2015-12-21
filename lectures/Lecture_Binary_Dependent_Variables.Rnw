@@ -133,7 +133,7 @@ mod2 <- lm(vote_yes ~ statusquo, data = Chile)
 ggplot(augment(mod2),
        aes(x = statusquo, y = .resid)) +
   geom_point(position = position_jitter(h = 0.1)) +
-  geom_hline(colour = "gray") +
+  geom_hline(yintercept = 0, colour = "gray") +
   ylab(expression(hat(epsilon)[i])) +
   xlab("Support for Status Quo") +
   theme_local()
@@ -151,7 +151,7 @@ mod2 <- lm(vote_yes ~ statusquo, data = Chile)
 ggplot(augment(mod2),
        aes(x = statusquo, y = abs(.resid)^2)) +
   geom_point(position = position_jitter(h = 0.1)) +
-  geom_hline(colour = "gray") +
+  geom_hline(yintercept = 0, colour = "gray") +
   ylab(expression(abs(hat(epsilon)[i])^2)) +
   xlab("Support for Status Quo") +
   theme_local()
@@ -339,7 +339,7 @@ summary(glm(voterep ~ income, data = nes_sample,
 ggplot(nes_sample, aes(x = income, y = voterep)) +
   geom_point(position = position_jitter(h = 0.1), colour = "gray") +
   geom_smooth(method = "lm", se = FALSE, colour = "red") +
-  geom_smooth(method = "lm", family = binomial(link = "logit")) +
+  geom_smooth(method = "glm", method.args = list(family = binomial(link = "logit"))) +
   ylab("Voted for Bush (1992)") +
   xlab("Income Category (low to high)") +
   theme_local()
@@ -366,7 +366,7 @@ ggplot(Chile,
        aes(x = statusquo, y = vote_yes)) +
   geom_point(position = position_jitter(h = 0.1), colour = "gray") +
   geom_smooth(method = "lm", se = FALSE, colour = "red") +
-  geom_smooth(method = "glm", family = binomial(link = "logit")) +
+  geom_smooth(method = "glm", method.args = list(family = binomial(link = "logit"))) +
   ylab("Voting Intention") +
   xlab("Support for Status Quo") +
   theme_local()
