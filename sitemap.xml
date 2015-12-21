@@ -6,104 +6,16 @@
     xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/2015/index.html</loc>
-  <lastmod>2015-12-21T05:35:00Z</lastmod>
- </url>
- <url>
   <loc>https://UW-POLS503.github.io/pols_503_sp15/archive.html</loc>
-  <lastmod>2015-12-21T05:47:00Z</lastmod>
- </url>
- <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/authors/index.html</loc>
-  <lastmod>2015-12-21T05:35:00Z</lastmod>
- </url>
- <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/authors/jeffrey-arnold.html</loc>
-  <lastmod>2015-12-21T05:35:00Z</lastmod>
- </url>
- <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/authors/jeffrey-b-arnold.html</loc>
-  <lastmod>2015-12-21T05:35:00Z</lastmod>
- </url>
- <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/categories/admin.html</loc>
-  <lastmod>2015-12-21T05:35:00Z</lastmod>
- </url>
- <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/categories/announcement.html</loc>
-  <lastmod>2015-12-21T05:35:00Z</lastmod>
- </url>
- <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/categories/cpe.html</loc>
-  <lastmod>2015-12-21T05:35:00Z</lastmod>
- </url>
- <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/categories/data.html</loc>
-  <lastmod>2015-12-21T05:35:00Z</lastmod>
- </url>
- <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/categories/error-messages.html</loc>
-  <lastmod>2015-12-21T05:35:00Z</lastmod>
+  <lastmod>2015-12-21T05:49:00Z</lastmod>
  </url>
  <url>
   <loc>https://UW-POLS503.github.io/pols_503_sp15/categories/index.html</loc>
-  <lastmod>2015-12-21T05:47:00Z</lastmod>
- </url>
- <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/categories/ipe.html</loc>
-  <lastmod>2015-12-21T05:35:00Z</lastmod>
- </url>
- <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/categories/ir.html</loc>
-  <lastmod>2015-12-21T05:35:00Z</lastmod>
- </url>
- <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/categories/lecture.html</loc>
-  <lastmod>2015-12-21T05:35:00Z</lastmod>
- </url>
- <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/categories/nhst.html</loc>
-  <lastmod>2015-12-21T05:35:00Z</lastmod>
- </url>
- <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/categories/ols.html</loc>
-  <lastmod>2015-12-21T05:35:00Z</lastmod>
- </url>
- <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/categories/problem-sets.html</loc>
-  <lastmod>2015-12-21T05:35:00Z</lastmod>
- </url>
- <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/categories/programming.html</loc>
-  <lastmod>2015-12-21T05:35:00Z</lastmod>
- </url>
- <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/categories/r-errors.html</loc>
-  <lastmod>2015-12-21T05:35:00Z</lastmod>
- </url>
- <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/categories/r.html</loc>
-  <lastmod>2015-12-21T05:35:00Z</lastmod>
- </url>
- <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/categories/significance-testing.html</loc>
-  <lastmod>2015-12-21T05:35:00Z</lastmod>
- </url>
- <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/categories/syllabus.html</loc>
-  <lastmod>2015-12-21T05:35:00Z</lastmod>
- </url>
- <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/categories/visualization.html</loc>
-  <lastmod>2015-12-21T05:35:00Z</lastmod>
- </url>
- <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/categories/writing.html</loc>
-  <lastmod>2015-12-21T05:35:00Z</lastmod>
+  <lastmod>2015-12-21T05:49:00Z</lastmod>
  </url>
  <url>
   <loc>https://UW-POLS503.github.io/pols_503_sp15/data.html</loc>
-  <lastmod>2015-12-21T05:47:00Z</lastmod>
+  <lastmod>2015-12-21T05:49:00Z</lastmod>
  </url>
  <url>
   <loc>https://UW-POLS503.github.io/pols_503_sp15/docs/Challenger_Analysis.html</loc>
@@ -135,7 +47,7 @@
  </url>
  <url>
   <loc>https://UW-POLS503.github.io/pols_503_sp15/getting_help_with_r.html</loc>
-  <lastmod>2015-12-21T05:47:00Z</lastmod>
+  <lastmod>2015-12-21T05:49:00Z</lastmod>
  </url>
  <url>
   <loc>https://UW-POLS503.github.io/pols_503_sp15/hw/hw1.html</loc>
@@ -159,11 +71,11 @@
  </url>
  <url>
   <loc>https://UW-POLS503.github.io/pols_503_sp15/index.html</loc>
-  <lastmod>2015-12-21T05:47:00Z</lastmod>
+  <lastmod>2015-12-21T05:49:00Z</lastmod>
  </url>
  <url>
   <loc>https://UW-POLS503.github.io/pols_503_sp15/install_r.html</loc>
-  <lastmod>2015-12-21T05:47:00Z</lastmod>
+  <lastmod>2015-12-21T05:49:00Z</lastmod>
  </url>
  <url>
   <loc>https://UW-POLS503.github.io/pols_503_sp15/labs/lab1.html</loc>
@@ -203,38 +115,22 @@
  </url>
  <url>
   <loc>https://UW-POLS503.github.io/pols_503_sp15/links.html</loc>
-  <lastmod>2015-12-21T05:47:00Z</lastmod>
+  <lastmod>2015-12-21T05:49:00Z</lastmod>
  </url>
  <url>
   <loc>https://UW-POLS503.github.io/pols_503_sp15/loading_data_in_r.html</loc>
-  <lastmod>2015-12-21T05:47:00Z</lastmod>
+  <lastmod>2015-12-21T05:49:00Z</lastmod>
  </url>
  <url>
   <loc>https://UW-POLS503.github.io/pols_503_sp15/matrices_in_r.html</loc>
-  <lastmod>2015-12-21T05:47:00Z</lastmod>
- </url>
- <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/miscellaneous-useful-functions.html</loc>
-  <lastmod>2015-12-21T05:36:00Z</lastmod>
- </url>
- <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/package_loading_warnings_and_errors.html</loc>
-  <lastmod>2015-12-21T05:35:00Z</lastmod>
+  <lastmod>2015-12-21T05:49:00Z</lastmod>
  </url>
  <url>
   <loc>https://UW-POLS503.github.io/pols_503_sp15/posts/index.html</loc>
-  <lastmod>2015-12-21T05:47:00Z</lastmod>
+  <lastmod>2015-12-21T05:49:00Z</lastmod>
  </url>
  <url>
   <loc>https://UW-POLS503.github.io/pols_503_sp15/r_best_practices.html</loc>
-  <lastmod>2015-12-21T05:47:00Z</lastmod>
- </url>
- <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/r_markdown_assignments.html</loc>
-  <lastmod>2015-12-21T05:35:00Z</lastmod>
- </url>
- <url>
-  <loc>https://UW-POLS503.github.io/pols_503_sp15/updated-syllabus.html</loc>
-  <lastmod>2015-12-21T05:35:00Z</lastmod>
+  <lastmod>2015-12-21T05:49:00Z</lastmod>
  </url>
 </urlset>
