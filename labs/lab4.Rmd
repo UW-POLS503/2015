@@ -24,7 +24,7 @@ library(broom)
 Read in the Ross data
 
 ```{r, results='hide'}
-rossdata <- read.csv("http://pols503.github.io/pols_503_sp15/data/ross_2012.csv",
+rossdata <- read.csv("http://UW-POLS503.github.io/pols_503_sp15/data/ross_2012.csv",
                      stringsAsFactors = FALSE)
 
 head (rossdata)
@@ -170,7 +170,7 @@ ggplot(tidy(model2) %>% filter(term != "(Intercept)"),
 ```
 
 We can also use `coefplot` 
-```{r, warning=FALSE}
+```{r, warning=FALSE, eval = FALSE}
 library("coefplot")
 coefplot(model2, coefficients = c("oecd", "oil", "gdp"))
 ```
@@ -316,7 +316,3 @@ ggplot(mod3_pred_df, aes(x =oil , y = fit,
   theme_bw()
 ```
 
-* * *
-
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
-R code is licensed under a [BSD 2-clause](http://www.r-project.org/Licenses/BSD_2_clause) license.

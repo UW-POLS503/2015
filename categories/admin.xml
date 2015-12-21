@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>POLS/CS&amp;SS 503 (admin)</title><link>http://pols503.github.io/pols_503_sp15/</link><description></description><atom:link type="application/rss+xml" rel="self" href="http://pols503.github.io/pols_503_sp15/categories/admin.xml"></atom:link><language>en</language><lastBuildDate>Fri, 24 Apr 2015 01:10:12 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Updated syllabus</title><link>http://pols503.github.io/pols_503_sp15/updated-syllabus.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;div&gt;&lt;style type="text/css"&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>POLS/CS&amp;SS 503 (admin)</title><link>http://UW-POLS503.github.io/pols_503_sp15/</link><description></description><atom:link type="application/rss+xml" href="http://UW-POLS503.github.io/pols_503_sp15/categories/admin.xml" rel="self"></atom:link><language>en</language><lastBuildDate>Mon, 21 Dec 2015 05:35:31 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Updated syllabus</title><link>http://UW-POLS503.github.io/pols_503_sp15/updated-syllabus.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;div&gt;&lt;style type="text/css"&gt;
 .main-container {
   max-width: 940px;
   margin-left: auto;
@@ -30,7 +30,6 @@ img {
 .. type: text
 .. author: Jeffrey Arnold
 --&gt;
-
 &lt;p&gt;I’ve updated the syllabus with my plans for the rest of the quarter. Of course, much of this will depend on how long it takes to cover the various material.&lt;/p&gt;
 
 
@@ -55,4 +54,4 @@ $(document).ready(function () {
   })();
 &lt;/script&gt;
 
-&lt;/div&gt;</description><category>admin</category><guid>http://pols503.github.io/pols_503_sp15/updated-syllabus.html</guid><pubDate>Fri, 24 Apr 2015 01:08:22 GMT</pubDate></item></channel></rss>
+&lt;/div&gt;</description><category>admin</category><guid>http://UW-POLS503.github.io/pols_503_sp15/updated-syllabus.html</guid><pubDate>Fri, 24 Apr 2015 01:08:22 GMT</pubDate></item></channel></rss>

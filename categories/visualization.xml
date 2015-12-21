@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0"><channel><title>POLS/CS&amp;SS 503 (visualization)</title><link>http://pols503.github.io/pols_503_sp15/</link><description></description><atom:link href="http://pols503.github.io/pols_503_sp15/categories/visualization.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Mon, 27 Apr 2015 19:58:15 GMT</lastBuildDate><generator>http://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Good Visualization of OLS</title><link>http://pols503.github.io/pols_503_sp15/posts/good-visualization-of-ols.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>POLS/CS&amp;SS 503 (visualization)</title><link>http://UW-POLS503.github.io/pols_503_sp15/</link><description></description><atom:link type="application/rss+xml" href="http://UW-POLS503.github.io/pols_503_sp15/categories/visualization.xml" rel="self"></atom:link><language>en</language><lastBuildDate>Mon, 21 Dec 2015 05:35:31 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Good Visualization of OLS</title><link>http://UW-POLS503.github.io/pols_503_sp15/posts/good-visualization-of-ols.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
 .. title: Good Visualization of OLS
 .. slug: good-visualization-of-ols
 .. date: 2015-04-25 22:09:54 UTC-07:00
@@ -10,6 +10,5 @@
 .. type: text
 .. author: Jeffrey Arnold
 --&gt;
-
 &lt;p&gt;&lt;a href="http://setosa.io/ev/"&gt;Explained Visually&lt;/a&gt; has very nice visual explanation of OLS: http://setosa.io/ev/ordinary-least-squares-regression/. Also, check out the other visualizations from that site.&lt;/p&gt;
-&lt;p&gt;Hat tip: Tyler Reny.&lt;/p&gt;</description><category>ols</category><category>visualization</category><guid>http://pols503.github.io/pols_503_sp15/posts/good-visualization-of-ols.html</guid><pubDate>Sun, 26 Apr 2015 05:09:54 GMT</pubDate></item></channel></rss>
+&lt;p&gt;Hat tip: Tyler Reny.&lt;/p&gt;</description><category>ols</category><category>visualization</category><guid>http://UW-POLS503.github.io/pols_503_sp15/posts/good-visualization-of-ols.html</guid><pubDate>Sun, 26 Apr 2015 05:09:54 GMT</pubDate></item></channel></rss>
