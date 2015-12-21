@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>POLS/CS&amp;SS 503 (Jeffrey B. Arnold)</title><link>https://UW-POLS503.github.io/pols_503_sp15/</link><description></description><atom:link rel="self" type="application/rss+xml" href="https://UW-POLS503.github.io/pols_503_sp15/authors/jeffrey-b-arnold.xml"></atom:link><language>en</language><lastBuildDate>Mon, 21 Dec 2015 05:57:32 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Lab 4 posted</title><link>https://UW-POLS503.github.io/pols_503_sp15/posts/2015-04-25.html</link><dc:creator>Jeffrey B. Arnold</dc:creator><description>&lt;!--
+.. title: Lab 4 posted
+.. tags: announcement
+.. date: 2015-04-25
+--&gt;
+&lt;p&gt;I’ve updated the syllabus to include a link to &lt;a href="https://UW-POLS503.github.io/pols_503_sp15/labs/lab4.html"&gt;Lab 4&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Also, although less convenient, you can download or preview the labs before they are posted by going to &lt;a href="https://github.com/POLS503/pols_503_sp15/tree/master/labs" class="uri"&gt;https://github.com/POLS503/pols_503_sp15/tree/master/labs&lt;/a&gt;.&lt;/p&gt;</description><category>announcement</category><guid>https://UW-POLS503.github.io/pols_503_sp15/posts/2015-04-25.html</guid><pubDate>Sat, 25 Apr 2015 07:00:00 GMT</pubDate></item><item><title>Notes on R Markdown assignments</title><link>https://UW-POLS503.github.io/pols_503_sp15/r_markdown_assignments.html</link><dc:creator>Jeffrey B. Arnold</dc:creator><description>&lt;div&gt;&lt;style type="text/css"&gt;
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img { 
+  max-width:100%; 
+  height: auto; 
+}
+&lt;/style&gt;
+&lt;div class="container-fluid main-container"&gt;
+
+
+
+
+&lt;!--
+.. title: Notes on R Markdown assignments
+.. date: 2015-04-21
+--&gt;
+&lt;ol style="list-style-type: decimal"&gt;
+&lt;li&gt;Do include both code and output. In general, you should show all your code and the output of that code, including graphs, output and tables.&lt;/li&gt;
+&lt;li&gt;Do include words. Your homework should not be just code and output. You should explain in prose what you are doing, and more importantly why.&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Do &lt;strong&gt;not&lt;/strong&gt; include &lt;strong&gt;extraneous&lt;/strong&gt; output. In general, you should include the output of your code. However, do not print large objects. Most commonly, do not print out large data frames. If you would like to show example lines from a large data frame use &lt;code&gt;head&lt;/code&gt; to show only the first few lines, or &lt;code&gt;glimpse&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class="r"&gt;&lt;code&gt;      library("gapminder")
+      library("dplyr")&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 
+## Attaching package: 'dplyr'
+## 
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+## 
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class="r"&gt;&lt;code&gt;  # bad
+      # gapminder
+
+      # good
+      head(gapminder)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##       country continent year lifeExp      pop gdpPercap
+## 1 Afghanistan      Asia 1952  28.801  8425333  779.4453
+## 2 Afghanistan      Asia 1957  30.332  9240934  820.8530
+## 3 Afghanistan      Asia 1962  31.997 10267083  853.1007
+## 4 Afghanistan      Asia 1967  34.020 11537966  836.1971
+## 5 Afghanistan      Asia 1972  36.088 13079460  739.9811
+## 6 Afghanistan      Asia 1977  38.438 14880372  786.1134&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class="r"&gt;&lt;code&gt;      glimpse(gapminder)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Observations: 1,704
+## Variables: 6
+## $ country   (fctr) Afghanistan, Afghanistan, Afghanistan, Afghanistan,...
+## $ continent (fctr) Asia, Asia, Asia, Asia, Asia, Asia, Asia, Asia, Asi...
+## $ year      (dbl) 1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992...
+## $ lifeExp   (dbl) 28.801, 30.332, 31.997, 34.020, 36.088, 38.438, 39.8...
+## $ pop       (dbl) 8425333, 9240934, 10267083, 11537966, 13079460, 1488...
+## $ gdpPercap (dbl) 779.4453, 820.8530, 853.1007, 836.1971, 739.9811, 78...&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Do not include warnings or messages unless the question asks for them. Examples of this include the message after using &lt;code&gt;geom_histogram&lt;/code&gt; without a &lt;code&gt;binwidth&lt;/code&gt; argument, or messages when loading certain packages. Either fix the code so that the warning or message no longer appears, or use &lt;code&gt;warning = FALSE&lt;/code&gt; or &lt;code&gt;message = FALSE&lt;/code&gt; in the code chunk to suppress that output.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Do format your assignment intelligently. Clearly indicate each problem with a header, as well as the parts of problems.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Do not use &lt;code&gt;install.packages&lt;/code&gt; in your analysis. If you are using unusual packages make a note of it.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;/div&gt;
+
+&lt;script&gt;
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+&lt;/script&gt;
+
+&lt;!-- dynamically load mathjax for compatibility with self-contained --&gt;
+&lt;script&gt;
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+&lt;/script&gt;
+
+&lt;/div&gt;</description><guid>https://UW-POLS503.github.io/pols_503_sp15/r_markdown_assignments.html</guid><pubDate>Tue, 21 Apr 2015 07:00:00 GMT</pubDate></item><item><title>R Packages Warnings and Messages when Loading</title><link>https://UW-POLS503.github.io/pols_503_sp15/package_loading_warnings_and_errors.html</link><dc:creator>Jeffrey B. Arnold</dc:creator><description>&lt;div&gt;&lt;style type="text/css"&gt;
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img { 
+  max-width:100%; 
+  height: auto; 
+}
+&lt;/style&gt;
+&lt;div class="container-fluid main-container"&gt;
+
+
+
+
+&lt;!--
+.. title: R Packages Warnings and Messages when Loading
+.. slug: package_loading_warnings_and_errors
+.. tags: R, error messages
+.. date: 2015-04-20 13:18
+--&gt;
+&lt;div id="warning-build-under-different-r-version" class="section level2"&gt;
+&lt;h3&gt;Warning: build under different R version&lt;/h3&gt;
+&lt;p&gt;You may get a message like &lt;code&gt;Warning: package 'pkgname' was build under R version *.*.*&lt;/code&gt;,&lt;/p&gt;
+&lt;pre class="r"&gt;&lt;code&gt;library(dplyr)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Warning: package 'dplyr' was built under R version 3.1.3&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Usually this won’t be an issue, but it could cause problems with some packages.&lt;/p&gt;
+&lt;p&gt;You can find your current version of R using&lt;/p&gt;
+&lt;pre class="r"&gt;&lt;code&gt;sessionInfo()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If your current version of R is less than the one in the error message, update R. If your current version of R is greater than the one in the error message, update the packages using,&lt;/p&gt;
+&lt;pre class="r"&gt;&lt;code&gt;update.packages(ask = FALSE, checkBuilt = TRUE)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The argument &lt;code&gt;ask = FALSE&lt;/code&gt; prevents R from asking you yes or no for each package. The argument &lt;code&gt;checkBuilt = TRUE&lt;/code&gt; is to rebuild the package for the newest version of R even if it is the most up to date version of the package.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id="warning-the-following-objects-are-masked" class="section level2"&gt;
+&lt;h3&gt;Warning the following objects are masked&lt;/h3&gt;
+&lt;p&gt;If you load the &lt;strong&gt;plyr&lt;/strong&gt; and &lt;strong&gt;dplyr&lt;/strong&gt; packages you will get several messages about objects being “masked”.&lt;/p&gt;
+&lt;pre class="r"&gt;&lt;code&gt;library("plyr")
+library("dplyr")&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 
+## Attaching package: 'dplyr'
+## 
+## The following objects are masked from 'package:plyr':
+## 
+##     arrange, count, desc, failwith, id, mutate, rename, summarise,
+##     summarize
+## 
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+## 
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This means that the new package has object (usually functions) with names that are the same as those of earlier loaded packages. In the above example, after loading &lt;strong&gt;dplyr&lt;/strong&gt;, typing &lt;code&gt;filter&lt;/code&gt; will use the function from the &lt;strong&gt;dplyr&lt;/strong&gt; package and not the &lt;strong&gt;base&lt;/strong&gt; (which is one of R’s built-in packages) package. If you need to use the &lt;code&gt;filter&lt;/code&gt; function in base R, you can refer to it explicitly with &lt;code&gt;::&lt;/code&gt;. For example, &lt;code&gt;base::filter&lt;/code&gt; will always use the function from the &lt;strong&gt;base&lt;/strong&gt; package; and &lt;code&gt;dplyr::filter&lt;/code&gt; will always use the function from the &lt;strong&gt;dplyr&lt;/strong&gt; package. Note that you can refer to functions in packages using &lt;code&gt;::&lt;/code&gt; without first loading the package using &lt;code&gt;library()&lt;/code&gt;. This can sometimes be useful if you want to use a function from a package, but don’t want to load the entire package.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id="package-startup-messages" class="section level2"&gt;
+&lt;h3&gt;Package Startup Messages&lt;/h3&gt;
+&lt;p&gt;Sometimes packages include messages that are printed on loading. Although this is fine for interactive use in the console, these messages are unsightly in documents and you should hide them from your knitr output either by setting &lt;code&gt;messages = FALSE&lt;/code&gt; in the code chunk with the function &lt;code&gt;suppressPackageStartupMessages&lt;/code&gt; (remember TAB completion is your friend). E.g.&lt;/p&gt;
+&lt;pre class="r"&gt;&lt;code&gt;suppressPackageStartupMessages({
+library("ggplot2")
+library("dplyr")
+})&lt;/code&gt;&lt;/pre&gt;
+&lt;!--  LocalWords:  'pkgname' dplyr 'dplyr' sessionInfo checkBuilt
+ --&gt;
+&lt;!--  LocalWords:  plyr knitr suppressPackageStartupMessages eval
+ --&gt;
+&lt;!--  LocalWords:  ggplot2
+ --&gt;
+&lt;/div&gt;
+
+
+&lt;/div&gt;
+
+&lt;script&gt;
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+&lt;/script&gt;
+
+&lt;!-- dynamically load mathjax for compatibility with self-contained --&gt;
+&lt;script&gt;
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+&lt;/script&gt;
+
+&lt;/div&gt;</description><category>error messages</category><category>R</category><guid>https://UW-POLS503.github.io/pols_503_sp15/package_loading_warnings_and_errors.html</guid><pubDate>Mon, 20 Apr 2015 20:18:00 GMT</pubDate></item><item><title>R warning messages involving LC_TYPE</title><link>https://UW-POLS503.github.io/pols_503_sp15/posts/r-warning-messages-involving-lc_type.html</link><dc:creator>Jeffrey B. Arnold</dc:creator><description>&lt;!--
+.. title: R warning messages involving LC_TYPE
+.. slug: r-warning-messages-involving-lc_type
+.. date: 2015-04-18 13:50:40 UTC-07:00
+.. tags: R errors
+.. category: 
+.. link: 
+.. description: 
+.. type: text
+--&gt;
+&lt;p&gt;If you are running R on a Mac and get the following warning message,&lt;/p&gt;
+&lt;div class="sourceCode"&gt;&lt;pre class="sourceCode r"&gt;&lt;code class="sourceCode r"&gt;During startup -&lt;span class="st"&gt; &lt;/span&gt;Warning messages:
+&lt;span class="dv"&gt;1&lt;/span&gt;:&lt;span class="st"&gt; &lt;/span&gt;Setting LC_CTYPE failed, using &lt;span class="st"&gt;"C"&lt;/span&gt;
+&lt;span class="dv"&gt;2&lt;/span&gt;:&lt;span class="st"&gt; &lt;/span&gt;Setting LC_COLLATE failed, using &lt;span class="st"&gt;"C"&lt;/span&gt;
+&lt;span class="dv"&gt;3&lt;/span&gt;:&lt;span class="st"&gt; &lt;/span&gt;Setting LC_TIME failed, using &lt;span class="st"&gt;"C"&lt;/span&gt;
+&lt;span class="dv"&gt;4&lt;/span&gt;:&lt;span class="st"&gt; &lt;/span&gt;Setting LC_MESSAGES failed, using &lt;span class="st"&gt;"C"&lt;/span&gt;
+&lt;span class="dv"&gt;5&lt;/span&gt;:&lt;span class="st"&gt; &lt;/span&gt;Setting LC_PAPER failed, using &lt;span class="st"&gt;"C"&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;run this command in R,&lt;/p&gt;
+&lt;div class="sourceCode"&gt;&lt;pre class="sourceCode r"&gt;&lt;code class="sourceCode r"&gt;&lt;span class="kw"&gt;system&lt;/span&gt;(&lt;span class="st"&gt;"defaults write org.R-project.R force.LANG en_US.UTF-8"&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;See this StackOverflow &lt;a href="http://stackoverflow.com/questions/9689104/installing-r-on-mac-warning-messages-setting-lc-ctype-failed-using-c"&gt;question&lt;/a&gt; for more information.&lt;/p&gt;</description><category>R errors</category><guid>https://UW-POLS503.github.io/pols_503_sp15/posts/r-warning-messages-involving-lc_type.html</guid><pubDate>Sat, 18 Apr 2015 20:50:40 GMT</pubDate></item><item><title>Writing a paper for this course</title><link>https://UW-POLS503.github.io/pols_503_sp15/posts/writing-a-paper-for-this-course.html</link><dc:creator>Jeffrey B. Arnold</dc:creator><description>&lt;!--
+.. title: Writing a paper for this course
+.. slug: writing-a-paper-for-this-course
+.. date: 2015-04-18 13:48:27 UTC-07:00
+.. tags: writing
+.. category: 
+.. link: 
+.. description: 
+.. type: text
+--&gt;
+&lt;p&gt;This course requires writing a final paper. Here are a couple of articles that may help.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;“Writing Empirical Papers: 6 Rules &amp;amp; 12 Recommendations”, Christopher Adolph, &lt;a href="http://faculty.washington.edu/cadolph/503/papers.pdf" class="uri"&gt;http://faculty.washington.edu/cadolph/503/papers.pdf&lt;/a&gt;. Written for previous versions of 503 course and still applicable both to this course and beyond.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Gary King, “Publication, Publication”, &lt;a href="http://gking.harvard.edu/files/paperspub.pdf" class="uri"&gt;http://gking.harvard.edu/files/paperspub.pdf&lt;/a&gt;. Advice on how to turn a class project into a publication.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;</description><category>writing</category><guid>https://UW-POLS503.github.io/pols_503_sp15/posts/writing-a-paper-for-this-course.html</guid><pubDate>Sat, 18 Apr 2015 20:48:27 GMT</pubDate></item></channel></rss>

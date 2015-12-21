@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>POLS/CS&amp;SS 503 (programming)</title><link>https://UW-POLS503.github.io/pols_503_sp15/</link><description></description><atom:link rel="self" type="application/rss+xml" href="https://UW-POLS503.github.io/pols_503_sp15/categories/programming.xml"></atom:link><language>en</language><lastBuildDate>Mon, 21 Dec 2015 05:57:33 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>awesome-R</title><link>https://UW-POLS503.github.io/pols_503_sp15/posts/awesome-r.html</link><dc:creator>Jeffrey Arnold</dc:creator><description>&lt;!--
+.. title: awesome-R
+.. slug: awesome-r
+.. date: 2015-04-27 12:54:42 UTC-07:00
+.. tags: R, programming
+.. category: 
+.. link: 
+.. description: 
+.. type: text
+.. author: Jeffrey Arnold
+--&gt;
+&lt;p&gt;&lt;a href="https://github.com/qinwf/awesome-R"&gt;awesome-R&lt;/a&gt; looks like a good curated list of links to R resources. Probably more than is relevant to you, but you may find something interesting.&lt;/p&gt;</description><category>programming</category><category>R</category><guid>https://UW-POLS503.github.io/pols_503_sp15/posts/awesome-r.html</guid><pubDate>Mon, 27 Apr 2015 19:54:42 GMT</pubDate></item></channel></rss>

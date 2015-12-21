@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>POLS/CS&amp;SS 503 (R errors)</title><link>https://UW-POLS503.github.io/pols_503_sp15/</link><description></description><atom:link rel="self" type="application/rss+xml" href="https://UW-POLS503.github.io/pols_503_sp15/categories/r-errors.xml"></atom:link><language>en</language><lastBuildDate>Mon, 21 Dec 2015 05:57:33 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>R warning messages involving LC_TYPE</title><link>https://UW-POLS503.github.io/pols_503_sp15/posts/r-warning-messages-involving-lc_type.html</link><dc:creator>Jeffrey B. Arnold</dc:creator><description>&lt;!--
+.. title: R warning messages involving LC_TYPE
+.. slug: r-warning-messages-involving-lc_type
+.. date: 2015-04-18 13:50:40 UTC-07:00
+.. tags: R errors
+.. category: 
+.. link: 
+.. description: 
+.. type: text
+--&gt;
+&lt;p&gt;If you are running R on a Mac and get the following warning message,&lt;/p&gt;
+&lt;div class="sourceCode"&gt;&lt;pre class="sourceCode r"&gt;&lt;code class="sourceCode r"&gt;During startup -&lt;span class="st"&gt; &lt;/span&gt;Warning messages:
+&lt;span class="dv"&gt;1&lt;/span&gt;:&lt;span class="st"&gt; &lt;/span&gt;Setting LC_CTYPE failed, using &lt;span class="st"&gt;"C"&lt;/span&gt;
+&lt;span class="dv"&gt;2&lt;/span&gt;:&lt;span class="st"&gt; &lt;/span&gt;Setting LC_COLLATE failed, using &lt;span class="st"&gt;"C"&lt;/span&gt;
+&lt;span class="dv"&gt;3&lt;/span&gt;:&lt;span class="st"&gt; &lt;/span&gt;Setting LC_TIME failed, using &lt;span class="st"&gt;"C"&lt;/span&gt;
+&lt;span class="dv"&gt;4&lt;/span&gt;:&lt;span class="st"&gt; &lt;/span&gt;Setting LC_MESSAGES failed, using &lt;span class="st"&gt;"C"&lt;/span&gt;
+&lt;span class="dv"&gt;5&lt;/span&gt;:&lt;span class="st"&gt; &lt;/span&gt;Setting LC_PAPER failed, using &lt;span class="st"&gt;"C"&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;run this command in R,&lt;/p&gt;
+&lt;div class="sourceCode"&gt;&lt;pre class="sourceCode r"&gt;&lt;code class="sourceCode r"&gt;&lt;span class="kw"&gt;system&lt;/span&gt;(&lt;span class="st"&gt;"defaults write org.R-project.R force.LANG en_US.UTF-8"&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;See this StackOverflow &lt;a href="http://stackoverflow.com/questions/9689104/installing-r-on-mac-warning-messages-setting-lc-ctype-failed-using-c"&gt;question&lt;/a&gt; for more information.&lt;/p&gt;</description><category>R errors</category><guid>https://UW-POLS503.github.io/pols_503_sp15/posts/r-warning-messages-involving-lc_type.html</guid><pubDate>Sat, 18 Apr 2015 20:50:40 GMT</pubDate></item></channel></rss>
