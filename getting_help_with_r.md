@@ -14,8 +14,8 @@
 
 - [The Cookbook for R](http://www.cookbook-r.com) and [Quick-R](http://www.statmethods.net/) are organized by task and thus may be easier to find what you are looking for.
 
-- Do you want to know what packages exist for a given topic? [CRAN Task Views](http://cran.r-project.org/web/views/) provide subject matter groupings of R packages.
-  E.g. [Environmetrics](http://cran.r-project.org/web/views/Environmetrics.html) and [Social Sciences](http://cran.r-project.org/web/views/SocialSciences.html)
+- Do you want to know what packages exist for a given topic? [CRAN Task Views](https://cran.r-project.org/web/views/) provide subject matter groupings of R packages.
+  E.g. [Environmetrics](https://cran.r-project.org/web/views/Environmetrics.html) and [Social Sciences](https://cran.r-project.org/web/views/SocialSciences.html)
 
 - Want to find out what datasets are included in the R packages that you have installed? `data()`
 

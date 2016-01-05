@@ -9,19 +9,19 @@
 <meta content="#5670d4" name="theme-color">
 <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.xml">
 <link rel="canonical" href="https://UW-POLS503.github.io/pols_503_sp15/posts/r_markdown_assignments.html">
-<link rel="icon" href="../favicon-96x96.png" sizes="96x96">
 <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-120x120.png" sizes="120x120">
-<link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-60x60.png" sizes="60x60">
-<link rel="icon" href="../favicon-32x32.png" sizes="32x32">
-<link rel="icon" href="../favicon-16x16.png" sizes="16x16">
-<link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-152x152.png" sizes="152x152">
-<link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-114x114.png" sizes="114x114">
-<link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-72x72.png" sizes="72x72">
-<link rel="icon" href="../favicon-128.png" sizes="128x128">
-<link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-76x76.png" sizes="76x76">
-<link rel="icon" href="../favicon-196x196.png" sizes="196x196">
-<link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-144x144.png" sizes="144x144">
 <link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-57x57.png" sizes="57x57">
+<link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-144x144.png" sizes="144x144">
+<link rel="icon" href="../favicon-32x32.png" sizes="32x32">
+<link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-60x60.png" sizes="60x60">
+<link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-114x114.png" sizes="114x114">
+<link rel="icon" href="../favicon-96x96.png" sizes="96x96">
+<link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-72x72.png" sizes="72x72">
+<link rel="icon" href="../favicon-16x16.png" sizes="16x16">
+<link rel="icon" href="../favicon-128.png" sizes="128x128">
+<link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-152x152.png" sizes="152x152">
+<link rel="icon" href="../favicon-196x196.png" sizes="196x196">
+<link rel="apple-touch-icon-precomposed" href="../apple-touch-icon-76x76.png" sizes="76x76">
 <!--[if lt IE 9]><script src="../assets/js/html5.js"></script><![endif]--><link rel="stylesheet" href="../assets/styles/default.css">
 <meta name="author" content="Jeffrey B. Arnold">
 <link rel="prev" href="package_loading_warnings_and_errors.html" title="R Packages Warnings and Messages when Loading" type="text/html">
@@ -79,16 +79,16 @@ img {
 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Problem Sets <b class="caret"></b></a>
             <ul class="dropdown-menu">
 <li>
-<a href="hw/hw1.html">PS 1</a>
+<a href="../hw/hw1.html">PS 1</a>
                     </li>
 <li>
-<a href="hw/hw2.html">PS 2</a>
+<a href="../hw/hw2.html">PS 2</a>
                     </li>
 <li>
-<a href="hw/hw3.html">PS 3</a>
+<a href="../hw/hw3.html">PS 3</a>
                     </li>
 <li>
-<a href="hw/hw4.html">PS 4</a>
+<a href="../hw/hw4.html">PS 4</a>
             </li>
 </ul>
 </li>
@@ -102,25 +102,22 @@ img {
 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages <b class="caret"></b></a>
             <ul class="dropdown-menu">
 <li>
-<a href="getting_help_with_r.html">Getting Help with R</a>
+<a href="../getting_help_with_r.html">Getting Help with R</a>
                     </li>
 <li>
-<a href="install_r.html">Installing R</a>
+<a href="../install_r.html">Installing R</a>
                     </li>
 <li>
-<a href="loading_data_in_r.html">Loading Data in R</a>
+<a href="../loading_data_in_r.html">Loading Data in R</a>
                     </li>
 <li>
-<a href="r_best_practices.html">Best Practices with R</a>
+<a href="../r_best_practices.html">Best Practices with R</a>
                     </li>
 <li>
-<a href="matrices_in_r.html">Matrices in R</a>
+<a href="../matrices_in_r.html">Matrices in R</a>
             </li>
 </ul>
 </li>
-<li>
-<a href="https://canvas.uw.edu/courses/964019">Canvas</a>
-                </li>
 <li>
 <a href="../links.html">Links</a>
 
@@ -211,21 +208,24 @@ img {
 
       # good
       head(gapminder)</code></pre>
-<pre><code>##       country continent year lifeExp      pop gdpPercap
-## 1 Afghanistan      Asia 1952  28.801  8425333  779.4453
-## 2 Afghanistan      Asia 1957  30.332  9240934  820.8530
-## 3 Afghanistan      Asia 1962  31.997 10267083  853.1007
-## 4 Afghanistan      Asia 1967  34.020 11537966  836.1971
-## 5 Afghanistan      Asia 1972  36.088 13079460  739.9811
-## 6 Afghanistan      Asia 1977  38.438 14880372  786.1134</code></pre>
+<pre><code>## Source: local data frame [6 x 6]
+## 
+##       country continent  year lifeExp      pop gdpPercap
+##        (fctr)    (fctr) (int)   (dbl)    (int)     (dbl)
+## 1 Afghanistan      Asia  1952  28.801  8425333  779.4453
+## 2 Afghanistan      Asia  1957  30.332  9240934  820.8530
+## 3 Afghanistan      Asia  1962  31.997 10267083  853.1007
+## 4 Afghanistan      Asia  1967  34.020 11537966  836.1971
+## 5 Afghanistan      Asia  1972  36.088 13079460  739.9811
+## 6 Afghanistan      Asia  1977  38.438 14880372  786.1134</code></pre>
 <pre class="r"><code>      glimpse(gapminder)</code></pre>
 <pre><code>## Observations: 1,704
 ## Variables: 6
 ## $ country   (fctr) Afghanistan, Afghanistan, Afghanistan, Afghanistan,...
 ## $ continent (fctr) Asia, Asia, Asia, Asia, Asia, Asia, Asia, Asia, Asi...
-## $ year      (dbl) 1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992...
+## $ year      (int) 1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992...
 ## $ lifeExp   (dbl) 28.801, 30.332, 31.997, 34.020, 36.088, 38.438, 39.8...
-## $ pop       (dbl) 8425333, 9240934, 10267083, 11537966, 13079460, 1488...
+## $ pop       (int) 8425333, 9240934, 10267083, 11537966, 13079460, 1488...
 ## $ gdpPercap (dbl) 779.4453, 820.8530, 853.1007, 836.1971, 739.9811, 78...</code></pre>
 </li>
 <li><p>Do not include warnings or messages unless the question asks for them. Examples of this include the message after using <code>geom_histogram</code> without a <code>binwidth</code> argument, or messages when loading certain packages. Either fix the code so that the warning or message no longer appears, or use <code>warning = FALSE</code> or <code>message = FALSE</code> in the code chunk to suppress that output.</p></li>
@@ -262,7 +262,7 @@ $(document).ready(function () {
 </div>
         <!--End of body content-->
 
-        <footer id="footer"><hr>Contents © 2015  <a href="mailto:jeffrey.arnold@gmail.com">Jeffrey B. Arnold</a>  
+        <footer id="footer"><hr>Contents © 2016  <a href="mailto:jeffrey.arnold@gmail.com">Jeffrey B. Arnold</a>  
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png"></a>.
  <br>
 Powered by <a href="http://getnikola.com" rel="nofollow">Nikola</a> | Theme is <a href="http://bootswatch.com/flatly/" rel="nofollow">Flatly</a> <br>

@@ -10,7 +10,7 @@
 .. author: Jeffrey Arnold
 -->
 
-See the instructions [here](http://pols503.github.io/pols_503_sp15/posts/final-papers.html).
+See the instructions [here](http://UW-POLS503.github.io/pols_503_sp15/posts/final-papers.html).
 Additionally, here are a few clarifications.
 
 - Your paper should be written in the form as an academic paper. Meaning, it should not be in the format of homeworks.

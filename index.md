@@ -100,7 +100,7 @@ Problem sets assigned weekly or bi-weekly. These problem sets will include progr
 The assignments and due dates will be distributed during the quarter.
 <!-- These assignments may involve peer review / grading. -->
 
-Assignments will be *both* submitted digitally through [canvas](https://canvas.uw.edu/courses/964019) at the due date and a paper copy to the TA at the next lab section.
+Assignments will be *both* submitted digitally through Canvas at the due date and a paper copy to the TA at the next lab section.
 
 ## Final Paper
 
@@ -116,7 +116,7 @@ For details, see the [Guidelines for the Final Papers](posts/final-papers.html).
 
 The teaching team will send announcements regularly by email.
 
-Any non-personal questions related to the material in the course should be posted as a [Canvas](https://canvas.uw.edu/courses/964019) discussion.
+Any non-personal questions related to the material in the course should be posted as a Canvas discussion.
 Reserve email for personal or administrative matters.
 Before posting, check that the question has not been asked and answered already.
 
@@ -175,7 +175,7 @@ Given that this is my first time teaching this course, I expect many adjustments
 - [Deck 2](lectures/Lecture_02_handout.pdf)
 - Readings: 
     - Matrix algebra readings. Read **any** of the following
-        - Moore, Will H., and David A. Siegel. 2013. *A Mathematics Course for Political and Social Research*. 1st edition. Princeton, NJ: Princeton University Press, Chapter 12 (on [Canvas](https://canvas.uw.edu/files/31074693/download?download_frd=1)).
+        - Moore, Will H., and David A. Siegel. 2013. *A Mathematics Course for Political and Social Research*. 1st edition. Princeton, NJ: Princeton University Press, Chapter 12 (on Canvas).
         - Kevin Quinn's matrix algebra [handout](docs/matrix.pdf)
         - [CSSS Math Camp Lectures](http://www.csss.washington.edu/MathCamp/Lectures/) Section 4
 	- Fox, Ch. 5, 9.1--9.2
@@ -185,7 +185,7 @@ Given that this is my first time teaching this course, I expect many adjustments
 
 - Readings:
 
-    - Hadley Wickham, [Introduction to dplyr](http://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html)
+    - Hadley Wickham, [Introduction to dplyr](https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html)
 
 ## Week 3: Assumptions & Properties of the Linear Regression Model, Part II
 
@@ -206,7 +206,7 @@ Given that this is my first time teaching this course, I expect many adjustments
 - Readings
 
     - Wickham, Hadley. 2014. ``Tidy Data.'' *Journal of Statistical Software* 59(10). <http://www.jstatsoft.org/v59/i10/>.
-    - Hadley Wickham, [tidyr vignette](http://cran.rstudio.com/web/packages/tidyr/vignettes/tidy-data.html)
+    - Hadley Wickham, [tidyr vignette](https://cran.rstudio.com/web/packages/tidyr/vignettes/tidy-data.html)
 
 ## Week 4: Statistical Inference / Interpretation of the Linear Model
 
@@ -225,8 +225,8 @@ Given that this is my first time teaching this course, I expect many adjustments
 - Data: [ross_2012.csv](data/ross_2012.csv)
 - Readings
 
-    - **stargazer** [vignette](http://cran.r-project.org/web/packages/stargazer/vignettes/stargazer.pdf)
-	- **broom** [vignette](http://cran.r-project.org/web/packages/broom/vignettes/broom.html)
+    - **stargazer** [vignette](https://cran.r-project.org/web/packages/stargazer/vignettes/stargazer.pdf)
+	- **broom** [vignette](https://cran.r-project.org/web/packages/broom/vignettes/broom.html)
 
 ## Week 5: Model Fitting and Data Transformation
 
@@ -289,7 +289,7 @@ You will need to cover collinearity, unusual and influential data, and robust re
 
 ### Friday, May 8
 
-Lab notes: [.html](http://pols503.github.io/pols_503_sp15/labs/lab6.html), [.Rmd](http://pols503.github.io/pols_503_sp15/labs/lab6.Rmd)
+Lab notes: [.html](http://UW-POLS503.github.io/pols_503_sp15/labs/lab6.html), [.Rmd](http://pols503.github.io/pols_503_sp15/labs/lab6.Rmd)
 
 ## Week 7: Interpretation, Model Selection
 
@@ -379,8 +379,8 @@ Lab document: [Rmd](labs/lab9.Rmd), [html](labs/lab9.html)
 - Readings
 
     - Angrist and Pischke, Ch. 5, 8.2
-    - Peter Kennedy, *A Guide to Econometrics*, 6th edition, Chapter 18, "Panel Data". On [canvas](https://canvas.uw.edu/files/31875436/)
-	- Wooldridge, *Econometric Analysis of Cross Section and Panel Data*, Chapter 10, "Basic Linear Unobserved Effects Panel Data Models". On [canvas](https://canvas.uw.edu/files/31869445/)
+    - Peter Kennedy, *A Guide to Econometrics*, 6th edition, Chapter 18, "Panel Data". On Canvas.
+	- Wooldridge, *Econometric Analysis of Cross Section and Panel Data*, Chapter 10, "Basic Linear Unobserved Effects Panel Data Models". On Canvas.
 	- Beck, N., & Katz, J. N. (2011). Modeling Dynamics in Time-Series–Cross-Section Political Economy Data. *Annual Review of Political Science*, 14(1), 331–352. <http://doi.org/10.1146/annurev-polisci-071510-103222>
 
 

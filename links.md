@@ -14,7 +14,7 @@
 ## ggplot2
 
 - Wickham, Hadley. 2010. “A Layered Grammar of Graphics.” Journal of Computational and Graphical Statistics 19(1): 3–28. http://dx.doi.org/10.1198/jcgs.2009.07098 (March 23, 2015).
-- The ggplot2 book. A new version just came out. You can find it on [Canvas](https://canvas.uw.edu/courses/964019/files/?preview=30992347).
+- The ggplot2 book.
 - The ggplot2 documentation http://docs.ggplot2.org/current/. If you don't know the function you want click on something with a picture that looks like what you are looking for.
 - Cookbook for R [graphs](http://www.cookbook-r.com/Graphs/). The author now works for Rstudio, infer from that what you will. It is organized by specific task so it may be easier to find what you are looking for than the documentation. This contains some of what is in the book, [R Graphics Cookbook](http://shop.oreilly.com/product/0636920023135.do).
 - [Beautiful plotting in R: A ggplot2 cheatsheet](http://zevross.com/blog/2014/08/04/beautiful-plotting-in-r-a-ggplot2-cheatsheet-3/)
