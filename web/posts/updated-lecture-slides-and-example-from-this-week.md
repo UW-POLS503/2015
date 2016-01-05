@@ -10,5 +10,5 @@
 .. author: Jeffrey Arnold
 -->
 
-Based off of class and some of the questions, I revised and updated the lecture [slides](http://pols503.github.io/pols_503_sp15/lectures/Lecture_Model_Specification_handout.pdf) and in-class regression [example](docs/Life_Expectancy_Example.html) from this week. 
+Based off of class and some of the questions, I revised and updated the lecture [slides](http://UW-POLS503.github.io/pols_503_sp15/lectures/Lecture_Model_Specification_handout.pdf) and in-class regression [example](docs/Life_Expectancy_Example.html) from this week. 
 
